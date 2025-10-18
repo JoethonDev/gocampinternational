@@ -1,0 +1,672 @@
+/* 
+ * File: assets/css/programs-theme.css
+ * Program Page Custom Styles with Bootstrap 5 Overrides
+ * 
+ * BRAND COLOR VARIABLES - Replace these with your brand file values
+ * -------------------------------------------------------------------
+ */
+
+:root {
+    /* === BRAND COLORS - REPLACE WITH ACTUAL HEX VALUES === */
+    --brand-primary: #00a4c0;        /* Replace: Main brand color */
+    --brand-accent: #F9BB08;         /* Replace: Accent/highlight color */
+    --brand-neutral: #f8f9fa;        /* Replace: Light background color */
+    --brand-dark: #212529;           /* Replace: Dark text/contrast color */
+    --brand-cta: #ff6b35;            /* Replace: Call-to-action color */
+    
+    /* === DERIVED COLORS (Auto-calculated, usually no changes needed) === */
+    --brand-primary-dark: #008ba3;
+    --brand-primary-light: #e6f7fa;
+    --brand-accent-dark: #d9a007;
+    --brand-accent-light: #fef5dc;
+    
+    /* === TYPOGRAPHY === */
+    --font-heading: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-body: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    
+    /* === SPACING SCALE === */
+    --spacing-xs: 8px;
+    --spacing-sm: 16px;
+    --spacing-md: 24px;
+    --spacing-lg: 32px;
+    --spacing-xl: 48px;
+    --spacing-xxl: 64px;
+    
+    /* === SHADOWS === */
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
+    
+    /* === TRANSITIONS === */
+    --transition-fast: 0.15s ease;
+    --transition-base: 0.3s ease;
+    --transition-slow: 0.5s ease;
+}
+
+/* 
+ * ===================================================================
+ * BOOTSTRAP 5 OVERRIDES
+ * ===================================================================
+ */
+
+/* Primary Button Override */
+.btn-primary {
+    background-color: var(--brand-primary);
+    border-color: var(--brand-primary);
+    font-weight: 600;
+    transition: all var(--transition-base);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    background-color: var(--brand-primary-dark);
+    border-color: var(--brand-primary-dark);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+/* Accent/Warning Button Override */
+.btn-warning {
+    background-color: var(--brand-accent);
+    border-color: var(--brand-accent);
+    color: #fff;
+    font-weight: 600;
+}
+
+.btn-warning:hover {
+    background-color: var(--brand-accent-dark);
+    border-color: var(--brand-accent-dark);
+}
+
+/* Link Colors */
+a {
+    color: var(--brand-primary);
+    transition: color var(--transition-fast);
+}
+
+a:hover {
+    color: var(--brand-primary-dark);
+}
+
+/* Badge Colors */
+.badge-primary {
+    background-color: var(--brand-primary);
+}
+
+.badge-accent {
+    background-color: var(--brand-accent);
+}
+
+/* Typography Base */
+body {
+    font-family: var(--font-body);
+    color: var(--brand-dark);
+    line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+}
+
+/* 
+ * ===================================================================
+ * HERO SECTION
+ * ===================================================================
+ */
+
+.hero-programs {
+    position: relative;
+    min-height: 600px;
+    display: flex;
+    align-items: center;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    overflow: hidden;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(0, 164, 192, 0.85) 0%, rgba(33, 37, 41, 0.75) 100%);
+    z-index: 1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    padding: var(--spacing-xxl) 0;
+}
+
+.hero-title {
+    font-size: 3rem;
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.hero-subtitle {
+    font-size: 1.25rem;
+    line-height: 1.8;
+    font-weight: 300;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.hero-cta-group .btn {
+    min-width: 180px;
+    padding: 0.75rem 2rem;
+    font-size: 1.1rem;
+}
+
+.hero-trust-indicators {
+    margin-top: var(--spacing-xl);
+}
+
+.trust-stat {
+    padding: var(--spacing-sm);
+}
+
+.trust-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    font-family: var(--font-heading);
+    margin-bottom: 0.5rem;
+}
+
+.trust-label {
+    font-size: 0.9rem;
+    opacity: 0.95;
+    font-weight: 300;
+}
+
+/* Mobile Hero Adjustments */
+@media (max-width: 768px) {
+    .hero-programs {
+        min-height: 500px;
+        background-attachment: scroll;
+    }
+    
+    .hero-title {
+        font-size: 2rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1rem;
+    }
+    
+    .trust-number {
+        font-size: 2rem;
+    }
+    
+    .hero-cta-group .btn {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+}
+
+/* 
+ * ===================================================================
+ * FILTER SECTION
+ * ===================================================================
+ */
+
+.program-filters {
+    background-color: #fff;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.program-filters .form-label {
+    color: var(--brand-dark);
+    margin-bottom: 0.5rem;
+}
+
+.program-filters .form-control,
+.program-filters .form-select {
+    border: 2px solid #e9ecef;
+    padding: 0.625rem 1rem;
+    transition: border-color var(--transition-fast);
+}
+
+.program-filters .form-control:focus,
+.program-filters .form-select:focus {
+    border-color: var(--brand-primary);
+    box-shadow: 0 0 0 0.2rem rgba(0, 164, 192, 0.15);
+}
+
+/* Filter Chips */
+#filterChips .badge {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+#filterChips .badge:hover {
+    transform: scale(1.05);
+}
+
+/* 
+ * ===================================================================
+ * PROGRAM CARDS
+ * ===================================================================
+ */
+
+.program-card {
+    border: none;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all var(--transition-base);
+    height: 100%;
+}
+
+.program-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-xl);
+}
+
+.program-card-image-wrapper {
+    position: relative;
+    overflow: hidden;
+    height: 240px;
+}
+
+.program-card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-slow);
+}
+
+.program-card:hover .program-card-image {
+    transform: scale(1.1);
+}
+
+/* Program Badges */
+.program-badges {
+    position: absolute;
+    top: var(--spacing-sm);
+    left: var(--spacing-sm);
+    z-index: 2;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.program-badges .badge {
+    background-color: rgba(0, 164, 192, 0.95);
+    padding: 0.4rem 0.8rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Featured Ribbon */
+.featured-ribbon {
+    position: absolute;
+    top: 20px;
+    right: -35px;
+    background-color: var(--brand-accent);
+    color: #fff;
+    padding: 8px 40px;
+    transform: rotate(45deg);
+    box-shadow: var(--shadow-md);
+    z-index: 3;
+    font-weight: 700;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Category Tag */
+.category-tag {
+    display: inline-block;
+    background-color: var(--brand-primary-light);
+    color: var(--brand-primary);
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Program Meta Icons */
+.program-meta i {
+    color: var(--brand-primary);
+    margin-right: 0.5rem;
+}
+
+/* Program Price */
+.program-price {
+    display: flex;
+    flex-direction: column;
+}
+
+.price-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.price-amount {
+    font-size: 1.5rem;
+    color: var(--brand-primary);
+    font-family: var(--font-heading);
+}
+
+/* View Details Button */
+.view-details-btn {
+    white-space: nowrap;
+    transition: all var(--transition-base);
+}
+
+.view-details-btn:hover {
+    transform: translateX(5px);
+}
+
+/* 
+ * ===================================================================
+ * PROGRAM DETAIL MODAL
+ * ===================================================================
+ */
+
+.program-detail-image {
+    max-height: 400px;
+    object-fit: cover;
+}
+
+.program-highlights-list,
+.program-included-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+.program-highlights-list li,
+.program-included-list li {
+    padding: 0.5rem 0;
+    padding-left: 2rem;
+    position: relative;
+}
+
+.program-highlights-list li::before,
+.program-included-list li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: var(--brand-primary);
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.program-quick-info i {
+    margin-right: 0.5rem;
+}
+
+/* 
+ * ===================================================================
+ * BOOKING CTA SIDEBAR
+ * ===================================================================
+ */
+
+.booking-cta-sidebar {
+    position: sticky;
+    top: 100px;
+}
+
+.booking-cta-sidebar .card {
+    border-radius: 16px;
+}
+
+.booking-cta-sidebar .btn i {
+    margin-right: 0.5rem;
+}
+
+/* Mobile Sticky CTA */
+.booking-cta-mobile {
+    z-index: 1030;
+    backdrop-filter: blur(10px);
+    background-color: rgba(255, 255, 255, 0.98) !important;
+}
+
+.booking-cta-mobile .btn i {
+    margin-right: 0.25rem;
+}
+
+/* 
+ * ===================================================================
+ * TRUST SIGNALS SECTION
+ * ===================================================================
+ */
+
+.trust-signals {
+    background: linear-gradient(135deg, var(--brand-neutral) 0%, #ffffff 100%);
+}
+
+.trust-badge {
+    padding: var(--spacing-md);
+    transition: transform var(--transition-base);
+}
+
+.trust-badge:hover {
+    transform: translateY(-5px);
+}
+
+.trust-badge i {
+    display: block;
+}
+
+.trust-badge h5 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+/* 
+ * ===================================================================
+ * FAQ SECTION
+ * ===================================================================
+ */
+
+.faq-section .accordion-button {
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: var(--brand-dark);
+    background-color: #fff;
+}
+
+.faq-section .accordion-button:not(.collapsed) {
+    background-color: var(--brand-primary-light);
+    color: var(--brand-primary);
+}
+
+.faq-section .accordion-button:focus {
+    box-shadow: 0 0 0 0.25rem rgba(0, 164, 192, 0.15);
+}
+
+.faq-section .accordion-body {
+    padding: 1.5rem;
+    line-height: 1.8;
+}
+
+/* 
+ * ===================================================================
+ * UTILITIES & HELPERS
+ * ===================================================================
+ */
+
+/* Smooth Scroll */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Focus Visible (Accessibility) */
+*:focus-visible {
+    outline: 3px solid var(--brand-primary);
+    outline-offset: 2px;
+}
+
+/* Loading Spinner */
+.spinner-border-primary {
+    color: var(--brand-primary);
+}
+
+/* Hidden Class */
+.d-none {
+    display: none !important;
+}
+
+/* Text Truncate Multi-line */
+.text-truncate-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.text-truncate-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Image Lazy Loading Placeholder */
+img[loading="lazy"] {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+/* 
+ * ===================================================================
+ * RESPONSIVE ADJUSTMENTS
+ * ===================================================================
+ */
+
+/* Tablet */
+@media (max-width: 991.98px) {
+    :root {
+        --spacing-xl: 32px;
+        --spacing-xxl: 48px;
+    }
+    
+    .program-card-image-wrapper {
+        height: 200px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 767.98px) {
+    :root {
+        --spacing-lg: 24px;
+        --spacing-xl: 32px;
+        --spacing-xxl: 40px;
+    }
+    
+    .program-card-image-wrapper {
+        height: 180px;
+    }
+    
+    .price-amount {
+        font-size: 1.25rem;
+    }
+    
+    .hero-trust-indicators .row {
+        row-gap: 1rem;
+    }
+}
+
+/* Extra Small Devices */
+@media (max-width: 575.98px) {
+    .program-filters .col-12 {
+        margin-bottom: 1rem;
+    }
+    
+    .trust-stat {
+        padding: var(--spacing-xs);
+    }
+}
+
+/* 
+ * ===================================================================
+ * PRINT STYLES
+ * ===================================================================
+ */
+
+@media print {
+    .booking-cta-sidebar,
+    .booking-cta-mobile,
+    .program-filters,
+    .navbar,
+    footer {
+        display: none !important;
+    }
+    
+    .program-card {
+        page-break-inside: avoid;
+    }
+}
+
+/* 
+ * ===================================================================
+ * ANIMATION UTILITIES (Optional - for AOS or custom animations)
+ * ===================================================================
+ */
+
+[data-aos] {
+    opacity: 0;
+    transition-property: opacity, transform;
+}
+
+[data-aos].aos-animate {
+    opacity: 1;
+}
+
+[data-aos="fade-up"] {
+    transform: translateY(30px);
+}
+
+[data-aos="fade-up"].aos-animate {
+    transform: translateY(0);
+}
+
+/* 
+ * ===================================================================
+ * CUSTOM SCROLLBAR (Webkit browsers)
+ * ===================================================================
+ */
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--brand-neutral);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--brand-primary);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--brand-primary-dark);
+}

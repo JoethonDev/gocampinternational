@@ -1,0 +1,22 @@
+# File: /.htaccess
+# This file is crucial. It redirects all non-file/directory requests to router.php.
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase "/"
+
+    # Rule 1: If the request is for an existing file, serve it directly.
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteRule ^ - [L]
+
+    # Rule 2: If the request is for an existing directory, serve it directly.
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # Rule 3: For all other requests, rewrite the URL to be handled by index.php.
+    RewriteRule . index.php [L]
+</IfModule>
+
+
+# Optional: Improve security by preventing directory listing
+Options -Indexes
