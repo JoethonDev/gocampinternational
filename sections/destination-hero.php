@@ -60,7 +60,7 @@ $highlights   = $destinationData['highlights'] ?? [];
                                 <div class="flex-shrink-0 bg-brand-accent rounded-circle p-3 me-3 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
                                     <i class="bi bi-<?= htmlspecialchars($highlight['icon'] ?? 'check-circle-fill') ?> fs-4 text-dark"></i>
                                 </div>
-                                <div class="text-white">
+                                <div class="text-black">
                                     <p class="mb-0 fw-bold"><?= htmlspecialchars($highlight['text']) ?></p>
                                 </div>
                             </div>

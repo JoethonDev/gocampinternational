@@ -15,17 +15,17 @@ $programId    = $program['id'] ?? uniqid();
 $name         = $program['name'] ?? 'Program Details';
 $tagline      = $program['tagline'] ?? '';
 $image        = $program['image'] ?? '/images/placeholder.jpg';
-$ages         = $program['ages'] ?? ['min' => 'N/A', 'max' => ''];
-$duration     = $program['duration'] ?? 0;
-$level        = $program['level'] ?? 'N/A';
-$price        = $program['price'] ?? 'Contact Us';
+$ages         = isset($program['ages']) && !empty($program['ages']) ? $program['ages'] : null;
+$duration     = isset($program['duration']) && $program['duration'] > 0 ? $program['duration'] : null;
+$level        = isset($program['level']) && !empty($program['level']) ? $program['level'] : null;
+$price        = isset($program['price']) && !empty($program['price']) ? $program['price'] : null;
 $description  = $program['description'] ?? '<p>No description available.</p>';
-$highlights   = $program['highlights'] ?? [];
-$schedule     = $program['schedule'] ?? [];
-$includes     = $program['includes'] ?? [];
-$excludes     = $program['excludes'] ?? [];
-$requirements = $program['requirements'] ?? [];
-$gallery      = $program['gallery'] ?? [];
+$highlights   = isset($program['highlights']) && !empty($program['highlights']) ? $program['highlights'] : null;
+$schedule     = isset($program['schedule']) && !empty($program['schedule']) ? $program['schedule'] : null;
+$includes     = isset($program['includes']) && !empty($program['includes']) ? $program['includes'] : null;
+$excludes     = isset($program['excludes']) && !empty($program['excludes']) ? $program['excludes'] : null;
+$requirements = isset($program['requirements']) && !empty($program['requirements']) ? $program['requirements'] : null;
+$gallery      = isset($program['gallery']) && !empty($program['gallery']) ? $program['gallery'] : null;
 ?>
 
 <div class="modal fade" id="programModal-<?= htmlspecialchars($programId) ?>" tabindex="-1" aria-labelledby="programModalLabel-<?= htmlspecialchars($programId) ?>" aria-hidden="true">
@@ -41,15 +41,28 @@ $gallery      = $program['gallery'] ?? [];
                 <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-3" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4">
+                <?php 
+                $hasDetails = $ages || $duration || $level || $price;
+                if ($hasDetails): 
+                ?>
                 <div class="row g-3 mb-4 p-3 rounded-lg bg-light">
-                    <div class="col-6 col-md-3 text-center"><i class="bi bi-people-fill text-brand-primary fs-2 mb-2"></i><div class="fw-bold text-dark">Ages <?= $ages['min'] ?>-<?= $ages['max'] ?></div><small class="text-muted">Age Range</small></div>
-                    <div class="col-6 col-md-3 text-center"><i class="bi bi-calendar-week-fill text-brand-secondary fs-2 mb-2"></i><div class="fw-bold text-dark"><?= $duration ?> Weeks</div><small class="text-muted">Duration</small></div>
-                    <div class="col-6 col-md-3 text-center"><i class="bi bi-bar-chart-fill text-brand-accent fs-2 mb-2"></i><div class="fw-bold text-dark"><?= htmlspecialchars($level) ?></div><small class="text-muted">Level</small></div>
-                    <div class="col-6 col-md-3 text-center"><i class="bi bi-tag-fill text-brand-primary fs-2 mb-2"></i><div class="fw-bold text-dark"><?= htmlspecialchars($price) ?></div><small class="text-muted">Price</small></div>
+                    <?php if ($ages && isset($ages['min']) && isset($ages['max'])): ?>
+                        <div class="col-6 col-md-3 text-center"><i class="bi bi-people-fill text-brand-primary fs-2 mb-2"></i><div class="fw-bold text-dark">Ages <?= $ages['min'] ?>-<?= $ages['max'] ?></div><small class="text-muted">Age Range</small></div>
+                    <?php endif; ?>
+                    <?php if ($duration): ?>
+                        <div class="col-6 col-md-3 text-center"><i class="bi bi-calendar-week-fill text-brand-secondary fs-2 mb-2"></i><div class="fw-bold text-dark"><?= $duration ?> Weeks</div><small class="text-muted">Duration</small></div>
+                    <?php endif; ?>
+                    <?php if ($level): ?>
+                        <div class="col-6 col-md-3 text-center"><i class="bi bi-bar-chart-fill text-brand-accent fs-2 mb-2"></i><div class="fw-bold text-dark"><?= htmlspecialchars($level) ?></div><small class="text-muted">Level</small></div>
+                    <?php endif; ?>
+                    <?php if ($price): ?>
+                        <div class="col-6 col-md-3 text-center"><i class="bi bi-tag-fill text-brand-primary fs-2 mb-2"></i><div class="fw-bold text-dark"><?= htmlspecialchars($price) ?></div><small class="text-muted">Price</small></div>
+                    <?php endif; ?>
                 </div>
+                <?php endif; ?>
                 <div class="tab-content" id="programTabContent-<?= htmlspecialchars($programId) ?>">
                     <div class="prose"><?= $description ?></div>
-                    <?php if (!empty($highlights)) : ?>
+                    <?php if ($highlights) : ?>
                         <div class="mt-4">
                             <h4 class="fw-bold text-brand-dark mb-3">Program Highlights</h4>
                             <div class="row g-3">
@@ -59,7 +72,7 @@ $gallery      = $program['gallery'] ?? [];
                             </div>
                         </div>
                     <?php endif; ?>
-                    <?php if (!empty($schedule)) : ?>
+                    <?php if ($schedule) : ?>
                         <div class="mt-4">
                             <h4 class="fw-bold text-brand-dark mb-4">Daily Schedule</h4>
                             <?php foreach ($schedule as $time => $activity) : ?>

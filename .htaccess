@@ -1,6 +1,4 @@
 # File: /.htaccess
-# This file is crucial. It redirects all non-file/directory requests to router.php.
-
 <IfModule mod_rewrite.c>
     RewriteEngine On
     RewriteBase "/"
@@ -13,10 +11,19 @@
     RewriteCond %{REQUEST_FILENAME} -d
     RewriteRule ^ - [L]
 
-    # Rule 3: For all other requests, rewrite the URL to be handled by index.php.
+    # --- NEW RULE START ---
+    # Rule 2.5: Automatically add .php if the file exists.
+    # If the request is NOT a directory...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    # ...and if the request + ".php" IS a valid file...
+    RewriteCond %{REQUEST_FILENAME}.php -f
+    # ...then rewrite the URL to include .php internally.
+    RewriteRule ^(.*)$ $1.php [L]
+    # --- NEW RULE END ---
+
+    # Rule 3: For all other requests (true 404s), rewrite to outer index.php.
     RewriteRule . index.php [L]
 </IfModule>
-
 
 # Optional: Improve security by preventing directory listing
 Options -Indexes

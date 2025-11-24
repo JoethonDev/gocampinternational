@@ -2,33 +2,61 @@
 /**
  * File: /program/category.php
  * This is the UNIVERSAL TEMPLATE for displaying a single program category page.
- * It uses a new, attractive layout and dynamically finds and lists all relevant programs.
- * UPDATED: Color theme changed to main brand color (cyan) and intro block added.
+ *
+ * --- UPDATED for new category routing ---
+ * - Now handles ?category= URL parameter
+ * - Loads category data from programs.php
+ * - Shows all programs in the specified category
  */
 
+// --- Load required data first ---
+require_once __DIR__ . '/../data/programs.php';
+require_once __DIR__ . '/../data/all_programs.php';
+require_once __DIR__ . '/../data/destinations.php';
+
+// --- Get category from URL parameter ---
+$categorySlug = $_GET['category'] ?? '';
+
 // --- Variable Safety Check ---
-if (!isset($programData) || !is_array($programData)) {
+if (empty($categorySlug) || !isset($programs[$categorySlug]) || $programs[$categorySlug]['status'] !== 'active') {
     http_response_code(404);
     include __DIR__ . '/../404.php';
     exit;
 }
-if (!isset($destinations) || !is_array($destinations)) {
-    require_once __DIR__ . '/../data/destinations.php';
-}
+
+$programData = $programs[$categorySlug];
 
 // --- Find all programs that belong to this category ---
 $relatedPrograms = [];
-foreach ($destinations as $destination) {
-    if (isset($destination['programs']) && is_array($destination['programs'])) {
-        foreach ($destination['programs'] as $program) {
-            if (isset($program['category_slug']) && $program['category_slug'] === $programData['slug']) {
-                $program['destination_name'] = $destination['name'];
-                $program['destination_slug'] = $destination['slug'];
-                $relatedPrograms[] = $program;
+foreach ($all_programs as $program_id => $program) {
+    // Check if it's in the correct category and is active
+    if (isset($program['category_slug']) && 
+        $program['category_slug'] === $categorySlug &&
+        isset($program['status']) && $program['status'] === 'active') {
+        // Find which destination this program belongs to
+        $destination_name = 'Multiple Locations'; // Default
+        $destination_slug = '#';
+        foreach ($destinations as $dest) {
+            if (isset($dest['program_ids']) && in_array($program_id, $dest['program_ids'])) {
+                $destination_name = $dest['name'];
+                $destination_slug = $dest['slug'];
+                break;
             }
         }
+        $program['destination_name'] = $destination_name;
+        $program['destination_slug'] = $destination_slug;
+        $relatedPrograms[] = $program;
     }
 }
+// Sort by order, then name
+usort($relatedPrograms, function($a, $b) {
+    $orderA = isset($a['order']) ? (int)$a['order'] : PHP_INT_MAX;
+    $orderB = isset($b['order']) ? (int)$b['order'] : PHP_INT_MAX;
+    if ($orderA === $orderB) {
+        return strcasecmp($a['name'] ?? '', $b['name'] ?? '');
+    }
+    return $orderA - $orderB;
+});
 
 // --- Page-specific variables ---
 $pageTitle = 'Go Camp :: ' . htmlspecialchars($programData['name']);
@@ -38,25 +66,86 @@ require_once __DIR__ . '/../includes/header.php';
 require_once __DIR__ . '/../includes/navigation.php';
 ?>
 
-<!-- Custom Styles for this Page Layout -->
 <style>
+    /* ... all styles from your original file ... */
     :root {
-        /* UPDATED: Changed primary color to cyan and adjusted others */
         --brand-primary: #00a4c0;
         --brand-secondary: #2C3E50;
-        --brand-accent: #F9BB08; /* Kept yellow as an accent */
+        --brand-accent: #F9BB08;
     }
     .hero-section {
-        position: relative; height: 70vh; min-height: 500px;
-        /* UPDATED: Changed gradient to match new primary color */
-        background: linear-gradient(135deg, rgba(0, 164, 192, 0.8), rgba(44, 62, 80, 0.8)), url('<?= htmlspecialchars($programData['banner']) ?>');
-        background-size: cover; background-position: center; background-attachment: fixed;
-        display: flex; align-items: center; justify-content: center;
-        color: white; text-align: center; overflow: hidden;
+        position: relative;
+        height: 70vh;
+        min-height: 500px;
+        background: url('<?= htmlspecialchars($programData['banner']) ?>');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-attachment: fixed;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        text-align: center;
+        overflow: hidden;
     }
-    .hero-content { position: relative; z-index: 2; animation: fadeInUp 1s ease-out; }
-    .hero-section h1 { font-size: 4rem; font-weight: 800; text-shadow: 3px 3px 10px rgba(0,0,0,0.3); margin-bottom: 1.5rem; }
-    .hero-tagline { font-size: 1.8rem; font-weight: 300; letter-spacing: 2px; text-shadow: 2px 2px 8px rgba(0,0,0,0.3); }
+    .hero-section::before {
+        content: '';
+        position: absolute;
+        left: 0; top: 0; right: 0; bottom: 0;
+        background: linear-gradient(0deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.2) 100%);
+        z-index: 1;
+        pointer-events: none;
+    }
+    .hero-content {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        max-width: 900px;
+        margin: 0 auto;
+        animation: fadeInUp 1s ease-out;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem 1rem;
+    }
+    .hero-section h1 {
+        font-size: 3.2rem;
+        font-weight: 900;
+        text-shadow: 0 2px 12px #000, 0 0 2px #fff;
+        margin-bottom: 0.5rem;
+        color: #fff;
+    }
+    .hero-tagline {
+        font-size: 1.3rem;
+        font-weight: 600;
+        letter-spacing: 2px;
+        text-shadow: 0 2px 8px #000, 0 0 2px #fff;
+        color: #fff;
+        margin-bottom: 1.2rem;
+    }
+    .hero-cta-btn {
+        background: #F9BB08;
+        color: #222;
+        padding: 0.9rem 2.2rem;
+        font-size: 1.1rem;
+        font-weight: 700;
+        border: none;
+        border-radius: 50px;
+        box-shadow: 0 4px 18px rgba(0,0,0,0.25);
+        transition: all 0.2s;
+        margin-top: 1.2rem;
+        margin-bottom: 0.2rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    .hero-cta-btn:hover {
+        background: #ffc920;
+        color: #111;
+        transform: translateY(-2px) scale(1.04);
+        box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+    }
     .intro-section { padding: 80px 0; background: white; }
     .intro-card { background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 20px; padding: 40px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); border-left: 6px solid var(--brand-primary); }
     .intro-image { border-radius: 20px; box-shadow: 0 15px 50px rgba(0,0,0,0.2); transition: transform 0.3s ease; }
@@ -77,15 +166,14 @@ require_once __DIR__ . '/../includes/navigation.php';
 
 <main id="main-content">
 
-    <!-- Hero Section -->
     <section class="hero-section">
         <div class="hero-content">
             <p class="hero-tagline text-uppercase">Program Category</p>
             <h1><?= htmlspecialchars($programData['name']) ?></h1>
+            <a href="#category-programs" class="hero-cta-btn">Explore Programs</a>
         </div>
     </section>
 
-    <!-- Breadcrumb -->
     <div class="bg-light border-bottom">
         <div class="container py-2">
             <nav aria-label="breadcrumb">
@@ -98,7 +186,6 @@ require_once __DIR__ . '/../includes/navigation.php';
         </div>
     </div>
 
-    <!-- NEW: Introduction Section -->
     <section class="intro-section">
         <div class="container">
             <div class="row align-items-center g-5">
@@ -106,7 +193,7 @@ require_once __DIR__ . '/../includes/navigation.php';
                     <div class="intro-card">
                         <h2 class="mb-4" style="color: var(--brand-secondary); font-weight: 700;">Experience Learning Like Never Before</h2>
                         <p class="lead" style="font-size: 1.2rem; line-height: 1.8; color: #555;">
-                            <?= htmlspecialchars($programData['intro']) ?>
+                            <?= $programData['intro'] ?>
                         </p>
                     </div>
                 </div>
@@ -117,14 +204,13 @@ require_once __DIR__ . '/../includes/navigation.php';
         </div>
     </section>
 
-    <!-- Content Sections from Data -->
     <?php foreach ($programData['sections'] as $index => $section) : ?>
     <section class="section-content" style="background-color: <?= ($index % 2 != 0) ? '#f8f9fa' : 'white' ?>;">
         <div class="container">
             <div class="row align-items-center g-5">
                 <div class="col-lg-6 <?= ($index % 2 != 0) ? 'order-lg-2' : '' ?>">
                      <div class="content-card">
-                        <h2><i class="bi bi-stars feature-icon d-block"></i><?= htmlspecialchars($section['title']) ?></h2>
+                        <h2><i class="bi bi-stars feature-icon d-block"></i><?= $section['title'] ?></h2>
                         <div class="text-muted" style="font-size: 1.1rem; line-height: 1.9; color: #555;">
                             <?= $section['content'] // Content is already HTML ?>
                         </div>
@@ -139,9 +225,8 @@ require_once __DIR__ . '/../includes/navigation.php';
     <?php endforeach; ?>
 
 
-    <!-- Related Programs Section -->
     <?php if (!empty($relatedPrograms)): ?>
-    <section class="section-content bg-light">
+    <section class="section-content bg-light" id="category-programs">
         <div class="container">
             <div class="text-center mb-5">
                 <h2 class="section-title">Find Your <?= htmlspecialchars($programData['name']) ?> Adventure</h2>
@@ -158,13 +243,11 @@ require_once __DIR__ . '/../includes/navigation.php';
     </section>
     <?php endif; ?>
 
-    <!-- Modals for the programs -->
     <?php foreach ($relatedPrograms as $program) {
         include __DIR__ . '/../sections/program_detail_modal.php';
     } ?>
 
 
-    <!-- Gallery Section -->
     <?php if (!empty($programData['gallery'])) : ?>
     <section class="gallery-section">
         <div class="container">
@@ -184,16 +267,8 @@ require_once __DIR__ . '/../includes/navigation.php';
     </section>
     <?php endif; ?>
 
-    <!-- CTA Section -->
     <section class="cta-section text-center py-5">
-        <div class="container">
-            <h2 class="display-5 fw-bold">Ready to Start Your Adventure?</h2>
-            <p class="lead mb-4">Join thousands of students who have transformed their lives through our programs.</p>
-            <button class="btn btn-cta" data-bs-toggle="modal" data-bs-target="#ctaModal">
-                <i class="bi bi-calendar-check me-2"></i>Book Your Program Now
-            </button>
-        </div>
-    </section>
+        </section>
 
     <?php
     require_once __DIR__ . '/../sections/testimonials.php';
@@ -203,6 +278,4 @@ require_once __DIR__ . '/../includes/navigation.php';
 <?php
 require_once __DIR__ . '/../includes/footer.php';
 ?>
-<!-- Simple Lightbox library for the gallery -->
 <script src="https://cdn.jsdelivr.net/npm/bs5-lightbox@1.8.3/dist/index.bundle.min.js"></script>
-

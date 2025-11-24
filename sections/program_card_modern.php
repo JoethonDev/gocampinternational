@@ -18,12 +18,12 @@ $programId = $program['id'] ?? uniqid();
 $name = $program['name'] ?? 'Untitled Program';
 $tagline = $program['tagline'] ?? 'No description.';
 $image = $program['image'] ?? '/images/placeholder.jpg';
-$ages = $program['ages'] ?? ['min' => 'N/A', 'max' => ''];
-$duration = $program['duration'] ?? 0;
-$level = $program['level'] ?? 'All';
-$price = $program['price'] ?? 'Contact Us';
-$highlights = $program['highlights'] ?? [];
-$badges = $program['badges'] ?? [];
+$ages = isset($program['ages']) && !empty($program['ages']) ? $program['ages'] : null;
+$duration = isset($program['duration']) && $program['duration'] > 0 ? $program['duration'] : null;
+$level = isset($program['level']) && !empty($program['level']) ? $program['level'] : 'All';
+$price = isset($program['price']) && !empty($program['price']) ? $program['price'] : 'Contact Us';
+$highlights = isset($program['highlights']) && !empty($program['highlights']) ? $program['highlights'] : null;
+$badges = isset($program['badges']) && !empty($program['badges']) ? $program['badges'] : null;
 $color = $program['color'] ?? 'primary';
 
 // --- Color Mapping ---
@@ -42,8 +42,12 @@ $colors = $colorClasses[$color] ?? $colorClasses['primary'];
             <div class="position-absolute bottom-0 start-0 w-100 h-100" style="background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 60%);"></div>
             <div class="position-absolute top-0 start-0 w-100 p-3">
                 <div class="d-flex justify-content-between align-items-start">
-                    <span class="badge bg-white text-dark fw-bold px-3 py-2 shadow-sm"><?= htmlspecialchars($level) ?></span>
-                    <?php if (!empty($badges)) : ?>
+                    <?php if ($level): ?>
+                        <span class="badge bg-white text-dark fw-bold px-3 py-2 shadow-sm"><?= htmlspecialchars($level) ?></span>
+                    <?php else: ?>
+                        <div></div> <!-- Empty div to maintain flex layout -->
+                    <?php endif; ?>
+                    <?php if ($badges) : ?>
                         <div class="d-flex gap-2">
                             <?php foreach ($badges as $badge) : ?>
                                 <span class="badge <?= $colors['bg'] ?> text-white fw-bold px-3 py-2 shadow-sm"><?= htmlspecialchars($badge) ?></span>
@@ -52,24 +56,32 @@ $colors = $colorClasses[$color] ?? $colorClasses['primary'];
                     <?php endif; ?>
                 </div>
             </div>
+            <?php if ($ages || $duration): ?>
             <div class="position-absolute bottom-0 start-0 w-100 p-3">
                 <div class="d-flex align-items-center gap-3 text-white">
-                    <div class="d-flex align-items-center bg-white bg-opacity-25 backdrop-blur rounded-pill px-3 py-2">
-                        <i class="bi bi-people-fill me-2"></i>
-                        <span class="fw-bold"><?= $ages['min'] ?>-<?= $ages['max'] ?> years</span>
-                    </div>
-                    <div class="d-flex align-items-center bg-white bg-opacity-25 backdrop-blur rounded-pill px-3 py-2">
-                        <i class="bi bi-calendar-week-fill me-2"></i>
-                        <span class="fw-bold"><?= $duration ?> Weeks</span>
-                    </div>
+                    <?php if ($ages && isset($ages['min']) && isset($ages['max'])): ?>
+                        <div class="d-flex align-items-center bg-white bg-opacity-25 backdrop-blur rounded-pill px-3 py-2">
+                            <i class="bi bi-people-fill me-2"></i>
+                            <span class="fw-bold"><?= $ages['min'] ?>-<?= $ages['max'] ?> years</span>
+                        </div>
+                    <?php endif; ?>
+                    <?php if ($duration): ?>
+                        <div class="d-flex align-items-center bg-white bg-opacity-25 backdrop-blur rounded-pill px-3 py-2">
+                            <i class="bi bi-calendar-week-fill me-2"></i>
+                            <span class="fw-bold"><?= $duration ?> Weeks</span>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
+            <?php endif; ?>
         </div>
         <div class="card-body p-4 d-flex flex-column">
             <h3 class="card-title fw-bold mb-2 text-brand-dark fs-4"><?= htmlspecialchars($name) ?></h3>
             <p class="card-text text-muted mb-3 flex-grow-1"><?= htmlspecialchars($tagline) ?></p>
-            <hr class="my-3" />
-            <?php if (!empty($highlights)) : ?>
+            <?php if ($highlights || $price): ?>
+                <hr class="my-3" />
+            <?php endif; ?>
+            <?php if ($highlights) : ?>
             <div class="mb-3">
                 <ul class="list-unstyled mb-0">
                     <?php foreach (array_slice($highlights, 0, 3) as $highlight) : ?>
@@ -87,6 +99,7 @@ $colors = $colorClasses[$color] ?? $colorClasses['primary'];
             </div>
             <?php endif; ?>
             <div class="mt-auto">
+                <?php if ($price): ?>
                 <div class="d-flex justify-content-between align-items-center mb-3 p-3 rounded-lg" style="background: rgba(0,0,0,0.03);">
                     <div>
                         <small class="text-muted d-block mb-1">Starting from</small>
@@ -94,6 +107,7 @@ $colors = $colorClasses[$color] ?? $colorClasses['primary'];
                     </div>
                     <i class="bi bi-tag-fill fs-1 <?= $colors['text'] ?> opacity-25"></i>
                 </div>
+                <?php endif; ?>
                 <div class="d-grid gap-2">
                     <button class="btn <?= $colors['bg'] ?> text-white btn-lg fw-bold" data-bs-toggle="modal" data-bs-target="#ctaModal" data-source="<?= htmlspecialchars($name) ?> Card">
                         <i class="bi bi-calendar-check-fill me-2"></i> Reserve Your Spot

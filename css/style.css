@@ -295,14 +295,8 @@ a:hover, a:focus {
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(0, 164, 192, 0.8) 0%,
-    rgba(133, 185, 46, 0.7) 50%,
-    rgba(249, 187, 8, 0.6) 100%
-  );
   z-index: 1;
-  opacity: 0.8;
+  opacity: 1;
 }
 
 .hero-section .container {
@@ -314,13 +308,33 @@ a:hover, a:focus {
   animation: fadeInUp 0.8s ease-out;
 }
 
+.hero-section h1 {
+  color: #fff;
+  text-shadow: 0 2px 12px #000, 0 0 2px #fff;
+  animation: fadeInUp 0.8s ease-out;
+}
 .hero-section p {
-  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
+  color: #fff;
+  text-shadow: 0 2px 8px #000, 0 0 2px #fff;
   animation: fadeInUp 0.8s ease-out 0.2s backwards;
 }
-
 .hero-section .btn {
   animation: fadeInUp 0.8s ease-out 0.4s backwards;
+  background: #F9BB08;
+  color: #222;
+  font-weight: 700;
+  border-radius: 50px;
+  border: none;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.25);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.2s;
+}
+.hero-section .btn:hover {
+  background: #ffc920;
+  color: #111;
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.35);
 }
 
 /* Carousel Controls Enhancement */

@@ -32,18 +32,29 @@ $sectionDescription = $sectionDescription ?? 'Numbers that speak for themselves'
             <p class="lead text-white opacity-90"><?= htmlspecialchars($sectionDescription) ?></p>
         </div>
         <div class="row g-4">
-            <?php foreach ($stats as $stat) :
+<?php foreach ($stats as $stat) :
                 $number = $stat['number'] ?? 0;
                 $label = $stat['label'] ?? 'Stat';
                 $suffix = $stat['suffix'] ?? '';
-                $icon = $stat['icon'] ?? 'star-fill';
+                $icon = $stat['icon'] ?? 'star-fill'; // Default icon if not set
+
+                // --- Inject Condition Here ---
+                // Check if the icon string already contains Font Awesome prefixes
+                if (strpos($icon, 'fa-') === false && strpos($icon, 'fas ') === false && strpos($icon, 'far ') === false && strpos($icon, 'fab ') === false) {
+                    // If NOT Font Awesome, assume Bootstrap Icons and add 'bi bi-' prefix
+                    $iconClass = 'bi bi-' . htmlspecialchars($icon);
+                } else {
+                    // If it IS Font Awesome, use the class directly
+                    $iconClass = htmlspecialchars($icon);
+                }
+                // --- End Injection ---
                 ?>
                 <div class="col-6 col-md-3">
                     <div class="stat-card text-center p-4 rounded-lg bg-white bg-opacity-10 backdrop-blur h-100 transition-all">
                         <div class="mb-3">
                             <div class="d-inline-flex align-items-center justify-content-center rounded-circle p-3 bg-brand-accent"
                                  style="width: 80px; height: 80px;">
-                                <i class="bi bi-<?= htmlspecialchars($icon) ?> text-dark" style="font-size: 2rem;"></i>
+                                <i class="<?= $iconClass ?> text-dark" style="font-size: 2rem;"></i>
                             </div>
                         </div>
                         <div class="stat-number display-3 fw-bold text-white mb-2"

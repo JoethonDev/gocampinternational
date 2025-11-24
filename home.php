@@ -30,12 +30,12 @@ require_once __DIR__ . '/includes/navigation.php';
         <div class="carousel-inner">
             <?php foreach ($banners as $index => $banner): ?>
                 <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
-                    <div class="hero-section d-flex align-items-center text-center" style="background-image: url('images/<?= htmlspecialchars($banner['image']) ?>'); background-size: cover; background-position: center;">
+                    <div class="hero-section d-flex align-items-center justify-content-center text-center" style="background-image: url('images/<?= htmlspecialchars($banner['image']) ?>'); background-size: cover; background-position: center; min-height: 90vh;">
                         <div class="hero-overlay"></div>
-                        <div class="container position-relative">
-                            <h1 class="display-3 fw-bold mb-3 text-white"><?= htmlspecialchars($banner['title']) ?></h1>
-                            <p class="lead mb-4 text-white-50">International camps are a life-changing opportunity to learn, grow, and make global friends.</p>
-                            <a href="#destinations" class="btn btn-warning btn-lg fw-bold px-5 py-3 rounded-pill text-uppercase">Explore Destinations</a>
+                        <div class="container position-relative d-flex flex-column align-items-center justify-content-center" style="z-index:2; min-height:60vh;">
+                            <h1 class="display-3 fw-bold mb-3 text-white" style="text-shadow:0 2px 12px #000,0 0 2px #fff;"><?= htmlspecialchars($banner['title']) ?></h1>
+                            <p class="lead mb-4 text-white" style="text-shadow:0 2px 8px #000,0 0 2px #fff;">International camps are a life-changing opportunity to learn, grow, and make global friends.</p>
+                            <a href="#destinations" class="btn btn-lg fw-bold px-5 py-3 text-uppercase">Explore Destinations</a>
                         </div>
                     </div>
                 </div>
@@ -61,50 +61,61 @@ require_once __DIR__ . '/includes/navigation.php';
     ?>
 
     <?php
-    // --- FEATURED PROGRAMS SECTION ---
-    $all_programs = [];
-    foreach ($destinations as $destination) {
-        if (isset($destination['programs']) && is_array($destination['programs'])) {
-            foreach($destination['programs'] as $p) {
-                // Add destination name to each program, which can be useful on other pages
-                $p['destination_name'] = $destination['name'];
-                $all_programs[] = $p;
+    // --- FEATURED CATEGORIES SECTION ---
+    // Load category and program data
+    require_once __DIR__ . '/data/programs.php';
+    require_once __DIR__ . '/data/all_programs.php';
+
+    // Count programs in each category and prepare featured categories
+    $featured_categories = [];
+    foreach ($programs as $category) {
+        if ($category['status'] === 'active') {
+            // Count active programs in this category
+            $program_count = 0;
+            foreach ($all_programs as $program) {
+                if (isset($program['category_slug']) && $program['category_slug'] === $category['slug'] && $program['status'] === 'active') {
+                    $program_count++;
+                }
+            }
+            
+            // Only include categories that have programs
+            if ($program_count > 0) {
+                $category['program_count'] = $program_count;
+                $featured_categories[] = $category;
             }
         }
     }
 
-    // Find programs that have a 'Popular' badge
-    $popular_programs = array_filter($all_programs, function($p) {
-        return isset($p['badges']) && is_array($p['badges']) && in_array('Popular', $p['badges']);
-    });
-
-    // Get the first 3 popular programs to feature
-    $featured_programs = array_slice($popular_programs, 0, 3);
+    // Limit to first 3 categories for the featured section
+    $featured_categories = array_slice($featured_categories, 0, 3);
     ?>
-    <section id="featured-programs" class="section-padding bg-light">
+    <section id="featured-categories" class="section-padding bg-light">
         <div class="container">
             <div class="text-center mb-5">
-                <h2 class="section-title">Featured Programs</h2>
-                <p class="lead text-muted">Discover our most popular adventures, chosen by families from around the world.</p>
+                <h2 class="section-title">Explore Our Program Categories</h2>
+                <p class="lead text-muted">Choose your adventure from our diverse range of international camp experiences.</p>
             </div>
             
             <div class="row g-4 justify-content-center">
-                <?php if (!empty($featured_programs)): ?>
-                    <?php foreach ($featured_programs as $program): ?>
+                <?php if (!empty($featured_categories)): ?>
+                    <?php foreach ($featured_categories as $category): ?>
                         <div class="col-lg-4 col-md-6 d-flex align-items-stretch">
-                            <?php // Pass the $program variable to the card component
-                            include __DIR__ . '/sections/program_card_modern.php'; ?>
+                            <?php 
+                            // Pass the category and program count to the card component
+                            $program_count = $category['program_count'];
+                            include __DIR__ . '/sections/category_card_modern.php'; 
+                            ?>
                         </div>
                     <?php endforeach; ?>
                 <?php else: ?>
                      <div class="col-12">
-                        <p class="text-center text-muted">No featured programs available at the moment. Please check back soon!</p>
+                        <p class="text-center text-muted">No program categories available at the moment. Please check back soon!</p>
                      </div>
                 <?php endif; ?>
             </div>
             
             <div class="text-center mt-5 pt-3">
-                <a href="/programs" class="btn btn-primary btn-lg fw-bold px-5 py-3">View All Programs</a>
+                <a href="/program/" class="btn btn-primary btn-lg fw-bold px-5 py-3">View All Programs</a>
             </div>
         </div>
     </section>

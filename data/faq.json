@@ -1,34 +1,34 @@
 [
-  {
-    "question": "How can I choose the right Summer Camp for my child?",
-    "answer": "Choosing the right camp involves considering your child's interests and readiness. Key elements to look for include a camp with a long history, a clear philosophy (e.g., sports, arts), an emphasis on creating a multinational community, a well-trained staff with a good staff-to-child ratio, and proper accreditation from international organizations. A good camp helps children separate from their families in a safe way to become resilient and independent."
-  },
-  {
-    "question": "What actions are taken to ensure camper safety and wellbeing?",
-    "answer": "The safety and wellbeing of campers is our most essential priority. Campers are cared for from the moment they arrive at the destination airport until the camp is over. All our camps are hosted in residential schools and are supervised 24/7 by specially trained counselors who provide optimum guidance and care. For our junior clients, we ensure a low leader-to-child ratio (1 to 5) for close supervision."
-  },
-  {
-    "question": "How should I prepare my child for camp?",
-    "answer": "To prepare your child, we recommend the following:<ul><li>Label all clothing and belongings.</li><li>Complete all health forms with detailed information.</li><li>Arrange a practice sleepover with a friend or grandparent.</li><li>Ensure your child can manage basic personal hygiene.</li><li>Discuss what will happen at camp to build excitement and reduce anxiety.</li></ul>"
-  },
-  {
-    "question": "What should my child bring to camp?",
-    "answer": "A detailed list will be provided, but essentials include: night clothes, sufficient underwear and socks for the stay, trousers, swimwear, shorts, t-shirts, a jumper/fleece, a waterproof jacket, two towels (one for swimming), and trainers. Please also pack necessary toiletries, sun cream, and insect repellent. It is not advisable for children to bring expensive electronics like mobile phones or computers."
-  },
-  {
-    "question": "Will my child be supervised at all times?",
-    "answer": "Yes, your child will be supervised at all times. Each child is assigned a Peak Leader responsible for their welfare day and night. Children are not permitted to leave the site unless accompanied by a member of staff on a planned excursion."
-  },
-  {
-    "question": "What type of food will be provided?",
-    "answer": "We provide a healthy, balanced, and high-energy diet. We can cater to all special dietary requirements, including vegetarian, no pork, and allergies, provided we are notified at least two weeks prior to arrival."
-  },
-  {
-    "question": "What if my child requires medication?",
-    "answer": "The camp must be notified in advance of any medical conditions and required treatments. It is critical that all health forms are completed accurately. Our staff will manage the administration of medication, keep full records, and parents will always be alerted in an emergency."
-  },
-  {
-    "question": "Do I need to provide pocket money?",
-    "answer": "Providing pocket money is a parental choice, but it is highly recommended. It allows children to learn how to handle money by themselves for small purchases like souvenirs or extra snacks during excursions."
-  }
+    {
+        "question": "How can I choose the right Summer Camp for my child?",
+        "answer": "<p>Choosing the right camp involves considering your child's interests and readiness. Key elements to look for include a camp with a long history, a clear philosophy (e.g., sports, arts), an emphasis on creating a multinational community, a well-trained staff with a good staff-to-child ratio, and proper accreditation from international organizations. A good camp helps children separate from their families in a safe way to become resilient and independent.</p>"
+    },
+    {
+        "question": "What actions are taken to ensure camper safety and wellbeing?",
+        "answer": "<p>The safety and wellbeing of campers is our most essential priority. Campers are cared for from the moment they arrive at the destination airport until the camp is over. All our camps are hosted in residential schools and are supervised 24/7 by specially trained counselors who provide optimum guidance and care. For our junior clients, we ensure a low leader-to-child ratio (1 to 5) for close supervision.</p>"
+    },
+    {
+        "question": "How should I prepare my child for camp?",
+        "answer": "<p>To prepare your child, we recommend the following:</p>\r\n<ul>\r\n<li>Label all clothing and belongings.</li>\r\n<li>Complete all health forms with detailed information.</li>\r\n<li>Arrange a practice sleepover with a friend or grandparent.</li>\r\n<li>Ensure your child can manage basic personal hygiene.</li>\r\n<li>Discuss what will happen at camp to build excitement and reduce anxiety.</li>\r\n</ul>"
+    },
+    {
+        "question": "What should my child bring to camp?",
+        "answer": "<p>A detailed list will be provided, but essentials include: night clothes, sufficient underwear and socks for the stay, trousers, swimwear, shorts, t-shirts, a jumper/fleece, a waterproof jacket, two towels (one for swimming), and trainers. Please also pack necessary toiletries, sun cream, and insect repellent. It is not advisable for children to bring expensive electronics like mobile phones or computers.</p>"
+    },
+    {
+        "question": "Will my child be supervised at all times?",
+        "answer": "<p>Yes, your child will be supervised at all times. Each child is assigned a Peak Leader responsible for their welfare day and night. Children are not permitted to leave the site unless accompanied by a member of staff on a planned excursion.</p>"
+    },
+    {
+        "question": "What type of food will be provided?",
+        "answer": "<p>We provide a healthy, balanced, and high-energy diet. We can cater to all special dietary requirements, including vegetarian, no pork, and allergies, provided we are notified at least two weeks prior to arrival.</p>"
+    },
+    {
+        "question": "What if my child requires medication?",
+        "answer": "<p>The camp must be notified in advance of any medical conditions and required treatments. It is critical that all health forms are completed accurately. Our staff will manage the administration of medication, keep full records, and parents will always be alerted in an emergency.</p>"
+    },
+    {
+        "question": "Do I need to provide pocket money???",
+        "answer": "<p>Providing pocket money is a parental choice, but it is highly recommended. It allows children to learn how to handle money by themselves for small purchases like souvenirs or extra snacks during excursions.</p>"
+    }
 ]

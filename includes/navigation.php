@@ -37,7 +37,9 @@ require_once __DIR__ . '/../data/destinations.php';
                         <li><hr class="dropdown-divider"></li>
                         <?php if (isset($programs) && is_array($programs)) : ?>
                             <?php foreach ($programs as $program) : ?>
-                                <li><a class="dropdown-item" href="/programs/<?= htmlspecialchars($program['slug']) ?>"><?= htmlspecialchars($program['name']) ?></a></li>
+                                <?php if (isset($program['status']) && $program['status'] === 'active') : ?>
+                                    <li><a class="dropdown-item" href="/program/category.php?category=<?= htmlspecialchars($program['slug']) ?>"><?= htmlspecialchars($program['name']) ?></a></li>
+                                <?php endif; ?>
                             <?php endforeach; ?>
                         <?php endif; ?>
                     </ul>
@@ -51,7 +53,9 @@ require_once __DIR__ . '/../data/destinations.php';
                     <ul class="dropdown-menu" aria-labelledby="destinationsDropdown">
                         <?php if (isset($destinations) && is_array($destinations)) : ?>
                             <?php foreach ($destinations as $destination) : ?>
-                                <li><a class="dropdown-item" href="/destinations/<?= htmlspecialchars($destination['slug']) ?>"><?= htmlspecialchars($destination['name']) ?></a></li>
+                                <?php if (isset($destination['status']) && $destination['status'] === 'active') : ?>
+                                    <li><a class="dropdown-item" href="/destinations/<?= htmlspecialchars($destination['slug']) ?>"><?= htmlspecialchars($destination['name']) ?></a></li>
+                                <?php endif; ?>
                             <?php endforeach; ?>
                         <?php endif; ?>
                     </ul>

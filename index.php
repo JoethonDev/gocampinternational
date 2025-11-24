@@ -54,13 +54,17 @@ if ($path === 'landing') {
     include __DIR__ . '/landing.php';
     exit;
 }
-
+// Handle admin dashboard
+if ($path === 'admin' || $path === 'admin/') {
+    include __DIR__ . '/admin/index.php';
+    exit;
+}
 // Handle dynamic destination pages (e.g., /destination/italy)
 if (preg_match('/^destinations\/([a-zA-Z0-9_-]+)$/', $path, $matches)) {
     $slug = $matches[1];
     $destinationData = null;
     foreach ($destinations as $dest) {
-        if ($dest['slug'] === $slug) {
+        if ($dest['slug'] === $slug && $dest['status'] === 'active') {
             $destinationData = $dest;
             break;
         }
@@ -75,23 +79,24 @@ if (preg_match('/^destinations\/([a-zA-Z0-9_-]+)$/', $path, $matches)) {
     exit;
 }
 
-// Handle dynamic program category pages (e.g., /program/soccer-camps)
+// Handle dynamic program category pages (e.g., /programs/soccer-camps)
 if (preg_match('/^programs\/([a-zA-Z0-9_-]+)$/', $path, $matches)) {
     $slug = $matches[1];
-    $programData = null;
-    foreach ($programs as $prog) {
-        if ($prog['slug'] === $slug) {
-            $programData = $prog;
-            break;
-        }
-    }
+    // Redirect to the new query parameter style for consistency
+    header('Location: /program/category?category=' . urlencode($slug));
+    exit;
+}
 
-    if ($programData) {
-        include __DIR__ . '/program/category.php';
-    } else {
-        http_response_code(404);
-        include __DIR__ . '/404.php';
-    }
+// Handle pretty URL for category page (no .php)
+if ($path === 'program/category') {
+    include __DIR__ . '/program/category.php';
+    exit;
+}
+
+// Optionally, redirect /program/category.php to /program/category for consistency
+if ($path === 'program/category.php') {
+    $query = $_SERVER['QUERY_STRING'] ? ('?' . $_SERVER['QUERY_STRING']) : '';
+    header('Location: /program/category' . $query);
     exit;
 }
 

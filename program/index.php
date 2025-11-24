@@ -1,53 +1,140 @@
 <?php
 /**
  * File: /program/index.php
- * This page lists ALL available programs from ALL destinations.
+ * This page lists ALL available programs from the master all_programs.php file.
  */
 
 // --- Page-specific variables ---
 $pageTitle = 'Go Camp :: All Programs';
 $pageDescription = 'Explore all available summer camps, from language and arts to sports and leadership programs across our premier destinations.';
 
+// --- Load required data ---
+require_once __DIR__ . '/../data/all_programs.php';
+require_once __DIR__ . '/../data/destinations.php';
+require_once __DIR__ . '/../data/programs.php';
+
 // --- Include Header and Navigation ---
 require_once __DIR__ . '/../includes/header.php';
 require_once __DIR__ . '/../includes/navigation.php';
 
-// --- Aggregate all programs from all destinations ---
+// --- Prepare all programs with destination information ---
 $allPrograms = [];
-foreach ($destinations as $destination) {
-    if (!empty($destination['programs'])) {
-        foreach ($destination['programs'] as $p) {
-            // Add the destination name to each program for context
-            $p['destination_name'] = $destination['name'];
-            $allPrograms[] = $p;
+foreach ($all_programs as $program_id => $program) {
+    if (isset($program['status']) && $program['status'] === 'active') {
+        // Find which destination this program belongs to
+        $destination_name = 'Multiple Locations'; // Default
+        $destination_slug = '#';
+        
+        foreach ($destinations as $dest) {
+            if (isset($dest['program_ids']) && in_array($program_id, $dest['program_ids'])) {
+                $destination_name = $dest['name'];
+                $destination_slug = $dest['slug'];
+                break; // Found the first destination, stop looping
+            }
         }
+        
+        $program['destination_name'] = $destination_name;
+        $program['destination_slug'] = $destination_slug;
+        $allPrograms[] = $program;
     }
 }
+
+// --- Group programs by category for better organization and sort by order then name ---
+$programsByCategory = [];
+foreach ($allPrograms as $program) {
+    $categorySlug = $program['category_slug'] ?? 'other';
+    if (!isset($programsByCategory[$categorySlug])) {
+        $programsByCategory[$categorySlug] = [
+            'category' => $programs[$categorySlug] ?? ['name' => 'Other Programs', 'slug' => $categorySlug],
+            'programs' => []
+        ];
+    }
+    $programsByCategory[$categorySlug]['programs'][] = $program;
+}
+// Sort programs in each category by 'order' (asc), then by name (asc)
+foreach ($programsByCategory as &$catData) {
+    usort($catData['programs'], function($a, $b) {
+        $orderA = isset($a['order']) ? (int)$a['order'] : PHP_INT_MAX;
+        $orderB = isset($b['order']) ? (int)$b['order'] : PHP_INT_MAX;
+        if ($orderA === $orderB) {
+            return strcasecmp($a['name'] ?? '', $b['name'] ?? '');
+        }
+        return $orderA - $orderB;
+    });
+}
+unset($catData);
 ?>
 <main>
-    <!-- Simple Hero Section -->
+    <!-- Hero Section -->
     <section class="py-5 text-center bg-light">
         <div class="container">
             <h1 class="display-4 fw-bold">All Our Programs</h1>
-            <p class="lead text-muted">Find the perfect adventure from our complete list of international camps.</p>
+            <p class="lead text-muted">Find the perfect adventure from our complete list of international camps, organized by category.</p>
         </div>
     </section>
 
-    <!-- Programs Grid -->
-    <section class="section-padding">
+    <!-- Category Filter Navigation -->
+    <section class="py-3 bg-white border-bottom sticky-top" style="top: 70px; z-index: 1000;">
         <div class="container">
-            <div class="row g-4">
-                <?php if (!empty($allPrograms)) : ?>
-                    <?php foreach ($allPrograms as $program) : ?>
-                        <div class="col-lg-4 col-md-6">
-                            <?php // The program card component will now also show the destination name if available ?>
-                            <?php require __DIR__ . '/../sections/program_card_modern.php'; ?>
-                        </div>
-                    <?php endforeach; ?>
-                <?php else : ?>
-                    <p class="text-center">No programs found. Please check back later.</p>
-                <?php endif; ?>
+            <div class="d-flex flex-wrap justify-content-center gap-2">
+                <a href="#all-programs" class="btn btn-outline-primary btn-sm smooth-scroll">All Programs</a>
+                <?php foreach ($programsByCategory as $categoryData): ?>
+                    <a href="#category-<?= htmlspecialchars($categoryData['category']['slug']) ?>" class="btn btn-outline-primary btn-sm smooth-scroll">
+                        <?= htmlspecialchars($categoryData['category']['name']) ?> 
+                        <span class="badge bg-primary ms-1"><?= count($categoryData['programs']) ?></span>
+                    </a>
+                <?php endforeach; ?>
             </div>
+        </div>
+    </section>
+
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        .smooth-scroll {
+            scroll-behavior: smooth;
+        }
+    </style>
+
+    <!-- Programs by Category -->
+    <section class="section-padding" id="all-programs">
+        <div class="container">
+            <?php if (!empty($programsByCategory)): ?>
+                <?php foreach ($programsByCategory as $categorySlug => $categoryData): ?>
+                    <div class="mb-5" id="category-<?= htmlspecialchars($categorySlug) ?>">
+                        <div class="row align-items-center mb-4">
+                            <div class="col-md-8">
+                                <h2 class="h3 fw-bold text-primary mb-1"><?= htmlspecialchars($categoryData['category']['name']) ?></h2>
+                                <p class="text-muted mb-0"><?= count($categoryData['programs']) ?> programs available</p>
+                            </div>
+                            <div class="col-md-4 text-md-end">
+                                <a href="/program/category.php?category=<?= htmlspecialchars($categorySlug) ?>" class="btn btn-outline-primary">
+                                    View Category Details <i class="bi bi-arrow-right ms-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <div class="row g-4">
+                            <?php foreach ($categoryData['programs'] as $program): ?>
+                                <div class="col-lg-4 col-md-6">
+                                    <?php require __DIR__ . '/../sections/program_card_modern.php'; ?>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                    
+                    <?php if ($categorySlug !== array_key_last($programsByCategory)): ?>
+                        <hr class="my-5">
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <div class="text-center py-5">
+                    <i class="bi bi-exclamation-circle display-1 text-muted"></i>
+                    <h3 class="mt-3">No programs found</h3>
+                    <p class="text-muted">Please check back later for new programs.</p>
+                </div>
+            <?php endif; ?>
         </div>
     </section>
     
