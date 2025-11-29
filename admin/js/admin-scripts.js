@@ -73,7 +73,15 @@ $(document).ready(function () {
       return;
     }
 
-    const addBtn = container.querySelector('[data-action="add-item"]');
+    // 1. Find the add button (internal or external in card header)
+    let addBtn = container.querySelector('[data-action="add-item"]');
+    if (!addBtn) {
+      const card = container.closest('.card');
+      if (card) {
+        addBtn = card.querySelector('.card-header [data-action="add-item"]');
+      }
+    }
+
     if (addBtn) {
       addBtn.addEventListener("click", function () {
         const newItemFragment = template.content.cloneNode(true);
@@ -94,6 +102,12 @@ $(document).ready(function () {
           return;
         }
 
+        // --- NEW: Replace NEW_ID with unique ID for Accordions ---
+        // This ensures that accordion toggles work correctly for dynamically added items
+        const uniqueId = Date.now() + "-" + Math.random().toString(36).substring(2);
+        newItemElement.innerHTML = newItemElement.innerHTML.replace(/NEW_ID/g, uniqueId);
+        // ---------------------------------------------------------
+
         // Media Input Logic (from Phase 13)
         const mediaInput = newItemElement.querySelector(
           "input.media-preview-target-input"
@@ -102,13 +116,13 @@ $(document).ready(function () {
           '[data-bs-toggle="media-modal"]'
         );
         if (mediaInput && mediaButton) {
-          const uniqueId =
+          const mediaUniqueId =
             "media-target-" +
             Date.now() +
             "-" +
             Math.random().toString(36).substring(2);
-          mediaInput.id = uniqueId;
-          mediaButton.dataset.bsTargetInput = uniqueId;
+          mediaInput.id = mediaUniqueId;
+          mediaButton.dataset.bsTargetInput = mediaUniqueId;
         }
 
         if (container.classList.contains("simple-repeater")) {
@@ -126,14 +140,14 @@ $(document).ready(function () {
           ".tinymce-init-on-add"
         );
         if (newTextarea) {
-          const uniqueId =
+          const tinyMceUniqueId =
             "tinymce-" +
             Date.now() +
             "-" +
             Math.random().toString(36).substring(2);
-          newTextarea.id = uniqueId;
+          newTextarea.id = tinyMceUniqueId;
           setTimeout(() => {
-            initializeTinyMCE("#" + uniqueId);
+            initializeTinyMCE("#" + tinyMceUniqueId);
             newTextarea.classList.remove("tinymce-init-on-add");
           }, 100);
         }
@@ -146,7 +160,18 @@ $(document).ready(function () {
         }
         // --- END MODIFIED ---
 
-        this.before(newItemElement); // Add to DOM
+        // Insert the new item
+        if (container.contains(addBtn)) {
+            addBtn.before(newItemElement);
+        } else {
+            container.appendChild(newItemElement);
+        }
+
+        // Hide empty state message if it exists
+        const emptyState = container.querySelector('.empty-state-message');
+        if (emptyState) {
+            emptyState.style.display = 'none';
+        }
       });
     }
 

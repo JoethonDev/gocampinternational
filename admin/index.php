@@ -92,10 +92,13 @@ $pageTitle = 'Admin Login';
     <title><?= htmlspecialchars($pageTitle) ?></title>
     <link rel="icon" type="image/png" href="/images/favi.png">
     
-    <?php
-    // We only need the styles, not the full header/nav
-    require_once __DIR__ . '/../includes/styles.php';
-    ?>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <!-- Admin Modern CSS -->
+    <link rel="stylesheet" href="/admin/css/admin-modern.css">
+
     <style>
         html, body {
             height: 100%;
@@ -104,48 +107,81 @@ $pageTitle = 'Admin Login';
             display: flex;
             align-items: center;
             justify-content: center;
-            padding-top: 40px;
-            padding-bottom: 40px;
-            background-color: #f5f5f5;
+            background-color: var(--bg-body);
+            background-image: radial-gradient(circle at 10% 20%, rgb(242, 246, 252) 0%, rgb(230, 236, 245) 90%);
         }
-        .form-signin {
+        [data-theme="dark"] body {
+            background-image: radial-gradient(circle at 10% 20%, #1a1d21 0%, #212529 90%);
+        }
+        .login-card {
             width: 100%;
-            max-width: 400px;
-            padding: 15px;
-            margin: auto;
+            max-width: 420px;
+            border: none;
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            background-color: var(--bg-card);
+            color: var(--text-main);
+        }
+        .form-floating > .form-control {
+            background-color: var(--bg-body);
+            border-color: var(--border-color);
+            color: var(--text-main);
+        }
+        .form-floating > .form-control:focus {
+            background-color: var(--bg-card);
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(var(--primary-rgb), 0.1);
+        }
+        .form-floating > label {
+            color: var(--text-muted);
         }
     </style>
 </head>
-<body class="text-center">
+<body class="animate-fade-in">
 
-    <main class="form-signin card">
+    <main class="login-card p-4 p-md-5">
         <form method="POST" action="">
-            <img class="mb-4" src="/images/logo.png" alt="Go Camp International" style="height: 70px;">
-            <h1 class="h3 mb-3 fw-normal">Admin Panel</h1>
+            <div class="text-center mb-4">
+                <img class="mb-4" src="/images/logo.png" alt="Go Camp International" style="height: 60px;">
+                <h1 class="h4 mb-3 fw-bold text-primary">Admin Access</h1>
+                <p class="text-muted small">Please sign in to continue to the dashboard.</p>
+            </div>
 
             <?php if ($error_message): ?>
-                <div class="alert alert-danger" role="alert">
-                    <?= htmlspecialchars($error_message) ?>
+                <div class="alert alert-danger border-0 shadow-sm d-flex align-items-center" role="alert">
+                    <i class="bi bi-exclamation-circle-fill me-2"></i>
+                    <div><?= htmlspecialchars($error_message) ?></div>
                 </div>
             <?php endif; ?>
 
             <div class="form-floating mb-3">
                 <input type="text" class="form-control" id="username" name="username" placeholder="Username" required>
-                <label for="username">Username</label>
+                <label for="username"><i class="bi bi-person me-1"></i> Username</label>
             </div>
-            <div class="form-floating">
+            <div class="form-floating mb-4">
                 <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
-                <label for="password">Password</label>
+                <label for="password"><i class="bi bi-lock me-1"></i> Password</label>
             </div>
             
-            <button class="w-100 btn btn-lg btn-primary mt-3" type="submit">Sign in</button>
-            <p class="mt-5 mb-3 text-muted">&copy; <?= date('Y') ?> Go Camp International</p>
+            <button class="w-100 btn btn-lg btn-primary rounded-pill shadow-sm" type="submit">
+                Sign In <i class="bi bi-arrow-right ms-2"></i>
+            </button>
+            
+            <div class="mt-5 text-center">
+                <p class="mb-0 text-muted small">&copy; <?= date('Y') ?> Go Camp International</p>
+            </div>
         </form>
     </main>
 
-    <?php
-    // We only need the scripts, not the full footer
-    require_once __DIR__ . '/../includes/scripts.php';
-    ?>
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Theme Script (Inline to prevent FOUC) -->
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('admin_theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        })();
+    </script>
 </body>
 </html>

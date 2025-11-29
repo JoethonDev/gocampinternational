@@ -30,12 +30,19 @@ $pageTitle = $pageTitle ?? 'Go Camp Admin';
     require_once __DIR__ . '/../../includes/styles.php';
     ?>
     
+    <!-- Admin Modern Theme -->
+    <link rel="stylesheet" href="/admin/css/admin-modern.css">
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        (function() {
+            const savedTheme = localStorage.getItem('admin-theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        })();
+    </script>
+    
     <style>
-        body {
-            /* Ensures admin content doesn't get hidden under the fixed nav */
-            padding-top: 56px; 
-            background-color: #f8f9fa; /* A light grey for admin */
-        }
+        /* Removed inline body styles as they are now in admin-modern.css */
     </style>
 </head>
 <body>

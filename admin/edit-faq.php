@@ -48,72 +48,118 @@ require_once 'includes/admin-header.php';
 ?>
 
 <template id="faq-template">
-    <div class="card p-3 mb-3 repeater-item">
-        <div class="mb-2">
-            <label class="form-label fw-bold">Question</label>
-            <input type="text" class="form-control" name="question[]">
+    <div class="accordion-item repeater-item border-0 mb-3 shadow-sm rounded">
+        <h2 class="accordion-header" id="heading-NEW_ID">
+            <button class="accordion-button collapsed bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-NEW_ID" aria-expanded="false" aria-controls="collapse-NEW_ID">
+                <span class="fw-bold text-primary me-2">New Question</span>
+                <small class="text-muted ms-auto me-3">Expand to edit</small>
+            </button>
+        </h2>
+        <div id="collapse-NEW_ID" class="accordion-collapse collapse show" aria-labelledby="heading-NEW_ID">
+            <div class="accordion-body bg-white">
+                <div class="row g-3">
+                    <div class="col-md-12">
+                        <label class="form-label fw-bold text-secondary small text-uppercase">Question</label>
+                        <input type="text" class="form-control form-control-lg" name="question[]" placeholder="e.g. What is the refund policy?">
+                    </div>
+                    <div class="col-md-12">
+                        <label class="form-label fw-bold text-secondary small text-uppercase">Answer</label>
+                        <textarea class="form-control tinymce-init-on-add" name="answer[]" rows="5"></textarea> 
+                    </div>
+                    <div class="col-12 text-end">
+                        <button class="btn btn-outline-danger btn-sm" type="button" data-action="remove-item">
+                            <i class="bi bi-trash"></i> Remove FAQ
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="mb-2">
-            <label class="form-label fw-bold">Answer</label>
-            <textarea class="form-control tinymce-init-on-add" name="answer[]" rows="5"></textarea> 
-        </div>
-        <button class="btn btn-danger btn-sm align-self-end mt-2" type="button" data-action="remove-item">
-            <i class="bi bi-trash"></i> Remove FAQ
-        </button>
     </div>
 </template>
 
-<form action="edit-faq.php" method="POST">
-    <div class="card">
-        <div class="card-header">
-            <h1 class="h3 mb-0">Edit Global FAQs</h1>
+<div class="container-fluid py-4 animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <a href="/admin/dashboard.php" class="text-decoration-none text-secondary mb-2 d-inline-block">
+                <i class="bi bi-arrow-left"></i> Back to Dashboard
+            </a>
+            <h1 class="h3 mb-0 fw-bold text-gray-800">Global FAQs</h1>
+            <p class="text-muted mb-0">Manage the Frequently Asked Questions displayed on the public site.</p>
         </div>
+        <button type="submit" class="btn btn-primary px-4" form="faqForm">
+            <i class="bi bi-save"></i> Save Changes
+        </button>
+    </div>
 
-        <div class="card-body">
-            
-            <?php if ($success_message): ?>
-                <div class="alert alert-success"><?= $success_message ?></div>
-            <?php endif; ?>
-            <?php if ($error_message): ?>
-                <div class="alert alert-danger"><?= $error_message ?></div>
-            <?php endif; ?>
+    <form id="faqForm" action="edit-faq.php" method="POST">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-transparent border-0 pt-4 pb-2 px-4 d-flex justify-content-between align-items-center">
+                <h5 class="card-title fw-bold text-primary mb-0"><i class="bi bi-question-circle me-2"></i>FAQ Items</h5>
+                <button class="btn btn-sm btn-primary rounded-pill px-3" type="button" data-action="add-item">
+                    <i class="bi bi-plus-lg me-1"></i> Add FAQ
+                </button>
+            </div>
 
-            <p class="text-muted">Changes saved here will be live on the public FAQ page.</p>
-
-            <div id="faq-list" class="repeater-container" data-template-id="faq-template">
-                <?php if (!empty($faqData)): ?>
-                    <?php foreach ($faqData as $index => $item): ?>
-                        <div class="card p-3 mb-3 repeater-item">
-                            <div class="mb-2">
-                                <label for="question-<?= $index ?>" class="form-label fw-bold">Question</label>
-                                <input type="text" class="form-control" id="question-<?= $index ?>" name="question[]" value="<?= htmlspecialchars($item['question']) ?>">
-                            </div>
-                            <div class="mb-2">
-                                <label for="answer-<?= $index ?>" class="form-label fw-bold">Answer</label>
-                                <textarea class="form-control tinymce-editor" id="answer-<?= $index ?>" name="answer[]" rows="5"><?= htmlspecialchars($item['answer']) ?></textarea>
-                            </div>
-                            <button class="btn btn-danger btn-sm align-self-end mt-2" type="button" data-action="remove-item">
-                                <i class="bi bi-trash"></i> Remove FAQ
-                            </button>
-                        </div>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <p class="text-muted fst-italic">No FAQs found. Click "Add FAQ" to create one.</p>
+            <div class="card-body p-4">
+                
+                <?php if ($success_message): ?>
+                    <div class="alert alert-success alert-dismissible fade show shadow-sm border-0 border-start border-success border-4" role="alert">
+                        <i class="bi bi-check-circle-fill me-2"></i> <?= $success_message ?>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                <?php endif; ?>
+                <?php if ($error_message): ?>
+                    <div class="alert alert-danger alert-dismissible fade show shadow-sm border-0 border-start border-danger border-4" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i> <?= $error_message ?>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
                 <?php endif; ?>
 
-                <button class="btn btn-outline-primary mt-3" type="button" data-action="add-item">
-                    <i class="bi bi-plus-lg"></i> Add FAQ
-                </button>
-            </div>
-            
-            <hr> 
-            <div class="text-end"> 
-                <button type="submit" class="btn btn-primary">
-                    <i class="bi bi-save"></i> Save Changes
-                </button>
-            </div>
-
-        </div> </div> </form> 
+                <div id="faq-list" class="repeater-container accordion" id="faqAccordion" data-template-id="faq-template">
+                    <?php if (!empty($faqData)): ?>
+                        <?php foreach ($faqData as $index => $item): 
+                            $collapseId = 'collapse-' . $index . '-' . uniqid();
+                            $headingId = 'heading-' . $index . '-' . uniqid();
+                        ?>
+                            <div class="accordion-item repeater-item border-0 mb-3 shadow-sm rounded">
+                                <h2 class="accordion-header" id="<?= $headingId ?>">
+                                    <button class="accordion-button collapsed bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#<?= $collapseId ?>" aria-expanded="false" aria-controls="<?= $collapseId ?>">
+                                        <span class="fw-bold text-primary me-2"><?= !empty($item['question']) ? htmlspecialchars($item['question']) : 'New Question' ?></span>
+                                        <small class="text-muted ms-auto me-3">Expand to edit</small>
+                                    </button>
+                                </h2>
+                                <div id="<?= $collapseId ?>" class="accordion-collapse collapse" aria-labelledby="<?= $headingId ?>" data-bs-parent="#faqAccordion">
+                                    <div class="accordion-body bg-white">
+                                        <div class="row g-3">
+                                            <div class="col-md-12">
+                                                <label for="question-<?= $index ?>" class="form-label fw-bold text-secondary small text-uppercase">Question</label>
+                                                <input type="text" class="form-control form-control-lg" id="question-<?= $index ?>" name="question[]" value="<?= htmlspecialchars($item['question']) ?>">
+                                            </div>
+                                            <div class="col-md-12">
+                                                <label for="answer-<?= $index ?>" class="form-label fw-bold text-secondary small text-uppercase">Answer</label>
+                                                <textarea class="form-control tinymce-editor" id="answer-<?= $index ?>" name="answer[]" rows="5"><?= htmlspecialchars($item['answer']) ?></textarea>
+                                            </div>
+                                            <div class="col-12 text-end">
+                                                <button class="btn btn-outline-danger btn-sm" type="button" data-action="remove-item">
+                                                    <i class="bi bi-trash"></i> Remove FAQ
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <div class="text-center py-5 text-muted empty-state-message">
+                            <i class="bi bi-chat-square-text display-4 mb-3 d-block opacity-25"></i>
+                            <p>No FAQs found. Click "Add FAQ" to create one.</p>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div> 
+        </div> 
+    </form> 
+</div> 
 <?php
 // 6. Include Footer
 require_once 'includes/admin-footer.php';

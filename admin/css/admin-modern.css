@@ -1,0 +1,463 @@
+/* 
+ * Admin Modern Theme 
+ * Supports: Light (Default), Dark, Dainty One Pro
+ */
+
+:root {
+    /* Default Light Theme */
+    --bg-body: #f4f6f9;
+    --bg-card: #ffffff;
+    --text-main: #212529;
+    --text-muted: #6c757d;
+    --border-color: #e9ecef;
+    --primary-color: #0d6efd;
+    --primary-rgb: 13, 110, 253; /* Added for rgba() usage */
+    --primary-hover: #0b5ed7;
+    --navbar-bg: #ffffff;
+    --navbar-text: #212529;
+    --card-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    --transition-speed: 0.3s;
+    --radius-md: 0.5rem;
+    --radius-lg: 1rem;
+    --input-bg: #ffffff;
+    --input-border: #ced4da;
+    --input-text: #212529;
+    --input-placeholder: #6c757d;
+}
+
+[data-theme="dark"] {
+    --bg-body: #121212;
+    --bg-card: #1e1e1e;
+    --text-main: #e0e0e0;
+    --text-muted: #a0a0a0;
+    --border-color: #333333;
+    --primary-color: #375a7f;
+    --primary-rgb: 55, 90, 127;
+    --primary-hover: #2b4764;
+    --navbar-bg: #1e1e1e;
+    --navbar-text: #e0e0e0;
+    --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    --input-bg: #2c2c2c;
+    --input-border: #444444;
+    --input-text: #e0e0e0;
+    --input-placeholder: #888888;
+}
+
+[data-theme="dainty"] {
+    --bg-body: #fdfbf7;
+    --bg-card: #ffffff;
+    --text-main: #4a4a4a;
+    --text-muted: #8c8c8c;
+    --border-color: #f0e6d2;
+    --primary-color: #d4a373;
+    --primary-rgb: 212, 163, 115;
+    --primary-hover: #c59260;
+    --navbar-bg: #faedcd;
+    --navbar-text: #4a4a4a; /* Darker text for better contrast on cream bg */
+    --card-shadow: 0 4px 15px rgba(212, 163, 115, 0.15);
+    --input-bg: #ffffff;
+    --input-border: #e0d4c0;
+    --input-text: #4a4a4a;
+    --input-placeholder: #a09080;
+}
+
+/* Global Styles */
+body {
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    transition: background-color var(--transition-speed), color var(--transition-speed);
+    padding-top: 70px; /* Adjusted for navbar */
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--text-main);
+}
+
+/* Dainty Theme Text Primary Override */
+[data-theme="dainty"] .text-primary {
+    color: #b07d4e !important; /* Darker shade of primary for text readability */
+}
+
+a {
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+/* Navbar */
+.navbar {
+    background-color: var(--navbar-bg) !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border-color);
+    padding: 0.75rem 1rem;
+}
+
+.navbar-brand {
+    color: var(--navbar-text) !important;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+.nav-link {
+    color: var(--navbar-text) !important;
+    opacity: 1; /* Increased from 0.8 for better contrast */
+    font-weight: 500;
+    transition: opacity 0.2s, transform 0.2s;
+}
+
+.nav-link:hover, .nav-link:focus {
+    opacity: 0.7;
+    color: var(--navbar-text) !important;
+    transform: translateY(-1px);
+}
+
+/* Navbar Toggler Fix */
+.navbar-toggler {
+    border-color: var(--border-color);
+    color: var(--navbar-text);
+}
+
+.navbar-toggler-icon {
+    background-image: none !important; /* Remove default SVG */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.navbar-toggler-icon::after {
+    content: "\F479"; /* Bootstrap Icons 'list' */
+    font-family: "bootstrap-icons";
+    font-size: 1.5rem;
+    color: var(--navbar-text);
+}
+
+/* Force Navbar Text Color for Light Theme */
+[data-theme="light"] .navbar-brand,
+[data-theme="light"] .nav-link,
+[data-theme="light"] .navbar-toggler,
+[data-theme="light"] .navbar-toggler-icon::after {
+    color: #212529 !important;
+}
+
+/* Choices.js Overrides for Theming */
+.choices__inner {
+    background-color: var(--input-bg) !important;
+    border-color: var(--input-border) !important;
+    color: var(--input-text) !important;
+    border-radius: var(--radius-md) !important;
+    min-height: 44px;
+}
+
+.choices__input {
+    background-color: transparent !important;
+    color: var(--input-text) !important;
+}
+
+.choices__list--dropdown {
+    background-color: var(--bg-card) !important;
+    border: 1px solid var(--border-color) !important;
+    color: var(--text-main) !important;
+    z-index: 1060 !important; /* Higher than Bootstrap dropdowns */
+}
+
+.choices__list--dropdown .choices__item {
+    color: var(--text-main) !important;
+}
+
+.choices__list--dropdown .choices__item--selectable.is-highlighted {
+    background-color: var(--border-color) !important;
+}
+
+/* Cards */
+.card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--card-shadow);
+    transition: box-shadow 0.3s ease; /* Removed transform to fix dropdown clipping */
+    overflow: visible !important; /* Force overflow visible for dropdowns */
+    color: var(--text-main);
+}
+
+.card-body {
+    overflow: visible !important; /* Ensure card body doesn't clip dropdowns */
+}
+
+.card:hover {
+    /* transform: translateY(-5px); REMOVED: Causes stacking context issues with dropdowns */
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.card-header {
+    background-color: transparent;
+    border-bottom: 1px solid var(--border-color);
+    padding: 1.5rem;
+}
+
+.card-header h1, .card-header h2, .card-header h3, .card-title {
+    color: var(--text-main);
+    font-weight: 600;
+}
+
+/* List Groups */
+.list-group {
+    overflow: visible !important;
+}
+
+.list-group-item {
+    background-color: var(--bg-card);
+    border-color: var(--border-color);
+    color: var(--text-main);
+    padding: 1rem 1.5rem;
+    transition: background-color 0.2s;
+    overflow: visible !important; /* Allow dropdowns to overflow */
+}
+
+.list-group-item:hover {
+    background-color: rgba(0,0,0,0.05); /* Increased contrast for light theme (was 0.02) */
+}
+
+[data-theme="dark"] .list-group-item:hover {
+    background-color: rgba(255,255,255,0.05);
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    border-radius: var(--radius-md);
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+    border-color: var(--primary-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.btn-light {
+    background-color: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+}
+
+.btn-light:hover {
+    background-color: var(--border-color);
+    color: var(--text-main);
+}
+
+/* Dropdowns */
+.dropdown-menu {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--card-shadow);
+    border-radius: var(--radius-md);
+    z-index: 1050; /* Ensure high z-index */
+}
+
+.dropdown-item {
+    color: var(--text-main);
+}
+
+.dropdown-item:hover {
+    background-color: var(--border-color);
+    color: var(--text-main);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.2s; }
+.delay-3 { animation-delay: 0.3s; }
+
+/* Theme Switcher */
+.theme-switcher {
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: background-color 0.2s;
+}
+
+.theme-switcher:hover {
+    background-color: rgba(0,0,0,0.1);
+}
+
+/* Dashboard Specifics */
+.dashboard-stat {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.badge {
+    font-weight: 500;
+    padding: 0.5em 0.8em;
+}
+
+/* Form Elements (for edit pages) */
+.form-control, .form-select {
+    background-color: var(--input-bg);
+    border-color: var(--input-border);
+    color: var(--input-text);
+    border-radius: var(--radius-md);
+    padding: 0.75rem;
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+/* Dark Mode Select Arrow Fix */
+[data-theme="dark"] .form-select {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23e0e0e0' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+}
+
+.form-control::placeholder {
+    color: var(--input-placeholder);
+    opacity: 1;
+}
+
+.form-control:focus, .form-select:focus {
+    background-color: var(--input-bg);
+    color: var(--input-text);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(var(--primary-rgb), 0.25);
+}
+
+/* Input Group Addons */
+.input-group-text {
+    background-color: var(--border-color);
+    border-color: var(--border-color);
+    color: var(--text-main);
+}
+
+/* Image Upload */
+.image-upload-preview {
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: var(--card-shadow);
+    transition: transform 0.3s;
+}
+
+.image-upload-preview:hover {
+    transform: scale(1.02);
+}
+
+/* Repeater Items */
+.repeater-item .btn-outline-danger,
+.simple-repeater-item .btn-outline-danger {
+    width: auto !important;
+    min-width: 36px;
+    max-width: 100%;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    box-sizing: border-box;
+    margin-left: 0.5rem;
+    margin-right: 0;
+}
+
+.repeater-item,
+.simple-repeater-item {
+    position: relative;
+    overflow: visible;
+}
+
+/* Text Utilities for Dark Mode */
+.text-muted {
+    color: var(--text-muted) !important;
+}
+
+.text-secondary {
+    color: var(--text-muted) !important;
+}
+
+/* Modal Fixes */
+.modal-content {
+    background-color: var(--bg-card);
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
+}
+
+.modal-header, .modal-footer {
+    border-color: var(--border-color);
+}
+
+.btn-close {
+    filter: invert(var(--btn-close-invert));
+}
+
+[data-theme="dark"] {
+    --btn-close-invert: 1;
+}
+
+[data-theme="light"], [data-theme="dainty"] {
+    --btn-close-invert: 0;
+}
+
+/* Utility Overrides for Dark Mode */
+[data-theme="dark"] .bg-light {
+    background-color: #2c2c2c !important;
+    color: #e0e0e0 !important;
+}
+
+[data-theme="dark"] .bg-white {
+    background-color: #1e1e1e !important;
+    color: #e0e0e0 !important;
+}
+
+[data-theme="dark"] .text-dark {
+    color: #e0e0e0 !important;
+}
+
+/* Smooth Input Transitions */
+.form-control, .form-select, .btn {
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+/* --- FIXES FOR SELECTION & DROPDOWNS --- */
+
+/* Text Selection */
+::selection {
+    background-color: var(--primary-color);
+    color: #ffffff;
+}
+
+/* Dropdown Menu Visibility */
+.dropdown-menu {
+    z-index: 9999 !important; /* Ensure it's on top of everything */
+}
+
+/* Form Checkboxes (Dark Mode Fix) */
+[data-theme="dark"] .form-check-input {
+    background-color: #2c2c2c;
+    border-color: #444444;
+}
+
+[data-theme="dark"] .form-check-input:checked {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+[data-theme="dark"] .form-check-label {
+    color: var(--text-main);
+}
+
+/* Select Options */
+option {
+    background-color: var(--bg-card);
+    color: var(--text-main);
+}
+
+/* Choices.js Dropdown Z-Index Fix */
+.choices__list.choices__list--dropdown {
+    z-index: 10000 !important;
+}

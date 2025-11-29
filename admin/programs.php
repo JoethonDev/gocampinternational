@@ -35,31 +35,37 @@ body {
 }
 </style>
 
-<div class="card" style="overflow: visible;">
-    <div class="card-header d-flex justify-content-between align-items-center">
-        <h1 class="h3 mb-0">Master Program List</h1>
-        <a href="/admin/edit-program" class="btn btn-primary btn-sm">
-            <i class="bi bi-plus-lg"></i> Create New Program
+<div class="card border-0 shadow-sm animate-fade-in delay-1" style="overflow: visible;">
+    <div class="card-header bg-transparent border-bottom-0 pt-4 pb-2 px-4 d-flex justify-content-between align-items-center">
+        <div>
+            <h1 class="h3 mb-1 fw-bold">Master Program List</h1>
+            <p class="text-muted small mb-0">Manage all programs across categories</p>
+        </div>
+        <a href="/admin/edit-program" class="btn btn-primary btn-sm rounded-pill px-3">
+            <i class="bi bi-plus-lg me-1"></i> Create New Program
         </a>
     </div>
-    <div class="card-body border-bottom" id="filter-bar">
-        <div class="row g-2 align-items-end">
+    <div class="card-body border-bottom bg-light bg-opacity-10 px-4 py-3" id="filter-bar">
+        <div class="row g-3 align-items-end">
             <div class="col-md-4">
-                <label for="searchInput" class="form-label mb-1">Search</label>
-                <input type="text" id="searchInput" class="form-control" placeholder="Search by name, ID, or category...">
+                <label for="searchInput" class="form-label mb-1 small fw-bold text-muted text-uppercase">Search</label>
+                <div class="input-group">
+                    <span class="input-group-text border-end-0"><i class="bi bi-search text-muted"></i></span>
+                    <input type="text" id="searchInput" class="form-control border-start-0 ps-0" placeholder="Search by name, ID, or category...">
+                </div>
             </div>
             <div class="col-md-3">
-                <label class="form-label mb-1">Category</label>
+                <label class="form-label mb-1 small fw-bold text-muted text-uppercase">Category</label>
                 <div class="dropdown">
-                    <button class="btn btn-outline-secondary dropdown-toggle w-100 text-start d-flex justify-content-between align-items-center" type="button" id="categoryDropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
-                        <span>Select Categories</span>
+                    <button class="btn btn-light border dropdown-toggle w-100 text-start d-flex justify-content-between align-items-center" type="button" id="categoryDropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" data-bs-boundary="viewport">
+                        <span class="text-truncate">Select Categories</span>
                     </button>
-                    <ul class="dropdown-menu w-100 p-2" aria-labelledby="categoryDropdown" style="max-height: 300px; overflow-y: auto;">
+                    <ul class="dropdown-menu w-100 p-2 shadow border-0" aria-labelledby="categoryDropdown" style="max-height: 300px; overflow-y: auto;">
                         <?php foreach ($programs as $slug => $cat): ?>
                             <li>
-                                <div class="form-check">
+                                <div class="form-check py-1 position-relative">
                                     <input class="form-check-input filter-category" type="checkbox" value="<?= htmlspecialchars($slug) ?>" id="cat_<?= htmlspecialchars($slug) ?>">
-                                    <label class="form-check-label w-100" for="cat_<?= htmlspecialchars($slug) ?>">
+                                    <label class="form-check-label w-100 stretched-link" for="cat_<?= htmlspecialchars($slug) ?>">
                                         <?= htmlspecialchars($cat['name']) ?>
                                     </label>
                                 </div>
@@ -69,17 +75,17 @@ body {
                 </div>
             </div>
             <div class="col-md-3">
-                <label class="form-label mb-1">Destination</label>
+                <label class="form-label mb-1 small fw-bold text-muted text-uppercase">Destination</label>
                 <div class="dropdown">
-                    <button class="btn btn-outline-secondary dropdown-toggle w-100 text-start d-flex justify-content-between align-items-center" type="button" id="destinationDropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
-                        <span>Select Destinations</span>
+                    <button class="btn btn-light border dropdown-toggle w-100 text-start d-flex justify-content-between align-items-center" type="button" id="destinationDropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" data-bs-boundary="viewport">
+                        <span class="text-truncate">Select Destinations</span>
                     </button>
-                    <ul class="dropdown-menu w-100 p-2" aria-labelledby="destinationDropdown" style="max-height: 300px; overflow-y: auto;">
+                    <ul class="dropdown-menu w-100 p-2 shadow border-0" aria-labelledby="destinationDropdown" style="max-height: 300px; overflow-y: auto;">
                         <?php foreach ($destinations as $slug => $dest): ?>
                             <li>
-                                <div class="form-check">
+                                <div class="form-check py-1 position-relative">
                                     <input class="form-check-input filter-destination" type="checkbox" value="<?= htmlspecialchars($slug) ?>" id="dest_<?= htmlspecialchars($slug) ?>">
-                                    <label class="form-check-label w-100" for="dest_<?= htmlspecialchars($slug) ?>">
+                                    <label class="form-check-label w-100 stretched-link" for="dest_<?= htmlspecialchars($slug) ?>">
                                         <?= htmlspecialchars($dest['name']) ?>
                                     </label>
                                 </div>
@@ -89,44 +95,48 @@ body {
                 </div>
             </div>
             <div class="col-md-2">
-                <button id="clearFilters" class="btn btn-light btn-sm w-100 border">Clear Filters</button>
+                <button id="clearFilters" class="btn btn-light btn-sm w-100 border py-2">
+                    <i class="bi bi-x-lg me-1"></i> Clear Filters
+                </button>
             </div>
         </div>
     </div>
     <div class="list-group list-group-flush" id="programsList">
         <?php foreach ($all_programs as $id => $prog): ?>
             <?php if ($prog['status'] !== 'trash'): ?>
-                <div class="list-group-item d-flex justify-content-between align-items-center program-item"
+                <div class="list-group-item border-0 px-4 py-3 d-flex justify-content-between align-items-center program-item hover-bg-light transition-base"
                      data-cat="<?= htmlspecialchars($prog['category_slug']) ?>"
                      data-pid="<?= htmlspecialchars($id) ?>">
-                    <div>
-                        <a class="fw-bold text-decoration-none" href="/admin/edit-program?id=<?= htmlspecialchars($id) ?>">
-                            <?= htmlspecialchars($prog['name']) ?>
-                        </a>
-                        <br>
-                        <small class="text-muted">
-                            ID: <?= htmlspecialchars($id) ?> | Category: 
-                            <?= htmlspecialchars($programs[$prog['category_slug']]['name'] ?? 'N/A') ?>
-                        </small>
+                    <div class="d-flex align-items-center">
+                        <div class="icon-box bg-light text-primary rounded-circle me-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 40px; height: 40px;">
+                            <i class="bi bi-journal-text"></i>
+                        </div>
+                        <div>
+                            <a class="fw-bold text-decoration-none text-reset stretched-link" href="/admin/edit-program?id=<?= htmlspecialchars($id) ?>">
+                                <?= htmlspecialchars($prog['name']) ?>
+                            </a>
+                            <div class="small text-muted mt-1">
+                                <span class="badge bg-light text-dark border me-1">ID: <?= htmlspecialchars($id) ?></span>
+                                <span class="text-muted">
+                                    <i class="bi bi-folder2-open me-1"></i>
+                                    <?= htmlspecialchars($programs[$prog['category_slug']]['name'] ?? 'N/A') ?>
+                                </span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="dropdown">
-                        <button class="btn btn-light btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-three-dots-vertical"></i>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="/admin/edit-program?id=<?= htmlspecialchars($id) ?>">Edit</a></li>
-                            <li><a class="dropdown-item" href="/admin/item-action?action=duplicate&type=master_prog&slug=<?= htmlspecialchars($id) ?>">Duplicate</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li>
-                                <a class="dropdown-item text-danger" href="/admin/item-action?action=soft-delete&type=master_prog&slug=<?= htmlspecialchars($id) ?>">Delete</a>
-                            </li>
-                        </ul>
+                    <div class="d-flex gap-2 position-relative" style="z-index: 2;">
+                        <a href="/admin/edit-program?id=<?= htmlspecialchars($id) ?>" class="btn btn-sm btn-light border rounded p-1" title="Edit"><i class="bi bi-pencil"></i></a>
+                        <a href="/admin/item-action?action=duplicate&type=master_prog&slug=<?= htmlspecialchars($id) ?>" class="btn btn-sm btn-light border rounded p-1" title="Duplicate"><i class="bi bi-files"></i></a>
+                        <a href="/admin/item-action?action=soft-delete&type=master_prog&slug=<?= htmlspecialchars($id) ?>" class="btn btn-sm btn-light border rounded p-1 text-danger" title="Delete"><i class="bi bi-trash"></i></a>
                     </div>
                 </div>
             <?php endif; ?>
         <?php endforeach; ?>
-        <div id="noResults" class="text-center py-4 text-muted" style="display: none;">
-            No programs found matching your filters.
+        <div id="noResults" class="text-center py-5 text-muted" style="display: none;">
+            <div class="mb-3">
+                <i class="bi bi-search display-4 text-light"></i>
+            </div>
+            <p class="mb-0">No programs found matching your filters.</p>
         </div>
     </div>
 </div>
@@ -194,18 +204,25 @@ document.addEventListener('DOMContentLoaded', function() {
         let visibleCount = 0;
 
         programItems.forEach(item => {
-            const name = normalize(item.querySelector('a.fw-bold').textContent);
-            const small = item.querySelector('small.text-muted').textContent;
-            const idMatch = small.match(/ID: ([^ |]+)/);
-            const id = idMatch ? idMatch[1] : '';
+            const nameEl = item.querySelector('a.fw-bold');
+            const name = nameEl ? normalize(nameEl.textContent) : '';
+            
+            // Improved ID extraction
+            const idEl = item.querySelector('.badge');
+            const id = idEl ? normalize(idEl.textContent.replace('ID:', '').trim()) : '';
+            
+            const smallEl = item.querySelector('small.text-muted');
+            const small = smallEl ? smallEl.textContent : '';
+            
             const catMatch = small.match(/Category: (.+)$/);
             const category = catMatch ? catMatch[1].trim() : '';
+            
             const progID = item.getAttribute('data-pid');
             const itemCat = item.getAttribute('data-cat');
 
             let show = true;
             
-            // Text search
+            // Text search: Match Name OR ID OR Category
             if (search && !(name.includes(search) || id.includes(search) || category.toLowerCase().includes(search))) {
                 show = false;
             }

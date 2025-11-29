@@ -19,116 +19,144 @@ $pageTitle = 'Trash';
 require_once 'includes/admin-header.php';
 ?>
 
-<style>
-html, body {
-    height: 100%;
-}
-body {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
-#main-content {
-    flex: 1 0 auto;
-}
-.admin-footer {
-    flex-shrink: 0;
-}
-</style>
-
-<div id="main-content" style="max-width:100%;padding:0 2vw;">
-    <h1 class="h3 mb-2 mt-4">Trash</h1>
-    <p class="text-muted mb-4">Items in the trash are hidden from the public site but can be restored.</p>
-
-    <h2 class="h4">Trashed Master Programs</h2>
-    <div class="list-group mb-4">
-        <?php
-        $trash_count = 0;
-        foreach ($all_programs as $id => $prog):
-            if ($prog['status'] === 'trash'):
-                $trash_count++;
-        ?>
-            <div class="list-group-item d-flex justify-content-between align-items-center">
-                <span><?= htmlspecialchars($prog['name']) ?> <small class="text-muted">(ID: <?= htmlspecialchars($id) ?>)</small></span>
-                <div>
-                    <a href="/admin/item-action?action=restore&type=master_prog&slug=<?= htmlspecialchars($id) ?>" class="btn btn-outline-secondary btn-sm">
-                        <i class="bi bi-arrow-counterclockwise"></i> Restore
-                    </a>
-                    <a href="/admin/item-action?action=perm-delete&type=master_prog&slug=<?= htmlspecialchars($id) ?>" 
-                       class="btn btn-danger btn-sm"
-                       onclick="return confirm('Are you sure you want to PERMANENTLY DELETE this item? This cannot be undone.');">
-                        <i class="bi bi-x-octagon"></i> Delete Permanently
-                    </a>
-                </div>
-            </div>
-        <?php
-            endif;
-        endforeach;
-        if ($trash_count === 0) {
-            echo '<p class="text-muted fst-italic">No master programs in the trash.</p>';
-        }
-        ?>
-    </div>
-    <h2 class="h4">Trashed Destinations</h2>
-    <div class="list-group mb-4">
-        <?php
-        $trash_count = 0;
-        foreach ($destinations as $slug => $dest):
-            if ($dest['status'] === 'trash'):
-                $trash_count++;
-        ?>
-            <div class="list-group-item d-flex justify-content-between align-items-center">
-                <span><?= htmlspecialchars($dest['name']) ?></span>
-                <div>
-                    <a href="/admin/item-action?action=restore&type=dest&slug=<?= htmlspecialchars($slug) ?>" class="btn btn-outline-secondary btn-sm">
-                        <i class="bi bi-arrow-counterclockwise"></i> Restore
-                    </a>
-                    <a href="/admin/item-action?action=perm-delete&type=dest&slug=<?= htmlspecialchars($slug) ?>" 
-                       class="btn btn-danger btn-sm"
-                       onclick="return confirm('Are you sure you want to PERMANENTLY DELETE this item? This cannot be undone.');">
-                        <i class="bi bi-x-octagon"></i> Delete Permanently
-                    </a>
-                </div>
-            </div>
-        <?php
-            endif;
-        endforeach;
-        if ($trash_count === 0) {
-            echo '<p class="text-muted fst-italic">No destinations in the trash.</p>';
-        }
-        ?>
+<div class="container-fluid py-4 animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <a href="/admin/dashboard.php" class="text-decoration-none text-secondary mb-2 d-inline-block">
+                <i class="bi bi-arrow-left"></i> Back to Dashboard
+            </a>
+            <h1 class="h3 mb-0 fw-bold text-gray-800">Trash Can</h1>
+            <p class="text-muted mb-0">Items in the trash are hidden from the public site but can be restored.</p>
+        </div>
+        <button class="btn btn-outline-danger" onclick="return confirm('Emptying trash is not implemented yet, but you can delete items individually.');">
+            <i class="bi bi-trash"></i> Empty Trash
+        </button>
     </div>
 
-    <h2 class="h4">Trashed Program Categories</h2>
-    <div class="list-group mb-5">
-        <?php
-        $trash_count = 0;
-        foreach ($programs as $slug => $prog):
-            if ($prog['status'] === 'trash'):
-                $trash_count++;
-        ?>
-            <div class="list-group-item d-flex justify-content-between align-items-center">
-                <span><?= htmlspecialchars($prog['name']) ?></span>
-                <div>
-                    <a href="/admin/item-action?action=restore&type=prog&slug=<?= htmlspecialchars($slug) ?>" class="btn btn-outline-secondary btn-sm">
-                        <i class="bi bi-arrow-counterclockwise"></i> Restore
-                    </a>
-                    <a href="/admin/item-action?action=perm-delete&type=prog&slug=<?= htmlspecialchars($slug) ?>" 
-                       class="btn btn-danger btn-sm"
-                       onclick="return confirm('Are you sure you want to PERMANENTLY DELETE this item? This cannot be undone.');">
-                        <i class="bi bi-x-octagon"></i> Delete Permanently
-                    </a>
+    <div class="row g-4">
+        <!-- Master Programs Trash -->
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-transparent border-0 pt-4 pb-2 px-4">
+                    <h5 class="card-title fw-bold text-danger mb-0"><i class="bi bi-journal-x me-2"></i>Trashed Master Programs</h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="list-group list-group-flush rounded-3 border">
+                        <?php
+                        $trash_count = 0;
+                        foreach ($all_programs as $id => $prog):
+                            if ($prog['status'] === 'trash'):
+                                $trash_count++;
+                        ?>
+                            <div class="list-group-item d-flex justify-content-between align-items-center p-3">
+                                <div>
+                                    <h6 class="mb-0 fw-bold"><?= htmlspecialchars($prog['name']) ?></h6>
+                                    <small class="text-muted">ID: <?= htmlspecialchars($id) ?></small>
+                                </div>
+                                <div class="btn-group">
+                                    <a href="/admin/item-action?action=restore&type=master_prog&slug=<?= htmlspecialchars($id) ?>" class="btn btn-outline-success btn-sm" title="Restore">
+                                        <i class="bi bi-arrow-counterclockwise"></i> Restore
+                                    </a>
+                                    <a href="/admin/item-action?action=perm-delete&type=master_prog&slug=<?= htmlspecialchars($id) ?>" 
+                                       class="btn btn-outline-danger btn-sm"
+                                       onclick="return confirm('Are you sure you want to PERMANENTLY DELETE this item? This cannot be undone.');"
+                                       title="Delete Permanently">
+                                        <i class="bi bi-x-lg"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        <?php
+                            endif;
+                        endforeach;
+                        if ($trash_count === 0) {
+                            echo '<div class="text-center py-4 text-muted"><i class="bi bi-check-circle display-6 d-block mb-2 opacity-25"></i>No master programs in trash.</div>';
+                        }
+                        ?>
+                    </div>
                 </div>
             </div>
-        <?php
-            endif;
-        endforeach;
-        if ($trash_count === 0) {
-            echo '<p class="text-muted fst-italic">No program categories in the trash.</p>';
-        }
-        ?>
+        </div>
+
+        <!-- Destinations Trash -->
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-transparent border-0 pt-4 pb-2 px-4">
+                    <h5 class="card-title fw-bold text-danger mb-0"><i class="bi bi-geo-alt me-2"></i>Trashed Destinations</h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="list-group list-group-flush rounded-3 border">
+                        <?php
+                        $trash_count = 0;
+                        foreach ($destinations as $slug => $dest):
+                            if ($dest['status'] === 'trash'):
+                                $trash_count++;
+                        ?>
+                            <div class="list-group-item d-flex justify-content-between align-items-center p-3">
+                                <span class="fw-medium"><?= htmlspecialchars($dest['name']) ?></span>
+                                <div class="btn-group">
+                                    <a href="/admin/item-action?action=restore&type=dest&slug=<?= htmlspecialchars($slug) ?>" class="btn btn-outline-success btn-sm">
+                                        <i class="bi bi-arrow-counterclockwise"></i>
+                                    </a>
+                                    <a href="/admin/item-action?action=perm-delete&type=dest&slug=<?= htmlspecialchars($slug) ?>" 
+                                       class="btn btn-outline-danger btn-sm"
+                                       onclick="return confirm('Are you sure you want to PERMANENTLY DELETE this item? This cannot be undone.');">
+                                        <i class="bi bi-x-lg"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        <?php
+                            endif;
+                        endforeach;
+                        if ($trash_count === 0) {
+                            echo '<div class="text-center py-4 text-muted"><i class="bi bi-check-circle display-6 d-block mb-2 opacity-25"></i>No destinations in trash.</div>';
+                        }
+                        ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Program Categories Trash -->
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-transparent border-0 pt-4 pb-2 px-4">
+                    <h5 class="card-title fw-bold text-danger mb-0"><i class="bi bi-tags me-2"></i>Trashed Categories</h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="list-group list-group-flush rounded-3 border">
+                        <?php
+                        $trash_count = 0;
+                        foreach ($programs as $slug => $prog):
+                            if ($prog['status'] === 'trash'):
+                                $trash_count++;
+                        ?>
+                            <div class="list-group-item d-flex justify-content-between align-items-center p-3">
+                                <span class="fw-medium"><?= htmlspecialchars($prog['name']) ?></span>
+                                <div class="btn-group">
+                                    <a href="/admin/item-action?action=restore&type=prog&slug=<?= htmlspecialchars($slug) ?>" class="btn btn-outline-success btn-sm">
+                                        <i class="bi bi-arrow-counterclockwise"></i>
+                                    </a>
+                                    <a href="/admin/item-action?action=perm-delete&type=prog&slug=<?= htmlspecialchars($slug) ?>" 
+                                       class="btn btn-outline-danger btn-sm"
+                                       onclick="return confirm('Are you sure you want to PERMANENTLY DELETE this item? This cannot be undone.');">
+                                        <i class="bi bi-x-lg"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        <?php
+                            endif;
+                        endforeach;
+                        if ($trash_count === 0) {
+                            echo '<div class="text-center py-4 text-muted"><i class="bi bi-check-circle display-6 d-block mb-2 opacity-25"></i>No categories in trash.</div>';
+                        }
+                        ?>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <?php
 // 3. Include Footer
-?><div class="admin-footer"><?php require_once 'includes/admin-footer.php'; ?></div>
+require_once 'includes/admin-footer.php';
+?>

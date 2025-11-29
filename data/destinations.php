@@ -469,3 +469,6 @@ $destinations = array (
     ),
   ),
 );
+
+
+// Texts in different themes are not correctly made, as in dark theme, some text are in black there is no contrast as well as in light mode there are some text are in white in nav bar and etc... also, for search input it has bad focus border with laggy transition check ti

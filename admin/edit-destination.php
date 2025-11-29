@@ -193,37 +193,52 @@ require_once 'includes/admin-header.php';
         <button class="btn btn-danger btn-sm align-self-end mt-2" type="button" data-action="remove-item"><i class="bi bi-trash"></i> Remove FAQ</button>
     </div>
 </template>
-<form action="edit-destination.php<?= $is_new_item ? '' : '?slug=' . htmlspecialchars($data['slug']) ?>" method="POST" enctype="multipart/form-data">
+<form action="edit-destination.php<?= $is_new_item ? '' : '?slug=' . htmlspecialchars($data['slug']) ?>" method="POST" enctype="multipart/form-data" class="animate-fade-in delay-1">
 
     <?php if (!$is_new_item): ?> <input type="hidden" name="original_slug" value="<?= htmlspecialchars($data['slug']) ?>"> <?php endif; ?>
 
     <div class="row gy-4">
         <div class="col-lg-8">
-            <div class="card">
-                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h1 class="h3 mb-0"><?= $pageTitle ?></h1>
-                    <button type="submit" class="btn btn-primary"><i class="bi bi-save"></i> Save Changes</button>
+            <div class="card border-0 shadow-sm mb-4">
+                 <div class="card-header bg-transparent border-bottom-0 pt-4 pb-2 px-4 d-flex justify-content-between align-items-center">
+                    <div>
+                        <h1 class="h3 mb-1 fw-bold"><?= $pageTitle ?></h1>
+                        <p class="text-muted small mb-0">Manage destination details</p>
+                    </div>
+                    <button type="submit" class="btn btn-primary rounded-pill px-4"><i class="bi bi-save me-1"></i> Save Changes</button>
                 </div>
-                <div class="card-body">
-                    <?php if ($success_message): ?><div class="alert alert-success"><?= $success_message ?></div><?php endif; ?>
-                    <?php if ($error_message): ?><div class="alert alert-danger"><?= $error_message ?></div><?php endif; ?>
-                    <div class="mb-3"><label for="name" class="form-label">Destination Name</label><input type="text" class="form-control" id="name" name="name" value="<?= htmlspecialchars($data['name']) ?>"></div>
-                    <div class="mb-3"><label for="tagline" class="form-label">Tagline</label><input type="text" class="form-control" id="tagline" name="tagline" value="<?= htmlspecialchars($data['tagline']) ?>"></div>
-                    <div class="mb-3"><label for="intro_text" class="form-label">Intro Text</label><textarea class="form-control tinymce-editor" id="intro_text" name="intro_text" rows="10"><?= htmlspecialchars($data['intro_text']) ?></textarea></div>
+                <div class="card-body px-4 pb-4">
+                    <?php if ($success_message): ?><div class="alert alert-success border-0 shadow-sm d-flex align-items-center"><i class="bi bi-check-circle-fill me-2"></i> <?= $success_message ?></div><?php endif; ?>
+                    <?php if ($error_message): ?><div class="alert alert-danger border-0 shadow-sm d-flex align-items-center"><i class="bi bi-exclamation-triangle-fill me-2"></i> <?= $error_message ?></div><?php endif; ?>
+                    
+                    <div class="mb-3">
+                        <label for="name" class="form-label fw-bold small text-uppercase text-muted">Destination Name</label>
+                        <input type="text" class="form-control" id="name" name="name" value="<?= htmlspecialchars($data['name']) ?>">
+                    </div>
+                    <div class="mb-3">
+                        <label for="tagline" class="form-label fw-bold small text-uppercase text-muted">Tagline</label>
+                        <input type="text" class="form-control" id="tagline" name="tagline" value="<?= htmlspecialchars($data['tagline']) ?>">
+                    </div>
+                    <div class="mb-3">
+                        <label for="intro_text" class="form-label fw-bold small text-uppercase text-muted">Intro Text</label>
+                        <textarea class="form-control tinymce-editor" id="intro_text" name="intro_text" rows="10"><?= htmlspecialchars($data['intro_text']) ?></textarea>
+                    </div>
                 </div>
             </div>
 
-            <div class="card mt-4">
-                <div class="card-header"><h2 class="h5 mb-0">Nested Content</h2></div>
-                <div class="card-body">
-                    <div class="accordion" id="nestedContentAccordion">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-transparent border-bottom-0 pt-4 pb-2 px-4"><h2 class="h5 mb-0 fw-bold">Nested Content</h2></div>
+                <div class="card-body px-4 pb-4">
+                    <div class="accordion accordion-flush" id="nestedContentAccordion">
 
 
-                        <div class="accordion-item">
-                            <h2 class="accordion-header"><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-programs">Linked Programs (<?= count($data['program_ids']) ?>)</button></h2>
+                        <div class="accordion-item border rounded mb-2">
+                            <h2 class="accordion-header"><button class="accordion-button rounded" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-programs">
+                                <i class="bi bi-journal-text me-2 text-primary"></i> Linked Programs (<?= count($data['program_ids']) ?>)
+                            </button></h2>
                             <div id="collapse-programs" class="accordion-collapse collapse show" data-bs-parent="#nestedContentAccordion">
-                                <div class="accordion-body">
-                                    <label for="program_ids" class="form-label">Select programs:</label>
+                                <div class="accordion-body bg-light bg-opacity-10">
+                                    <label for="program_ids" class="form-label fw-bold small text-uppercase text-muted">Select programs:</label>
                                     <select id="program_ids" name="program_ids[]" class="form-control choices-select" multiple>
                                         <?php foreach ($all_programs as $prog_id => $program): ?>
                                             <?php if($program['status'] === 'active'): ?>
@@ -235,10 +250,10 @@ require_once 'includes/admin-header.php';
                                     </select>
                                     <?php if (!empty($data['program_ids'])): ?>
                                         <div class="mt-3">
-                                            <label class="form-label">Set Program Order (lower = higher priority):</label>
-                                            <div class="row g-2 align-items-center">
-                                                <div class="col-6 fw-bold">Program Name</div>
-                                                <div class="col-4 fw-bold">Order</div>
+                                            <label class="form-label fw-bold small text-uppercase text-muted">Set Program Order (lower = higher priority):</label>
+                                            <div class="row g-2 align-items-center mb-2">
+                                                <div class="col-6 fw-bold small text-muted">Program Name</div>
+                                                <div class="col-4 fw-bold small text-muted">Order</div>
                                             </div>
                                             <?php foreach ($data['program_ids'] as $prog_id): ?>
                                                 <?php if (isset($all_programs[$prog_id])): ?>
@@ -248,25 +263,27 @@ require_once 'includes/admin-header.php';
                                                             <span class="text-muted small">(<?= htmlspecialchars($prog_id) ?>)</span>
                                                         </div>
                                                         <div class="col-4">
-                                                            <input type="number" class="form-control" name="program_order[<?= htmlspecialchars($prog_id) ?>]" value="<?= isset($all_programs[$prog_id]['order']) ? (int)$all_programs[$prog_id]['order'] : '' ?>" placeholder="Order">
+                                                            <input type="number" class="form-control form-control-sm" name="program_order[<?= htmlspecialchars($prog_id) ?>]" value="<?= isset($all_programs[$prog_id]['order']) ? (int)$all_programs[$prog_id]['order'] : '' ?>" placeholder="Order">
                                                         </div>
                                                     </div>
                                                 <?php endif; ?>
                                             <?php endforeach; ?>
-                                            <small class="text-muted">Order is used for sorting programs in this destination and across the site.</small>
+                                            <small class="text-muted d-block mt-2">Order is used for sorting programs in this destination and across the site.</small>
                                         </div>
                                     <?php endif; ?>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="accordion-item">
-                            <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-highlights">Highlights (<?= count($data['highlights']) ?>)</button></h2>
+                        <div class="accordion-item border rounded mb-2">
+                            <h2 class="accordion-header"><button class="accordion-button collapsed rounded" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-highlights">
+                                <i class="bi bi-stars me-2 text-warning"></i> Highlights (<?= count($data['highlights']) ?>)
+                            </button></h2>
                             <div id="collapse-highlights" class="accordion-collapse collapse repeater-container" data-template-id="highlight-template" data-bs-parent="#nestedContentAccordion">
-                                <div class="accordion-body">
+                                <div class="accordion-body bg-light bg-opacity-10">
                                     <div class="row g-2 mb-2">
-                                        <div class="col-4"><label class="form-label small">Icon</label></div>
-                                        <div class="col-7"><label class="form-label small">Text</label></div>
+                                        <div class="col-4"><label class="form-label small text-muted">Icon</label></div>
+                                        <div class="col-7"><label class="form-label small text-muted">Text</label></div>
                                     </div>
                                     <?php foreach ($data['highlights'] as $index => $item): ?>
                                     <div class="row g-2 mb-2 repeater-item align-items-center">
@@ -277,20 +294,22 @@ require_once 'includes/admin-header.php';
                                         <div class="col-1"><button class="btn btn-outline-danger w-100" type="button" data-action="remove-item"><i class="bi bi-trash"></i></button></div>
                                     </div>
                                     <?php endforeach; ?>
-                                    <button class="btn btn-sm btn-outline-primary mt-2" type="button" data-action="add-item">Add Highlight</button>
+                                    <button class="btn btn-sm btn-outline-primary mt-2" type="button" data-action="add-item"><i class="bi bi-plus-circle me-1"></i> Add Highlight</button>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="accordion-item">
-                            <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-stats">Stats (<?= count($data['stats']) ?>)</button></h2>
+                        <div class="accordion-item border rounded mb-2">
+                            <h2 class="accordion-header"><button class="accordion-button collapsed rounded" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-stats">
+                                <i class="bi bi-bar-chart me-2 text-info"></i> Stats (<?= count($data['stats']) ?>)
+                            </button></h2>
                             <div id="collapse-stats" class="accordion-collapse collapse repeater-container" data-template-id="stat-template" data-bs-parent="#nestedContentAccordion">
-                                <div class="accordion-body">
+                                <div class="accordion-body bg-light bg-opacity-10">
                                     <div class="row g-2 mb-2">
-                                        <div class="col-2"><label class="form-label small">Number</label></div>
-                                        <div class="col-3"><label class="form-label small">Label</label></div>
-                                        <div class="col-2"><label class="form-label small">Suffix</label></div>
-                                        <div class="col-4"><label class="form-label small">Icon</label></div>
+                                        <div class="col-2"><label class="form-label small text-muted">Number</label></div>
+                                        <div class="col-3"><label class="form-label small text-muted">Label</label></div>
+                                        <div class="col-2"><label class="form-label small text-muted">Suffix</label></div>
+                                        <div class="col-4"><label class="form-label small text-muted">Icon</label></div>
                                     </div>
                                     <?php foreach ($data['stats'] as $index => $item): ?>
                                     <div class="row g-2 mb-2 repeater-item align-items-center">
@@ -303,16 +322,18 @@ require_once 'includes/admin-header.php';
                                         <div class="col-1"><button class="btn btn-outline-danger w-100" type="button" data-action="remove-item"><i class="bi bi-trash"></i></button></div>
                                     </div>
                                     <?php endforeach; ?>
-                                    <button class="btn btn-sm btn-outline-primary mt-2" type="button" data-action="add-item">Add Stat</button>
+                                    <button class="btn btn-sm btn-outline-primary mt-2" type="button" data-action="add-item"><i class="bi bi-plus-circle me-1"></i> Add Stat</button>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="accordion-item">
-                           <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-gallery">Gallery (<?= count($data['gallery']) ?>)</button></h2>
+                        <div class="accordion-item border rounded mb-2">
+                           <h2 class="accordion-header"><button class="accordion-button collapsed rounded" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-gallery">
+                               <i class="bi bi-images me-2 text-success"></i> Gallery (<?= count($data['gallery']) ?>)
+                           </button></h2>
                            <div id="collapse-gallery" class="accordion-collapse collapse repeater-container simple-repeater" data-template-id="gallery-template" data-input-name="gallery_path[]" data-bs-parent="#nestedContentAccordion">
-                               <div class="accordion-body">
-                                   <label class="form-label">Gallery Images</label>
+                               <div class="accordion-body bg-light bg-opacity-10">
+                                   <label class="form-label fw-bold small text-uppercase text-muted">Gallery Images</label>
                                    <?php foreach ($data['gallery'] as $index => $path):
                                        $input_id = 'gallery_path_' . $index . '_' . uniqid(); // Unique ID for each input
                                    ?>
@@ -323,7 +344,7 @@ require_once 'includes/admin-header.php';
                                              onerror="this.onerror=null; this.src='/admin/placeholder-image.png'">
                                         <div class="input-group">
                                             <input type="text" class="form-control gallery-path-input media-preview-target-input" id="<?= $input_id ?>" name="gallery_path[]"
-                                                   value="<?= htmlspecialchars($path) ?>" placeholder="Select image..." readonly style="background-color: #fff;">
+                                                   value="<?= htmlspecialchars($path) ?>" placeholder="Select image..." readonly style="background-color: var(--bg-card);">
                                             <button class="btn btn-outline-secondary" type="button"
                                                     data-bs-toggle="media-modal"
                                                     data-bs-target-input="<?= $input_id ?>">
@@ -335,13 +356,15 @@ require_once 'includes/admin-header.php';
                                         </div>
                                     </div>
                                    <?php endforeach; ?>
-                                   <button class="btn btn-sm btn-outline-primary mt-2" type="button" data-action="add-item">Add Gallery Image</button>
+                                   <button class="btn btn-sm btn-outline-primary mt-2" type="button" data-action="add-item"><i class="bi bi-plus-circle me-1"></i> Add Gallery Image</button>
                                </div>
                            </div>
                            </div>
-                        <div class="accordion-item">
-                            <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-faq">FAQs (<?= count($data['faq']) ?>)</button></h2>
-                            <div id="collapse-faq" class="accordion-collapse collapse repeater-container" data-template-id="faq-template" data-bs-parent="#nestedContentAccordion"> <div class="accordion-body"> <?php foreach ($data['faq'] as $item): ?> <div class="card p-3 mb-2 repeater-item"> <div class="mb-2"> <label class="form-label fw-bold">Question</label> <input type="text" class="form-control" name="faq_q[]" value="<?= htmlspecialchars($item['q']) ?>"> </div> <div class="mb-2"> <label class="form-label fw-bold">Answer</label> <textarea class="form-control" name="faq_a[]" rows="3"><?= htmlspecialchars($item['a']) ?></textarea> </div> <button class="btn btn-danger btn-sm align-self-end mt-2" type="button" data-action="remove-item"><i class="bi bi-trash"></i> Remove FAQ</button> </div> <?php endforeach; ?> <button class="btn btn-sm btn-outline-primary mt-3" type="button" data-action="add-item"><i class="bi bi-plus-lg"></i> Add FAQ</button> </div> </div>
+                        <div class="accordion-item border rounded mb-2">
+                            <h2 class="accordion-header"><button class="accordion-button collapsed rounded" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-faq">
+                                <i class="bi bi-question-circle me-2 text-secondary"></i> FAQs (<?= count($data['faq']) ?>)
+                            </button></h2>
+                            <div id="collapse-faq" class="accordion-collapse collapse repeater-container" data-template-id="faq-template" data-bs-parent="#nestedContentAccordion"> <div class="accordion-body bg-light bg-opacity-10"> <?php foreach ($data['faq'] as $item): ?> <div class="card p-3 mb-2 repeater-item border-0 shadow-sm"> <div class="mb-2"> <label class="form-label fw-bold small text-muted">Question</label> <input type="text" class="form-control" name="faq_q[]" value="<?= htmlspecialchars($item['q']) ?>"> </div> <div class="mb-2"> <label class="form-label fw-bold small text-muted">Answer</label> <textarea class="form-control" name="faq_a[]" rows="3"><?= htmlspecialchars($item['a']) ?></textarea> </div> <button class="btn btn-danger btn-sm align-self-end mt-2" type="button" data-action="remove-item"><i class="bi bi-trash"></i> Remove FAQ</button> </div> <?php endforeach; ?> <button class="btn btn-sm btn-outline-primary mt-3" type="button" data-action="add-item"><i class="bi bi-plus-lg"></i> Add FAQ</button> </div> </div>
                         </div>
                     </div>
                 </div>
@@ -349,13 +372,13 @@ require_once 'includes/admin-header.php';
         </div>
 
         <div class="col-lg-4">
-             <div class="card">
-                <div class="card-header"><h2 class="h5 mb-0">Settings</h2></div>
-                <div class="card-body">
-                    <div class="mb-3"><label for="slug" class="form-label">URL Slug</label><input type="text" class="form-control" id="slug" name="slug" value="<?= htmlspecialchars($data['slug']) ?>" <?= $is_new_item ? '' : '' ?>><small class="text-muted"><?= $is_new_item ? 'e.g., "italy"' : 'Changing this will change the URL.' ?></small></div>
-                    <div class="mb-3"><label for="status" class="form-label">Status</label><select class="form-select" id="status" name="status"><option value="active" <?= $data['status'] === 'active' ? 'selected' : '' ?>>Active</option><option value="coming-soon" <?= $data['status'] === 'coming-soon' ? 'selected' : '' ?>>Coming Soon</option></select></div>
+             <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-transparent border-bottom-0 pt-4 pb-2 px-4"><h2 class="h5 mb-0 fw-bold">Settings</h2></div>
+                <div class="card-body px-4 pb-4">
+                    <div class="mb-3"><label for="slug" class="form-label fw-bold small text-uppercase text-muted">URL Slug</label><input type="text" class="form-control" id="slug" name="slug" value="<?= htmlspecialchars($data['slug']) ?>" <?= $is_new_item ? '' : '' ?>><small class="text-muted"><?= $is_new_item ? 'e.g., "italy"' : 'Changing this will change the URL.' ?></small></div>
+                    <div class="mb-3"><label for="status" class="form-label fw-bold small text-uppercase text-muted">Status</label><select class="form-select" id="status" name="status"><option value="active" <?= $data['status'] === 'active' ? 'selected' : '' ?>>Active</option><option value="coming-soon" <?= $data['status'] === 'coming-soon' ? 'selected' : '' ?>>Coming Soon</option></select></div>
                     <div class="mb-3">
-                        <label for="color" class="form-label">Color Theme</label>
+                        <label for="color" class="form-label fw-bold small text-uppercase text-muted">Color Theme</label>
                         <select class="form-select" id="color" name="color">
                             <option value="primary" <?= $data['color'] === 'primary' ? 'selected' : '' ?>>Primary (Blue)</option>
                             <option value="secondary" <?= $data['color'] === 'secondary' ? 'selected' : '' ?>>Secondary (Gray)</option>
@@ -368,22 +391,23 @@ require_once 'includes/admin-header.php';
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="banner_input" class="form-label">Banner Image</label>
-                        <img src="<?= !empty($data['banner']) ? htmlspecialchars($data['banner']) : '/admin/placeholder-image.png' ?>"
-                             alt="Banner preview"
-                             class="img-fluid rounded mb-2 d-block media-preview-image"
-                             style="max-height: 150px; object-fit: cover;"
-                             onerror="this.onerror=null; this.src='/admin/placeholder-image.png'">
+                        <label for="banner_input" class="form-label fw-bold small text-uppercase text-muted">Banner Image</label>
+                        <div class="image-upload-preview mb-2 bg-light d-flex align-items-center justify-content-center" style="min-height: 150px;">
+                            <img src="<?= !empty($data['banner']) ? htmlspecialchars($data['banner']) : '/admin/placeholder-image.png' ?>"
+                                 alt="Banner preview"
+                                 class="img-fluid media-preview-image"
+                                 style="max-height: 150px; object-fit: cover;"
+                                 onerror="this.onerror=null; this.src='/admin/placeholder-image.png'">
+                        </div>
                         
                         <div class="input-group">
-                             <input type="text" class="form-control media-preview-target-input" id="banner_input" name="banner" value="<?= htmlspecialchars($data['banner']) ?>" placeholder="Select image..." readonly style="background-color: #fff;">
+                             <input type="text" class="form-control media-preview-target-input" id="banner_input" name="banner" value="<?= htmlspecialchars($data['banner']) ?>" placeholder="Select image..." readonly style="background-color: var(--bg-card);">
                              <button class="btn btn-outline-secondary" type="button"
                                 data-bs-toggle="media-modal"
                                 data-bs-target-input="banner_input">
                                  Browse...
                              </button>
                         </div>
-                        <small class="text-muted">Click "Browse" to select or upload.</small>
                     </div>
                     <div class="d-grid gap-2"><button type="submit" class="btn btn-primary"><i class="bi bi-save"></i> Save Changes</button></div>
                     <?php if (!$is_new_item): ?><hr><div class="d-grid"><button type="submit" class="btn btn-outline-danger" form="trashForm"><i class="bi bi-trash"></i> Move to Trash</button></div><?php endif; ?>
