@@ -40,31 +40,31 @@ require_once __DIR__ . '/includes/header.php';
                 <div class="card-body p-4 p-md-5">
                      <h3 class="card-title mb-4">Send Us a Message</h3>
                     <!-- Form can be enhanced with JS/API later -->
-                    <form id="contactForm">
+                    <form id="contactForm" data-form-type="contact">
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label for="contact-name" class="form-label">Name *</label>
-                                <input type="text" id="contact-name" class="form-control" required>
+                                <input type="text" id="contact-name" name="name" class="form-control" required>
                             </div>
                             <div class="col-md-6">
                                 <label for="contact-email" class="form-label">Email *</label>
-                                <input type="email" id="contact-email" class="form-control" required>
+                                <input type="email" id="contact-email" name="email" class="form-control" required>
                             </div>
                             <div class="col-md-6">
                                 <label for="contact-phone" class="form-label">Phone</label>
-                                <input type="tel" id="contact-phone" class="form-control">
+                                <input type="tel" id="contact-phone" name="phone" class="form-control">
                             </div>
                              <div class="col-md-6">
                                 <label for="contact-country" class="form-label">Country</label>
-                                <input type="text" id="contact-country" class="form-control">
+                                <input type="text" id="contact-country" name="country" class="form-control">
                             </div>
                             <div class="col-12">
                                 <label for="contact-subject" class="form-label">Subject</label>
-                                <input type="text" id="contact-subject" class="form-control">
+                                <input type="text" id="contact-subject" name="subject" class="form-control">
                             </div>
                             <div class="col-12">
                                 <label for="contact-message" class="form-label">Message</label>
-                                <textarea id="contact-message" class="form-control" rows="5"></textarea>
+                                <textarea id="contact-message" name="message" class="form-control" rows="5"></textarea>
                             </div>
                             <div class="col-12 text-end">
                                 <button type="submit" class="btn btn-warning btn-lg">Send Message</button>

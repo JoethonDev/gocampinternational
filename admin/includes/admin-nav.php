@@ -20,7 +20,10 @@
                     <a class="nav-link" href="/admin/dashboard">Dashboard</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/admin/programs">Programs</a>
+                    <a class="nav-link" href="/admin/programs.php">Programs</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/inquiries.php">Inquiries</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/admin/trash">Trash</a>

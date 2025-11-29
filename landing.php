@@ -6,19 +6,21 @@
  */
 
 // --- FORM PROCESSING LOGIC ---
+require_once __DIR__ . '/admin/includes/inquiry-handler.php';
+
 $errors = [];
 $successMessage = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Sanitize and retrieve form data
-    $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
-    $age = filter_input(INPUT_POST, 'age', FILTER_SANITIZE_STRING);
-    $gender = filter_input(INPUT_POST, 'gender', FILTER_SANITIZE_STRING);
+    $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    $age = filter_input(INPUT_POST, 'age', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    $gender = filter_input(INPUT_POST, 'gender', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $interests = isset($_POST['interests']) ? implode(', ', $_POST['interests']) : 'Not specified';
-    $destination = filter_input(INPUT_POST, 'destination', FILTER_SANITIZE_STRING);
+    $destination = filter_input(INPUT_POST, 'destination', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
-    $phone = filter_input(INPUT_POST, 'phone', FILTER_SANITIZE_STRING);
-    $travel_time = filter_input(INPUT_POST, 'travel_time', FILTER_SANITIZE_STRING);
+    $phone = filter_input(INPUT_POST, 'phone', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    $travel_time = filter_input(INPUT_POST, 'travel_time', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $privacyConsent = isset($_POST['privacyConsent']);
 
     // Validation
@@ -52,6 +54,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $message .= '</body></html>';
 
         if (mail($to, $emailSubject, $message, $headers)) {
+            // Save to disk
+            saveInquiry($_POST, 'landing');
             $successMessage = '🎉 Success! Your request has been submitted. Our camp advisor will contact you within 2 hours!';
         } else {
             $errors[] = 'Sorry, there was an error sending your message. Please try again later.';
@@ -207,7 +211,7 @@ h1, h2, h3, h4, h5, h6 {
                                 </div>
                             <?php endif; ?>
 
-                            <form id="leadForm" method="POST" action="/landing" novalidate>
+                            <form id="landingPageForm" method="POST" action="/landing.php" novalidate>
                                 <!-- All form fields go here -->
                                 <div class="form-group">
                                     <label class="form-label">Child's Full Name <span class="required">*</span></label>

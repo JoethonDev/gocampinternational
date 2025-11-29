@@ -323,7 +323,7 @@ $destinations = array (
   array (
     'name' => 'Canada',
     'slug' => 'canada',
-    'status' => 'coming-soon',
+    'status' => 'active',
     'banner' => '/images/canada_banner.jpg',
     'tagline' => 'Urban Excitement & Natural Wonders',
     'intro_image' => '/images/canada_1.jpg',
@@ -469,6 +469,3 @@ $destinations = array (
     ),
   ),
 );
-
-
-// Texts in different themes are not correctly made, as in dark theme, some text are in black there is no contrast as well as in light mode there are some text are in white in nav bar and etc... also, for search input it has bad focus border with laggy transition check ti
