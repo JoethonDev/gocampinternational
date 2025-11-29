@@ -97,7 +97,7 @@ $destinations = array (
   array (
     'name' => 'Switzerland',
     'slug' => 'switzerland',
-    'status' => 'active',
+    'status' => 'coming-soon',
     'banner' => '/images/swiss_banner.jpg',
     'tagline' => 'Alpine Adventures in the Heart of Europe',
     'intro_image' => '/images/swiss_1.jpg',
@@ -173,7 +173,7 @@ $destinations = array (
   array (
     'name' => 'Germany',
     'slug' => 'germany',
-    'status' => 'active',
+    'status' => 'coming-soon',
     'banner' => '/images/germany_banner.jpg',
     'tagline' => 'Language, Academia, and Culture',
     'intro_image' => '/images/germany_1.jpg',
@@ -212,15 +212,19 @@ $destinations = array (
     ),
     'program_ids' => 
     array (
-      0 => 'germany-children-summer',
-      1 => 'germany-university-pathway',
+    ),
+    'stats' => 
+    array (
+    ),
+    'faq' => 
+    array (
     ),
   ),
   'spain' => 
   array (
     'name' => 'Spain',
     'slug' => 'spain',
-    'status' => 'active',
+    'status' => 'coming-soon',
     'banner' => '/images/spainr_banner_new.jpg',
     'tagline' => 'Sun, Language, and Soccer',
     'intro_image' => '/images/spain_22.jpg',
@@ -259,15 +263,19 @@ $destinations = array (
     ),
     'program_ids' => 
     array (
-      0 => 'spain-language-water-sports',
-      1 => 'spain-soccer-camp',
+    ),
+    'stats' => 
+    array (
+    ),
+    'faq' => 
+    array (
     ),
   ),
   'usa' => 
   array (
     'name' => 'USA',
     'slug' => 'usa',
-    'status' => 'active',
+    'status' => 'coming-soon',
     'banner' => '/images/usa_banner.jpg',
     'tagline' => 'Diverse Camps from Coast to Coast',
     'intro_image' => '/images/usa_1.jpg',
@@ -303,15 +311,19 @@ $destinations = array (
     ),
     'program_ids' => 
     array (
-      0 => 'usa-global-leadership',
-      1 => 'usa-pre-university',
+    ),
+    'stats' => 
+    array (
+    ),
+    'faq' => 
+    array (
     ),
   ),
   'canada' => 
   array (
     'name' => 'Canada',
     'slug' => 'canada',
-    'status' => 'active',
+    'status' => 'coming-soon',
     'banner' => '/images/canada_banner.jpg',
     'tagline' => 'Urban Excitement & Natural Wonders',
     'intro_image' => '/images/canada_1.jpg',
@@ -347,8 +359,74 @@ $destinations = array (
     ),
     'program_ids' => 
     array (
-      0 => 'canada-adventure-summer',
-      1 => 'canada-english-ski',
+    ),
+    'stats' => 
+    array (
+    ),
+    'faq' => 
+    array (
+    ),
+  ),
+  'uk' => 
+  array (
+    'name' => 'United Kingdom',
+    'slug' => 'uk',
+    'status' => 'active',
+    'banner' => '',
+    'tagline' => 'Where centuries of tradition meet a global community',
+    'intro_image' => '',
+    'intro_text' => '<p class="lead text-muted mb-4">Live, learn, and connect in one of the world’s most inspiring academic cities. Oxford isn’t just a place to study, it’s where centuries of tradition meet a global community of curious minds. Students come together to challenge ideas, spark creativity, and discover new perspectives.</p>',
+    'highlights' => 
+    array (
+      0 => 
+      array (
+        'icon' => 'building-fill',
+        'text' => 'Inspiring Academic Cities',
+      ),
+      1 => 
+      array (
+        'icon' => 'globe',
+        'text' => 'Global Community',
+      ),
+      2 => 
+      array (
+        'icon' => 'mortarboard-fill',
+        'text' => 'University Preparation',
+      ),
+      3 => 
+      array (
+        'icon' => 'briefcase-fill',
+        'text' => 'Professional Experience',
+      ),
+    ),
+    'stats' => 
+    array (
+      0 => 
+      array (
+        'number' => 100,
+        'label' => 'Countries Represented',
+        'suffix' => '+',
+        'icon' => 'globe',
+      ),
+      1 => 
+      array (
+        'number' => 100,
+        'label' => 'Tradition',
+        'suffix' => '%',
+        'icon' => 'bank',
+      ),
+    ),
+    'gallery' => 
+    array (
+    ),
+    'faq' => 
+    array (
+    ),
+    'program_ids' => 
+    array (
+      0 => 'uk-english-foundation',
+      1 => 'uk-young-professional',
+      2 => 'uk-pre-university',
     ),
   ),
   'france' => 

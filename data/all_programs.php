@@ -5,7 +5,7 @@
  */
 
 $all_programs = array (
-    // ADULT ACADEMIC (1-2)
+    // ADULT ACADEMIC
     'germany-university-pathway' => array (
         'order' => 1,
         'id' => 'germany-university-pathway',
@@ -33,7 +33,7 @@ $all_programs = array (
             3 => 'Guidance through every step',
         ),
         'description' => 'This program guides you through every step to university, including language preparation and entrance exam courses.',
-        'status' => 'inactive', // Set to inactive
+        'status' => 'inactive',
     ),
     'usa-pre-university' => 
     array (
@@ -63,63 +63,70 @@ $all_programs = array (
             3 => 'Campus tours in Boston or LA',
         ),
         'description' => 'Get a head start on your university applications and experience life on a US college campus.',
-        'status' => 'inactive', // Set to inactive
+        'status' => 'inactive',
     ),
-    // KIDS CAMPS (1-3)
-    // 'italy-junior-discover' => 
-    // array (
-    //     'order' => 1,
-    //     'id' => 'italy-junior-discover',
-    //     'category_slug' => 'kids-camps',
-    //     'name' => 'Junior Discover',
-    //     'tagline' => 'An exciting full-immersion experience for young adventurers',
-    //     'image' => '/images/italy_1.jpg',
-    //     'ages' => 
-    //     array (
-    //         'min' => '6',
-    //         'max' => '12',
-    //     ),
-    //     'duration' => 2,
-    //     'level' => 'Beginner',
-    //     'price' => '€2,400',
-    //     'color' => 'accent',
-    //     'badges' => 
-    //     array (
-    //         0 => 'Popular',
-    //         1 => 'Hot',
-    //     ),
-    //     'highlights' => 
-    //     array (
-    //         0 => 'Daily sports & team competitions',
-    //         1 => 'Theatre & creative arts workshops',
-    //         2 => 'Treasure hunts & adventure games',
-    //         3 => 'Full board accommodation',
-    //     ),
-    //     'description' => '<p>Children participate in an exciting and educational full-immersion experience designed to foster creativity, teamwork, and personal growth. This program combines physical activities with cultural exploration in a safe, supervised environment.</p>',
-    //     'schedule' => 
-    //     array (
-    //         '7:30 AM' => 'Wake up & breakfast',
-    //         '9:00 AM' => 'Morning sports activities',
-    //         '12:30 PM' => 'Lunch & rest time',
-    //         '2:30 PM' => 'Afternoon workshops',
-    //         '7:00 PM' => 'Dinner & Evening activities',
-    //     ),
-    //     'includes' => 
-    //     array (
-    //         0 => 'All meals & snacks',
-    //         1 => 'Accommodation',
-    //         2 => 'All activities and equipment',
-    //         3 => 'Medical insurance',
-    //         4 => 'Airport transfers',
-    //     ),
-    //     'excludes' => 
-    //     array (
-    //         0 => 'International flights',
-    //         1 => 'Personal spending money',
-    //         2 => 'Visa fees',
-    //     ),
-    //     'status' => 'active',
-    // ),
+    'uk-young-professional' => array(
+        'order' => 3,
+        'id' => 'uk-young-professional',
+        'category_slug' => 'adult-academic',
+        'name' => 'Young Professional Summer',
+        'tagline' => 'A unique blend of English and subject-specific learning alongside real-world industry experience.',
+        'image' => '',
+        'ages' => array(
+            'min' => 13,
+            'max' => 17
+        ),
+        'duration' => 2,
+        'level' => 'Professional',
+        'price' => null,
+        'color' => 'secondary',
+        'badges' => array(
+            0 => 'Career',
+            1 => 'Immersive'
+        ),
+        'highlights' => array(
+            0 => 'Explore various career paths like AI, Engineering, and Business.',
+            1 => 'Real-world industry experience.',
+            2 => 'Improve language skills and knowledge in a professional context.',
+            3 => 'Designed for ambitious individuals.'
+        ),
+        'description' => '<p>The Young Professionals Summer Camp is a two-week immersive English programme designed for ambitious individuals. You’ll get a unique blend of English and subject-specific learning alongside real-world industry experience, giving you the chance to explore various career paths (such as Business, Engineering, AI, and Visual Arts) while improving your language skills in a professional context.</p>',
+        'includes' => array(),
+        'excludes' => array(),
+        'status' => 'active',
+    ),
+    'uk-pre-university' => array(
+        'order' => 4,
+        'id' => 'uk-pre-university',
+        'category_slug' => 'adult-academic',
+        'name' => 'Adult Pre-University',
+        'tagline' => 'Equipping dedicated students with the skills needed for university-level studies.',
+        'image' => '',
+        'ages' => array(
+            'min' => 15,
+            'max' => 17
+        ),
+        'duration' => 2,
+        'level' => 'Advanced',
+        'price' => null,
+        'color' => 'accent',
+        'badges' => array(
+            0 => 'Academic',
+            1 => 'University Prep'
+        ),
+        'highlights' => array(
+            0 => 'Interactive lessons, guest lectures, and debate societies.',
+            1 => 'Develop a strong foundation in your field of interest.',
+            2 => 'Personalised feedback and support from expert instructors.',
+            3 => 'Navigate the transition to higher education successfully.'
+        ),
+        'description' => '<p>The Pre-University Summer Camp is a two-week academic programme designed to equip dedicated students with the skills needed for university-level studies. Led by expert instructors, the programme combines interactive lessons, masterclasses, and debate societies, ensuring you develop a strong foundation. You will also benefit from personalised feedback to help navigate the transition to higher education.</p>',
+        'includes' => array(),
+        'excludes' => array(),
+        'status' => 'active',
+    ),
+    
+    // KIDS CAMPS
     'italy-junior-discovery' => array(
         'order' => 2,
         'id' => 'italy-junior-discovery',
@@ -142,7 +149,7 @@ $all_programs = array (
         'description' => '<p>Junior Discovery Camp offers innovative summer programs in the heart of Italy. These camps provide a comprehensive learning environment where students can explore their potential.</p>',
         'includes' => array(),
         'excludes' => array(),
-        'status' => 'active', // Maintained active
+        'status' => 'active',
     ),
     'germany-children-summer' => 
     array (
@@ -172,9 +179,10 @@ $all_programs = array (
             3 => 'Safe, supervised environment',
         ),
         'description' => 'A fun and effective way for children to learn German while exploring the culture and making international friends.',
-        'status' => 'inactive', // Set to inactive
+        'status' => 'inactive',
     ),
-    // LANGUAGE AND ACTIVITY CAMPS (1-2)
+
+    // LANGUAGE AND ACTIVITY CAMPS
     'spain-language-water-sports' => 
     array (
         'order' => 1,
@@ -203,7 +211,7 @@ $all_programs = array (
             3 => 'Beach activities',
         ),
         'description' => 'Combine language learning with exciting water sports on the beautiful Spanish coast.',
-        'status' => 'inactive', // Set to inactive
+        'status' => 'inactive',
     ),
     'canada-english-ski' => 
     array (
@@ -234,9 +242,40 @@ $all_programs = array (
             3 => 'All equipment provided',
         ),
         'description' => 'Improve your English and your skiing or snowboarding skills in the world-renowned resort of Whistler.',
-        'status' => 'inactive', // Set to inactive
+        'status' => 'inactive',
     ),
-    // SOCCER CAMPS (1-2)
+    'uk-english-foundation' => array(
+        'order' => 3,
+        'id' => 'uk-english-foundation',
+        'category_slug' => 'language-and-activity-camps',
+        'name' => 'English Foundation Summer',
+        'tagline' => 'Enhance and improve language skills in a supportive and immersive environment.',
+        'image' => '',
+        'ages' => array(
+            'min' => 11,
+            'max' => 17
+        ),
+        'duration' => null,
+        'level' => 'Foundation',
+        'price' => null,
+        'color' => 'primary',
+        'badges' => array(
+            0 => 'Summer',
+            1 => 'Language'
+        ),
+        'highlights' => array(
+            0 => 'Dynamic language curriculum focused on speaking and listening.',
+            1 => 'Enhance and improve student’s language skills.',
+            2 => 'Supportive and immersive environment.',
+            3 => 'Includes various activities and excursions.'
+        ),
+        'description' => '<p>This Summer foundation program enhances and improves student’s language skills in a supportive and immersive environment. It features a dynamic language curriculum that includes a mix of English classes focused on speaking and listening, grammar, vocabulary, reading, and writing along with various activities and excursions.</p>',
+        'includes' => array(),
+        'excludes' => array(),
+        'status' => 'active',
+    ),
+
+    // SOCCER CAMPS
     'italy-football-ac-milan' => array(
         'order' => 1,
         'id' => 'italy-football-ac-milan',
@@ -265,7 +304,7 @@ $all_programs = array (
             'Special camp excursions'
         ),
         'excludes' => array(),
-        'status' => 'active', // Maintained active
+        'status' => 'active',
     ),
     'spain-soccer-camp' => 
     array (
@@ -295,9 +334,10 @@ $all_programs = array (
             3 => 'Visit famous stadiums',
         ),
         'description' => 'For the soccer fans of FC Barcelona or Real Madrid, this camp offers professional training and an unforgettable experience.',
-        'status' => 'inactive', // Set to inactive
+        'status' => 'inactive',
     ),
-    // SPECIAL INTERESTS CAMPS (1-7)
+
+    // SPECIAL INTERESTS CAMPS
     'switzerland-adventure-camp' => 
     array (
         'order' => 1,
@@ -326,7 +366,7 @@ $all_programs = array (
             3 => 'Team building',
         ),
         'description' => 'A classic summer camp experience in the Swiss Alps, focusing on outdoor adventure and making new friends.',
-        'status' => 'inactive', // Set to inactive
+        'status' => 'inactive',
     ),
     'canada-adventure-summer' => 
     array (
@@ -356,7 +396,7 @@ $all_programs = array (
             3 => 'Campfire stories',
         ),
         'description' => 'Explore the great Canadian outdoors with our adventure summer camp, based in beautiful British Columbia.',
-        'status' => 'inactive', // Set to inactive
+        'status' => 'inactive',
     ),
     'italy-fashion' => array(
         'order' => 3,
@@ -380,7 +420,7 @@ $all_programs = array (
         'description' => '<p>The Program in Fashion is perfect for young fashion enthusiasts who want to immerse themselves in the world of fashion design. Held in the heart of Milan, participants will have the chance to explore, develop, and showcase their creativity. It is ideal for those aspiring to enter the fashion industry and eager to explore various aspects of the fashion field.</p>',
         'includes' => array(),
         'excludes' => array(),
-        'status' => 'active', // Maintained active
+        'status' => 'active',
     ),
     'switzerland-film-academy' => 
     array (
@@ -410,7 +450,7 @@ $all_programs = array (
             3 => 'Editing with pro software',
         ),
         'description' => 'A hands-on camp for aspiring filmmakers. Write, shoot, and edit your own short film in a stunning location.',
-        'status' => 'inactive', // Set to inactive
+        'status' => 'inactive',
     ),
     'italy-food' => array(
         'order' => 5,
@@ -443,7 +483,7 @@ $all_programs = array (
             'Visit to cheese factory'
         ),
         'excludes' => array(),
-        'status' => 'active', // Maintained active
+        'status' => 'active',
     ),
     'italy-outdoor-exploration' => 
     array (
@@ -497,7 +537,7 @@ $all_programs = array (
             1 => 'Personal outdoor gear',
             2 => 'Spending money',
         ),
-        'status' => 'active', // Maintained active
+        'status' => 'active',
     ),
     'italy-sea-quest' => 
     array (
@@ -551,9 +591,10 @@ $all_programs = array (
             1 => 'Shore meals (optional)',
             2 => 'Personal sailing gear',
         ),
-        'status' => 'active', // Maintained active
+        'status' => 'active',
     ),
-    // SPORTS CAMPS (1-3)
+
+    // SPORTS CAMPS
     'italy-tennis' => array(
         'order' => 1,
         'id' => 'italy-tennis',
@@ -584,7 +625,7 @@ $all_programs = array (
             'Closing award ceremony'
         ),
         'excludes' => array(),
-        'status' => 'active', // Maintained active
+        'status' => 'active',
     ),
     'italy-sailing' => array(
         'order' => 2,
@@ -608,7 +649,7 @@ $all_programs = array (
         'description' => '<p>A thrilling sailing voyage enriched with local knowledge and new horizons for 12 to 16-year-olds. Campers navigate the Mediterranean’s bluest waters while growing as a team. British RYA instructors and native English-speaking counselors lead the entire program in English. Through hands-on learning, campers learn sailing techniques, teamwork, and leadership, building communication skills and self-reliance. Students earn a sailing certificate of achievement.</p>',
         'includes' => array(),
         'excludes' => array(),
-        'status' => 'active', // Maintained active
+        'status' => 'active',
     ),
     'switzerland-ski-camp' => 
     array (
@@ -638,9 +679,10 @@ $all_programs = array (
             3 => 'All gear included',
         ),
         'description' => 'Learn to ski or improve your skills on world-famous Swiss slopes with professional instructors.',
-        'status' => 'inactive', // Set to inactive
+        'status' => 'inactive',
     ),
-    // YOUNG LEADER PROGRAM (1)
+
+    // YOUNG LEADER PROGRAM
     'usa-global-leadership' => 
     array (
         'order' => 1,
@@ -669,7 +711,7 @@ $all_programs = array (
             3 => 'Visits to major organizations',
         ),
         'description' => 'Develop the skills to become a future leader in a globalized world, with workshops and real-world case studies.',
-        'status' => 'inactive', // Set to inactive
+        'status' => 'inactive',
     ),
 );
 
