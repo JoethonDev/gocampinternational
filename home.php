@@ -80,8 +80,18 @@ require_once __DIR__ . '/includes/navigation.php';
             $program_count = 0;
             foreach ($all_programs as $program) {
                 if (
-                    isset($program['category_slug']) && $program['category_slug'] === $category['slug'] && $program['status'] === 'active'
+                    isset($program['category_slug']) && $program['category_slug'] === $category['slug'] &&
+                    isset($program['status']) && $program['status'] === 'active'
                 ) {
+                    // Check if program's category is active (not trashed/missing)
+                    $category_active = isset($programs[$program['category_slug']]) && 
+                                     isset($programs[$program['category_slug']]['status']) && 
+                                     $programs[$program['category_slug']]['status'] === 'active';
+                    
+                    if (!$category_active) {
+                        continue; // Skip programs with trashed/missing categories
+                    }
+                    
                     // Check if program's destination is not trashed
                     $destination_trashed = false;
                     foreach ($destinations as $dest) {

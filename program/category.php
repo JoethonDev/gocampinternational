@@ -18,7 +18,8 @@ require_once __DIR__ . '/../data/destinations.php';
 $categorySlug = $_GET['category'] ?? '';
 
 // --- Variable Safety Check ---
-if (empty($categorySlug) || !isset($programs[$categorySlug]) || $programs[$categorySlug]['status'] !== 'active') {
+if (empty($categorySlug) || !isset($programs[$categorySlug]) || 
+    !isset($programs[$categorySlug]['status']) || $programs[$categorySlug]['status'] !== 'active') {
     http_response_code(404);
     include __DIR__ . '/../404.php';
     exit;
@@ -29,30 +30,32 @@ $programData = $programs[$categorySlug];
 // --- Find all programs that belong to this category ---
 $relatedPrograms = [];
 foreach ($all_programs as $program_id => $program) {
-    // Check if it's in the correct category and is active
-    if (isset($program['category_slug']) && 
-        $program['category_slug'] === $categorySlug &&
-        isset($program['status']) && $program['status'] === 'active') {
-        // Find which destination this program belongs to and check if destination is trashed
-        $destination_name = 'Multiple Locations'; // Default
-        $destination_slug = '#';
-        $destination_trashed = false;
-        foreach ($destinations as $dest) {
-            if (isset($dest['program_ids']) && in_array($program_id, $dest['program_ids'])) {
-                $destination_name = $dest['name'];
-                $destination_slug = $dest['slug'];
-                if (isset($dest['status']) && $dest['status'] === 'trash') {
-                    $destination_trashed = true;
-                }
-                break;
+    // Only show programs that are active and in the correct category
+    if (!isset($program['category_slug']) || $program['category_slug'] !== $categorySlug) {
+        continue;
+    }
+    if (!isset($program['status']) || $program['status'] !== 'active') {
+        continue;
+    }
+    // Find which destination this program belongs to and check if destination is trashed
+    $destination_name = 'Multiple Locations'; // Default
+    $destination_slug = '#';
+    $destination_trashed = false;
+    foreach ($destinations as $dest) {
+        if (isset($dest['program_ids']) && in_array($program_id, $dest['program_ids'])) {
+            $destination_name = $dest['name'];
+            $destination_slug = $dest['slug'];
+            if (isset($dest['status']) && $dest['status'] === 'trash') {
+                $destination_trashed = true;
             }
+            break;
         }
-        // Only add program if its destination is not trashed
-        if (!$destination_trashed) {
-            $program['destination_name'] = $destination_name;
-            $program['destination_slug'] = $destination_slug;
-            $relatedPrograms[] = $program;
-        }
+    }
+    // Only add program if its destination is not trashed
+    if (!$destination_trashed) {
+        $program['destination_name'] = $destination_name;
+        $program['destination_slug'] = $destination_slug;
+        $relatedPrograms[] = $program;
     }
 }
 // Sort by order, then name

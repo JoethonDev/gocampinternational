@@ -55,10 +55,9 @@
                 <div class="col-lg-3 col-md-6 text-center text-md-start">
                     <h5 class="fw-bold text-uppercase mb-3">Follow Us</h5>
                     <div class="social-icons mb-4">
-                        <a href="#" target="_blank" class="me-2"><img src="/images/facebook_icon.png" alt="Facebook"></a>
-                        <a href="#" target="_blank" class="me-2"><img src="/images/instagram_icon.png" alt="Instagram"></a>
-                        <a href="#" target="_blank" class="me-2"><img src="/images/linkin_icon.png" alt="LinkedIn"></a>
-                        <a href="#" target="_blank"><img src="/images/twitter_icon.png" alt="Twitter"></a>
+                        <a href="https://www.facebook.com/GoCampGo" target="_blank" class="me-2"><img src="/images/facebook_icon.png" alt="Facebook"></a>
+                        <a href="https://www.instagram.com/gocampgo/" target="_blank" class="me-2"><img src="/images/instagram_icon.webp" alt="Instagram"></a>
+                        <a href="https://www.linkedin.com/in/zeinab-el-sokkary-97245a34/" target="_blank" class="me-2"><img src="/images/linkin_icon.png" alt="LinkedIn"></a>
                     </div>
                     <img src="/images/icef_logo.png" alt="ICEF Accredited" style="max-width: 100px;">
                 </div>

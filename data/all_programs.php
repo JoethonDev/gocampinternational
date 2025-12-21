@@ -12,98 +12,115 @@ $all_programs = array (
     'category_slug' => 'adult-academic',
     'name' => 'University Pathway',
     'image' => '/images/germ_1.jpg',
-    'ages' => array(
-        'min' => 17,
-        'max' => 99,
+    'ages' => 
+    array (
+      'min' => 17,
+      'max' => 99,
     ),
     'duration' => 12,
     'price' => '€8,000',
     'color' => 'secondary',
-    'badges' => array(
-        0 => 'Academic',
-        1 => 'Year-Round',
+    'badges' => 
+    array (
+      0 => 'Academic',
+      1 => 'Year-Round',
     ),
-    'highlights' => array(
-        0 => 'Prepare for university entry',
-        1 => 'Studienkolleg prep course',
-        2 => 'TestDaf prep',
-        3 => 'Guidance through every step',
+    'highlights' => 
+    array (
+      0 => 'Prepare for university entry',
+      1 => 'Studienkolleg prep course',
+      2 => 'TestDaf prep',
+      3 => 'Guidance through every step',
     ),
     'description' => 'This program guides you through every step to university, including language preparation and entrance exam courses.',
     'status' => 'inactive',
-    'gallery' => array(
-      '/images/germ_1.jpg',
-      '/images/germ_2.jpg',
-      '/images/germ_3.jpg',
-      '/images/germ_4.jpg',
-      '/images/germ_5.jpg',
-      '/images/germ_6.jpg',
+    'gallery' => 
+    array (
+      0 => '/images/germ_1.jpg',
+      1 => '/images/germ_2.jpg',
+      2 => '/images/germ_3.jpg',
+      3 => '/images/germ_4.jpg',
+      4 => '/images/germ_5.jpg',
+      5 => '/images/germ_6.jpg',
     ),
   ),
   'usa-pre-university' => 
   array (
-      'order' => 2,
-      'id' => 'usa-pre-university',
-      'category_slug' => 'adult-academic',
-      'name' => 'Pre-University Camp',
-      'image' => '/images/usa_3.jpg',
-      'ages' => array(
-          'min' => 16,
-          'max' => 18,
-      ),
-      'duration' => 4,
-      'price' => '$5,200',
-      'color' => 'primary',
-      'badges' => array(
-          0 => 'Academic',
-          1 => 'University Prep',
-      ),
-      'highlights' => array(
-          0 => 'Experience university life',
-          1 => 'SAT/ACT prep sessions',
-          2 => 'College application workshops',
-          3 => 'Campus tours in Boston or LA',
-      ),
-      'description' => 'Get a head start on your university applications and experience life on a US college campus.',
-      'status' => 'inactive',
-      'gallery' => array(
-        '/images/usa_1.jpg',
-        '/images/usa_2.jpg',
-        '/images/usa_3.jpg',
-      ),
+    'order' => 2,
+    'id' => 'usa-pre-university',
+    'category_slug' => 'adult-academic',
+    'name' => 'Pre-University Camp',
+    'image' => '/images/usa_3.jpg',
+    'ages' => 
+    array (
+      'min' => 16,
+      'max' => 18,
     ),
+    'duration' => 4,
+    'price' => '$5,200',
+    'color' => 'primary',
+    'badges' => 
+    array (
+      0 => 'Academic',
+      1 => 'University Prep',
+    ),
+    'highlights' => 
+    array (
+      0 => 'Experience university life',
+      1 => 'SAT/ACT prep sessions',
+      2 => 'College application workshops',
+      3 => 'Campus tours in Boston or LA',
+    ),
+    'description' => 'Get a head start on your university applications and experience life on a US college campus.',
+    'status' => 'inactive',
+    'gallery' => 
+    array (
+      0 => '/images/usa_1.jpg',
+      1 => '/images/usa_2.jpg',
+      2 => '/images/usa_3.jpg',
+    ),
+  ),
   'uk-young-professional' => 
   array (
-      'order' => 3,
-      'id' => 'uk-young-professional',
-      'category_slug' => 'adult-academic',
-      'name' => 'Young Professional Summer',
-      'tagline' => 'A unique blend of English and subject-specific learning alongside real-world industry experience.',
-      'image' => '',
-      'ages' => array(
-          'min' => 13,
-          'max' => 17,
-      ),
-      'duration' => 2,
-      'level' => 'Professional',
-      'price' => NULL,
-      'color' => 'secondary',
-      'badges' => array(
-          0 => 'Career',
-          1 => 'Immersive',
-      ),
-      'highlights' => array(
-          0 => 'Explore various career paths like AI, Engineering, and Business.',
-          1 => 'Real-world industry experience.',
-          2 => 'Improve language skills and knowledge in a professional context.',
-          3 => 'Designed for ambitious individuals.',
-      ),
-      'description' => '<p>The Young Professionals Summer Camp is a two-week immersive English programme designed for ambitious individuals. You’ll get a unique blend of English and subject-specific learning alongside real-world industry experience, giving you the chance to explore various career paths (such as Business, Engineering, AI, and Visual Arts) while improving your language skills in a professional context.</p>',
-      'includes' => array(),
-      'excludes' => array(),
-      'status' => 'active',
-      'gallery' => array(),
+    'order' => 3,
+    'id' => 'uk-young-professional',
+    'category_slug' => 'adult-academic',
+    'name' => 'Young Professional Summer',
+    'tagline' => 'A unique blend of English and subject-specific learning alongside real-world industry experience.',
+    'image' => '',
+    'ages' => 
+    array (
+      'min' => 13,
+      'max' => 17,
     ),
+    'duration' => 2,
+    'level' => 'Professional',
+    'price' => NULL,
+    'color' => 'secondary',
+    'badges' => 
+    array (
+      0 => 'Career',
+      1 => 'Immersive',
+    ),
+    'highlights' => 
+    array (
+      0 => 'Explore various career paths like AI, Engineering, and Business.',
+      1 => 'Real-world industry experience.',
+      2 => 'Improve language skills and knowledge in a professional context.',
+      3 => 'Designed for ambitious individuals.',
+    ),
+    'description' => '<p>The Young Professionals Summer Camp is a two-week immersive English programme designed for ambitious individuals. You’ll get a unique blend of English and subject-specific learning alongside real-world industry experience, giving you the chance to explore various career paths (such as Business, Engineering, AI, and Visual Arts) while improving your language skills in a professional context.</p>',
+    'includes' => 
+    array (
+    ),
+    'excludes' => 
+    array (
+    ),
+    'status' => 'active',
+    'gallery' => 
+    array (
+    ),
+  ),
   'uk-pre-university' => 
   array (
     'order' => 4,
@@ -141,7 +158,9 @@ $all_programs = array (
     array (
     ),
     'status' => 'active',
-    'gallery' => array(),
+    'gallery' => 
+    array (
+    ),
   ),
   'italy-junior-discovery' => 
   array (
@@ -165,32 +184,36 @@ $all_programs = array (
       0 => 'New',
       1 => 'Explorer',
     ),
-    'highlights' => array (
+    'highlights' => 
+    array (
       0 => 'Empowering students to explore their potential through experiential education.',
       1 => 'Innovative summer programs blending education, culture, and adventure.',
       2 => 'Camp is entirely conducted in English.',
       3 => 'Develop independence, form new friendships, strengthen communication skills, and learn the value of teamwork.',
     ),
     'description' => '<p>Junior Discovery Camp offers innovative summer programs in the heart of Italy. These camps provide a comprehensive learning environment where students can explore their potential.</p>',
-    'includes' => array (
+    'includes' => 
+    array (
     ),
-    'excludes' => array (
+    'excludes' => 
+    array (
     ),
     'status' => 'active',
     'schedule' => 
     array (
     ),
-    'gallery' => array(
-      '/images/italy_1.jpg',
-      '/images/italy_2.jpg',
-      '/images/italy_3.jpg',
-      '/images/Junior_1.jpg',
-      '/images/Junior_2.jpg',
-      '/images/Junior_3.jpg',
-      '/images/Junior_4.jpg',
-      '/images/Junior_5.jpg',
-      '/images/Junior_6.jpg',
-      '/images/Junior_7.jpg',
+    'gallery' => 
+    array (
+      0 => '/images/italy_1.jpg',
+      1 => '/images/italy_2.jpg',
+      2 => '/images/italy_3.jpg',
+      3 => '/images/Junior_1.jpg',
+      4 => '/images/Junior_2.jpg',
+      5 => '/images/Junior_3.jpg',
+      6 => '/images/Junior_4.jpg',
+      7 => '/images/Junior_5.jpg',
+      8 => '/images/Junior_6.jpg',
+      9 => '/images/Junior_7.jpg',
     ),
   ),
   'germany-children-summer' => 
@@ -222,7 +245,9 @@ $all_programs = array (
     ),
     'description' => 'A fun and effective way for children to learn German while exploring the culture and making international friends.',
     'status' => 'inactive',
-    'gallery' => array(),
+    'gallery' => 
+    array (
+    ),
   ),
   'spain-language-water-sports' => 
   array (
@@ -253,13 +278,14 @@ $all_programs = array (
     ),
     'description' => 'Combine language learning with exciting water sports on the beautiful Spanish coast.',
     'status' => 'inactive',
-    'gallery' => array(
-      '/images/spain_1_g.jpg',
-      '/images/spain_2_g.jpg',
-      '/images/spain_3_g.jpg',
-      '/images/spain_4_g.jpg',
-      '/images/spain_5_g.jpg',
-      '/images/spain_6_g.jpg',
+    'gallery' => 
+    array (
+      0 => '/images/spain_1_g.jpg',
+      1 => '/images/spain_2_g.jpg',
+      2 => '/images/spain_3_g.jpg',
+      3 => '/images/spain_4_g.jpg',
+      4 => '/images/spain_5_g.jpg',
+      5 => '/images/spain_6_g.jpg',
     ),
   ),
   'canada-english-ski' => 
@@ -292,7 +318,9 @@ $all_programs = array (
     ),
     'description' => 'Improve your English and your skiing or snowboarding skills in the world-renowned resort of Whistler.',
     'status' => 'inactive',
-    'gallery' => array(),
+    'gallery' => 
+    array (
+    ),
   ),
   'uk-english-foundation' => 
   array (
@@ -331,7 +359,9 @@ $all_programs = array (
     array (
     ),
     'status' => 'active',
-    'gallery' => array(),
+    'gallery' => 
+    array (
+    ),
   ),
   'italy-football-ac-milan' => 
   array (
@@ -377,15 +407,16 @@ $all_programs = array (
     'schedule' => 
     array (
     ),
-    'gallery' => array(
-      '/images/09-07-2025-Football_Milan__X0A7085.jpg',
-      '/images/09-07-2025-Football_Milan__X0A7671.jpg',
-      '/images/09-07-2025-Football_Milan__X0A7922.jpg',
-      '/images/09-07-2025-Football_Milan__X0A8055.jpg',
-      '/images/Copia_di_09-07-2025-Football_Milan__X0A7714.jpg',
-      '/images/Copia_di_12-07-2025-Football_Milan__X0A0371.jpg',
-      '/images/Footbal-1.jpg',
-      '/images/Footbal-17.jpg',
+    'gallery' => 
+    array (
+      0 => '/images/09-07-2025-Football_Milan__X0A7085.jpg',
+      1 => '/images/09-07-2025-Football_Milan__X0A7671.jpg',
+      2 => '/images/09-07-2025-Football_Milan__X0A7922.jpg',
+      3 => '/images/09-07-2025-Football_Milan__X0A8055.jpg',
+      4 => '/images/Copia_di_09-07-2025-Football_Milan__X0A7714.jpg',
+      5 => '/images/Copia_di_12-07-2025-Football_Milan__X0A0371.jpg',
+      6 => '/images/Footbal-1.jpg',
+      7 => '/images/Footbal-17.jpg',
     ),
   ),
   'spain-soccer-camp' => 
@@ -417,7 +448,9 @@ $all_programs = array (
     ),
     'description' => 'For the soccer fans of FC Barcelona or Real Madrid, this camp offers professional training and an unforgettable experience.',
     'status' => 'inactive',
-    'gallery' => array(),
+    'gallery' => 
+    array (
+    ),
   ),
   'canada-adventure-summer' => 
   array (
@@ -448,10 +481,11 @@ $all_programs = array (
     ),
     'description' => 'Explore the great Canadian outdoors with our adventure summer camp, based in beautiful British Columbia.',
     'status' => 'inactive',
-    'gallery' => array(
-      '/images/canada_1.jpg',
-      '/images/canada_2.jpg',
-      '/images/canada_3.jpg',
+    'gallery' => 
+    array (
+      0 => '/images/canada_1.jpg',
+      1 => '/images/canada_2.jpg',
+      2 => '/images/canada_3.jpg',
     ),
   ),
   'italy-fashion' => 
@@ -494,14 +528,15 @@ $all_programs = array (
     'schedule' => 
     array (
     ),
-    'gallery' => array(
-      '/images/Copia_di_09-07-2025-Fashion__X0A7481.jpg',
-      '/images/Fashion_0.jpg',
-      '/images/Copia_di_03-07-2025-Fashion__X0A6485.jpg',
-      '/images/Fashion_158.jpg',
-      '/images/Fashion_6.jpg',
-      '/images/Fashion_85.jpg',
-      '/images/Fashion_93.jpg',
+    'gallery' => 
+    array (
+      0 => '/images/Copia_di_09-07-2025-Fashion__X0A7481.jpg',
+      1 => '/images/Fashion_0.jpg',
+      2 => '/images/Copia_di_03-07-2025-Fashion__X0A6485.jpg',
+      3 => '/images/Fashion_158.jpg',
+      4 => '/images/Fashion_6.jpg',
+      5 => '/images/Fashion_85.jpg',
+      6 => '/images/Fashion_93.jpg',
     ),
   ),
   'italy-food' => 
@@ -552,13 +587,14 @@ $all_programs = array (
     'schedule' => 
     array (
     ),
-    'gallery' => array(
-      '/images/Copia_di_03-07-2025-Kitchen_CongustoIstitute__X0A5580.jpg',
-      '/images/Copia_di_03-07-2025-Kitchen_CongustoIstitute__X0A6231.jpg',
-      '/images/Kitchen_110.jpg',
-      '/images/Kitchen_113.jpg',
-      '/images/Kitchen_3.jpg',
-      '/images/Kitchen_82.jpg',
+    'gallery' => 
+    array (
+      0 => '/images/Copia_di_03-07-2025-Kitchen_CongustoIstitute__X0A5580.jpg',
+      1 => '/images/Copia_di_03-07-2025-Kitchen_CongustoIstitute__X0A6231.jpg',
+      2 => '/images/Kitchen_110.jpg',
+      3 => '/images/Kitchen_113.jpg',
+      4 => '/images/Kitchen_3.jpg',
+      5 => '/images/Kitchen_82.jpg',
     ),
   ),
   'italy-outdoor-exploration' => 
@@ -614,12 +650,13 @@ $all_programs = array (
       2 => 'Spending money',
     ),
     'status' => 'active',
-    'gallery' => array(
-      '/images/exploration_1.jpg',
-      '/images/exploration_2.jpg',
-      '/images/exploration_3.jpg',
-      '/images/exploration_4.jpg',
-      '/images/exploration_5.jpg',
+    'gallery' => 
+    array (
+      0 => '/images/exploration_1.jpg',
+      1 => '/images/exploration_2.jpg',
+      2 => '/images/exploration_3.jpg',
+      3 => '/images/exploration_4.jpg',
+      4 => '/images/exploration_5.jpg',
     ),
   ),
   'italy-sea-quest' => 
@@ -675,7 +712,9 @@ $all_programs = array (
       2 => 'Personal sailing gear',
     ),
     'status' => 'trash',
-    'gallery' => array(),
+    'gallery' => 
+    array (
+    ),
   ),
   'italy-tennis' => 
   array (
@@ -723,13 +762,14 @@ $all_programs = array (
     'schedule' => 
     array (
     ),
-    'gallery' => array(
-      '/images/Tennis_MG_2934-187__1_.jpg',
-      '/images/Tennis_MG_2934-187__1_.png',
-      '/images/Tennis_MG_2934-187__2_.jpg',
-      '/images/Tennis_MG_2934-187__2_.png',
-      '/images/Tennis_MG_2934-187__3_.jpg',
-      '/images/Tennis_MG_2934-187__3_.png',
+    'gallery' => 
+    array (
+      0 => '/images/Tennis_MG_2934-187__1_.jpg',
+      1 => '/images/Tennis_MG_2934-187__1_.png',
+      2 => '/images/Tennis_MG_2934-187__2_.jpg',
+      3 => '/images/Tennis_MG_2934-187__2_.png',
+      4 => '/images/Tennis_MG_2934-187__3_.jpg',
+      5 => '/images/Tennis_MG_2934-187__3_.png',
     ),
   ),
   'italy-sailing' => 
@@ -771,16 +811,17 @@ $all_programs = array (
     'schedule' => 
     array (
     ),
-    'gallery' => array(
-      '/images/sailing_1.jpg',
-      '/images/sailing_2.jpg',
-      '/images/sailing_3.jpg',
-      '/images/sailing_4.jpg',
-      '/images/sailing_5.jpg',
-      '/images/sailing_6.jpg',
-      '/images/sailing_7.jpg',
-      '/images/sailing_8.jpg',
-      '/images/sailing_9.jpg',
+    'gallery' => 
+    array (
+      0 => '/images/sailing_1.jpg',
+      1 => '/images/sailing_2.jpg',
+      2 => '/images/sailing_3.jpg',
+      3 => '/images/sailing_4.jpg',
+      4 => '/images/sailing_5.jpg',
+      5 => '/images/sailing_6.jpg',
+      6 => '/images/sailing_7.jpg',
+      7 => '/images/sailing_8.jpg',
+      8 => '/images/sailing_9.jpg',
     ),
   ),
   'usa-global-leadership' => 
@@ -812,7 +853,9 @@ $all_programs = array (
     ),
     'description' => 'Develop the skills to become a future leader in a globalized world, with workshops and real-world case studies.',
     'status' => 'inactive',
-    'gallery' => array(),
+    'gallery' => 
+    array (
+    ),
   ),
   'switzerland-adventure-camp' => 
   array (
@@ -854,11 +897,12 @@ $all_programs = array (
     ),
     'tagline' => '',
     'level' => '',
-    'gallery' => array(
-      '/images/swiss_1.jpg',
-      '/images/swiss_2.jpg',
-      '/images/swiss_3.jpg',
-      '/images/swiss_5.jpg',
+    'gallery' => 
+    array (
+      0 => '/images/swiss_1.jpg',
+      1 => '/images/swiss_2.jpg',
+      2 => '/images/swiss_3.jpg',
+      3 => '/images/swiss_5.jpg',
     ),
   ),
   'switzerland-film-academy' => 
@@ -901,8 +945,9 @@ $all_programs = array (
     ),
     'tagline' => '',
     'level' => '',
-    'gallery' => array(
-      '/images/swiss_4.jpg',
+    'gallery' => 
+    array (
+      0 => '/images/swiss_4.jpg',
     ),
   ),
   'switzerland-ski-camp' => 
@@ -945,10 +990,11 @@ $all_programs = array (
     ),
     'tagline' => '',
     'level' => '',
-    'gallery' => array(
-      '/images/Winter-2.png',
-      '/images/Winter-day-camps-zip-line-1.webp',
-      '/images/Winter-day-camps-zip-line-2.webp',
+    'gallery' => 
+    array (
+      0 => '/images/Winter-2.png',
+      1 => '/images/Winter-day-camps-zip-line-1.webp',
+      2 => '/images/Winter-day-camps-zip-line-2.webp',
     ),
   ),
 );

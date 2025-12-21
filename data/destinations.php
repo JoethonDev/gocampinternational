@@ -249,7 +249,7 @@ $destinations = array (
   array (
     'name' => 'United Kingdom',
     'slug' => 'uk',
-    'status' => 'trash',
+    'status' => 'active',
     'banner' => '',
     'tagline' => '',
     'intro_image' => '',

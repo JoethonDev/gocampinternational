@@ -20,27 +20,28 @@ require_once __DIR__ . '/../includes/navigation.php';
 // --- Prepare all programs with destination information ---
 $allPrograms = [];
 foreach ($all_programs as $program_id => $program) {
-    if (isset($program['status']) && $program['status'] === 'active') {
-        // Find which destination this program belongs to and check if destination is trashed
-        $destination_name = 'Multiple Locations'; // Default
-        $destination_slug = '#';
-        $destination_trashed = false;
-        foreach ($destinations as $dest) {
-            if (isset($dest['program_ids']) && in_array($program_id, $dest['program_ids'])) {
-                $destination_name = $dest['name'];
-                $destination_slug = $dest['slug'];
-                if (isset($dest['status']) && $dest['status'] === 'trash') {
-                    $destination_trashed = true;
-                }
-                break; // Found the first destination, stop looping
+    if (!isset($program['status']) || $program['status'] !== 'active') {
+        continue;
+    }
+    // Find which destination this program belongs to and check if destination is trashed
+    $destination_name = 'Multiple Locations'; // Default
+    $destination_slug = '#';
+    $destination_trashed = false;
+    foreach ($destinations as $dest) {
+        if (isset($dest['program_ids']) && in_array($program_id, $dest['program_ids'])) {
+            $destination_name = $dest['name'];
+            $destination_slug = $dest['slug'];
+            if (isset($dest['status']) && $dest['status'] === 'trash') {
+                $destination_trashed = true;
             }
+            break; // Found the first destination, stop looping
         }
-        // Only add program if its destination is not trashed
-        if (!$destination_trashed) {
-            $program['destination_name'] = $destination_name;
-            $program['destination_slug'] = $destination_slug;
-            $allPrograms[] = $program;
-        }
+    }
+    // Only add program if its destination is not trashed
+    if (!$destination_trashed) {
+        $program['destination_name'] = $destination_name;
+        $program['destination_slug'] = $destination_slug;
+        $allPrograms[] = $program;
     }
 }
 
@@ -48,13 +49,24 @@ foreach ($all_programs as $program_id => $program) {
 $programsByCategory = [];
 foreach ($allPrograms as $program) {
     $categorySlug = $program['category_slug'] ?? 'other';
-    if (!isset($programsByCategory[$categorySlug])) {
-        $programsByCategory[$categorySlug] = [
-            'category' => $programs[$categorySlug] ?? ['name' => 'Other Programs', 'slug' => $categorySlug],
+    
+    // Check if category exists and is active, if not treat as 'other'
+    if (!empty($categorySlug) && isset($programs[$categorySlug]) && 
+        isset($programs[$categorySlug]['status']) && $programs[$categorySlug]['status'] === 'active') {
+        // Category is active, use it normally
+        $displayCategorySlug = $categorySlug;
+    } else {
+        // Category is missing, trashed, or inactive - treat as 'other' for display
+        $displayCategorySlug = 'other';
+    }
+    
+    if (!isset($programsByCategory[$displayCategorySlug])) {
+        $programsByCategory[$displayCategorySlug] = [
+            'category' => $programs[$displayCategorySlug] ?? ['name' => 'Other Programs', 'slug' => $displayCategorySlug],
             'programs' => []
         ];
     }
-    $programsByCategory[$categorySlug]['programs'][] = $program;
+    $programsByCategory[$displayCategorySlug]['programs'][] = $program;
 }
 // Sort programs in each category by 'order' (asc), then by name (asc)
 foreach ($programsByCategory as &$catData) {
