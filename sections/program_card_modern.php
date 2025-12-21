@@ -78,6 +78,22 @@ $colors = $colorClasses[$color] ?? $colorClasses['primary'];
         <div class="card-body p-4 d-flex flex-column">
             <h3 class="card-title fw-bold mb-2 text-brand-dark fs-4"><?= htmlspecialchars($name) ?></h3>
             <p class="card-text text-muted mb-3 flex-grow-1"><?= htmlspecialchars($tagline) ?></p>
+                <?php if (!empty($program['gallery'])): ?>
+                <div class="mb-3">
+                    <div class="row g-2">
+                        <?php foreach (array_slice($program['gallery'], 0, 4) as $img): ?>
+                            <div class="col-6 col-md-3 mb-2">
+                                <img src="<?= htmlspecialchars($img) ?>" alt="<?= htmlspecialchars($name) ?> photo" class="img-fluid rounded shadow-sm w-100" style="object-fit:cover;max-height:120px;" loading="lazy">
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                    <?php if (count($program['gallery']) > 4): ?>
+                        <button class="btn btn-link p-0 mt-2 text-brand-primary text-decoration-none fw-bold" data-bs-toggle="modal" data-bs-target="#programModal-<?= htmlspecialchars($programId) ?>">
+                            +<?= count($program['gallery']) - 4 ?> more photos <i class="bi bi-arrow-right ms-1"></i>
+                        </button>
+                    <?php endif; ?>
+                </div>
+                <?php endif; ?>
             <?php if ($highlights || $price): ?>
                 <hr class="my-3" />
             <?php endif; ?>
