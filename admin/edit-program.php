@@ -89,6 +89,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $new_data['color'] = $_POST['color'] ?? 'primary';
             $new_data['description'] = $_POST['description'] ?? '';
             $new_data['status'] = $_POST['status'] ?? 'active';
+            // Gallery - Reads from text input `gallery_path[]` populated by modal
+            $new_data['gallery'] = array_values(array_filter($_POST['gallery_path'] ?? []));
 
             // Update the main $all_programs array
             if ($id !== $original_id) {
@@ -204,6 +206,19 @@ require_once 'includes/admin-header.php';
     </div>
 </template>
 
+<template id="gallery-template">
+    <div class="repeater-item mb-3">
+        <img src="" class="img-fluid rounded mb-2 d-block media-preview-image" style="max-height: 100px; max-width: 150px; object-fit: cover;" onerror="this.onerror=null; this.src='/admin/placeholder-image.png'">
+        <div class="input-group">
+            <input type="text" class="form-control gallery-path-input media-preview-target-input" name="gallery_path[]" value="" placeholder="Select image..." readonly style="background-color: var(--bg-card);">
+            <button class="btn btn-outline-secondary" type="button" data-bs-toggle="media-modal" data-bs-target-input="">Browse...</button>
+            <button class="btn btn-outline-danger" type="button" data-action="remove-item">
+                <i class="bi bi-trash"></i>
+            </button>
+        </div>
+    </div>
+</template>
+
 
 <form action="edit-program.php<?= $is_new_item ? '' : '?id=' . htmlspecialchars($data['id']) ?>" method="POST" enctype="multipart/form-data" class="animate-fade-in delay-1">
 
@@ -255,6 +270,41 @@ require_once 'includes/admin-header.php';
                     <div class="mt-3">
                         <label for="description" class="form-label fw-bold small text-uppercase text-muted">Description</label>
                         <textarea class="form-control tinymce-editor" id="description" name="description" rows="10"><?= htmlspecialchars($data['description']) ?></textarea>
+                    </div>
+
+                    <div class="accordion-item border rounded mb-2">
+                        <h2 class="accordion-header"><button class="accordion-button collapsed rounded" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-gallery">
+                            <i class="bi bi-images me-2 text-success"></i> Gallery (<?= isset($data['gallery']) ? count($data['gallery']) : 0 ?>)
+                        </button></h2>
+                        <div id="collapse-gallery" class="accordion-collapse collapse repeater-container simple-repeater" data-template-id="gallery-template" data-input-name="gallery_path[]" data-bs-parent="#detailsAccordion">
+                            <div class="accordion-body bg-light bg-opacity-10">
+                                <label class="form-label fw-bold small text-uppercase text-muted">Gallery Images</label>
+                                <?php if (isset($data['gallery']) && is_array($data['gallery'])):
+                                    foreach ($data['gallery'] as $index => $path):
+                                        $input_id = 'gallery_path_' . $index . '_' . uniqid();
+                                ?>
+                                <div class="repeater-item mb-3">
+                                    <img src="<?= htmlspecialchars($path) ?>"
+                                         class="img-fluid rounded mb-2 d-block media-preview-image"
+                                         style="max-height: 100px; max-width: 150px; object-fit: cover;"
+                                         onerror="this.onerror=null; this.src='/admin/placeholder-image.png'">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control gallery-path-input media-preview-target-input" id="<?= $input_id ?>" name="gallery_path[]"
+                                               value="<?= htmlspecialchars($path) ?>" placeholder="Select image..." readonly style="background-color: var(--bg-card);">
+                                        <button class="btn btn-outline-secondary" type="button"
+                                                data-bs-toggle="media-modal"
+                                                data-bs-target-input="<?= $input_id ?>">
+                                            Browse...
+                                        </button>
+                                        <button class="btn btn-outline-danger" type="button" data-action="remove-item">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <?php endforeach; endif; ?>
+                                <button class="btn btn-sm btn-outline-primary mt-2" type="button" data-action="add-item"><i class="bi bi-plus-circle me-1"></i> Add Gallery Image</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

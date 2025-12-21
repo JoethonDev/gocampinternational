@@ -200,7 +200,7 @@ $programs = array (
   ),
   'special-interests-camps' => 
   array (
-    'status' => 'active',
+    'status' => 'trash',
     'name' => 'Special Interests Camps',
     'slug' => 'special-interests-camps',
     'banner' => '/images/special_banner.jpg',

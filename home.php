@@ -57,6 +57,12 @@ require_once __DIR__ . '/includes/navigation.php';
 
     <?php
     // --- DYNAMIC DESTINATIONS SECTION ---
+    // Filter out trashed destinations before including the cards section
+    $public_destinations = array_filter($destinations, function($dest) {
+        return isset($dest['status']) && $dest['status'] !== 'trash';
+    });
+    // Make $public_destinations available to the cards section
+    // The destination-cards.php should use $public_destinations if set, otherwise fallback to $destinations
     require_once __DIR__ . '/sections/destination-cards.php';
     ?>
 
@@ -70,14 +76,27 @@ require_once __DIR__ . '/includes/navigation.php';
     $featured_categories = [];
     foreach ($programs as $category) {
         if ($category['status'] === 'active') {
-            // Count active programs in this category
+            // Count active programs in this category whose destination is not trashed
             $program_count = 0;
             foreach ($all_programs as $program) {
-                if (isset($program['category_slug']) && $program['category_slug'] === $category['slug'] && $program['status'] === 'active') {
-                    $program_count++;
+                if (
+                    isset($program['category_slug']) && $program['category_slug'] === $category['slug'] && $program['status'] === 'active'
+                ) {
+                    // Check if program's destination is not trashed
+                    $destination_trashed = false;
+                    foreach ($destinations as $dest) {
+                        if (isset($dest['program_ids']) && in_array($program['id'], $dest['program_ids'])) {
+                            if (isset($dest['status']) && $dest['status'] === 'trash') {
+                                $destination_trashed = true;
+                            }
+                            break;
+                        }
+                    }
+                    if (!$destination_trashed) {
+                        $program_count++;
+                    }
                 }
             }
-            
             // Only include categories that have programs
             if ($program_count > 0) {
                 $category['program_count'] = $program_count;

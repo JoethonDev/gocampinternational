@@ -9,9 +9,25 @@
  */
 
 // --- Variable Safety Check ---
-if (!isset($destinationData) || !is_array($destinationData)) {
+if (!isset($destinationData) || !is_array($destinationData) || (isset($destinationData['status']) && $destinationData['status'] === 'trash')) {
     http_response_code(404);
     include __DIR__ . '/../404.php';
+    exit;
+}
+
+// --- Coming Soon Handling ---
+if (isset($destinationData['status']) && $destinationData['status'] === 'coming-soon') {
+    $pageTitle = 'Coming Soon: ' . htmlspecialchars($destinationData['name']);
+    $pageDescription = 'This destination will be available soon.';
+    require_once __DIR__ . '/../includes/header.php';
+    require_once __DIR__ . '/../includes/navigation.php';
+    echo '<main><div class="container text-center py-5 my-5">';
+    echo '<h1 class="display-3 fw-bold text-brand-primary mb-4">Coming Soon</h1>';
+    echo '<h2 class="mb-3">' . htmlspecialchars($destinationData['name']) . ' is not available yet.</h2>';
+    echo '<p class="lead text-muted mb-4">Please check back later for updates on this destination.</p>';
+    echo '<a href="/" class="btn btn-primary btn-lg"><i class="bi bi-house-door-fill me-2"></i>Go to Homepage</a>';
+    echo '</div></main>';
+    require_once __DIR__ . '/../includes/footer.php';
     exit;
 }
 
@@ -84,6 +100,41 @@ require_once __DIR__ . '/../includes/navigation.php';
         }
     }
 
+        // Gallery Section: Grouped by Program
+        ?>
+        <section class="section-padding bg-white" id="destination-gallery">
+            <div class="container">
+                <div class="text-center mb-5">
+                    <h2 class="display-5 fw-bold text-brand-dark mb-3">Gallery: <?= htmlspecialchars($destinationData['name']) ?></h2>
+                    <p class="lead text-muted mb-0">Photos grouped by program</p>
+                </div>
+                <div class="row g-5">
+                    <?php
+                    if (!empty($destinationData['program_ids'])) {
+                        foreach ($destinationData['program_ids'] as $program_id) {
+                            if (isset($all_programs[$program_id]) && $all_programs[$program_id]['status'] === 'active') {
+                                $program = $all_programs[$program_id];
+                                $gallery = $program['gallery'] ?? [];
+                                if (!empty($gallery)) {
+                                    echo '<div class="col-12 mb-4">';
+                                    echo '<h3 class="fw-bold mb-3 text-brand-secondary">' . htmlspecialchars($program['name']) . '</h3>';
+                                    echo '<div class="row g-2">';
+                                    foreach ($gallery as $img) {
+                                        echo '<div class="col-6 col-md-3 mb-2"><img src="' . htmlspecialchars($img) . '" alt="' . htmlspecialchars($program['name']) . ' photo" class="img-fluid rounded shadow-sm w-100" style="object-fit:cover;max-height:180px;" loading="lazy"></div>';
+                                    }
+                                    echo '</div>';
+                                    echo '</div>';
+                                }
+                            }
+                        }
+                    } else {
+                        echo '<p class="text-center">No gallery images available for this destination.</p>';
+                    }
+                    ?>
+                </div>
+            </div>
+        </section>
+        <?php
     // --- 4. FAQ SECTION ---
     if (!empty($destinationData['faq'])) {
         $faqs = $destinationData['faq']; 

@@ -64,7 +64,7 @@ if (preg_match('/^destinations\/([a-zA-Z0-9_-]+)$/', $path, $matches)) {
     $slug = $matches[1];
     $destinationData = null;
     foreach ($destinations as $dest) {
-        if ($dest['slug'] === $slug && $dest['status'] === 'active') {
+        if ($dest['slug'] === $slug && $dest['status'] !== 'trash') {
             $destinationData = $dest;
             break;
         }

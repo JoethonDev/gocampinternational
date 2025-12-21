@@ -9,158 +9,54 @@ $destinations = array (
   array (
     'name' => 'Italy',
     'slug' => 'italy',
-    'status' => 'inactive',
+    'status' => 'active',
     'banner' => '/images/it_banner_new.jpg',
-    'tagline' => 'Where Adventure Meets Mediterranean Beauty',
+    'tagline' => '',
     'intro_image' => '/images/it_inn_banner.jpg',
     'intro_text' => '<p class="lead text-muted mb-4">Italy offers the perfect blend of outdoor adventure, cultural enrichment, and unforgettable experiences. Our programs are designed to challenge, inspire, and create lifelong memories.</p>',
     'highlights' => 
     array (
-      0 => 
-      array (
-        'icon' => 'sun-fill',
-        'text' => 'Mediterranean Climate',
-      ),
-      1 => 
-      array (
-        'icon' => 'water',
-        'text' => 'Coastal & Mountain Activities',
-      ),
-      2 => 
-      array (
-        'icon' => 'translate',
-        'text' => 'Italian Language Immersion',
-      ),
-      3 => 
-      array (
-        'icon' => 'award-fill',
-        'text' => 'Award-Winning Programs',
-      ),
     ),
     'stats' => 
     array (
-      0 => 
-      array (
-        'number' => 15,
-        'label' => 'Years Experience',
-        'suffix' => '+',
-        'icon' => 'calendar-check',
-      ),
-      1 => 
-      array (
-        'number' => 98,
-        'label' => 'Satisfaction Rate',
-        'suffix' => '%',
-        'icon' => 'heart-fill',
-      ),
-      2 => 
-      array (
-        'number' => 90,
-        'label' => 'Returing',
-        'suffix' => '%',
-        'icon' => 'fas fa-heart',
-      ),
     ),
     'gallery' => 
     array (
-      0 => '/images/italy_1.jpg',
-      1 => '/images/italy_2.jpg',
-      2 => '/images/italy_3.jpg',
     ),
     'faq' => 
     array (
-      0 => 
-      array (
-        'q' => 'What is included in the program price?',
-        'a' => 'All our Italy programs include accommodation, all meals, activities, equipment, qualified instructors, medical insurance, and airport transfers.',
-      ),
-      1 => 
-      array (
-        'q' => 'How do you ensure student safety?',
-        'a' => 'Safety is our highest priority. All activities are led by certified professionals with a 1:8 staff-to-student ratio and 24/7 supervision.',
-      ),
     ),
     'program_ids' => 
     array (
-      0 => 'italy-junior-discover',
-      1 => 'italy-junior-discovery',
-      2 => 'italy-football-ac-milan',
-      3 => 'italy-fashion',
-      4 => 'italy-food',
-      5 => 'italy-outdoor-exploration',
-      6 => 'italy-sea-quest',
-      7 => 'italy-tennis',
-      8 => 'italy-sailing',
+      0 => 'italy-junior-discovery',
+      1 => 'italy-football-ac-milan',
+      2 => 'italy-fashion',
+      3 => 'italy-food',
+      4 => 'italy-outdoor-exploration',
+      5 => 'italy-tennis',
+      6 => 'italy-sailing',
     ),
   ),
   'switzerland' => 
   array (
     'name' => 'Switzerland',
     'slug' => 'switzerland',
-    'status' => 'coming-soon',
+    'status' => 'active',
     'banner' => '/images/swiss_banner.jpg',
-    'tagline' => 'Alpine Adventures in the Heart of Europe',
+    'tagline' => '',
     'intro_image' => '/images/swiss_1.jpg',
-    'intro_text' => '<p class="lead text-muted mb-4">Enjoy high-quality Swiss facilities, pure mountain air, and a natural environment of meadows, forests, and wildlife. Highlights include hikes to taste homemade <strong>cheese and chocolate</strong>.</p>
-<table style="border-collapse: collapse; width: 100%;" border="1"><colgroup><col style="width: 24.9677%;"><col style="width: 24.9677%;"><col style="width: 24.9677%;"><col style="width: 24.9677%;"></colgroup>
-<tbody>
-<tr>
-<td>testint</td>
-<td>testin</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-</tr>
-<tr>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-</tr>
-<tr>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-</tr>
-<tr>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
-</tr>
-</tbody>
-</table>',
+    'intro_text' => '<p class="lead text-muted mb-4">Enjoy high-quality Swiss facilities, pure mountain air, and a natural environment of meadows, forests, and wildlife. Highlights include hikes to taste homemade <strong>cheese and chocolate</strong>.</p>',
     'highlights' => 
     array (
-      0 => 
-      array (
-        'icon' => 'snow',
-        'text' => 'Winter & Summer Camps',
-      ),
-      1 => 
-      array (
-        'icon' => 'camera-reels-fill',
-        'text' => 'Specialty Film Camps',
-      ),
-      2 => 
-      array (
-        'icon' => 'globe-europe-africa',
-        'text' => 'Multi-Lingual Environment',
-      ),
-      3 => 
-      array (
-        'icon' => 'shield-check',
-        'text' => 'Renowned for Safety',
-      ),
     ),
     'gallery' => 
     array (
-      0 => '/images/swiss_3.jpg',
-      1 => '/images/swiss_4.jpg',
-      2 => '/images/swiss_5.jpg',
     ),
     'program_ids' => 
     array (
+      0 => 'switzerland-adventure-camp',
+      1 => 'switzerland-film-academy',
+      2 => 'switzerland-ski-camp',
     ),
     'stats' => 
     array (
@@ -203,12 +99,6 @@ $destinations = array (
     ),
     'gallery' => 
     array (
-      0 => '/images/germ_1.jpg',
-      1 => '/images/germ_2.jpg',
-      2 => '/images/germ_3.jpg',
-      3 => '/images/germ_4.jpg',
-      4 => '/images/germ_5.jpg',
-      5 => '/images/germ_6.jpg',
     ),
     'program_ids' => 
     array (
@@ -254,12 +144,6 @@ $destinations = array (
     ),
     'gallery' => 
     array (
-      0 => '/images/spain_1_g.jpg',
-      1 => '/images/spain_2_g.jpg',
-      2 => '/images/spain_3_g.jpg',
-      3 => '/images/spain_4_g.jpg',
-      4 => '/images/spain_5_g.jpg',
-      5 => '/images/spain_6_g.jpg',
     ),
     'program_ids' => 
     array (
@@ -273,7 +157,7 @@ $destinations = array (
   ),
   'usa' => 
   array (
-    'name' => 'USA',
+    'name' => 'USA & Canada',
     'slug' => 'usa',
     'status' => 'coming-soon',
     'banner' => '/images/usa_banner.jpg',
@@ -305,9 +189,6 @@ $destinations = array (
     ),
     'gallery' => 
     array (
-      0 => '/images/usa_1.jpg',
-      1 => '/images/usa_2.jpg',
-      2 => '/images/usa_3.jpg',
     ),
     'program_ids' => 
     array (
@@ -323,7 +204,7 @@ $destinations = array (
   array (
     'name' => 'Canada',
     'slug' => 'canada',
-    'status' => 'active',
+    'status' => 'trash',
     'banner' => '/images/canada_banner.jpg',
     'tagline' => 'Urban Excitement & Natural Wonders',
     'intro_image' => '/images/canada_1.jpg',
@@ -353,9 +234,6 @@ $destinations = array (
     ),
     'gallery' => 
     array (
-      0 => '/images/canada_1.jpg',
-      1 => '/images/canada_2.jpg',
-      2 => '/images/canada_3.jpg',
     ),
     'program_ids' => 
     array (
@@ -371,50 +249,16 @@ $destinations = array (
   array (
     'name' => 'United Kingdom',
     'slug' => 'uk',
-    'status' => 'active',
+    'status' => 'trash',
     'banner' => '',
-    'tagline' => 'Where centuries of tradition meet a global community',
+    'tagline' => '',
     'intro_image' => '',
-    'intro_text' => '<p class="lead text-muted mb-4">Live, learn, and connect in one of the world’s most inspiring academic cities. Oxford isn’t just a place to study, it’s where centuries of tradition meet a global community of curious minds. Students come together to challenge ideas, spark creativity, and discover new perspectives.</p>',
+    'intro_text' => '<p class="lead text-muted mb-4">Live, learn, and connect in one of the world&rsquo;s most inspiring academic cities.</p>',
     'highlights' => 
     array (
-      0 => 
-      array (
-        'icon' => 'building-fill',
-        'text' => 'Inspiring Academic Cities',
-      ),
-      1 => 
-      array (
-        'icon' => 'globe',
-        'text' => 'Global Community',
-      ),
-      2 => 
-      array (
-        'icon' => 'mortarboard-fill',
-        'text' => 'University Preparation',
-      ),
-      3 => 
-      array (
-        'icon' => 'briefcase-fill',
-        'text' => 'Professional Experience',
-      ),
     ),
     'stats' => 
     array (
-      0 => 
-      array (
-        'number' => 100,
-        'label' => 'Countries Represented',
-        'suffix' => '+',
-        'icon' => 'globe',
-      ),
-      1 => 
-      array (
-        'number' => 100,
-        'label' => 'Tradition',
-        'suffix' => '%',
-        'icon' => 'bank',
-      ),
     ),
     'gallery' => 
     array (
@@ -424,9 +268,9 @@ $destinations = array (
     ),
     'program_ids' => 
     array (
-      0 => 'uk-english-foundation',
-      1 => 'uk-young-professional',
-      2 => 'uk-pre-university',
+      0 => 'uk-young-professional',
+      1 => 'uk-pre-university',
+      2 => 'uk-english-foundation',
     ),
   ),
   'france' => 
@@ -465,6 +309,12 @@ $destinations = array (
     array (
     ),
     'program_ids' => 
+    array (
+    ),
+    'stats' => 
+    array (
+    ),
+    'faq' => 
     array (
     ),
   ),

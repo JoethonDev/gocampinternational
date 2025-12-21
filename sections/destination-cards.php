@@ -8,8 +8,12 @@
     <div class="container">
         <h2 class="section-title text-center mb-5">Our Destinations</h2>
         <div class="row g-4 justify-content-center">
-            <?php if (isset($destinations) && !empty($destinations)): ?>
-                <?php foreach ($destinations as $destination): ?>
+            <?php
+            // Use $public_destinations if set, otherwise fallback to $destinations
+            $dest_list = isset($public_destinations) ? $public_destinations : (isset($destinations) ? $destinations : []);
+            ?>
+            <?php if (!empty($dest_list)): ?>
+                <?php foreach ($dest_list as $destination): ?>
                     <div class="col-sm-6 col-lg-4">
                         <a href="/destinations/<?= htmlspecialchars($destination['slug']) ?>" class="card text-white border-0 shadow-sm program-card-home">
                             <img src="<?= htmlspecialchars($destination['banner']) ?>" class="card-img" alt="<?= htmlspecialchars($destination['name']) ?>">

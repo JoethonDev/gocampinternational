@@ -21,21 +21,26 @@ require_once __DIR__ . '/../includes/navigation.php';
 $allPrograms = [];
 foreach ($all_programs as $program_id => $program) {
     if (isset($program['status']) && $program['status'] === 'active') {
-        // Find which destination this program belongs to
+        // Find which destination this program belongs to and check if destination is trashed
         $destination_name = 'Multiple Locations'; // Default
         $destination_slug = '#';
-        
+        $destination_trashed = false;
         foreach ($destinations as $dest) {
             if (isset($dest['program_ids']) && in_array($program_id, $dest['program_ids'])) {
                 $destination_name = $dest['name'];
                 $destination_slug = $dest['slug'];
+                if (isset($dest['status']) && $dest['status'] === 'trash') {
+                    $destination_trashed = true;
+                }
                 break; // Found the first destination, stop looping
             }
         }
-        
-        $program['destination_name'] = $destination_name;
-        $program['destination_slug'] = $destination_slug;
-        $allPrograms[] = $program;
+        // Only add program if its destination is not trashed
+        if (!$destination_trashed) {
+            $program['destination_name'] = $destination_name;
+            $program['destination_slug'] = $destination_slug;
+            $allPrograms[] = $program;
+        }
     }
 }
 

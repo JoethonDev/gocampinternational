@@ -5,714 +5,950 @@
  */
 
 $all_programs = array (
-    // ADULT ACADEMIC
-    'germany-university-pathway' => array (
-        'order' => 1,
-        'id' => 'germany-university-pathway',
-        'category_slug' => 'adult-academic',
-        'name' => 'University Pathway',
-        'image' => '/images/germ_1.jpg',
-        'ages' => 
-        array (
-            'min' => 17,
-            'max' => 99,
-        ),
-        'duration' => 12,
-        'price' => '€8,000',
-        'color' => 'secondary',
-        'badges' => 
-        array (
-            0 => 'Academic',
-            1 => 'Year-Round',
-        ),
-        'highlights' => 
-        array (
-            0 => 'Prepare for university entry',
-            1 => 'Studienkolleg prep course',
-            2 => 'TestDaf prep',
-            3 => 'Guidance through every step',
-        ),
-        'description' => 'This program guides you through every step to university, including language preparation and entrance exam courses.',
-        'status' => 'inactive',
+  'germany-university-pathway' => 
+  array (
+    'order' => 1,
+    'id' => 'germany-university-pathway',
+    'category_slug' => 'adult-academic',
+    'name' => 'University Pathway',
+    'image' => '/images/germ_1.jpg',
+    'ages' => array(
+        'min' => 17,
+        'max' => 99,
     ),
-    'usa-pre-university' => 
+    'duration' => 12,
+    'price' => '€8,000',
+    'color' => 'secondary',
+    'badges' => array(
+        0 => 'Academic',
+        1 => 'Year-Round',
+    ),
+    'highlights' => array(
+        0 => 'Prepare for university entry',
+        1 => 'Studienkolleg prep course',
+        2 => 'TestDaf prep',
+        3 => 'Guidance through every step',
+    ),
+    'description' => 'This program guides you through every step to university, including language preparation and entrance exam courses.',
+    'status' => 'inactive',
+    'gallery' => array(
+      '/images/germ_1.jpg',
+      '/images/germ_2.jpg',
+      '/images/germ_3.jpg',
+      '/images/germ_4.jpg',
+      '/images/germ_5.jpg',
+      '/images/germ_6.jpg',
+    ),
+  ),
+  'usa-pre-university' => 
+  array (
+      'order' => 2,
+      'id' => 'usa-pre-university',
+      'category_slug' => 'adult-academic',
+      'name' => 'Pre-University Camp',
+      'image' => '/images/usa_3.jpg',
+      'ages' => array(
+          'min' => 16,
+          'max' => 18,
+      ),
+      'duration' => 4,
+      'price' => '$5,200',
+      'color' => 'primary',
+      'badges' => array(
+          0 => 'Academic',
+          1 => 'University Prep',
+      ),
+      'highlights' => array(
+          0 => 'Experience university life',
+          1 => 'SAT/ACT prep sessions',
+          2 => 'College application workshops',
+          3 => 'Campus tours in Boston or LA',
+      ),
+      'description' => 'Get a head start on your university applications and experience life on a US college campus.',
+      'status' => 'inactive',
+      'gallery' => array(
+        '/images/usa_1.jpg',
+        '/images/usa_2.jpg',
+        '/images/usa_3.jpg',
+      ),
+    ),
+  'uk-young-professional' => 
+  array (
+      'order' => 3,
+      'id' => 'uk-young-professional',
+      'category_slug' => 'adult-academic',
+      'name' => 'Young Professional Summer',
+      'tagline' => 'A unique blend of English and subject-specific learning alongside real-world industry experience.',
+      'image' => '',
+      'ages' => array(
+          'min' => 13,
+          'max' => 17,
+      ),
+      'duration' => 2,
+      'level' => 'Professional',
+      'price' => NULL,
+      'color' => 'secondary',
+      'badges' => array(
+          0 => 'Career',
+          1 => 'Immersive',
+      ),
+      'highlights' => array(
+          0 => 'Explore various career paths like AI, Engineering, and Business.',
+          1 => 'Real-world industry experience.',
+          2 => 'Improve language skills and knowledge in a professional context.',
+          3 => 'Designed for ambitious individuals.',
+      ),
+      'description' => '<p>The Young Professionals Summer Camp is a two-week immersive English programme designed for ambitious individuals. You’ll get a unique blend of English and subject-specific learning alongside real-world industry experience, giving you the chance to explore various career paths (such as Business, Engineering, AI, and Visual Arts) while improving your language skills in a professional context.</p>',
+      'includes' => array(),
+      'excludes' => array(),
+      'status' => 'active',
+      'gallery' => array(),
+    ),
+  'uk-pre-university' => 
+  array (
+    'order' => 4,
+    'id' => 'uk-pre-university',
+    'category_slug' => 'adult-academic',
+    'name' => 'Adult Pre-University',
+    'tagline' => 'Equipping dedicated students with the skills needed for university-level studies.',
+    'image' => '',
+    'ages' => 
     array (
-        'order' => 2,
-        'id' => 'usa-pre-university',
-        'category_slug' => 'adult-academic',
-        'name' => 'Pre-University Camp',
-        'image' => '/images/usa_3.jpg',
-        'ages' => 
-        array (
-            'min' => 16,
-            'max' => 18,
-        ),
-        'duration' => 4,
-        'price' => '$5,200',
-        'color' => 'primary',
-        'badges' => 
-        array (
-            0 => 'Academic',
-            1 => 'University Prep',
-        ),
-        'highlights' => 
-        array (
-            0 => 'Experience university life',
-            1 => 'SAT/ACT prep sessions',
-            2 => 'College application workshops',
-            3 => 'Campus tours in Boston or LA',
-        ),
-        'description' => 'Get a head start on your university applications and experience life on a US college campus.',
-        'status' => 'inactive',
+      'min' => 15,
+      'max' => 17,
     ),
-    'uk-young-professional' => array(
-        'order' => 3,
-        'id' => 'uk-young-professional',
-        'category_slug' => 'adult-academic',
-        'name' => 'Young Professional Summer',
-        'tagline' => 'A unique blend of English and subject-specific learning alongside real-world industry experience.',
-        'image' => '',
-        'ages' => array(
-            'min' => 13,
-            'max' => 17
-        ),
-        'duration' => 2,
-        'level' => 'Professional',
-        'price' => null,
-        'color' => 'secondary',
-        'badges' => array(
-            0 => 'Career',
-            1 => 'Immersive'
-        ),
-        'highlights' => array(
-            0 => 'Explore various career paths like AI, Engineering, and Business.',
-            1 => 'Real-world industry experience.',
-            2 => 'Improve language skills and knowledge in a professional context.',
-            3 => 'Designed for ambitious individuals.'
-        ),
-        'description' => '<p>The Young Professionals Summer Camp is a two-week immersive English programme designed for ambitious individuals. You’ll get a unique blend of English and subject-specific learning alongside real-world industry experience, giving you the chance to explore various career paths (such as Business, Engineering, AI, and Visual Arts) while improving your language skills in a professional context.</p>',
-        'includes' => array(),
-        'excludes' => array(),
-        'status' => 'active',
-    ),
-    'uk-pre-university' => array(
-        'order' => 4,
-        'id' => 'uk-pre-university',
-        'category_slug' => 'adult-academic',
-        'name' => 'Adult Pre-University',
-        'tagline' => 'Equipping dedicated students with the skills needed for university-level studies.',
-        'image' => '',
-        'ages' => array(
-            'min' => 15,
-            'max' => 17
-        ),
-        'duration' => 2,
-        'level' => 'Advanced',
-        'price' => null,
-        'color' => 'accent',
-        'badges' => array(
-            0 => 'Academic',
-            1 => 'University Prep'
-        ),
-        'highlights' => array(
-            0 => 'Interactive lessons, guest lectures, and debate societies.',
-            1 => 'Develop a strong foundation in your field of interest.',
-            2 => 'Personalised feedback and support from expert instructors.',
-            3 => 'Navigate the transition to higher education successfully.'
-        ),
-        'description' => '<p>The Pre-University Summer Camp is a two-week academic programme designed to equip dedicated students with the skills needed for university-level studies. Led by expert instructors, the programme combines interactive lessons, masterclasses, and debate societies, ensuring you develop a strong foundation. You will also benefit from personalised feedback to help navigate the transition to higher education.</p>',
-        'includes' => array(),
-        'excludes' => array(),
-        'status' => 'active',
-    ),
-    
-    // KIDS CAMPS
-    'italy-junior-discovery' => array(
-        'order' => 2,
-        'id' => 'italy-junior-discovery',
-        'category_slug' => 'kids-camps',
-        'name' => 'Junior Discovery',
-        'tagline' => 'Empowering students to explore their potential through experiential education and blending culture, and adventure.',
-        'image' => '',
-        'ages' => array('min' => 12, 'max' => 16),
-        'duration' => null,
-        'level' => null,
-        'price' => null,
-        'color' => 'success',
-            'badges' => array('New', 'Explorer'),
-        'highlights' => array(
-            0 => 'Empowering students to explore their potential through experiential education.',
-            1 => 'Innovative summer programs blending education, culture, and adventure.',
-            2 => 'Camp is entirely conducted in English.',
-            3 => 'Develop independence, form new friendships, strengthen communication skills, and learn the value of teamwork.'
-        ),
-        'description' => '<p>Junior Discovery Camp offers innovative summer programs in the heart of Italy. These camps provide a comprehensive learning environment where students can explore their potential.</p>',
-        'includes' => array(),
-        'excludes' => array(),
-        'status' => 'active',
-    ),
-    'germany-children-summer' => 
+    'duration' => 2,
+    'level' => 'Advanced',
+    'price' => NULL,
+    'color' => 'accent',
+    'badges' => 
     array (
-        'order' => 3,
-        'id' => 'germany-children-summer',
-        'category_slug' => 'kids-camps',
-        'name' => 'Children Summer Camps',
-        'image' => '/images/germany_2.jpg',
-        'ages' => 
-        array (
-            'min' => 8,
-            'max' => 14,
-        ),
-        'duration' => 2,
-        'price' => '€2,200',
-        'color' => 'primary',
-        'badges' => 
-        array (
-            0 => 'Language',
-            1 => 'Summer',
-        ),
-        'highlights' => 
-        array (
-            0 => 'Intensive German lessons',
-            1 => 'Afternoon activities',
-            2 => 'Cultural excursions',
-            3 => 'Safe, supervised environment',
-        ),
-        'description' => 'A fun and effective way for children to learn German while exploring the culture and making international friends.',
-        'status' => 'inactive',
+      0 => 'Academic',
+      1 => 'University Prep',
     ),
-
-    // LANGUAGE AND ACTIVITY CAMPS
-    'spain-language-water-sports' => 
+    'highlights' => 
     array (
-        'order' => 1,
-        'id' => 'spain-language-water-sports',
-        'category_slug' => 'language-and-activity-camps',
-        'name' => 'Language & Water Sports',
-        'image' => '/images/spain_1_g.jpg',
-        'ages' => 
-        array (
-            'min' => 10,
-            'max' => 17,
-        ),
-        'duration' => 2,
-        'price' => '€2,600',
-        'color' => 'secondary',
-        'badges' => 
-        array (
-            0 => 'Popular',
-            1 => 'Summer',
-        ),
-        'highlights' => 
-        array (
-            0 => 'Spanish or English classes',
-            1 => 'Sailing & Windsurfing',
-            2 => 'Paddle Surfing & Kayaking',
-            3 => 'Beach activities',
-        ),
-        'description' => 'Combine language learning with exciting water sports on the beautiful Spanish coast.',
-        'status' => 'inactive',
+      0 => 'Interactive lessons, guest lectures, and debate societies.',
+      1 => 'Develop a strong foundation in your field of interest.',
+      2 => 'Personalised feedback and support from expert instructors.',
+      3 => 'Navigate the transition to higher education successfully.',
     ),
-    'canada-english-ski' => 
+    'description' => '<p>The Pre-University Summer Camp is a two-week academic programme designed to equip dedicated students with the skills needed for university-level studies. Led by expert instructors, the programme combines interactive lessons, masterclasses, and debate societies, ensuring you develop a strong foundation. You will also benefit from personalised feedback to help navigate the transition to higher education.</p>',
+    'includes' => 
     array (
-        'order' => 2,
-        'id' => 'canada-english-ski',
-        'category_slug' => 'language-and-activity-camps',
-        'name' => 'English & Ski (Winter)',
-        'image' => '/images/canada_3.jpg',
-        'ages' => 
-        array (
-            'min' => 13,
-            'max' => 18,
-        ),
-        'duration' => 2,
-        'price' => '$4,100',
-        'color' => 'primary',
-        'badges' => 
-        array (
-            0 => 'Winter',
-            1 => 'Sports',
-            2 => 'Language',
-        ),
-        'highlights' => 
-        array (
-            0 => 'Morning English classes',
-            1 => 'Afternoon skiing/snowboarding',
-            2 => 'Located in Whistler',
-            3 => 'All equipment provided',
-        ),
-        'description' => 'Improve your English and your skiing or snowboarding skills in the world-renowned resort of Whistler.',
-        'status' => 'inactive',
     ),
-    'uk-english-foundation' => array(
-        'order' => 3,
-        'id' => 'uk-english-foundation',
-        'category_slug' => 'language-and-activity-camps',
-        'name' => 'English Foundation Summer',
-        'tagline' => 'Enhance and improve language skills in a supportive and immersive environment.',
-        'image' => '',
-        'ages' => array(
-            'min' => 11,
-            'max' => 17
-        ),
-        'duration' => null,
-        'level' => 'Foundation',
-        'price' => null,
-        'color' => 'primary',
-        'badges' => array(
-            0 => 'Summer',
-            1 => 'Language'
-        ),
-        'highlights' => array(
-            0 => 'Dynamic language curriculum focused on speaking and listening.',
-            1 => 'Enhance and improve student’s language skills.',
-            2 => 'Supportive and immersive environment.',
-            3 => 'Includes various activities and excursions.'
-        ),
-        'description' => '<p>This Summer foundation program enhances and improves student’s language skills in a supportive and immersive environment. It features a dynamic language curriculum that includes a mix of English classes focused on speaking and listening, grammar, vocabulary, reading, and writing along with various activities and excursions.</p>',
-        'includes' => array(),
-        'excludes' => array(),
-        'status' => 'active',
-    ),
-
-    // SOCCER CAMPS
-    'italy-football-ac-milan' => array(
-        'order' => 1,
-        'id' => 'italy-football-ac-milan',
-        'category_slug' => 'soccer-camps',
-        'name' => 'Football with AC Milan',
-        'tagline' => 'Unparalleled football training under the guidance of AC Milan’s Youth Team and Academy coaches.',
-        'image' => '',
-        'ages' => array('min' => 8, 'max' => 16),
-        'duration' => null,
-        'level' => null,
-        'price' => null,
-        'color' => 'danger',
-        'badges' => array('Official'),
-        'highlights' => array(
-            0 => 'Unparalleled football training with AC Milan’s Youth Team coaches and official Milan Academy coaches.',
-            1 => 'Tournaments & Friendly games.',
-            2 => 'Specialized training for players who are goalkeepers.'
-        ),
-        'description' => '<p>This program offers unparalleled football training for boys and girls aged 8 to 16. Training is conducted under the guidance of AC Milan’s Youth Team coaches and official Milan Academy coaches.</p>',
-        'includes' => array(
-            'Individual football coaching',
-            'Recordings on camera',
-            'Performance certificate',
-            'AC Milan’s official kit',
-            'FB Accommodations',
-            'Special camp excursions'
-        ),
-        'excludes' => array(),
-        'status' => 'active',
-    ),
-    'spain-soccer-camp' => 
+    'excludes' => 
     array (
-        'order' => 2,
-        'id' => 'spain-soccer-camp',
-        'category_slug' => 'soccer-camps',
-        'name' => 'Pro Soccer Camp',
-        'image' => '/images/spain_4_g.jpg',
-        'ages' => 
-        array (
-            'min' => 8,
-            'max' => 18,
-        ),
-        'duration' => 2,
-        'price' => '€3,100',
-        'color' => 'primary',
-        'badges' => 
-        array (
-            0 => 'Sports',
-            1 => 'Popular',
-        ),
-        'highlights' => 
-        array (
-            0 => 'Train with top coaches',
-            1 => 'Improve technical skills',
-            2 => 'Tactical workshops',
-            3 => 'Visit famous stadiums',
-        ),
-        'description' => 'For the soccer fans of FC Barcelona or Real Madrid, this camp offers professional training and an unforgettable experience.',
-        'status' => 'inactive',
     ),
-
-    // SPECIAL INTERESTS CAMPS
-    'switzerland-adventure-camp' => 
+    'status' => 'active',
+    'gallery' => array(),
+  ),
+  'italy-junior-discovery' => 
+  array (
+    'order' => 2,
+    'id' => 'italy-junior-discovery',
+    'category_slug' => 'kids-camps',
+    'name' => 'Junior Discovery',
+    'tagline' => 'Empowering students to explore their potential through experiential education and blending culture, and adventure.',
+    'image' => '/images/Junior_7.jpg',
+    'ages' => 
     array (
-        'order' => 1,
-        'id' => 'switzerland-adventure-camp',
-        'category_slug' => 'special-interests-camps',
-        'name' => 'Adventure Camp',
-        'image' => '/images/swiss_2.jpg',
-        'ages' => 
-        array (
-            'min' => 10,
-            'max' => 16,
-        ),
-        'duration' => 2,
-        'price' => '€3,500',
-        'color' => 'secondary',
-        'badges' => 
-        array (
-            0 => 'Adventure',
-            1 => 'Popular',
-        ),
-        'highlights' => 
-        array (
-            0 => 'Mountain hiking',
-            1 => 'Lake activities',
-            2 => 'Chocolate & cheese tasting',
-            3 => 'Team building',
-        ),
-        'description' => 'A classic summer camp experience in the Swiss Alps, focusing on outdoor adventure and making new friends.',
-        'status' => 'inactive',
+      'min' => '12',
+      'max' => '16',
     ),
-    'canada-adventure-summer' => 
+    'duration' => 0,
+    'level' => '',
+    'price' => '',
+    'color' => 'success',
+    'badges' => 
     array (
-        'order' => 2,
-        'id' => 'canada-adventure-summer',
-        'category_slug' => 'special-interests-camps',
-        'name' => 'Adventure Summer Camp',
-        'image' => '/images/canada_2.jpg',
-        'ages' => 
-        array (
-            'min' => 12,
-            'max' => 17,
-        ),
-        'duration' => 2,
-        'price' => '$3,800',
-        'color' => 'secondary',
-        'badges' => 
-        array (
-            0 => 'Adventure',
-            1 => 'Summer',
-        ),
-        'highlights' => 
-        array (
-            0 => 'Canoeing in pristine lakes',
-            1 => 'Hiking in national parks',
-            2 => 'Wildlife spotting',
-            3 => 'Campfire stories',
-        ),
-        'description' => 'Explore the great Canadian outdoors with our adventure summer camp, based in beautiful British Columbia.',
-        'status' => 'inactive',
+      0 => 'New',
+      1 => 'Explorer',
     ),
-    'italy-fashion' => array(
-        'order' => 3,
-        'id' => 'italy-fashion',
-        'category_slug' => 'special-interests-camps',
-        'name' => 'Fashion',
-        'tagline' => 'Immerse yourself in the world of fashion design in the heart of Milan.',
-        'image' => '',
-        'ages' => array('min' => 15, 'max' => 18),
-        'duration' => null,
-        'level' => null,
-        'price' => null,
-        'color' => 'secondary',
-            'badges' => array('New', 'Design'),
-        'highlights' => array(
-            0 => 'Introduction to product design and brainstorming for innovative ideas.',
-            1 => 'Use of AI software to develop unique product concepts.',
-            2 => 'Learn graphic design techniques for detailed sketches.',
-            3 => 'Culmination with prototyping, transforming digital ideas into tangible creation.'
-        ),
-        'description' => '<p>The Program in Fashion is perfect for young fashion enthusiasts who want to immerse themselves in the world of fashion design. Held in the heart of Milan, participants will have the chance to explore, develop, and showcase their creativity. It is ideal for those aspiring to enter the fashion industry and eager to explore various aspects of the fashion field.</p>',
-        'includes' => array(),
-        'excludes' => array(),
-        'status' => 'active',
+    'highlights' => array (
+      0 => 'Empowering students to explore their potential through experiential education.',
+      1 => 'Innovative summer programs blending education, culture, and adventure.',
+      2 => 'Camp is entirely conducted in English.',
+      3 => 'Develop independence, form new friendships, strengthen communication skills, and learn the value of teamwork.',
     ),
-    'switzerland-film-academy' => 
+    'description' => '<p>Junior Discovery Camp offers innovative summer programs in the heart of Italy. These camps provide a comprehensive learning environment where students can explore their potential.</p>',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'active',
+    'schedule' => 
     array (
-        'order' => 4,
-        'id' => 'switzerland-film-academy',
-        'category_slug' => 'special-interests-camps',
-        'name' => 'Film Academy Camp',
-        'image' => '/images/swiss_4.jpg',
-        'ages' => 
-        array (
-            'min' => 14,
-            'max' => 18,
-        ),
-        'duration' => 3,
-        'price' => '€4,200',
-        'color' => 'accent',
-        'badges' => 
-        array (
-            0 => 'Creative',
-            1 => 'Specialty',
-        ),
-        'highlights' => 
-        array (
-            0 => 'Screenwriting',
-            1 => 'Directing',
-            2 => 'Cinematography',
-            3 => 'Editing with pro software',
-        ),
-        'description' => 'A hands-on camp for aspiring filmmakers. Write, shoot, and edit your own short film in a stunning location.',
-        'status' => 'inactive',
     ),
-    'italy-food' => array(
-        'order' => 5,
-        'id' => 'italy-food',
-        'category_slug' => 'special-interests-camps',
-        'name' => 'Food',
-        'tagline' => 'Hands-on experience in Italian cooking, baking, and pastry making, in partnership with IN CONGUSTO INSTITUTE.',
-        'image' => '',
-        'ages' => array('min' => 15, 'max' => 18),
-        'duration' => 'Intensive 40-hour programme',
-        'level' => null,
-        'price' => null,
-        'color' => 'info',
-            'badges' => array('Partnership', 'Culinary Arts'),
-        'highlights' => array(
-            0 => 'Partnership with IN CONGUSTO INSTITUTE.',
-            1 => 'Intensive 40-hour programme.',
-            2 => 'Hands-on experience in Italian cooking, baking, and pastry making.',
-            3 => 'Exploration of the restaurant business and new culinary formats.'
-        ),
-        'description' => '<p>The Italian Gastronomic Arts Summer Campus offers participants hands-on experience in Italian cooking, baking, and pastry making. The program also explores the restaurant business and new culinary formats, making it ideal for students aspiring to access careers in the food industry.</p>',
-        'includes' => array(
-            'Practical and theoretical lessons',
-            'Equipment and ingredients',
-            'Field trips & excursions',
-            'Supplementary activities',
-            'Special events',
-            'Accommodation',
-            'Milan sightseeing',
-            'Visit to cheese factory'
-        ),
-        'excludes' => array(),
-        'status' => 'active',
+    'gallery' => array(
+      '/images/italy_1.jpg',
+      '/images/italy_2.jpg',
+      '/images/italy_3.jpg',
+      '/images/Junior_1.jpg',
+      '/images/Junior_2.jpg',
+      '/images/Junior_3.jpg',
+      '/images/Junior_4.jpg',
+      '/images/Junior_5.jpg',
+      '/images/Junior_6.jpg',
+      '/images/Junior_7.jpg',
     ),
-    'italy-outdoor-exploration' => 
+  ),
+  'germany-children-summer' => 
+  array (
+    'order' => 3,
+    'id' => 'germany-children-summer',
+    'category_slug' => 'kids-camps',
+    'name' => 'Children Summer Camps',
+    'image' => '/images/germany_2.jpg',
+    'ages' => 
     array (
-        'order' => 6,
-        'id' => 'italy-outdoor-exploration',
-        'category_slug' => 'special-interests-camps',
-        'name' => 'Outdoor Exploration',
-        'tagline' => 'Challenge yourself with thrilling outdoor adventures',
-        'image' => '/images/italy_2.jpg',
-        'ages' => 
-        array (
-            'min' => 12,
-            'max' => 16,
-        ),
-        'duration' => 3,
-        'level' => 'Intermediate',
-        'price' => '€3,200',
-        'color' => 'secondary',
-            'badges' => 
-            array (
-                0 => 'Adventure',
-                1 => 'Challenge',
-            ),
-        'highlights' => 
-        array (
-            0 => 'Rock climbing',
-            1 => 'Whitewater rafting',
-            2 => 'Mountain biking',
-            3 => 'Orienteering and navigation skills',
-        ),
-        'description' => '<p>Every day campers will face a new outdoor activity, representing for most a totally new challenge. This program is designed for teenagers seeking adventure and personal growth through outdoor activities.</p>',
-        'schedule' => 
-        array (
-            '7:00 AM' => 'Breakfast & briefing',
-            '8:00 AM' => 'Morning adventure activity',
-            '12:30 PM' => 'Lunch (on location)',
-            '2:00 PM' => 'Afternoon expedition',
-            '7:30 PM' => 'Dinner & debrief',
-        ),
-        'includes' => 
-        array (
-            0 => 'All outdoor equipment',
-            1 => 'Professional guides',
-            2 => 'Accommodation in lodges',
-            3 => 'All meals',
-            4 => 'Safety equipment',
-        ),
-        'excludes' => 
-        array (
-            0 => 'International flights',
-            1 => 'Personal outdoor gear',
-            2 => 'Spending money',
-        ),
-        'status' => 'active',
+      'min' => 8,
+      'max' => 14,
     ),
-    'italy-sea-quest' => 
+    'duration' => 2,
+    'price' => '€2,200',
+    'color' => 'primary',
+    'badges' => 
     array (
-        'order' => 7,
-        'id' => 'italy-sea-quest',
-        'category_slug' => 'special-interests-camps',
-        'name' => 'Sea Quest',
-        'tagline' => 'Two-week sailing expedition along Italy\'s stunning coastline',
-        'image' => '/images/italy_3.jpg',
-        'ages' => 
-        array (
-            'min' => 14,
-            'max' => 17,
-        ),
-        'duration' => 2,
-        'level' => 'Advanced',
-        'price' => '€3,800',
-        'color' => 'accent',
-        'badges' => 
-        array (
-            0 => 'Premium',
-            1 => 'Limited',
-        ),
-        'highlights' => 
-        array (
-            0 => 'Sail around famous islands',
-            1 => 'Learn core nautical skills',
-            2 => 'Coastal exploration',
-            3 => 'Onboard living experience',
-        ),
-        'description' => '<p>Sea Quest is a two-week sailing expedition around the most beautiful and famous islands of the Italian coast. This program introduces the magic of sailing and core nautical skills while voyaging along one of the Mediterranean\'s most idyllic coastlines.</p>',
-        'schedule' => 
-        array (
-            '8:00 AM' => 'Sailing instruction & navigation',
-            '10:00 AM' => 'Set sail',
-            '1:00 PM' => 'Lunch & swimming stop',
-            '3:00 PM' => 'Afternoon sailing',
-            '7:30 PM' => 'Dinner & shore exploration',
-        ),
-        'includes' => 
-        array (
-            0 => 'Private yacht with crew',
-            1 => 'All sailing instruction',
-            2 => 'All meals onboard',
-            3 => 'Snorkeling equipment',
-            4 => 'Safety gear',
-        ),
-        'excludes' => 
-        array (
-            0 => 'International flights',
-            1 => 'Shore meals (optional)',
-            2 => 'Personal sailing gear',
-        ),
-        'status' => 'active',
+      0 => 'Language',
+      1 => 'Summer',
     ),
-
-    // SPORTS CAMPS
-    'italy-tennis' => array(
-        'order' => 1,
-        'id' => 'italy-tennis',
-        'category_slug' => 'sports-camps',
-        'name' => 'Tennis',
-        'tagline' => 'High-Performance Junior Tennis Camp for elite training in an iconic Italian destination.',
-        'image' => '',
-        'ages' => array('min' => null, 'max' => null),
-        'duration' => null,
-        'level' => 'High-Performance',
-        'price' => null,
-        'color' => 'warning',
-        'badges' => array('Elite'),
-        'highlights' => array(
-            0 => 'High-level sports training with an educational and stimulating environment.',
-            1 => 'Elite training in one of Italy’s most iconic tennis destinations.',
-            2 => 'Develop your game on state-of-the-art courts.',
-            3 => 'Internal tournaments, and friendly matches.'
-        ),
-        'description' => '<p>The High-Performance Junior Tennis Camp is perfect for young tennis players who want to experience elite training and ensures a stimulating environment, guaranteeing young athletes concrete tools for their growth. Participants will develop their game where professional players and national teams have prepared for international success.</p>',
-        'includes' => array(
-            'Individual tennis coaching',
-            '30 hours of tennis coaching with experienced coaches',
-            'Mental game and tactical workshop',
-            'Recordings on camera',
-            'Performance certificate',
-            'Full board accommodation',
-            'Closing award ceremony'
-        ),
-        'excludes' => array(),
-        'status' => 'active',
-    ),
-    'italy-sailing' => array(
-        'order' => 2,
-        'id' => 'italy-sailing',
-        'category_slug' => 'sports-camps',
-        'name' => 'Sailing',
-        'tagline' => 'A thrilling sailing voyage exploring the stunning islands off Italy’s coast for core nautical skills and teamwork.',
-        'image' => '',
-        'ages' => array('min' => 12, 'max' => 16),
-        'duration' => null,
-        'level' => null,
-        'price' => null,
-        'color' => 'primary',
-        'badges' => array('Adventure'),
-        'highlights' => array(
-            0 => 'Extraordinary sailing adventure exploring the stunning islands off Italy’s coast.',
-            1 => 'Campers learn core nautical skills and experience life aboard 50-foot yachts.',
-            2 => 'Sail as part of a three-yacht flotilla, guided by experienced instructors.',
-            3 => 'Participate in interactive lessons on marine life and local history.'
-        ),
-        'description' => '<p>A thrilling sailing voyage enriched with local knowledge and new horizons for 12 to 16-year-olds. Campers navigate the Mediterranean’s bluest waters while growing as a team. British RYA instructors and native English-speaking counselors lead the entire program in English. Through hands-on learning, campers learn sailing techniques, teamwork, and leadership, building communication skills and self-reliance. Students earn a sailing certificate of achievement.</p>',
-        'includes' => array(),
-        'excludes' => array(),
-        'status' => 'active',
-    ),
-    'switzerland-ski-camp' => 
+    'highlights' => 
     array (
-        'order' => 3,
-        'id' => 'switzerland-ski-camp',
-        'category_slug' => 'special-interests-camps',
-        'name' => 'Ski Camp (Winter)',
-        'image' => '/images/swiss_3.jpg',
-        'ages' => 
-        array (
-            'min' => 8,
-            'max' => 17,
-        ),
-        'duration' => 1,
-        'price' => '€2,800',
-        'color' => 'primary',
-        'badges' => 
-        array (
-            0 => 'Winter',
-            1 => 'Sports',
-        ),
-        'highlights' => 
-        array (
-            0 => 'Professional ski instruction',
-            1 => 'Access to top resorts',
-            2 => 'Après-ski activities',
-            3 => 'All gear included',
-        ),
-        'description' => 'Learn to ski or improve your skills on world-famous Swiss slopes with professional instructors.',
-        'status' => 'inactive',
+      0 => 'Intensive German lessons',
+      1 => 'Afternoon activities',
+      2 => 'Cultural excursions',
+      3 => 'Safe, supervised environment',
     ),
-
-    // YOUNG LEADER PROGRAM
-    'usa-global-leadership' => 
+    'description' => 'A fun and effective way for children to learn German while exploring the culture and making international friends.',
+    'status' => 'inactive',
+    'gallery' => array(),
+  ),
+  'spain-language-water-sports' => 
+  array (
+    'order' => 1,
+    'id' => 'spain-language-water-sports',
+    'category_slug' => 'language-and-activity-camps',
+    'name' => 'Language & Water Sports',
+    'image' => '/images/spain_1_g.jpg',
+    'ages' => 
     array (
-        'order' => 1,
-        'id' => 'usa-global-leadership',
-        'category_slug' => 'young-leader-program',
-        'name' => 'Global Leadership Training',
-        'image' => '/images/usa_2.jpg',
-        'ages' => 
-        array (
-            'min' => 15,
-            'max' => 18,
-        ),
-        'duration' => 3,
-        'price' => '$4,500',
-        'color' => 'accent',
-        'badges' => 
-        array (
-            0 => 'Leadership',
-            1 => 'Academic',
-        ),
-        'highlights' => 
-        array (
-            0 => 'Public speaking workshops',
-            1 => 'Debate and negotiation',
-            2 => 'Project management',
-            3 => 'Visits to major organizations',
-        ),
-        'description' => 'Develop the skills to become a future leader in a globalized world, with workshops and real-world case studies.',
-        'status' => 'inactive',
+      'min' => 10,
+      'max' => 17,
     ),
+    'duration' => 2,
+    'price' => '€2,600',
+    'color' => 'secondary',
+    'badges' => 
+    array (
+      0 => 'Popular',
+      1 => 'Summer',
+    ),
+    'highlights' => 
+    array (
+      0 => 'Spanish or English classes',
+      1 => 'Sailing & Windsurfing',
+      2 => 'Paddle Surfing & Kayaking',
+      3 => 'Beach activities',
+    ),
+    'description' => 'Combine language learning with exciting water sports on the beautiful Spanish coast.',
+    'status' => 'inactive',
+    'gallery' => array(
+      '/images/spain_1_g.jpg',
+      '/images/spain_2_g.jpg',
+      '/images/spain_3_g.jpg',
+      '/images/spain_4_g.jpg',
+      '/images/spain_5_g.jpg',
+      '/images/spain_6_g.jpg',
+    ),
+  ),
+  'canada-english-ski' => 
+  array (
+    'order' => 2,
+    'id' => 'canada-english-ski',
+    'category_slug' => 'language-and-activity-camps',
+    'name' => 'English & Ski (Winter)',
+    'image' => '/images/canada_3.jpg',
+    'ages' => 
+    array (
+      'min' => 13,
+      'max' => 18,
+    ),
+    'duration' => 2,
+    'price' => '$4,100',
+    'color' => 'primary',
+    'badges' => 
+    array (
+      0 => 'Winter',
+      1 => 'Sports',
+      2 => 'Language',
+    ),
+    'highlights' => 
+    array (
+      0 => 'Morning English classes',
+      1 => 'Afternoon skiing/snowboarding',
+      2 => 'Located in Whistler',
+      3 => 'All equipment provided',
+    ),
+    'description' => 'Improve your English and your skiing or snowboarding skills in the world-renowned resort of Whistler.',
+    'status' => 'inactive',
+    'gallery' => array(),
+  ),
+  'uk-english-foundation' => 
+  array (
+    'order' => 3,
+    'id' => 'uk-english-foundation',
+    'category_slug' => 'language-and-activity-camps',
+    'name' => 'English Foundation Summer',
+    'tagline' => 'Enhance and improve language skills in a supportive and immersive environment.',
+    'image' => '',
+    'ages' => 
+    array (
+      'min' => 11,
+      'max' => 17,
+    ),
+    'duration' => NULL,
+    'level' => 'Foundation',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => 
+    array (
+      0 => 'Summer',
+      1 => 'Language',
+    ),
+    'highlights' => 
+    array (
+      0 => 'Dynamic language curriculum focused on speaking and listening.',
+      1 => 'Enhance and improve student’s language skills.',
+      2 => 'Supportive and immersive environment.',
+      3 => 'Includes various activities and excursions.',
+    ),
+    'description' => '<p>This Summer foundation program enhances and improves student’s language skills in a supportive and immersive environment. It features a dynamic language curriculum that includes a mix of English classes focused on speaking and listening, grammar, vocabulary, reading, and writing along with various activities and excursions.</p>',
+    'includes' => 
+    array (
+    ),
+    'excludes' => 
+    array (
+    ),
+    'status' => 'active',
+    'gallery' => array(),
+  ),
+  'italy-football-ac-milan' => 
+  array (
+    'order' => 1,
+    'id' => 'italy-football-ac-milan',
+    'category_slug' => 'soccer-camps',
+    'name' => 'Football with AC Milan',
+    'tagline' => 'Unparalleled football training under the guidance of AC Milan’s Youth Team and Academy coaches.',
+    'image' => '/images/Footbal-17.jpg',
+    'ages' => 
+    array (
+      'min' => '8',
+      'max' => '16',
+    ),
+    'duration' => 0,
+    'level' => '',
+    'price' => '',
+    'color' => 'danger',
+    'badges' => 
+    array (
+      0 => 'Official',
+    ),
+    'highlights' => 
+    array (
+      0 => 'Unparalleled football training with AC Milan’s Youth Team coaches and official Milan Academy coaches.',
+      1 => 'Tournaments & Friendly games.',
+      2 => 'Specialized training for players who are goalkeepers.',
+    ),
+    'description' => '<p>This program offers unparalleled football training for boys and girls aged 8 to 16. Training is conducted under the guidance of AC Milan&rsquo;s Youth Team coaches and official Milan Academy coaches.</p>',
+    'includes' => 
+    array (
+      0 => 'Individual football coaching',
+      1 => 'Recordings on camera',
+      2 => 'Performance certificate',
+      3 => 'AC Milan’s official kit',
+      4 => 'FB Accommodations',
+      5 => 'Special camp excursions',
+    ),
+    'excludes' => 
+    array (
+    ),
+    'status' => 'active',
+    'schedule' => 
+    array (
+    ),
+    'gallery' => array(
+      '/images/09-07-2025-Football_Milan__X0A7085.jpg',
+      '/images/09-07-2025-Football_Milan__X0A7671.jpg',
+      '/images/09-07-2025-Football_Milan__X0A7922.jpg',
+      '/images/09-07-2025-Football_Milan__X0A8055.jpg',
+      '/images/Copia_di_09-07-2025-Football_Milan__X0A7714.jpg',
+      '/images/Copia_di_12-07-2025-Football_Milan__X0A0371.jpg',
+      '/images/Footbal-1.jpg',
+      '/images/Footbal-17.jpg',
+    ),
+  ),
+  'spain-soccer-camp' => 
+  array (
+    'order' => 2,
+    'id' => 'spain-soccer-camp',
+    'category_slug' => 'soccer-camps',
+    'name' => 'Pro Soccer Camp',
+    'image' => '/images/spain_4_g.jpg',
+    'ages' => 
+    array (
+      'min' => 8,
+      'max' => 18,
+    ),
+    'duration' => 2,
+    'price' => '€3,100',
+    'color' => 'primary',
+    'badges' => 
+    array (
+      0 => 'Sports',
+      1 => 'Popular',
+    ),
+    'highlights' => 
+    array (
+      0 => 'Train with top coaches',
+      1 => 'Improve technical skills',
+      2 => 'Tactical workshops',
+      3 => 'Visit famous stadiums',
+    ),
+    'description' => 'For the soccer fans of FC Barcelona or Real Madrid, this camp offers professional training and an unforgettable experience.',
+    'status' => 'inactive',
+    'gallery' => array(),
+  ),
+  'canada-adventure-summer' => 
+  array (
+    'order' => 2,
+    'id' => 'canada-adventure-summer',
+    'category_slug' => 'special-interests-camps',
+    'name' => 'Adventure Summer Camp',
+    'image' => '/images/canada_2.jpg',
+    'ages' => 
+    array (
+      'min' => 12,
+      'max' => 17,
+    ),
+    'duration' => 2,
+    'price' => '$3,800',
+    'color' => 'secondary',
+    'badges' => 
+    array (
+      0 => 'Adventure',
+      1 => 'Summer',
+    ),
+    'highlights' => 
+    array (
+      0 => 'Canoeing in pristine lakes',
+      1 => 'Hiking in national parks',
+      2 => 'Wildlife spotting',
+      3 => 'Campfire stories',
+    ),
+    'description' => 'Explore the great Canadian outdoors with our adventure summer camp, based in beautiful British Columbia.',
+    'status' => 'inactive',
+    'gallery' => array(
+      '/images/canada_1.jpg',
+      '/images/canada_2.jpg',
+      '/images/canada_3.jpg',
+    ),
+  ),
+  'italy-fashion' => 
+  array (
+    'order' => 3,
+    'id' => 'italy-fashion',
+    'category_slug' => 'special-interests-camps',
+    'name' => 'Fashion',
+    'tagline' => 'Immerse yourself in the world of fashion design in the heart of Milan.',
+    'image' => '/images/Fashion_85.jpg',
+    'ages' => 
+    array (
+      'min' => '15',
+      'max' => '18',
+    ),
+    'duration' => 0,
+    'level' => '',
+    'price' => '',
+    'color' => 'secondary',
+    'badges' => 
+    array (
+      0 => 'New',
+      1 => 'Design',
+    ),
+    'highlights' => 
+    array (
+      0 => 'Introduction to product design and brainstorming for innovative ideas.',
+      1 => 'Use of AI software to develop unique product concepts.',
+      2 => 'Learn graphic design techniques for detailed sketches.',
+      3 => 'Culmination with prototyping, transforming digital ideas into tangible creation.',
+    ),
+    'description' => '<p>The Program in Fashion is perfect for young fashion enthusiasts who want to immerse themselves in the world of fashion design. Held in the heart of Milan, participants will have the chance to explore, develop, and showcase their creativity. It is ideal for those aspiring to enter the fashion industry and eager to explore various aspects of the fashion field.</p>',
+    'includes' => 
+    array (
+    ),
+    'excludes' => 
+    array (
+    ),
+    'status' => 'active',
+    'schedule' => 
+    array (
+    ),
+    'gallery' => array(
+      '/images/Copia_di_09-07-2025-Fashion__X0A7481.jpg',
+      '/images/Fashion_0.jpg',
+      '/images/Copia_di_03-07-2025-Fashion__X0A6485.jpg',
+      '/images/Fashion_158.jpg',
+      '/images/Fashion_6.jpg',
+      '/images/Fashion_85.jpg',
+      '/images/Fashion_93.jpg',
+    ),
+  ),
+  'italy-food' => 
+  array (
+    'order' => 5,
+    'id' => 'italy-food',
+    'category_slug' => 'special-interests-camps',
+    'name' => 'Food',
+    'tagline' => 'Hands-on experience in Italian cooking, baking, and pastry making, in partnership with IN CONGUSTO INSTITUTE.',
+    'image' => '/images/Kitchen_113.jpg',
+    'ages' => 
+    array (
+      'min' => '15',
+      'max' => '18',
+    ),
+    'duration' => 0,
+    'level' => '',
+    'price' => '',
+    'color' => 'info',
+    'badges' => 
+    array (
+      0 => 'Partnership',
+      1 => 'Culinary Arts',
+    ),
+    'highlights' => 
+    array (
+      0 => 'Partnership with IN CONGUSTO INSTITUTE.',
+      1 => 'Intensive 40-hour programme.',
+      2 => 'Hands-on experience in Italian cooking, baking, and pastry making.',
+      3 => 'Exploration of the restaurant business and new culinary formats.',
+    ),
+    'description' => '<p>The Italian Gastronomic Arts Summer Campus offers participants hands-on experience in Italian cooking, baking, and pastry making. The program also explores the restaurant business and new culinary formats, making it ideal for students aspiring to access careers in the food industry.</p>',
+    'includes' => 
+    array (
+      0 => 'Practical and theoretical lessons',
+      1 => 'Equipment and ingredients',
+      2 => 'Field trips & excursions',
+      3 => 'Supplementary activities',
+      4 => 'Special events',
+      5 => 'Accommodation',
+      6 => 'Milan sightseeing',
+      7 => 'Visit to cheese factory',
+    ),
+    'excludes' => 
+    array (
+    ),
+    'status' => 'active',
+    'schedule' => 
+    array (
+    ),
+    'gallery' => array(
+      '/images/Copia_di_03-07-2025-Kitchen_CongustoIstitute__X0A5580.jpg',
+      '/images/Copia_di_03-07-2025-Kitchen_CongustoIstitute__X0A6231.jpg',
+      '/images/Kitchen_110.jpg',
+      '/images/Kitchen_113.jpg',
+      '/images/Kitchen_3.jpg',
+      '/images/Kitchen_82.jpg',
+    ),
+  ),
+  'italy-outdoor-exploration' => 
+  array (
+    'order' => 6,
+    'id' => 'italy-outdoor-exploration',
+    'category_slug' => 'special-interests-camps',
+    'name' => 'Outdoor Exploration',
+    'tagline' => 'Challenge yourself with thrilling outdoor adventures',
+    'image' => '/images/exploration_5.jpg',
+    'ages' => 
+    array (
+      'min' => '12',
+      'max' => '16',
+    ),
+    'duration' => 3,
+    'level' => 'Intermediate',
+    'price' => '',
+    'color' => 'secondary',
+    'badges' => 
+    array (
+      0 => 'Adventure',
+      1 => 'Challenge',
+    ),
+    'highlights' => 
+    array (
+      0 => 'Rock climbing',
+      1 => 'Whitewater rafting',
+      2 => 'Mountain biking',
+      3 => 'Orienteering and navigation skills',
+    ),
+    'description' => '<p>Every day campers will face a new outdoor activity, representing for most a totally new challenge. This program is designed for teenagers seeking adventure and personal growth through outdoor activities.</p>',
+    'schedule' => 
+    array (
+      '7:00 AM' => 'Breakfast & briefing',
+      '8:00 AM' => 'Morning adventure activity',
+      '12:30 PM' => 'Lunch (on location)',
+      '2:00 PM' => 'Afternoon expedition',
+      '7:30 PM' => 'Dinner & debrief',
+    ),
+    'includes' => 
+    array (
+      0 => 'All outdoor equipment',
+      1 => 'Professional guides',
+      2 => 'Accommodation in lodges',
+      3 => 'All meals',
+      4 => 'Safety equipment',
+    ),
+    'excludes' => 
+    array (
+      0 => 'International flights',
+      1 => 'Personal outdoor gear',
+      2 => 'Spending money',
+    ),
+    'status' => 'active',
+    'gallery' => array(
+      '/images/exploration_1.jpg',
+      '/images/exploration_2.jpg',
+      '/images/exploration_3.jpg',
+      '/images/exploration_4.jpg',
+      '/images/exploration_5.jpg',
+    ),
+  ),
+  'italy-sea-quest' => 
+  array (
+    'order' => 7,
+    'id' => 'italy-sea-quest',
+    'category_slug' => 'special-interests-camps',
+    'name' => 'Sea Quest',
+    'tagline' => 'Two-week sailing expedition along Italy\'s stunning coastline',
+    'image' => '/images/italy_3.jpg',
+    'ages' => 
+    array (
+      'min' => '14',
+      'max' => '17',
+    ),
+    'duration' => 2,
+    'level' => 'Advanced',
+    'price' => '',
+    'color' => 'primary',
+    'badges' => 
+    array (
+      0 => 'Premium',
+      1 => 'Limited',
+    ),
+    'highlights' => 
+    array (
+      0 => 'Sail around famous islands',
+      1 => 'Learn core nautical skills',
+      2 => 'Coastal exploration',
+      3 => 'Onboard living experience',
+    ),
+    'description' => '<p>Sea Quest is a two-week sailing expedition around the most beautiful and famous islands of the Italian coast. This program introduces the magic of sailing and core nautical skills while voyaging along one of the Mediterranean\'s most idyllic coastlines.</p>',
+    'schedule' => 
+    array (
+      '8:00 AM' => 'Sailing instruction & navigation',
+      '10:00 AM' => 'Set sail',
+      '1:00 PM' => 'Lunch & swimming stop',
+      '3:00 PM' => 'Afternoon sailing',
+      '7:30 PM' => 'Dinner & shore exploration',
+    ),
+    'includes' => 
+    array (
+      0 => 'Private yacht with crew',
+      1 => 'All sailing instruction',
+      2 => 'All meals onboard',
+      3 => 'Snorkeling equipment',
+      4 => 'Safety gear',
+    ),
+    'excludes' => 
+    array (
+      0 => 'International flights',
+      1 => 'Shore meals (optional)',
+      2 => 'Personal sailing gear',
+    ),
+    'status' => 'trash',
+    'gallery' => array(),
+  ),
+  'italy-tennis' => 
+  array (
+    'order' => 1,
+    'id' => 'italy-tennis',
+    'category_slug' => '',
+    'name' => 'Tennis',
+    'tagline' => 'High-Performance Junior Tennis Camp for elite training in an iconic Italian destination.',
+    'image' => '/images/Tennis_MG_2934-187__3_.jpg',
+    'ages' => 
+    array (
+      'min' => '',
+      'max' => '',
+    ),
+    'duration' => 0,
+    'level' => 'High-Performance',
+    'price' => '',
+    'color' => 'warning',
+    'badges' => 
+    array (
+      0 => 'Elite',
+    ),
+    'highlights' => 
+    array (
+      0 => 'High-level sports training with an educational and stimulating environment.',
+      1 => 'Elite training in one of Italy’s most iconic tennis destinations.',
+      2 => 'Develop your game on state-of-the-art courts.',
+      3 => 'Internal tournaments, and friendly matches.',
+    ),
+    'description' => '<p>The High-Performance Junior Tennis Camp is perfect for young tennis players who want to experience elite training and ensures a stimulating environment, guaranteeing young athletes concrete tools for their growth. Participants will develop their game where professional players and national teams have prepared for international success.</p>',
+    'includes' => 
+    array (
+      0 => 'Individual tennis coaching',
+      1 => '30 hours of tennis coaching with experienced coaches',
+      2 => 'Mental game and tactical workshop',
+      3 => 'Recordings on camera',
+      4 => 'Performance certificate',
+      5 => 'Full board accommodation',
+      6 => 'Closing award ceremony',
+    ),
+    'excludes' => 
+    array (
+    ),
+    'status' => 'active',
+    'schedule' => 
+    array (
+    ),
+    'gallery' => array(
+      '/images/Tennis_MG_2934-187__1_.jpg',
+      '/images/Tennis_MG_2934-187__1_.png',
+      '/images/Tennis_MG_2934-187__2_.jpg',
+      '/images/Tennis_MG_2934-187__2_.png',
+      '/images/Tennis_MG_2934-187__3_.jpg',
+      '/images/Tennis_MG_2934-187__3_.png',
+    ),
+  ),
+  'italy-sailing' => 
+  array (
+    'order' => 2,
+    'id' => 'italy-sailing',
+    'category_slug' => '',
+    'name' => 'Sailing',
+    'tagline' => 'A thrilling sailing voyage exploring the stunning islands off Italy’s coast for core nautical skills and teamwork.',
+    'image' => '/images/sailing_7.jpg',
+    'ages' => 
+    array (
+      'min' => '12',
+      'max' => '16',
+    ),
+    'duration' => 0,
+    'level' => '',
+    'price' => '',
+    'color' => 'primary',
+    'badges' => 
+    array (
+      0 => 'Adventure',
+    ),
+    'highlights' => 
+    array (
+      0 => 'Extraordinary sailing adventure exploring the stunning islands off Italy’s coast.',
+      1 => 'Campers learn core nautical skills and experience life aboard 50-foot yachts.',
+      2 => 'Sail as part of a three-yacht flotilla, guided by experienced instructors.',
+      3 => 'Participate in interactive lessons on marine life and local history.',
+    ),
+    'description' => '<p>A thrilling sailing voyage enriched with local knowledge and new horizons for 12 to 16-year-olds. Campers navigate the Mediterranean&rsquo;s bluest waters while growing as a team. British RYA instructors and native English-speaking counselors lead the entire program in English. Through hands-on learning, campers learn sailing techniques, teamwork, and leadership, building communication skills and self-reliance. Students earn a sailing certificate of achievement.</p>',
+    'includes' => 
+    array (
+    ),
+    'excludes' => 
+    array (
+    ),
+    'status' => 'active',
+    'schedule' => 
+    array (
+    ),
+    'gallery' => array(
+      '/images/sailing_1.jpg',
+      '/images/sailing_2.jpg',
+      '/images/sailing_3.jpg',
+      '/images/sailing_4.jpg',
+      '/images/sailing_5.jpg',
+      '/images/sailing_6.jpg',
+      '/images/sailing_7.jpg',
+      '/images/sailing_8.jpg',
+      '/images/sailing_9.jpg',
+    ),
+  ),
+  'usa-global-leadership' => 
+  array (
+    'order' => 1,
+    'id' => 'usa-global-leadership',
+    'category_slug' => 'young-leader-program',
+    'name' => 'Global Leadership Training',
+    'image' => '/images/usa_2.jpg',
+    'ages' => 
+    array (
+      'min' => 15,
+      'max' => 18,
+    ),
+    'duration' => 3,
+    'price' => '$4,500',
+    'color' => 'accent',
+    'badges' => 
+    array (
+      0 => 'Leadership',
+      1 => 'Academic',
+    ),
+    'highlights' => 
+    array (
+      0 => 'Public speaking workshops',
+      1 => 'Debate and negotiation',
+      2 => 'Project management',
+      3 => 'Visits to major organizations',
+    ),
+    'description' => 'Develop the skills to become a future leader in a globalized world, with workshops and real-world case studies.',
+    'status' => 'inactive',
+    'gallery' => array(),
+  ),
+  'switzerland-adventure-camp' => 
+  array (
+    'order' => 3,
+    'id' => 'switzerland-adventure-camp',
+    'category_slug' => 'special-interests-camps',
+    'name' => 'Adventure Camp',
+    'image' => '/images/swiss_2.jpg',
+    'ages' => 
+    array (
+      'min' => '10',
+      'max' => '16',
+    ),
+    'duration' => 2,
+    'price' => '',
+    'color' => 'secondary',
+    'badges' => 
+    array (
+      0 => 'Adventure',
+      1 => 'Popular',
+    ),
+    'highlights' => 
+    array (
+      0 => 'Mountain hiking',
+      1 => 'Lake activities',
+      2 => 'Chocolate & cheese tasting',
+      3 => 'Team building',
+    ),
+    'description' => '<p>A classic summer camp experience in the Swiss Alps, focusing on outdoor adventure and making new friends.</p>',
+    'status' => 'active',
+    'includes' => 
+    array (
+    ),
+    'excludes' => 
+    array (
+    ),
+    'schedule' => 
+    array (
+    ),
+    'tagline' => '',
+    'level' => '',
+    'gallery' => array(
+      '/images/swiss_1.jpg',
+      '/images/swiss_2.jpg',
+      '/images/swiss_3.jpg',
+      '/images/swiss_5.jpg',
+    ),
+  ),
+  'switzerland-film-academy' => 
+  array (
+    'order' => 2,
+    'id' => 'switzerland-film-academy',
+    'category_slug' => 'special-interests-camps',
+    'name' => 'Film Academy Camp',
+    'image' => '/images/swiss_4.jpg',
+    'ages' => 
+    array (
+      'min' => '14',
+      'max' => '18',
+    ),
+    'duration' => 3,
+    'price' => '',
+    'color' => 'primary',
+    'badges' => 
+    array (
+      0 => 'Creative',
+      1 => 'Specialty',
+    ),
+    'highlights' => 
+    array (
+      0 => 'Screenwriting',
+      1 => 'Directing',
+      2 => 'Cinematography',
+      3 => 'Editing with pro software',
+    ),
+    'description' => '<p>A hands-on camp for aspiring filmmakers. Write, shoot, and edit your own short film in a stunning location.</p>',
+    'status' => 'trash',
+    'includes' => 
+    array (
+    ),
+    'excludes' => 
+    array (
+    ),
+    'schedule' => 
+    array (
+    ),
+    'tagline' => '',
+    'level' => '',
+    'gallery' => array(
+      '/images/swiss_4.jpg',
+    ),
+  ),
+  'switzerland-ski-camp' => 
+  array (
+    'order' => 1,
+    'id' => 'switzerland-ski-camp',
+    'category_slug' => 'special-interests-camps',
+    'name' => 'Ski Camp (Winter)',
+    'image' => '/images/Winter-2.png',
+    'ages' => 
+    array (
+      'min' => '8',
+      'max' => '17',
+    ),
+    'duration' => 1,
+    'price' => '',
+    'color' => 'primary',
+    'badges' => 
+    array (
+      0 => 'Winter',
+      1 => 'Sports',
+    ),
+    'highlights' => 
+    array (
+      0 => 'Professional ski instruction',
+      1 => 'Access to top resorts',
+      2 => 'Après-ski activities',
+      3 => 'All gear included',
+    ),
+    'description' => '<p>Learn to ski or improve your skills on world-famous Swiss slopes with professional instructors.</p>',
+    'status' => 'active',
+    'includes' => 
+    array (
+    ),
+    'excludes' => 
+    array (
+    ),
+    'schedule' => 
+    array (
+    ),
+    'tagline' => '',
+    'level' => '',
+    'gallery' => array(
+      '/images/Winter-2.png',
+      '/images/Winter-day-camps-zip-line-1.webp',
+      '/images/Winter-day-camps-zip-line-2.webp',
+    ),
+  ),
 );
-
-?>
