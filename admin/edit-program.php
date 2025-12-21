@@ -239,7 +239,6 @@ require_once 'includes/admin-header.php';
                     </button>
                 </div>
                 <div class="card-body px-4 pb-4">
-                
                     <?php if ($success_message): ?>
                         <div class="alert alert-success border-0 shadow-sm d-flex align-items-center">
                             <i class="bi bi-check-circle-fill me-2"></i> <?= $success_message ?>
@@ -250,7 +249,6 @@ require_once 'includes/admin-header.php';
                             <i class="bi bi-exclamation-triangle-fill me-2"></i> <?= $error_message ?>
                         </div>
                     <?php endif; ?>
-
                     <div class="row g-3">
                         <div class="col-md-3">
                             <label for="order" class="form-label fw-bold small text-uppercase text-muted">Order</label>
@@ -261,50 +259,13 @@ require_once 'includes/admin-header.php';
                             <input type="text" class="form-control" id="name" name="name" value="<?= htmlspecialchars($data['name']) ?>">
                         </div>
                     </div>
-                    
                     <div class="mt-3">
                         <label for="tagline" class="form-label fw-bold small text-uppercase text-muted">Tagline</label>
                         <input type="text" class="form-control" id="tagline" name="tagline" value="<?= htmlspecialchars($data['tagline']) ?>">
                     </div>
-
                     <div class="mt-3">
                         <label for="description" class="form-label fw-bold small text-uppercase text-muted">Description</label>
                         <textarea class="form-control tinymce-editor" id="description" name="description" rows="10"><?= htmlspecialchars($data['description']) ?></textarea>
-                    </div>
-
-                    <div class="accordion-item border rounded mb-2">
-                        <h2 class="accordion-header"><button class="accordion-button collapsed rounded" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-gallery">
-                            <i class="bi bi-images me-2 text-success"></i> Gallery (<?= isset($data['gallery']) ? count($data['gallery']) : 0 ?>)
-                        </button></h2>
-                        <div id="collapse-gallery" class="accordion-collapse collapse repeater-container simple-repeater" data-template-id="gallery-template" data-input-name="gallery_path[]" data-bs-parent="#detailsAccordion">
-                            <div class="accordion-body bg-light bg-opacity-10">
-                                <label class="form-label fw-bold small text-uppercase text-muted">Gallery Images</label>
-                                <?php if (isset($data['gallery']) && is_array($data['gallery'])):
-                                    foreach ($data['gallery'] as $index => $path):
-                                        $input_id = 'gallery_path_' . $index . '_' . uniqid();
-                                ?>
-                                <div class="repeater-item mb-3">
-                                    <img src="<?= htmlspecialchars($path) ?>"
-                                         class="img-fluid rounded mb-2 d-block media-preview-image"
-                                         style="max-height: 100px; max-width: 150px; object-fit: cover;"
-                                         onerror="this.onerror=null; this.src='/admin/placeholder-image.png'">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control gallery-path-input media-preview-target-input" id="<?= $input_id ?>" name="gallery_path[]"
-                                               value="<?= htmlspecialchars($path) ?>" placeholder="Select image..." readonly style="background-color: var(--bg-card);">
-                                        <button class="btn btn-outline-secondary" type="button"
-                                                data-bs-toggle="media-modal"
-                                                data-bs-target-input="<?= $input_id ?>">
-                                            Browse...
-                                        </button>
-                                        <button class="btn btn-outline-danger" type="button" data-action="remove-item">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                <?php endforeach; endif; ?>
-                                <button class="btn btn-sm btn-outline-primary mt-2" type="button" data-action="add-item"><i class="bi bi-plus-circle me-1"></i> Add Gallery Image</button>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -315,7 +276,6 @@ require_once 'includes/admin-header.php';
                 </div>
                 <div class="card-body px-4 pb-4">
                     <div class="accordion accordion-flush" id="detailsAccordion">
-
                         <div class="accordion-item border rounded mb-2">
                             <h2 class="accordion-header"><button class="accordion-button collapsed rounded" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-highlights">
                                 <i class="bi bi-stars me-2 text-warning"></i> Highlights
@@ -341,7 +301,6 @@ require_once 'includes/admin-header.php';
                                 </div>
                             </div>
                         </div>
-                        
                         <div class="accordion-item border rounded mb-2">
                             <h2 class="accordion-header"><button class="accordion-button collapsed rounded" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-schedule">
                                 <i class="bi bi-calendar-week me-2 text-info"></i> Schedule
@@ -361,7 +320,6 @@ require_once 'includes/admin-header.php';
                                 </div>
                             </div>
                         </div>
-                        
                         <div class="accordion-item border rounded mb-2">
                             <h2 class="accordion-header"><button class="accordion-button collapsed rounded" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-includes">
                                 <i class="bi bi-check-circle me-2 text-success"></i> Includes
@@ -380,7 +338,6 @@ require_once 'includes/admin-header.php';
                                 </div>
                             </div>
                         </div>
-
                         <div class="accordion-item border rounded mb-2">
                             <h2 class="accordion-header"><button class="accordion-button collapsed rounded" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-excludes">
                                 <i class="bi bi-x-circle me-2 text-danger"></i> Excludes
@@ -399,7 +356,42 @@ require_once 'includes/admin-header.php';
                                 </div>
                             </div>
                         </div>
-
+                        <!-- Gallery Accordion moved here under Program Details -->
+                        <div class="accordion-item border rounded mb-2">
+                            <h2 class="accordion-header"><button class="accordion-button collapsed rounded" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-gallery">
+                                <i class="bi bi-images me-2 text-success"></i> Gallery (<?= isset($data['gallery']) ? count($data['gallery']) : 0 ?>)
+                            </button></h2>
+                            <div id="collapse-gallery" class="accordion-collapse collapse repeater-container simple-repeater" data-template-id="gallery-template" data-input-name="gallery_path[]" data-bs-parent="#detailsAccordion">
+                                <div class="accordion-body bg-light bg-opacity-10">
+                                    <label class="form-label fw-bold small text-uppercase text-muted">Gallery Images</label>
+                                    <?php if (isset($data['gallery']) && is_array($data['gallery'])):
+                                        foreach ($data['gallery'] as $index => $path):
+                                            $input_id = 'gallery_path_' . $index . '_' . uniqid();
+                                    ?>
+                                    <div class="repeater-item mb-3">
+                                        <img src="<?= htmlspecialchars($path) ?>"
+                                             class="img-fluid rounded mb-2 d-block media-preview-image"
+                                             style="max-height: 100px; max-width: 150px; object-fit: cover;"
+                                             onerror="this.onerror=null; this.src='/admin/placeholder-image.png'">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control gallery-path-input media-preview-target-input" id="<?= $input_id ?>" name="gallery_path[]"
+                                                   value="<?= htmlspecialchars($path) ?>" placeholder="Select image..." readonly style="background-color: var(--bg-card);">
+                                            <button class="btn btn-outline-secondary" type="button"
+                                                    data-bs-toggle="media-modal"
+                                                    data-bs-target-input="<?= $input_id ?>">
+                                                Browse...
+                                            </button>
+                                            <button class="btn btn-outline-danger" type="button" data-action="remove-item">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <?php endforeach; endif; ?>
+                                    <button class="btn btn-sm btn-outline-primary mt-2" type="button" data-action="add-item"><i class="bi bi-plus-circle me-1"></i> Add Gallery Image</button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Gallery Accordion -->
                     </div>
                 </div>
             </div>
