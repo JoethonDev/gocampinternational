@@ -56,6 +56,7 @@ require_once __DIR__ . '/../includes/navigation.php';
 
     <section class="section-padding bg-light" id="programs">
         <div class="container">
+            <?php /*
             <div class="text-center mb-5">
                 <h2 class="display-4 fw-bold text-brand-dark mb-3">
                     Choose Your Adventure in <?= htmlspecialchars($destinationData['name']) ?>
@@ -64,6 +65,7 @@ require_once __DIR__ . '/../includes/navigation.php';
                     Programs designed for every interest and age group.
                 </p>
             </div>
+            */ ?>
 
             <div class="row g-4 justify-content-center">
                 <?php
@@ -90,6 +92,7 @@ require_once __DIR__ . '/../includes/navigation.php';
     <?php
     // --- MODALS (must be included for each program card) ---
     // --- MODIFIED LOOP (Phase 5) ---
+    /*
     if (!empty($destinationData['program_ids'])) {
         foreach ($destinationData['program_ids'] as $program_id) {
             if (isset($all_programs[$program_id]) && $all_programs[$program_id]['status'] === 'active') {
@@ -99,9 +102,23 @@ require_once __DIR__ . '/../includes/navigation.php';
             }
         }
     }
-
-        // Gallery Section: Grouped by Program
-        ?>
+    */ ?>
+        <?php /*
+        // Original Gallery section logic
+        $hasGalleryImages = false;
+        if (!empty($destinationData['program_ids'])) {
+            foreach ($destinationData['program_ids'] as $program_id) {
+                if (isset($all_programs[$program_id]) && $all_programs[$program_id]['status'] === 'active') {
+                    $program = $all_programs[$program_id];
+                    $gallery = $program['gallery'] ?? [];
+                    if (!empty($gallery)) {
+                        $hasGalleryImages = true;
+                        break;
+                    }
+                }
+            }
+        }
+        if ($hasGalleryImages) : ?>
         <section class="section-padding bg-white" id="destination-gallery">
             <div class="container">
                 <div class="text-center mb-5">
@@ -110,30 +127,73 @@ require_once __DIR__ . '/../includes/navigation.php';
                 </div>
                 <div class="row g-5">
                     <?php
-                    if (!empty($destinationData['program_ids'])) {
-                        foreach ($destinationData['program_ids'] as $program_id) {
-                            if (isset($all_programs[$program_id]) && $all_programs[$program_id]['status'] === 'active') {
-                                $program = $all_programs[$program_id];
-                                $gallery = $program['gallery'] ?? [];
-                                if (!empty($gallery)) {
-                                    echo '<div class="col-12 mb-4">';
-                                    echo '<h3 class="fw-bold mb-3 text-brand-secondary">' . htmlspecialchars($program['name']) . '</h3>';
-                                    echo '<div class="row g-2">';
-                                    foreach ($gallery as $img) {
-                                        echo '<div class="col-6 col-md-3 mb-2"><img src="' . htmlspecialchars($img) . '" alt="' . htmlspecialchars($program['name']) . ' photo" class="img-fluid rounded shadow-sm w-100" style="object-fit:cover;max-height:180px;" loading="lazy"></div>';
-                                    }
-                                    echo '</div>';
-                                    echo '</div>';
+                    foreach ($destinationData['program_ids'] as $program_id) {
+                        if (isset($all_programs[$program_id]) && $all_programs[$program_id]['status'] === 'active') {
+                            $program = $all_programs[$program_id];
+                            $gallery = $program['gallery'] ?? [];
+                            if (!empty($gallery)) {
+                                echo '<div class="col-12 mb-4">';
+                                echo '<h3 class="fw-bold mb-3 text-brand-secondary">' . htmlspecialchars($program['name']) . '</h3>';
+                                echo '<div class="row g-2">';
+                                foreach ($gallery as $img) {
+                                    echo '<div class="col-6 col-md-3 mb-2"><img src="' . htmlspecialchars($img) . '" alt="' . htmlspecialchars($program['name']) . ' photo" class="img-fluid rounded shadow-sm w-100" style="object-fit:cover;max-height:180px;" loading="lazy"></div>';
                                 }
+                                echo '</div>';
+                                echo '</div>';
                             }
                         }
-                    } else {
-                        echo '<p class="text-center">No gallery images available for this destination.</p>';
                     }
                     ?>
                 </div>
             </div>
         </section>
+        <?php endif; ?>
+        */ ?>
+        <?php
+        // Only show Gallery section if there are any images in any program
+        $hasGalleryImages = false;
+        if (!empty($destinationData['program_ids'])) {
+            foreach ($destinationData['program_ids'] as $program_id) {
+                if (isset($all_programs[$program_id]) && $all_programs[$program_id]['status'] === 'active') {
+                    $program = $all_programs[$program_id];
+                    $gallery = $program['gallery'] ?? [];
+                    if (!empty($gallery)) {
+                        $hasGalleryImages = true;
+                        break;
+                    }
+                }
+            }
+        }
+        if ($hasGalleryImages) : ?>
+        <section class="section-padding bg-white" id="destination-gallery">
+            <div class="container">
+                <div class="text-center mb-5">
+                    <h2 class="display-5 fw-bold text-brand-dark mb-3">Gallery: <?= htmlspecialchars($destinationData['name']) ?></h2>
+                    <p class="lead text-muted mb-0">Photos grouped by program</p>
+                </div>
+                <div class="row g-5">
+                    <?php
+                    foreach ($destinationData['program_ids'] as $program_id) {
+                        if (isset($all_programs[$program_id]) && $all_programs[$program_id]['status'] === 'active') {
+                            $program = $all_programs[$program_id];
+                            $gallery = $program['gallery'] ?? [];
+                            if (!empty($gallery)) {
+                                echo '<div class="col-12 mb-4">';
+                                echo '<h3 class="fw-bold mb-3 text-brand-secondary">' . htmlspecialchars($program['name']) . '</h3>';
+                                echo '<div class="row g-2">';
+                                foreach ($gallery as $img) {
+                                    echo '<div class="col-6 col-md-3 mb-2"><img src="' . htmlspecialchars($img) . '" alt="' . htmlspecialchars($program['name']) . ' photo" class="img-fluid rounded shadow-sm w-100" style="object-fit:cover;max-height:180px;" loading="lazy"></div>';
+                                }
+                                echo '</div>';
+                                echo '</div>';
+                            }
+                        }
+                    }
+                    ?>
+                </div>
+            </div>
+        </section>
+        <?php endif; ?>
         <?php
     // --- 4. FAQ SECTION ---
     if (!empty($destinationData['faq'])) {
@@ -143,7 +203,7 @@ require_once __DIR__ . '/../includes/navigation.php';
     }
     
     // --- 5. FINAL CTA BANNER ---
-    require_once __DIR__ . '/../sections/booking-cta-banner.php';
+    // require_once __DIR__ . '/../sections/booking-cta-banner.php';
     
     // --- 6. TESTIMONIALS ---
     require_once __DIR__ . '/../sections/testimonials.php';

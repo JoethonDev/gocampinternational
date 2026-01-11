@@ -33,12 +33,15 @@ if (strlen($shortIntro) > 120) {
         <div class="position-relative overflow-hidden" style="height: 280px;">
             <img src="<?= htmlspecialchars($image) ?>" class="card-img-top h-100 w-100 object-fit-cover category-card-image" alt="<?= htmlspecialchars($name) ?>" loading="lazy" />
             <div class="position-absolute bottom-0 start-0 w-100 h-100" style="background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 60%);"></div>
+            <!-- Badge removed as per requirements -->
+            <?php /*
             <div class="position-absolute top-0 end-0 p-3">
                 <span class="badge bg-white text-dark fw-bold px-3 py-2 shadow-sm">
                     <i class="bi bi-collection-fill me-1"></i>
                     <?= $program_count ?> Programs
                 </span>
             </div>
+            */ ?>
             <div class="position-absolute bottom-0 start-0 w-100 p-4">
                 <h3 class="text-white fw-bold mb-2 fs-3"><?= htmlspecialchars($name) ?></h3>
                 <div class="d-flex align-items-center text-white-50">
@@ -62,9 +65,12 @@ if (strlen($shortIntro) > 120) {
                     <a href="/program/category.php?category=<?= htmlspecialchars($categorySlug) ?>" class="btn btn-primary btn-lg fw-bold">
                         <i class="bi bi-arrow-right-circle-fill me-2"></i> Explore Programs
                     </a>
-                    <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#ctaModal" data-source="<?= htmlspecialchars($name) ?> Category Card">
-                        <i class="bi bi-calendar-check me-2"></i> Get Information
-                    </button>
+                    <!-- Badge, Get Info button, and related CTA removed as per requirements -->
+                    <?php /*
+                        <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#ctaModal" data-source="<?= htmlspecialchars($name) ?> Category Card">
+                            <i class="bi bi-calendar-check me-2"></i> Get Information
+                        </button>
+                    */ ?>
                 </div>
             </div>
         </div>

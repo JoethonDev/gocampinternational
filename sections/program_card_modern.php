@@ -43,20 +43,25 @@ $colors = $colorClasses[$color] ?? $colorClasses['primary'];
             <div class="position-absolute top-0 start-0 w-100 p-3">
                 <div class="d-flex justify-content-between align-items-start">
                     <?php if ($level): ?>
-                        <span class="badge bg-white text-dark fw-bold px-3 py-2 shadow-sm"><?= htmlspecialchars($level) ?></span>
+                        <!-- <span class="badge bg-white text-dark fw-bold px-3 py-2 shadow-sm"><?= htmlspecialchars($level) ?></span> -->
                     <?php else: ?>
-                        <div></div> <!-- Empty div to maintain flex layout -->
+                        <!-- <div></div>  Empty div to maintain flex layout  -->
                     <?php endif; ?>
-                    <?php if ($badges) : ?>
+                    <!-- Badges removed as per requirements -->
+                    <?php /*
+                    if ($badges) : ?>
                         <div class="d-flex gap-2">
                             <?php foreach ($badges as $badge) : ?>
                                 <span class="badge <?= $colors['bg'] ?> text-white fw-bold px-3 py-2 shadow-sm"><?= htmlspecialchars($badge) ?></span>
                             <?php endforeach; ?>
                         </div>
-                    <?php endif; ?>
+                    <?php endif;
+                    */ ?>
                 </div>
             </div>
-            <?php if ($ages || $duration): ?>
+            <?php /*
+            // Original ages and duration pill logic
+            if ($ages || $duration): ?>
             <div class="position-absolute bottom-0 start-0 w-100 p-3">
                 <div class="d-flex align-items-center gap-3 text-white">
                     <?php if ($ages && isset($ages['min']) && isset($ages['max'])): ?>
@@ -74,11 +79,24 @@ $colors = $colorClasses[$color] ?? $colorClasses['primary'];
                 </div>
             </div>
             <?php endif; ?>
+            */ ?>
+            <?php if ($ages && isset($ages['min']) && isset($ages['max'])): ?>
+            <div class="position-absolute bottom-0 start-0 w-100 p-3">
+                <div class="d-flex align-items-center gap-3 text-white">
+                    <div class="d-flex align-items-center bg-white bg-opacity-25 backdrop-blur rounded-pill px-3 py-2">
+                        <i class="bi bi-people-fill me-2"></i>
+                        <span class="fw-bold"><?= $ages['min'] ?>-<?= $ages['max'] ?> years</span>
+                    </div>
+                </div>
+            </div>
+            <?php endif; ?>
         </div>
         <div class="card-body p-4 d-flex flex-column">
             <h3 class="card-title fw-bold mb-2 text-brand-dark fs-4"><?= htmlspecialchars($name) ?></h3>
             <p class="card-text text-muted mb-3 flex-grow-1"><?= htmlspecialchars($tagline) ?></p>
-                <?php if (!empty($program['gallery'])): ?>
+                <?php /*
+                // Original gallery/photo section
+                if (!empty($program['gallery'])): ?>
                 <div class="mb-3">
                     <div class="row g-2">
                         <?php foreach (array_slice($program['gallery'], 0, 4) as $img): ?>
@@ -94,10 +112,16 @@ $colors = $colorClasses[$color] ?? $colorClasses['primary'];
                     <?php endif; ?>
                 </div>
                 <?php endif; ?>
-            <?php if ($highlights || $price): ?>
+                */ ?>
+            <!-- Line separator removed as per requirements -->
+            <?php /*
+            if ($highlights || $price): ?>
                 <hr class="my-3" />
-            <?php endif; ?>
-            <?php if ($highlights) : ?>
+            <?php endif;
+            */ ?>
+            <?php /*
+            // Original highlights section (limited to 3)
+            if ($highlights) : ?>
             <div class="mb-3">
                 <ul class="list-unstyled mb-0">
                     <?php foreach (array_slice($highlights, 0, 3) as $highlight) : ?>
@@ -107,15 +131,29 @@ $colors = $colorClasses[$color] ?? $colorClasses['primary'];
                         </li>
                     <?php endforeach; ?>
                 </ul>
-                <?php if (count($highlights) > 3) : ?>
+                <!-- More Features modal trigger removed as per requirements -->
+                <?php /*
+                if (count($highlights) > 3) : ?>
                     <button class="btn btn-link p-0 mt-2 <?= $colors['text'] ?> text-decoration-none fw-bold" data-bs-toggle="modal" data-bs-target="#programModal-<?= htmlspecialchars($programId) ?>">
                         +<?= count($highlights) - 3 ?> more features <i class="bi bi-arrow-right ms-1"></i>
                     </button>
-                <?php endif; ?>
+                */ ?>
+            <?php if ($highlights) : ?>
+            <div class="mb-3">
+                <ul class="list-unstyled mb-0">
+                    <?php foreach ($highlights as $highlight) : ?>
+                        <li class="mb-2 d-flex align-items-start">
+                            <i class="bi bi-check-circle-fill <?= $colors['text'] ?> me-2 mt-1"></i>
+                            <span class="text-dark"><?= htmlspecialchars($highlight) ?></span>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
             </div>
             <?php endif; ?>
             <div class="mt-auto">
-                <?php if ($price): ?>
+                <!-- Price Listing removed as per requirements -->
+                <?php /*
+                if ($price): ?>
                 <div class="d-flex justify-content-between align-items-center mb-3 p-3 rounded-lg" style="background: rgba(0,0,0,0.03);">
                     <div>
                         <small class="text-muted d-block mb-1">Starting from</small>
@@ -123,7 +161,10 @@ $colors = $colorClasses[$color] ?? $colorClasses['primary'];
                     </div>
                     <i class="bi bi-tag-fill fs-1 <?= $colors['text'] ?> opacity-25"></i>
                 </div>
-                <?php endif; ?>
+                <?php endif;
+                */ ?>
+                <!-- CTA buttons removed as per requirements -->
+                <?php /*
                 <div class="d-grid gap-2">
                     <button class="btn <?= $colors['bg'] ?> text-white btn-lg fw-bold" data-bs-toggle="modal" data-bs-target="#ctaModal" data-source="<?= htmlspecialchars($name) ?> Card">
                         <i class="bi bi-calendar-check-fill me-2"></i> Reserve Your Spot
@@ -132,6 +173,7 @@ $colors = $colorClasses[$color] ?? $colorClasses['primary'];
                         <i class="bi bi-info-circle me-2"></i> View Full Details
                     </button>
                 </div>
+                */ ?>
             </div>
         </div>
     </div>

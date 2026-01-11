@@ -109,6 +109,8 @@ $gallery      = isset($program['gallery']) && !empty($program['gallery']) ? $pro
                     <?php endif; ?>
                 </div>
             </div>
+            <!-- Modal CTA (Ready to join, Book Now) removed as per requirements -->
+            <?php /*
             <div class="modal-footer border-0 bg-light p-4">
                 <div class="d-flex w-100 align-items-center justify-content-between">
                     <div><div class="fw-bold text-dark fs-5">Ready to join?</div></div>
@@ -117,6 +119,7 @@ $gallery      = isset($program['gallery']) && !empty($program['gallery']) ? $pro
                     </button>
                 </div>
             </div>
+            */ ?>
         </div>
     </div>
 </div>

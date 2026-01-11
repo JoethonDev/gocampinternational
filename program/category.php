@@ -176,6 +176,7 @@ require_once __DIR__ . '/../includes/navigation.php';
 
 <main id="main-content">
 
+    
     <section class="hero-section">
         <div class="hero-content">
             <p class="hero-tagline text-uppercase">Program Category</p>
@@ -196,6 +197,7 @@ require_once __DIR__ . '/../includes/navigation.php';
         </div>
     </div>
 
+    <?php /*
     <section class="intro-section">
         <div class="container">
             <div class="row align-items-center g-5">
@@ -213,7 +215,9 @@ require_once __DIR__ . '/../includes/navigation.php';
             </div>
         </div>
     </section>
+    */ ?>
 
+    <?php /*
     <?php foreach ($programData['sections'] as $index => $section) : ?>
     <section class="section-content" style="background-color: <?= ($index % 2 != 0) ? '#f8f9fa' : 'white' ?>;">
         <div class="container">
@@ -233,15 +237,13 @@ require_once __DIR__ . '/../includes/navigation.php';
         </div>
     </section>
     <?php endforeach; ?>
+    */ ?>
 
 
     <?php if (!empty($relatedPrograms)): ?>
     <section class="section-content bg-light" id="category-programs">
         <div class="container">
-            <div class="text-center mb-5">
-                <h2 class="section-title">Find Your <?= htmlspecialchars($programData['name']) ?> Adventure</h2>
-                <p class="lead text-muted">These programs are available in the following destinations.</p>
-            </div>
+            <!-- Headers removed as per requirements -->
             <div class="row g-4 justify-content-center">
                 <?php foreach ($relatedPrograms as $program): ?>
                     <div class="col-lg-4 col-md-6 d-flex align-items-stretch">
@@ -253,9 +255,11 @@ require_once __DIR__ . '/../includes/navigation.php';
     </section>
     <?php endif; ?>
 
+    <?php /*
     <?php foreach ($relatedPrograms as $program) {
         include __DIR__ . '/../sections/program_detail_modal.php';
     } ?>
+    */ ?>
 
 
     <?php if (!empty($programData['gallery'])) : ?>
