@@ -33,51 +33,58 @@ require_once __DIR__ . '/includes/header.php';
     <!-- Main unique content for the About Us page starts here -->
     <div class="row g-5">
         <div class="col-12">
-            <!-- First Section -->
+            <!-- Section 1: Our Mission -->
             <div class="card shadow-sm border-0 overflow-hidden mb-5">
                 <div class="row g-0">
                     <div class="col-lg-5">
-                        <img src="/images/about_map.jpg" class="img-fluid h-100" style="object-fit: cover;" alt="Map illustration" />
+                        <img src="/images/about_1.jpg" class="img-fluid h-100" alt="About Us" />
                     </div>
                     <div class="col-lg-7 d-flex align-items-center">
                         <div class="card-body p-5">
-                            <h2 class="card-title mb-3">Our Philosophy</h2>
+                            <h2 class="card-title mb-3">About Us</h2>
                             <p class="fs-5 lh-lg text-secondary">
-                                With 20 years of experience in organizing summer language camps and short programs all over the world, we combine an excellent language education with wide range of leisure, sport, and sightseeing activities. We believe that children should be offered as many opportunities to experience new things as possible. Our philosophy is directed to allow all students and young campers to find their life experience.
+                                With over 15 years of experience in organizing international summer camps and short-term educational programs, we specialize in creating meaningful overseas experiences for children and young learners.
                             </p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Second Section -->
+            <!-- Section 2: Our Approach -->
             <div class="card shadow-sm border-0 overflow-hidden mb-5">
                 <div class="row g-0 flex-row-reverse">
-                     <div class="col-lg-5">
-                        <img src="/images/about_img_2.jpg" class="img-fluid h-100" style="object-fit: cover;" alt="Group of students smiling"/>
+                    <div class="col-lg-5">
+                        <img src="/images/about_2.jpg" class="img-fluid h-100" alt="Academic, Sports, and Culture" />
                     </div>
                     <div class="col-lg-7 d-flex align-items-center">
                         <div class="card-body p-5">
-                             <h2 class="card-title mb-3">Our Experience</h2>
-                             <p class="fs-5 lh-lg text-secondary">
-                                The Owner & Founder of GO Camp International has long experience in the field of Education as well as Travel and Tourism. This allowed us to offer best service for summer programs as well as counseling students who are willing to STUDY ABROAD or parents who are considering sending their kids for boarding schools. Each client is given exclusive counseling till reaching their final decision on their chosen programs. We are also ready to organize Cultural Educational School Travel all over the year.
+                            <h2 class="card-title mb-3">Our Approach</h2>
+                            <p class="fs-5 lh-lg text-secondary">
+                                Our programs go beyond traditional language courses. We thoughtfully combine high-quality academic learning with sports, cultural exploration, and guided leisure activities—ensuring every student learns, grows, and enjoys every moment of their journey.
+                            </p>
+                            <p class="fs-5 lh-lg text-secondary mb-0">
+                                We believe that exposure to new cultures, environments, and challenges at a young age plays a powerful role in shaping confident, independent, and globally minded individuals. That’s why our philosophy centers on offering students the opportunity to discover their interests, develop real-world skills, and build lifelong memories in a safe and supportive international setting.
                             </p>
                         </div>
                     </div>
                 </div>
             </div>
-            
-            <!-- Third Section -->
-             <div class="card shadow-sm border-0 overflow-hidden mb-5">
+
+            <!-- Section 3: Collaboration & Transparency -->
+            <div class="card shadow-sm border-0 overflow-hidden mb-5">
                 <div class="row g-0">
                     <div class="col-lg-5">
-                        <img src="/images/about_img_4.jpg" class="img-fluid h-100" style="object-fit: cover;" alt="Students in a classroom" />
+                        <img src="/images/about_3.jpg" class="img-fluid h-100" alt="Collaboration and Transparency" />
                     </div>
                     <div class="col-lg-7 d-flex align-items-center">
                         <div class="card-body p-5">
-                             <h2 class="card-title mb-3">Our Global Reach</h2>
+                            <h2 class="card-title mb-3">Beyond Camps: Schools, Parents & Global Collaboration</h2>
                             <p class="fs-5 lh-lg text-secondary">
-                               Go Camp International has a wealth of experience in promoting its summer and educational programmes at school events. Meeting parents and learning about their needs and expectations for their children allows us to expand our global destinations. The increase in demand for international travel experiences among students has enabled us to contract with one of the biggest travel companies in England.
+                                We also regularly host parent presentations, orientation sessions, and partner-led meetings—both independently and in cooperation with our international partners. These events allow parents and students to gain direct insight into programs, destinations, safety standards, and educational outcomes.
+                            </p>
+                            <p class="fs-5 lh-lg text-secondary mb-0">
+                                Through these face-to-face interactions, parents can ask questions, meet representatives from overseas institutions, and feel confident about every step of their child’s journey.<br><br>
+                                Our long-standing partnerships and on-the-ground experience ensure that every program is delivered with transparency, care, and international best practices.
                             </p>
                         </div>
                     </div>
@@ -92,7 +99,7 @@ require_once __DIR__ . '/includes/header.php';
                     </div>
                     <div class="col-lg-7 d-flex align-items-center">
                         <div class="card-body p-5">
-                           <h2 class="card-title mb-3">Safety and Welfare</h3>
+                           <h2 class="card-title mb-3">Safety and Welfare</h2>
                             <p class="fs-5 lh-lg text-secondary">
                                 Go Camp International is committed to provide stimulating, challenging and safe learning environment for children and students with the highest quality product available worldwide. The safety and wellbeing of campers is the most essential part of the summer programs. They are cared for from the moment they arrive at the destination airport, until the summer camp is over.
                             </p>
