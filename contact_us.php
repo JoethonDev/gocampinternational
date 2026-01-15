@@ -78,25 +78,32 @@ require_once __DIR__ . '/includes/header.php';
         <!-- Contact Info -->
         <div class="col-lg-5">
             <div class="card border-0 shadow-sm h-100" style="background-color: var(--brand-primary); color: white;">
-                <div class="card-body p-4 p-md-5">
-                    <h3 class="card-title text-white mb-4">Contact Information</h3>
-                    <ul class="list-unstyled fs-5">
-                        <li class="mb-3">
-                            <strong>Person:</strong><br>
-                            Zeinab El Sokkary (Managing Director)
-                        </li>
-                        <li class="mb-3">
-                             <strong>Phone:</strong><br>
-                             <a href="tel:+201221719621" class="text-white text-decoration-none">+20 122 171 9621</a>
-                        </li>
-                         <li class="mb-3">
-                            <strong>Email:</strong><br>
-                            <a href="mailto:Zeinab@gocampinternational.net" class="text-white text-decoration-none">Zeinab@gocampinternational.net</a>
-                        </li>
-                    </ul>
-                     <div class="mt-4">
-                        <iframe src="https://www.google.com/maps/d/embed?mid=zLY0XCu3oM_k.k95PuDsYnDCw&z=14" width="100%" height="250" style="border:0; border-radius: 8px;" allowfullscreen="" loading="lazy"></iframe>
-                     </div>
+                <div class="card-body p-4 p-md-5 d-flex flex-column justify-content-center align-items-center text-center">
+                    
+                    <div class="mb-4 position-relative">
+                        <img src="/images/profile.jpg" alt="Zeinab El Sokkary" 
+                             class="rounded-circle shadow-lg" 
+                             style="width: 160px; height: 160px; object-fit: cover; border: 5px solid rgba(255,255,255,0.2);">
+                    </div>
+
+                    <h3 class="fw-bold text-white mb-1">Zeinab El Sokkary</h3>
+                    <p class="text-white-50 fs-5 mb-4 text-uppercase fw-semibold tracking-wide" style="letter-spacing: 1px;">Managing Director</p>
+
+                    <div class="d-flex flex-column gap-3 w-100 px-md-3">
+                        <a href="tel:+201221719621" class="btn btn-outline-light border-0 py-3 px-4 d-flex align-items-center justify-content-start gap-3 rounded-3" style="background-color: rgba(255,255,255,0.1);">
+                            <div class="bg-white text-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; color: var(--brand-primary) !important;">
+                                <i class="bi bi-telephone-fill"></i>
+                            </div>
+                            <span class="fs-5 fw-semibold">+20 122 171 9621</span>
+                        </a>
+
+                        <a href="mailto:Zeinab@gocampinternational.net" class="btn btn-outline-light border-0 py-3 px-4 d-flex align-items-center justify-content-start gap-3 rounded-3" style="background-color: rgba(255,255,255,0.1);">
+                            <div class="bg-white text-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; color: var(--brand-primary) !important;">
+                                <i class="bi bi-envelope-fill"></i>
+                            </div>
+                            <span class="fs-5 fw-semibold text-truncate w-100 text-start">Zeinab@gocampinternational.net</span>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
