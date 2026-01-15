@@ -1,38 +1,38 @@
 <?php
 /**
- * File: /faq.php (NEW)
- * This is the template for displaying all global FAQs.
+ * File: /faq.php
+ * Refactored FAQ Page
  */
 
-// --- Page-specific variables ---
+// 1. Define page-specific variables
 $pageTitle = 'Go Camp :: Frequently Asked Questions';
 $pageDescription = 'Find answers to common questions about our summer camps, including safety, preparation, and program details.';
 
-// --- Load FAQ Data ---
+// 2. Load FAQ Data
 $faq_content = file_get_contents(__DIR__ . '/data/faq.json');
 $faqs_from_json = json_decode($faq_content, true);
 
-// --- Include Header and Navigation ---
+// 3. Include the global header
 require_once __DIR__ . '/includes/header.php';
-require_once __DIR__ . '/includes/navigation.php';
 ?>
-<main>
-    <!-- Simple Banner -->
-    <div class="outer_banner_container">
-        <div class="banner_container">
-            <img src="/images/as_banner.jpg" class="img-page" alt="FAQ Banner" />
-            <div class="banner_text" align="center">
-                <span class="inner_pages_banner_font">FAQ</span>
-            </div>
-        </div>
-    </div>
 
-     <!-- Breadcrumb -->
-    <div class="outer_breadcrumb_container">
-        <div class="inner_breadcrumb_container">
-            <a href="/">HOME</a> > FAQ
+<div class="container-fluid p-0">
+    <div class="position-relative">
+        <img src="/images/faq_banner.jpg" class="img-fluid w-100" style="height: 300px; object-fit: cover;" alt="FAQ Banner" />
+        <div class="position-absolute top-50 start-50 translate-middle text-center text-white">
+            <h1 class="display-4 fw-bold">FAQ</h1>
         </div>
     </div>
+</div>
+
+<div class="container py-5">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/index.php">HOME</a></li>
+            <li class="breadcrumb-item active" aria-current="page">FAQ</li>
+        </ol>
+    </nav>
 
     <?php
     // --- DYNAMIC FAQ SECTION ---
@@ -42,8 +42,9 @@ require_once __DIR__ . '/includes/navigation.php';
         require_once __DIR__ . '/sections/faq-section.php';
     }
     ?>
-</main>
+</div>
+
 <?php
-// --- Include Footer ---
+// 4. Include the global footer
 require_once __DIR__ . '/includes/footer.php';
 ?>
