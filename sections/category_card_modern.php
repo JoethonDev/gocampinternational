@@ -54,6 +54,7 @@ if (strlen($shortIntro) > 120) {
             <p class="card-text text-muted mb-4 flex-grow-1 lh-lg"><?= htmlspecialchars($shortIntro) ?></p>
             
             <div class="mt-auto">
+                <?php /*
                 <div class="d-flex justify-content-between align-items-center mb-3 p-3 rounded-lg" style="background: rgba(0,0,0,0.03);">
                     <div class="text-center flex-fill">
                         <small class="text-muted d-block mb-1">Available Programs</small>
@@ -61,6 +62,7 @@ if (strlen($shortIntro) > 120) {
                     </div>
                     <i class="bi bi-collection fs-1 text-primary opacity-25"></i>
                 </div>
+                */ ?>
                 <div class="d-grid gap-2">
                     <a href="/program/category.php?category=<?= htmlspecialchars($categorySlug) ?>" class="btn btn-primary btn-lg fw-bold">
                         <i class="bi bi-arrow-right-circle-fill me-2"></i> Explore Programs

@@ -165,7 +165,7 @@ unset($catData);
     }
     */
     // --- Final CTA Banner ---
-    require_once __DIR__ . '/../sections/booking-cta-banner.php';
+    // require_once __DIR__ . '/../sections/booking-cta-banner.php';
     ?>
 </main>
 

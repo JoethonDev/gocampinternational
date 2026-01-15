@@ -263,6 +263,7 @@ require_once __DIR__ . '/../includes/navigation.php';
 
 
     <?php if (!empty($programData['gallery'])) : ?>
+    <?php /*
     <section class="gallery-section">
         <div class="container">
              <div class="text-center mb-5">
@@ -279,6 +280,7 @@ require_once __DIR__ . '/../includes/navigation.php';
             </div>
         </div>
     </section>
+    */ ?>
     <?php endif; ?>
 
     <section class="cta-section text-center py-5">
