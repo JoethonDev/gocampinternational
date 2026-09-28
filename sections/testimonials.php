@@ -66,8 +66,11 @@ if (!isset($testimonials) || !is_array($testimonials) || empty($testimonials)) {
             <div class="col-lg-5">
                  <div class="card shadow-lg">
                     <div class="card-body p-2">
-                        <div class="fb-page" data-href="https://www.facebook.com/GoCampGo" data-tabs="timeline" data-height="450" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true">
+                        <div class="fb-page" data-href="https://www.facebook.com/GoCampGo" data-tabs="timeline" data-width="500" data-height="450" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true" data-lazy="true">
                             <blockquote cite="https://www.facebook.com/GoCampGo" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/GoCampGo">Go Camp International</a></blockquote>
+                        </div>
+                        <div class="text-center mt-2">
+                            <a href="https://www.facebook.com/GoCampGo" target="_blank" rel="noopener" class="btn btn-sm btn-outline-primary">View on Facebook</a>
                         </div>
                     </div>
                 </div>

@@ -54,10 +54,10 @@ require_once 'includes/admin-header.php';
                                     <small class="text-muted">ID: <?= htmlspecialchars($id) ?></small>
                                 </div>
                                 <div class="btn-group">
-                                    <a href="/admin/item-action?action=restore&type=master_prog&slug=<?= htmlspecialchars($id) ?>" class="btn btn-outline-success btn-sm" title="Restore">
+                                    <a href="/admin/item-action?action=restore&type=master_prog&slug=<?= htmlspecialchars($id) ?>&csrf=<?= urlencode(csrf_token()) ?>" class="btn btn-outline-success btn-sm" title="Restore">
                                         <i class="bi bi-arrow-counterclockwise"></i> Restore
                                     </a>
-                                    <a href="/admin/item-action?action=perm-delete&type=master_prog&slug=<?= htmlspecialchars($id) ?>" 
+                                    <a href="/admin/item-action?action=perm-delete&type=master_prog&slug=<?= htmlspecialchars($id) ?>&csrf=<?= urlencode(csrf_token()) ?>" 
                                        class="btn btn-outline-danger btn-sm"
                                        onclick="return confirm('Are you sure you want to PERMANENTLY DELETE this item? This cannot be undone.');"
                                        title="Delete Permanently">
@@ -94,10 +94,10 @@ require_once 'includes/admin-header.php';
                             <div class="list-group-item d-flex justify-content-between align-items-center p-3">
                                 <span class="fw-medium"><?= htmlspecialchars($dest['name']) ?></span>
                                 <div class="btn-group">
-                                    <a href="/admin/item-action?action=restore&type=dest&slug=<?= htmlspecialchars($slug) ?>" class="btn btn-outline-success btn-sm">
+                                    <a href="/admin/item-action?action=restore&type=dest&slug=<?= htmlspecialchars($slug) ?>&csrf=<?= urlencode(csrf_token()) ?>" class="btn btn-outline-success btn-sm">
                                         <i class="bi bi-arrow-counterclockwise"></i>
                                     </a>
-                                    <a href="/admin/item-action?action=perm-delete&type=dest&slug=<?= htmlspecialchars($slug) ?>" 
+                                    <a href="/admin/item-action?action=perm-delete&type=dest&slug=<?= htmlspecialchars($slug) ?>&csrf=<?= urlencode(csrf_token()) ?>" 
                                        class="btn btn-outline-danger btn-sm"
                                        onclick="return confirm('Are you sure you want to PERMANENTLY DELETE this item? This cannot be undone.');">
                                         <i class="bi bi-x-lg"></i>
@@ -133,10 +133,10 @@ require_once 'includes/admin-header.php';
                             <div class="list-group-item d-flex justify-content-between align-items-center p-3">
                                 <span class="fw-medium"><?= htmlspecialchars($prog['name']) ?></span>
                                 <div class="btn-group">
-                                    <a href="/admin/item-action?action=restore&type=prog&slug=<?= htmlspecialchars($slug) ?>" class="btn btn-outline-success btn-sm">
+                                    <a href="/admin/item-action?action=restore&type=prog&slug=<?= htmlspecialchars($slug) ?>&csrf=<?= urlencode(csrf_token()) ?>" class="btn btn-outline-success btn-sm">
                                         <i class="bi bi-arrow-counterclockwise"></i>
                                     </a>
-                                    <a href="/admin/item-action?action=perm-delete&type=prog&slug=<?= htmlspecialchars($slug) ?>" 
+                                    <a href="/admin/item-action?action=perm-delete&type=prog&slug=<?= htmlspecialchars($slug) ?>&csrf=<?= urlencode(csrf_token()) ?>" 
                                        class="btn btn-outline-danger btn-sm"
                                        onclick="return confirm('Are you sure you want to PERMANENTLY DELETE this item? This cannot be undone.');">
                                         <i class="bi bi-x-lg"></i>

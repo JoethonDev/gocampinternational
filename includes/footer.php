@@ -16,10 +16,10 @@
                 <div class="col-lg-3 col-md-6">
                     <h5 class="fw-bold text-uppercase mb-3">About</h5>
                     <ul class="list-unstyled">
-                        <li class="mb-2"><a href="/index.php">Home</a></li>
-                        <li class="mb-2"><a href="/about_us.php">About Us</a></li>
-                        <li class="mb-2"><a href="#">F.A.Q</a></li>
-                        <li><a href="/contact_us.php">Contact Us</a></li>
+                        <li class="mb-2"><a href="/">Home</a></li>
+                        <li class="mb-2"><a href="/about">About Us</a></li>
+                        <li class="mb-2"><a href="/faq">F.A.Q</a></li>
+                        <li><a href="/contact">Contact Us</a></li>
                     </ul>
                 </div>
 
@@ -27,10 +27,10 @@
                 <div class="col-lg-3 col-md-6">
                     <h5 class="fw-bold text-uppercase mb-3">Programs</h5>
                     <ul class="list-unstyled">
-                        <li class="mb-2"><a href="#">Language & Activity</a></li>
-                        <li class="mb-2"><a href="#">Adult Academic</a></li>
-                        <li class="mb-2"><a href="#">Young Leader</a></li>
-                        <li><a href="#">Soccer Camps</a></li>
+                        <li class="mb-2"><a href="/program/category?category=kids-camps">Language & Activity</a></li>
+                        <li class="mb-2"><a href="/program/category?category=adult-academic">Adult Academic</a></li>
+                        <li class="mb-2"><a href="/program/category?category=young-leader-program">Young Leader</a></li>
+                        <li><a href="/program/category?category=soccer-camps">Soccer Camps</a></li>
                     </ul>
                 </div>
 

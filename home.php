@@ -18,22 +18,25 @@ $banners = [
     ['image' => 'about_img_3.jpg', 'title' => 'Build Lifelong Friendships']
 ];
 
-// --- Include Header and Navigation ---
+// --- Include Header (header.php already includes navigation.php and opens <main id="main-content">) ---
 require_once __DIR__ . '/includes/header.php';
-require_once __DIR__ . '/includes/navigation.php';
 ?>
 
-<main id="main-content">
+<div class="page-content">
 
     <!-- HERO SLIDER SECTION -->
     <header id="home-hero-slider" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
             <?php foreach ($banners as $index => $banner): ?>
                 <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
-                    <div class="hero-section d-flex align-items-center justify-content-center text-center" style="background-image: url('images/<?= htmlspecialchars($banner['image']) ?>'); background-size: cover; background-position: center; min-height: 90vh;">
+                    <div class="hero-section d-flex align-items-center justify-content-center text-center" style="background-image: url('/images/<?= htmlspecialchars($banner['image']) ?>'); background-size: cover; background-position: center;">
                         <div class="hero-overlay"></div>
                         <div class="container position-relative d-flex flex-column align-items-center justify-content-center" style="z-index:2; min-height:60vh;">
+                            <?php if ($index === 0): ?>
                             <h1 class="display-3 fw-bold mb-3 text-white" style="text-shadow:0 2px 12px #000,0 0 2px #fff;"><?= htmlspecialchars($banner['title']) ?></h1>
+                            <?php else: ?>
+                            <h2 class="display-3 fw-bold mb-3 text-white" style="text-shadow:0 2px 12px #000,0 0 2px #fff;"><?= htmlspecialchars($banner['title']) ?></h2>
+                            <?php endif; ?>
                             <p class="lead mb-4 text-white" style="text-shadow:0 2px 8px #000,0 0 2px #fff;">International camps are a life-changing opportunity to learn, grow, and make global friends.</p>
                             <a href="#destinations" class="btn btn-lg fw-bold px-5 py-3 text-uppercase">Explore Destinations</a>
                         </div>
@@ -57,9 +60,9 @@ require_once __DIR__ . '/includes/navigation.php';
 
     <?php
     // --- DYNAMIC DESTINATIONS SECTION ---
-    // Filter out trashed destinations before including the cards section
-    $public_destinations = array_filter($destinations, function($dest) {
-        return isset($dest['status']) && $dest['status'] !== 'trash';
+    // Only show active destinations (unified rule: status === 'active').
+    $public_destinations = array_filter(($destinations ?? []), function($dest) {
+        return isset($dest['status']) && $dest['status'] === 'active';
     });
     // Make $public_destinations available to the cards section
     // The destination-cards.php should use $public_destinations if set, otherwise fallback to $destinations
@@ -73,38 +76,43 @@ require_once __DIR__ . '/includes/navigation.php';
     require_once __DIR__ . '/data/all_programs.php';
 
     // Count programs in each category and prepare featured categories
+    // Unified rule: program status must be 'active' AND its category must exist + be 'active'.
     $featured_categories = [];
-    foreach ($programs as $category) {
-        if ($category['status'] === 'active') {
-            // Count active programs in this category whose destination is not trashed
+    foreach (($programs ?? []) as $category) {
+        if (($category['status'] ?? null) === 'active') {
+            // Count active programs in this category whose destination is active
             $program_count = 0;
-            foreach ($all_programs as $program) {
+            foreach (($all_programs ?? []) as $program) {
                 if (
                     isset($program['category_slug']) && $program['category_slug'] === $category['slug'] &&
                     isset($program['status']) && $program['status'] === 'active'
                 ) {
-                    // Check if program's category is active (not trashed/missing)
+                    // Check if program's category is active (must exist + status active)
                     $category_active = isset($programs[$program['category_slug']]) && 
                                      isset($programs[$program['category_slug']]['status']) && 
                                      $programs[$program['category_slug']]['status'] === 'active';
                     
                     if (!$category_active) {
-                        continue; // Skip programs with trashed/missing categories
+                        continue; // Skip programs with inactive/missing categories
                     }
                     
-                    // Check if program's destination is not trashed
-                    $destination_trashed = false;
-                    foreach ($destinations as $dest) {
+                    // Check if program's destination is active (unified rule)
+                    $destination_active = false;
+                    $found_destination = false;
+                    foreach (($destinations ?? []) as $dest) {
                         if (isset($dest['program_ids']) && in_array($program['id'], $dest['program_ids'])) {
-                            if (isset($dest['status']) && $dest['status'] === 'trash') {
-                                $destination_trashed = true;
+                            $found_destination = true;
+                            if (isset($dest['status']) && $dest['status'] === 'active') {
+                                $destination_active = true;
                             }
                             break;
                         }
                     }
-                    if (!$destination_trashed) {
-                        $program_count++;
+                    // Programs with no linked destination count; linked ones must be active.
+                    if ($found_destination && !$destination_active) {
+                        continue;
                     }
+                    $program_count++;
                 }
             }
             // Only include categories that have programs
@@ -144,7 +152,7 @@ require_once __DIR__ . '/includes/navigation.php';
             </div>
             
             <div class="text-center mt-5 pt-3">
-                <a href="/program/" class="btn btn-primary btn-lg fw-bold px-5 py-3">View All Programs</a>
+                <a href="/programs" class="btn btn-primary btn-lg fw-bold px-5 py-3">View All Programs</a>
             </div>
         </div>
     </section>
@@ -152,7 +160,7 @@ require_once __DIR__ . '/includes/navigation.php';
     <!-- TESTIMONIALS SECTION -->
     <?php require_once __DIR__ . '/sections/testimonials.php'; ?>
 
-</main>
+</div>
 
 <?php require_once __DIR__ . '/includes/footer.php'; ?>
 

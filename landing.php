@@ -16,11 +16,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $age = filter_input(INPUT_POST, 'age', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $gender = filter_input(INPUT_POST, 'gender', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-    $interests = isset($_POST['interests']) ? implode(', ', $_POST['interests']) : 'Not specified';
-    $destination = filter_input(INPUT_POST, 'destination', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    // Sanitize interests checkbox array (values are fixed options, escape each entry).
+    $rawInterests = (isset($_POST['interests']) && is_array($_POST['interests'])) ? $_POST['interests'] : [];
+    $cleanInterests = array_map(function ($v) {
+        return htmlspecialchars(trim((string) $v), ENT_QUOTES, 'UTF-8');
+    }, $rawInterests);
+    $interests = !empty($cleanInterests) ? implode(', ', $cleanInterests) : 'Not specified';
     $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
     $phone = filter_input(INPUT_POST, 'phone', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-    $travel_time = filter_input(INPUT_POST, 'travel_time', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $privacyConsent = isset($_POST['privacyConsent']);
 
     // Validation
@@ -46,11 +49,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $message .= '<p><strong>Child\'s Name:</strong> ' . htmlspecialchars($name) . '</p>';
         $message .= '<p><strong>Child\'s Age:</strong> ' . htmlspecialchars($age) . '</p>';
         $message .= '<p><strong>Gender:</strong> ' . htmlspecialchars($gender) . '</p>';
-        $message .= '<p><strong>Interests:</strong> ' . htmlspecialchars($interests) . '</p>';
-        $message .= '<p><strong>Preferred Destination:</strong> ' . htmlspecialchars($destination) . '</p>';
+        $message .= '<p><strong>Interests:</strong> ' . $interests . '</p>';
         $message .= '<p><strong>Parent\'s Email:</strong> ' . htmlspecialchars($email) . '</p>';
         $message .= '<p><strong>Parent\'s Phone:</strong> ' . htmlspecialchars($phone) . '</p>';
-        $message .= '<p><strong>Planned Travel Time:</strong> ' . htmlspecialchars($travel_time) . '</p>';
         $message .= '</body></html>';
 
         if (mail($to, $emailSubject, $message, $headers)) {
@@ -66,10 +67,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 // --- SEO & META ---
 $pageTitle = 'Transform Your Teen\'s Future - International Summer Programs | Go Camp';
 $pageDescription = 'Elite international summer camps for ambitious teens. Sports academies, language immersion, leadership programs. 20+ years trusted by 10,000+ families.';
+$pageRobots = 'noindex, nofollow';
 
 require_once __DIR__ . '/includes/header.php';
 ?>
-<!-- Landing Page Specific Styles and Fonts -->
+<!-- Landing Page Specific Styles and Fonts (header.php already opened <body> and <main id="main-content">) -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -156,10 +158,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 </style>
 
-<body>
     <!-- NOTE: A dedicated landing page often omits the main navigation to reduce distractions and improve focus on the CTA. -->
 
-    <main>
+    <div class="page-content">
         <section class="hero-landing">
             <div class="container">
                 <div class="row align-items-center">
@@ -199,7 +200,7 @@ h1, h2, h3, h4, h5, h6 {
                             </div>
 
                             <?php if ($successMessage): ?>
-                                <div class="alert alert-success"><?= $successMessage ?></div>
+                                <div class="alert alert-success"><?= htmlspecialchars($successMessage, ENT_QUOTES, 'UTF-8') ?></div>
                             <?php endif; ?>
                             <?php if (!empty($errors)): ?>
                                 <div class="alert alert-danger">
@@ -211,7 +212,7 @@ h1, h2, h3, h4, h5, h6 {
                                 </div>
                             <?php endif; ?>
 
-                            <form id="landingPageForm" method="POST" action="/landing.php" novalidate>
+                            <form id="landingPageForm" method="POST" action="/landing" novalidate>
                                 <!-- All form fields go here -->
                                 <div class="form-group">
                                     <label class="form-label">Child's Full Name <span class="required">*</span></label>
@@ -335,8 +336,6 @@ h1, h2, h3, h4, h5, h6 {
                 <p class="guarantee-text">Your satisfaction and your child's safety are our top priorities. We stand by our programs with a comprehensive guarantee.</p>
             </div>
         </section>
-    </main>
+    </div>
 
 <?php require_once __DIR__ . '/includes/footer.php'; ?>
-</body>
-</html>

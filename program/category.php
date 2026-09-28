@@ -14,8 +14,13 @@ require_once __DIR__ . '/../data/programs.php';
 require_once __DIR__ . '/../data/all_programs.php';
 require_once __DIR__ . '/../data/destinations.php';
 
-// --- Get category from URL parameter ---
-$categorySlug = $_GET['category'] ?? '';
+// --- Get category from URL parameter (sanitized + validated) ---
+$rawCategory = filter_input(INPUT_GET, 'category', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+$categorySlug = is_string($rawCategory) ? trim($rawCategory) : '';
+// Validate slug format (letters, numbers, hyphens, underscores only).
+if ($categorySlug !== '' && !preg_match('/^[a-zA-Z0-9_-]+$/', $categorySlug)) {
+    $categorySlug = '';
+}
 
 // --- Variable Safety Check ---
 if (empty($categorySlug) || !isset($programs[$categorySlug]) || 
@@ -29,7 +34,7 @@ $programData = $programs[$categorySlug];
 
 // --- Find all programs that belong to this category ---
 $relatedPrograms = [];
-foreach ($all_programs as $program_id => $program) {
+foreach (($all_programs ?? []) as $program_id => $program) {
     // Only show programs that are active and in the correct category
     if (!isset($program['category_slug']) || $program['category_slug'] !== $categorySlug) {
         continue;
@@ -41,7 +46,7 @@ foreach ($all_programs as $program_id => $program) {
     $destination_name = 'Multiple Locations'; // Default
     $destination_slug = '#';
     $destination_trashed = false;
-    foreach ($destinations as $dest) {
+    foreach (($destinations ?? []) as $dest) {
         if (isset($dest['program_ids']) && in_array($program_id, $dest['program_ids'])) {
             $destination_name = $dest['name'];
             $destination_slug = $dest['slug'];
@@ -68,12 +73,20 @@ usort($relatedPrograms, function($a, $b) {
     return $orderA - $orderB;
 });
 
-// --- Page-specific variables ---
-$pageTitle = 'Go Camp :: ' . htmlspecialchars($programData['name']);
-$pageDescription = substr(strip_tags($programData['intro']), 0, 160);
+// --- Page-specific variables (store raw; header.php escapes on output) ---
+$pageTitle = 'Go Camp :: ' . ($programData['name'] ?? 'Programs');
+$programIntroRaw = $programData['intro'] ?? '';
+$pageDescription = substr(strip_tags($programIntroRaw), 0, 160);
+
+// --- Banner / intro / gallery / sections fallbacks (use !empty so empty strings fall back) ---
+$categoryBanner = !empty($programData['banner']) ? $programData['banner'] : '/images/hero.jpg';
+$categoryTagline = !empty($programData['tagline']) ? $programData['tagline'] : '';
+$categoryIntro = $programData['intro'] ?? '';
+$categoryIntroImage = !empty($programData['intro_image']) ? $programData['intro_image'] : '/images/placeholder.jpg';
+$categoryGallery = $programData['gallery'] ?? [];
+$categorySections = $programData['sections'] ?? [];
 
 require_once __DIR__ . '/../includes/header.php';
-require_once __DIR__ . '/../includes/navigation.php';
 ?>
 
 <style>
@@ -85,9 +98,9 @@ require_once __DIR__ . '/../includes/navigation.php';
     }
     .hero-section {
         position: relative;
-        height: 70vh;
+        /* height: 70vh; */
         min-height: 500px;
-        background: url('<?= htmlspecialchars($programData['banner']) ?>');
+        background: url('<?= htmlspecialchars($categoryBanner) ?>');
         background-size: cover;
         background-repeat: no-repeat;
         background-position: center center;
@@ -174,7 +187,7 @@ require_once __DIR__ . '/../includes/navigation.php';
     @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 </style>
 
-<main id="main-content">
+<div class="page-content">
 
     
     <section class="hero-section">
@@ -262,7 +275,7 @@ require_once __DIR__ . '/../includes/navigation.php';
     */ ?>
 
 
-    <?php if (!empty($programData['gallery'])) : ?>
+    <?php if (!empty($categoryGallery)) : ?>
     <?php /*
     <section class="gallery-section">
         <div class="container">
@@ -289,7 +302,7 @@ require_once __DIR__ . '/../includes/navigation.php';
     <?php
     require_once __DIR__ . '/../sections/testimonials.php';
     ?>
-</main>
+</div>
 
 <?php
 require_once __DIR__ . '/../includes/footer.php';

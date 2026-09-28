@@ -21,7 +21,8 @@ $error_message = '';
 
 // 3. --- SAVE/CREATE LOGIC (No changes needed) ---
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['name'])) {
+    if (!csrf_check($_POST['csrf'] ?? '')) { $error_message = 'Invalid CSRF token. Please reload and try again.'; }
+    elseif (isset($_POST['name'])) {
         $slug = $_POST['slug'] ?? null;
         $original_slug = $_POST['original_slug'] ?? $slug;
 
@@ -67,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (save_php_file($file_path, 'programs', $programs)) {
                 $success_message = 'Successfully saved program category!';
                 if (empty($_POST['original_slug'])) {
-                    header("Location: /admin/edit-program-category?slug=$slug&created=true");
+                    header('Location: /admin/edit-program-category?slug=' . urlencode($slug) . '&created=true');
                     exit;
                 }
                 $data = $new_data;
@@ -209,6 +210,7 @@ require_once 'includes/admin-header.php';
     </div>
 
     <form id="mainForm" action="edit-program-category.php<?= $is_new_item ? '' : '?slug=' . htmlspecialchars($data['slug']) ?>" method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="csrf" value="<?= htmlspecialchars(csrf_token()) ?>">
 
         <?php if (!$is_new_item): ?>
             <input type="hidden" name="original_slug" value="<?= htmlspecialchars($data['slug']) ?>">
@@ -441,8 +443,8 @@ require_once 'includes/admin-header.php';
 <?php if (!$is_new_item): ?>
 <form 
     id="trashForm" 
-    action="item-action.php?action=soft-delete&type=prog&slug=<?= htmlspecialchars($data['slug']) ?>" 
-    method="POST">
+    action="item-action.php?action=soft-delete&type=prog&slug=<?= urlencode($data['slug']) ?>&csrf=<?= urlencode(csrf_token()) ?>" 
+    method="POST"><input type="hidden" name="csrf" value="<?= htmlspecialchars(csrf_token()) ?>">
 </form>
 <?php endif; ?>
 

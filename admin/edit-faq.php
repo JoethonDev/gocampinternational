@@ -17,6 +17,8 @@ $error_message = '';
 
 // 3. --- SAVE LOGIC ---
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!csrf_check($_POST['csrf'] ?? '')) { $error_message = 'Invalid CSRF token. Please reload and try again.'; }
+    else {
     $questions = $_POST['question'] ?? [];
     $answers = $_POST['answer'] ?? [];
     
@@ -35,6 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $success_message = 'Successfully saved FAQ data!';
     } else {
         $error_message = 'Error saving FAQ data. Check file permissions.';
+    }
     }
 }
 
@@ -92,6 +95,7 @@ require_once 'includes/admin-header.php';
     </div>
 
     <form id="faqForm" action="edit-faq.php" method="POST">
+    <input type="hidden" name="csrf" value="<?= htmlspecialchars(csrf_token()) ?>">
         <div class="card border-0 shadow-sm">
             <div class="card-header bg-transparent border-0 pt-4 pb-2 px-4 d-flex justify-content-between align-items-center">
                 <h5 class="card-title fw-bold text-primary mb-0"><i class="bi bi-question-circle me-2"></i>FAQ Items</h5>

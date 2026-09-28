@@ -12,6 +12,44 @@
 require_once __DIR__ . '/../init.php';
 
 /**
+ * Returns the current session CSRF token, generating one if missing.
+ *
+ * @return string
+ */
+function csrf_token() {
+    if (empty($_SESSION['csrf'])) {
+        $_SESSION['csrf'] = bin2hex(random_bytes(32));
+    }
+    return (string)$_SESSION['csrf'];
+}
+
+/**
+ * Timing-safe CSRF token comparison.
+ *
+ * @param mixed $token Token supplied with the request.
+ * @return bool
+ */
+function csrf_check($token) {
+    if (!is_string($token) || empty($_SESSION['csrf']) || !is_string($_SESSION['csrf'])) {
+        return false;
+    }
+    return hash_equals((string)$_SESSION['csrf'], $token);
+}
+
+/**
+ * Enforces POST requests; sends 405 otherwise.
+ *
+ * @return void
+ */
+function require_post() {
+    if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'POST') {
+        http_response_code(405);
+        header('Allow: POST');
+        exit('Method Not Allowed');
+    }
+}
+
+/**
  * Handles a file upload, validates it, and moves it to the /uploads directory.
  *
  * @param string $file_input_name The 'name' attribute of the <input type="file">.
@@ -21,29 +59,77 @@ require_once __DIR__ . '/../init.php';
 function handle_image_upload($file_input_name, $current_image_path) {
     // Check if a new file was actually uploaded
     if (isset($_FILES[$file_input_name]) && $_FILES[$file_input_name]['error'] === UPLOAD_ERR_OK) {
-        
+
         $file = $_FILES[$file_input_name];
-        
-        // --- Validation ---
-        $allowed_types = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'];
-        if (!in_array($file['type'], $allowed_types)) {
-            // Not a valid image type. We could set an error message here.
-            // For now, we just safely return the old path.
+        $tmp_name = $file['tmp_name'];
+        $size = $file['size'];
+
+        // --- Size cap: 5MB ---
+        if ($size > 5 * 1024 * 1024) {
             return $current_image_path;
         }
 
-        // --- Generate Safe, Unique Filename ---
-        $file_extension = pathinfo($file['name'], PATHINFO_EXTENSION);
-        $safe_filename = preg_replace('/[^a-z0-9_-]/i', '_', pathinfo($file['name'], PATHINFO_FILENAME));
-        $new_filename = $safe_filename . '_' . time() . '.' . $file_extension;
-        
-        // --- Define Upload Path ---
+        // --- Verify real MIME via finfo (never trust client type) ---
+        $allowed_types = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        if ($finfo === false) {
+            return $current_image_path;
+        }
+        $real = finfo_file($finfo, $tmp_name);
+        finfo_close($finfo);
+        if (!in_array($real, $allowed_types, true)) {
+            return $current_image_path;
+        }
+
+        // --- Image content must parse ---
+        if (@getimagesize($tmp_name) === false) {
+            return $current_image_path;
+        }
+
+        // --- Extension allowlist (lowercased), block executables ---
+        $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+        $allowed_ext = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+        $blocked_ext = ['php', 'phtml', 'phar', 'htaccess', 'cgi', 'pl'];
+        if (!in_array($ext, $allowed_ext, true) || in_array($ext, $blocked_ext, true)) {
+            return $current_image_path;
+        }
+
+        // --- Generate Safe, Unique, Randomized Filename ---
+        $safe_base = preg_replace('/[^a-z0-9_-]/i', '_', pathinfo($file['name'], PATHINFO_FILENAME));
+        $safe_base = substr($safe_base !== '' ? $safe_base : 'upload', 0, 50);
+        try {
+            $rand = bin2hex(random_bytes(8));
+        } catch (Exception $e) {
+            $rand = uniqid();
+        }
+        $new_filename = $safe_base . '_' . $rand . '.' . $ext;
+
+        // --- Define Upload Path (ensure dir exists) ---
         // __DIR__ is /admin, so we go up one, then into /uploads/
         $upload_dir = __DIR__ . '/../uploads/';
+        if (!is_dir($upload_dir)) {
+            if (!mkdir($upload_dir, 0755, true)) {
+                return $current_image_path;
+            }
+        }
         $upload_path = $upload_dir . $new_filename;
+        $counter = 1;
+        while (file_exists($upload_path)) {
+            try {
+                $rand = bin2hex(random_bytes(8));
+            } catch (Exception $e) {
+                $rand = uniqid() . $counter;
+            }
+            $new_filename = $safe_base . '_' . $rand . '.' . $ext;
+            $upload_path = $upload_dir . $new_filename;
+            $counter++;
+            if ($counter > 50) {
+                return $current_image_path;
+            }
+        }
 
         // --- Move the File ---
-        if (move_uploaded_file($file['tmp_name'], $upload_path)) {
+        if (move_uploaded_file($tmp_name, $upload_path)) {
             // Success! Return the *public* path for the database.
             return '/uploads/' . $new_filename;
         } else {
@@ -51,7 +137,7 @@ function handle_image_upload($file_input_name, $current_image_path) {
             return $current_image_path;
         }
     }
-    
+
     // No new file was uploaded, so just return the existing path.
     return $current_image_path;
 }
@@ -70,24 +156,29 @@ function save_php_file($filepath, $variable_name, $data_array) {
     $php_code = "<?php\n/**\n * This file is auto-generated by the Go Camp Admin Panel.\n * Do not edit this file manually.\n */\n\n";
     $php_code .= "\$" . $variable_name . " = " . var_export($data_array, true) . ";\n";
 
-    // Use file locking (flock) to prevent race conditions
-    $file_handle = fopen($filepath, 'w');
+    // Atomic write: temp file + flock + rename (avoids truncate-then-lock race)
+    $tmp_path = $filepath . '.tmp.' . uniqid('', true);
+    $file_handle = fopen($tmp_path, 'w');
     if (!$file_handle) {
-        return false; // Could not open file
+        return false; // Could not open temp file
     }
 
-    // Get an exclusive lock
     if (flock($file_handle, LOCK_EX)) {
-        fwrite($file_handle, $php_code); // Write the new content
-        fflush($file_handle);            // Flush output before releasing lock
-        flock($file_handle, LOCK_UN);    // Release the lock
-    } else {
+        fwrite($file_handle, $php_code);
+        fflush($file_handle);
+        flock($file_handle, LOCK_UN);
         fclose($file_handle);
-        return false; // Could not get lock
+        // Atomic replace
+        if (!rename($tmp_path, $filepath)) {
+            @unlink($tmp_path);
+            return false;
+        }
+        return true;
     }
 
     fclose($file_handle);
-    return true;
+    @unlink($tmp_path);
+    return false; // Could not get lock
 }
 
 /**
@@ -100,25 +191,33 @@ function save_php_file($filepath, $variable_name, $data_array) {
 function save_json_file($filepath, $data_array) {
     // Convert array to formatted JSON
     $json_string = json_encode($data_array, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-
-    // Use file locking (flock)
-    $file_handle = fopen($filepath, 'w');
-    if (!$file_handle) {
-        return false; // Could not open file
+    if ($json_string === false) {
+        return false;
     }
 
-    // Get an exclusive lock
+    // Atomic write: temp file + flock + rename (avoids truncate-then-lock race)
+    $tmp_path = $filepath . '.tmp.' . uniqid('', true);
+    $file_handle = fopen($tmp_path, 'w');
+    if (!$file_handle) {
+        return false; // Could not open temp file
+    }
+
     if (flock($file_handle, LOCK_EX)) {
-        fwrite($file_handle, $json_string); // Write the new content
-        fflush($file_handle);               // Flush output before releasing lock
-        flock($file_handle, LOCK_UN);       // Release the lock
-    } else {
+        fwrite($file_handle, $json_string);
+        fflush($file_handle);
+        flock($file_handle, LOCK_UN);
         fclose($file_handle);
-        return false; // Could not get lock
+        // Atomic replace
+        if (!rename($tmp_path, $filepath)) {
+            @unlink($tmp_path);
+            return false;
+        }
+        return true;
     }
 
     fclose($file_handle);
-    return true;
+    @unlink($tmp_path);
+    return false; // Could not get lock
 }
 
 /**

@@ -6,7 +6,7 @@
 
 // 1. Define page-specific variables
 $pageTitle = 'Go Camp :: About Us';
-$pageDescription = 'With 20 years of experience, Go Camp International combines excellent language education with a wide range of leisure, sport, and sightseeing activities.';
+$pageDescription = 'With 15 years of experience, Go Camp International combines excellent language education with a wide range of leisure, sport, and sightseeing activities.';
 
 // 2. Include the global header
 require_once __DIR__ . '/includes/header.php';
@@ -25,7 +25,7 @@ require_once __DIR__ . '/includes/header.php';
     <!-- Breadcrumb -->
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/index.php">HOME</a></li>
+            <li class="breadcrumb-item"><a href="/">HOME</a></li>
             <li class="breadcrumb-item active" aria-current="page">ABOUT US</li>
         </ol>
     </nav>

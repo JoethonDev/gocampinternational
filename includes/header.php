@@ -22,11 +22,25 @@ $ogImage = $ogImage ?? BASE_URL . '/images/logo.png';
 
     <!-- SEO and Social Meta -->
     <meta name="description" content="<?= htmlspecialchars($pageDescription) ?>">
+    <?php if (!empty($pageRobots)): ?>
+    <meta name="robots" content="<?= htmlspecialchars($pageRobots) ?>">
+    <?php endif; ?>
+    <?php
+    // Build canonical URL safely (guard REQUEST_URI, use BASE_URL).
+    $requestUriForMeta = $_SERVER['REQUEST_URI'] ?? '/';
+    $baseUrlForMeta = defined('BASE_URL') ? BASE_URL : '';
+    $canonicalUrl = $baseUrlForMeta . htmlspecialchars($requestUriForMeta);
+    ?>
+    <link rel="canonical" href="<?= $canonicalUrl ?>">
     <meta property="og:title" content="<?= htmlspecialchars($pageTitle) ?>" />
     <meta property="og:description" content="<?= htmlspecialchars($pageDescription) ?>" />
     <meta property="og:image" content="<?= htmlspecialchars($ogImage) ?>" />
-    <meta property="og:url" content="<?= BASE_URL . htmlspecialchars($_SERVER['REQUEST_URI']) ?>" />
+    <meta property="og:url" content="<?= $canonicalUrl ?>" />
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Go Camp International" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="<?= htmlspecialchars($pageTitle) ?>" />
+    <meta name="twitter:description" content="<?= htmlspecialchars($pageDescription) ?>" />
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/images/favi.png">

@@ -27,6 +27,10 @@ $accordionId = 'faqAccordion-' . uniqid();
                 <?php foreach ($faqs as $index => $faq) :
                     $question = $faq['question'] ?? $faq['q'] ?? 'No question provided.';
                     $answer = $faq['answer'] ?? $faq['a'] ?? 'No answer provided.';
+                    // NOTE: FAQ answers may contain basic HTML from the CMS. Allow only safe
+                    // formatting tags and strip everything else (e.g. <script>) to block XSS
+                    // while keeping <p>/<ul>/<ol>/<li>/<br>/<strong>/<em>/<a>/<b>/<i> formatting.
+                    $answer = strip_tags($answer, '<p><ul><ol><li><br><strong><em><a><b><i>');
                     $isFirst = ($index === 0);
                     ?>
                     <div class="accordion-item border-0 mb-3 shadow-sm" style="border-radius: 12px; overflow: hidden;">
@@ -49,7 +53,7 @@ $accordionId = 'faqAccordion-' . uniqid();
 
         <div class="text-center mt-5">
             <p class="text-muted mb-3">Still have questions?</p>
-            <a href="/contact_us.php" class="btn btn-warning btn-lg">
+            <a href="/contact" class="btn btn-warning btn-lg">
                 <i class="bi bi-envelope-fill me-2"></i>Contact Us
             </a>
         </div>

@@ -1,4 +1,15 @@
 # File: /.htaccess
+ServerSignature Off
+
+# --- SECURITY BLOCK (before rewrites) ---
+<FilesMatch "^\.env$">
+    Require all denied
+</FilesMatch>
+RedirectMatch 404 ^/data/.*$
+RedirectMatch 404 ^/.*\.jsonl$
+# Block direct execution of scripts inside public upload/image dirs
+RedirectMatch 403 ^/(uploads|images)/.*\.(php|phtml|phar|cgi|pl)$
+
 <IfModule mod_rewrite.c>
     RewriteEngine On
     RewriteBase "/"
@@ -13,6 +24,8 @@
 
     # --- NEW RULE START ---
     # Rule 2.5: Automatically add .php if the file exists.
+    # Exclude router-managed prefixes so /admin, /program, /destination, /api hit index.php router.
+    RewriteCond %{REQUEST_URI} !^/(admin|program|destination|api)/
     # If the request is NOT a directory...
     RewriteCond %{REQUEST_FILENAME} !-d
     # ...and if the request + ".php" IS a valid file...
@@ -22,7 +35,7 @@
     # --- NEW RULE END ---
 
     # Rule 3: For all other requests (true 404s), rewrite to outer index.php.
-    RewriteRule . index.php [L]
+    RewriteRule ^ index.php [QSA,L]
 </IfModule>
 
 # Optional: Improve security by preventing directory listing

@@ -8,9 +8,26 @@
 $pageTitle = 'Go Camp :: Frequently Asked Questions';
 $pageDescription = 'Find answers to common questions about our summer camps, including safety, preparation, and program details.';
 
-// 2. Load FAQ Data
-$faq_content = file_get_contents(__DIR__ . '/data/faq.json');
-$faqs_from_json = json_decode($faq_content, true);
+// 2. Load FAQ Data (guarded: missing file / invalid JSON falls back to empty + user message)
+$faq_file = __DIR__ . '/data/faq.json';
+$faqs_from_json = [];
+$faq_load_error = false;
+if (!file_exists($faq_file)) {
+    $faq_load_error = true;
+} else {
+    $faq_content = file_get_contents($faq_file);
+    if ($faq_content === false) {
+        $faq_load_error = true;
+    } else {
+        $decoded = json_decode($faq_content, true);
+        if (json_last_error() !== JSON_ERROR_NONE || !is_array($decoded)) {
+            $faq_load_error = true;
+            $faqs_from_json = [];
+        } else {
+            $faqs_from_json = $decoded;
+        }
+    }
+}
 
 // 3. Include the global header
 require_once __DIR__ . '/includes/header.php';
@@ -29,7 +46,7 @@ require_once __DIR__ . '/includes/header.php';
     <!-- Breadcrumb -->
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/index.php">HOME</a></li>
+            <li class="breadcrumb-item"><a href="/">HOME</a></li>
             <li class="breadcrumb-item active" aria-current="page">FAQ</li>
         </ol>
     </nav>
@@ -40,6 +57,8 @@ require_once __DIR__ . '/includes/header.php';
     if (!empty($faqs_from_json)) {
         $faqs = $faqs_from_json; // The component expects a variable named $faqs
         require_once __DIR__ . '/sections/faq-section.php';
+    } else {
+        echo '<div class="alert alert-info">No FAQs available at the moment. Please check back later.</div>';
     }
     ?>
 </div>

@@ -14,12 +14,16 @@ if (!isset($program) || !is_array($program)) { return; }
 $programId    = $program['id'] ?? uniqid();
 $name         = $program['name'] ?? 'Program Details';
 $tagline      = $program['tagline'] ?? '';
-$image        = $program['image'] ?? '/images/placeholder.jpg';
+$image        = !empty($program['image']) ? $program['image'] : '/images/placeholder.jpg';
 $ages         = isset($program['ages']) && !empty($program['ages']) ? $program['ages'] : null;
 $duration     = isset($program['duration']) && $program['duration'] > 0 ? $program['duration'] : null;
 $level        = isset($program['level']) && !empty($program['level']) ? $program['level'] : null;
 $price        = isset($program['price']) && !empty($program['price']) ? $program['price'] : null;
-$description  = $program['description'] ?? '<p>No description available.</p>';
+// NOTE: Rich-text fields may contain basic HTML from the CMS. We allow only safe
+// formatting tags and strip everything else (e.g. <script>) to block XSS while
+// keeping <p>/<ul>/<ol>/<li>/<br>/<strong>/<em>/<a>/<b>/<i> formatting.
+$allowedHtml = '<p><ul><ol><li><br><strong><em><a><b><i>';
+$description  = isset($program['description']) ? strip_tags($program['description'], $allowedHtml) : '<p>No description available.</p>';
 $highlights   = isset($program['highlights']) && !empty($program['highlights']) ? $program['highlights'] : null;
 $schedule     = isset($program['schedule']) && !empty($program['schedule']) ? $program['schedule'] : null;
 $includes     = isset($program['includes']) && !empty($program['includes']) ? $program['includes'] : null;
@@ -59,8 +63,8 @@ $gallery      = isset($program['gallery']) && !empty($program['gallery']) ? $pro
                     <div class="tab-pane fade show active" id="overview-<?= htmlspecialchars($programId) ?>" role="tabpanel" aria-labelledby="overview-tab-<?= htmlspecialchars($programId) ?>">
                         <?php if ($hasDetails): ?>
                         <div class="row g-3 mb-4 p-3 rounded-lg bg-light">
-                            <?php if ($ages && isset($ages['min']) && isset($ages['max'])): ?>
-                                <div class="col-6 col-md-3 text-center"><i class="bi bi-people-fill text-brand-primary fs-2 mb-2"></i><div class="fw-bold text-dark">Ages <?= $ages['min'] ?>-<?= $ages['max'] ?></div><small class="text-muted">Age Range</small></div>
+                            <?php if ($ages && !empty($ages['min']) && !empty($ages['max'])): ?>
+                                <div class="col-6 col-md-3 text-center"><i class="bi bi-people-fill text-brand-primary fs-2 mb-2"></i><div class="fw-bold text-dark">Ages <?= (int) $ages['min'] ?>-<?= (int) $ages['max'] ?></div><small class="text-muted">Age Range</small></div>
                             <?php endif; ?>
                             <?php if ($duration): ?>
                                 <div class="col-6 col-md-3 text-center"><i class="bi bi-calendar-week-fill text-brand-secondary fs-2 mb-2"></i><div class="fw-bold text-dark"><?= $duration ?> Weeks</div><small class="text-muted">Duration</small></div>

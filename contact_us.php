@@ -40,7 +40,7 @@ require_once __DIR__ . '/includes/header.php';
                 <div class="card-body p-4 p-md-5">
                      <h3 class="card-title mb-4">Send Us a Message</h3>
                     <!-- Form can be enhanced with JS/API later -->
-                    <form id="contactForm" data-form-type="contact">
+                    <form id="contactForm" data-form-type="contact" method="POST" action="/api/submit-contact.php">
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label for="contact-name" class="form-label">Name *</label>
