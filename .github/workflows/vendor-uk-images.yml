@@ -1,0 +1,60 @@
+name: Vendor external images to local WebP
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - feat/uk-academic-programs-reviewed
+    paths:
+      - data/all_programs.php
+      - data/destinations.php
+      - data/programs.php
+      - scripts/vendor_uk_academic_images.py
+      - .github/workflows/vendor-uk-images.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: gocamp-image-vendor-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  vendor:
+    if: github.repository == 'JoethonDev/gocampinternational'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Checkout the triggering branch, never hard-code PR/main/develop.
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install image codecs
+        run: python -m pip install 'Pillow>=11,<13' 'pillow-avif-plugin>=1.5,<2'
+      - name: Vendor referenced CDN images
+        run: python scripts/vendor_uk_academic_images.py
+      - name: Lint affected PHP catalogs
+        run: |
+          php -l data/all_programs.php
+          php -l data/destinations.php
+          php -l data/programs.php
+      - name: Commit assets and local references to the same branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A data/all_programs.php data/destinations.php data/programs.php images/
+          if git diff --cached --quiet; then
+            echo "No external image changes."
+            exit 0
+          fi
+          git commit -m "Vendor CDN images as locally hosted WebP assets"
+          # Reject if a concurrent user edit conflicts; never force push.
+          git fetch origin "${GITHUB_REF_NAME}"
+          git rebase "origin/${GITHUB_REF_NAME}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
