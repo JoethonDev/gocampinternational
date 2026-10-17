@@ -12,7 +12,7 @@ function expect_description(bool $condition, string $message): void {
 
 $richText = '<p class="lead">Medicine &amp; Science</p><p onclick="alert(1)">Learn <strong style="color:red">together</strong>.</p>';
 expect_description(gocamp_description_text($richText) === 'Medicine & Science Learn together.', 'Plain text from CMS paragraphs');
-expect_description(gocamp_description_excerpt($richText, 17) === 'Medicine & Science…', 'UTF-8-safe preview truncation');
+expect_description(gocamp_description_excerpt($richText, 18) === 'Medicine & Science…', 'UTF-8-safe preview truncation');
 $safe = gocamp_description_markup($richText . '<script>alert(2)</script><a href="javascript:alert(3)">Read more</a>');
 expect_description(str_contains($safe, '<strong>together</strong>'), 'Formatting is retained');
 expect_description(!str_contains($safe, 'onclick') && !str_contains($safe, 'style=') && !str_contains($safe, '<script') && !str_contains($safe, 'href='), 'Untrusted HTML attributes and tags are removed');
