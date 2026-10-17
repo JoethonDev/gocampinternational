@@ -997,4 +997,642 @@ $all_programs = array (
       2 => '/images/Winter-day-camps-zip-line-2.webp',
     ),
   ),
+  'uk-academic-architecture' => array (
+    'order' => 1,
+    'id' => 'uk-academic-architecture',
+    'category_slug' => 'adult-academic',
+    'name' => 'Architecture',
+    'tagline' => 'Academic Insights summer course',
+    'image' => 'https://cdn.prod.website-files.com/689f009387b6b6b947c8a835/691dbacd025ec3a64c0d5b7d_Programme_1_Architecture-Summer-Programme-in-Cambridge-.jpg.avif',
+    'ages' => array (
+      'min' => 13,
+      'max' => 15,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Explore architectural design principles, building techniques, and hands-on design projects.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'active',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-artificial-intelligence' => array (
+    'order' => 2,
+    'id' => 'uk-academic-artificial-intelligence',
+    'category_slug' => 'adult-academic',
+    'name' => 'Artificial Intelligence',
+    'tagline' => 'Academic Insights summer course',
+    'image' => 'https://cdn.prod.website-files.com/689f009387b6b6b947c8a835/691dbacf7a014d5d869a77b5_Programme-_1_-Artificial-Intelligence-Oxford--1024x683.avif',
+    'ages' => array (
+      'min' => 16,
+      'max' => 18,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Discover machine learning, algorithms, AI applications, and their impact on society.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'active',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-biology' => array (
+    'order' => 3,
+    'id' => 'uk-academic-biology',
+    'category_slug' => 'adult-academic',
+    'name' => 'Biology',
+    'tagline' => 'Academic Insights summer course',
+    'image' => 'https://cdn.prod.website-files.com/689f009387b6b6b947c8a835/691dbad298c1ab2eddb0640e_Programme-_1_-Biology_Cambridge-.jpg.avif',
+    'ages' => array (
+      'min' => 16,
+      'max' => 18,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Investigate genetics, ecology, human biology, and scientific methods in the life sciences.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'inactive',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-biotechnology' => array (
+    'order' => 4,
+    'id' => 'uk-academic-biotechnology',
+    'category_slug' => 'adult-academic',
+    'name' => 'Biotechnology',
+    'tagline' => 'Academic Insights summer course',
+    'image' => 'https://cdn.prod.website-files.com/689f009387b6b6b947c8a835/691dbad3c03bfbc353c22f2c_Banner-1_Biotechnology-_Cambridge-.jpg.avif',
+    'ages' => array (
+      'min' => 16,
+      'max' => 18,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Examine how biotechnology applies biological science to medicine, agriculture, and the environment.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'inactive',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-business-management' => array (
+    'order' => 5,
+    'id' => 'uk-academic-business-management',
+    'category_slug' => 'adult-academic',
+    'name' => 'Business Management',
+    'tagline' => 'Academic Insights summer course',
+    'image' => 'https://cdn.prod.website-files.com/689f009387b6b6b947c8a835/691dbad428b872fc9feea8c0_Programme_1-Business-Management-Cambridge--e1745434967628.jpg.avif',
+    'ages' => array (
+      'min' => 13,
+      'max' => 15,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Learn the foundations of business strategy, management principles, and practical business decision-making.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'active',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-chemistry' => array (
+    'order' => 6,
+    'id' => 'uk-academic-chemistry',
+    'category_slug' => 'adult-academic',
+    'name' => 'Chemistry',
+    'tagline' => 'Academic Insights summer course',
+    'image' => 'https://cdn.prod.website-files.com/689f009387b6b6b947c8a835/691dbada446d99dfa9cb7b60_Programme_1-Chemistry-Oxford-.jpg.avif',
+    'ages' => array (
+      'min' => 16,
+      'max' => 18,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Study organic and inorganic chemistry, chemical reactions, and the principles behind modern chemistry.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'inactive',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-computer-science' => array (
+    'order' => 7,
+    'id' => 'uk-academic-computer-science',
+    'category_slug' => 'adult-academic',
+    'name' => 'Computer Science',
+    'tagline' => 'Academic Insights summer course',
+    'image' => 'https://cdn.prod.website-files.com/689f009387b6b6b947c8a835/691dbadc4d5c7deb10f8d0fa_Programme_1-Computer-Science-Oxford-.jpg.avif',
+    'ages' => array (
+      'min' => 13,
+      'max' => 15,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Build computational-thinking, programming, and problem-solving skills through introductory computing.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'active',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-creative-writing' => array (
+    'order' => 8,
+    'id' => 'uk-academic-creative-writing',
+    'category_slug' => 'adult-academic',
+    'name' => 'Creative Writing',
+    'tagline' => 'Academic Insights summer course',
+    'image' => 'https://cdn.prod.website-files.com/689f009387b6b6b947c8a835/6a0f001802f99458ddfc7411_Programme_2-Creative-Writing-Oxford-.jpg.avif',
+    'ages' => array (
+      'min' => 13,
+      'max' => 15,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Develop storytelling skills and a writing voice through fiction, poetry, and other creative forms.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'inactive',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-criminology' => array (
+    'order' => 9,
+    'id' => 'uk-academic-criminology',
+    'category_slug' => 'adult-academic',
+    'name' => 'Criminology',
+    'tagline' => 'Academic Insights summer course',
+    'image' => 'https://cdn.prod.website-files.com/689f009387b6b6b947c8a835/691dbae13fc0e2875988719c_Programme_1_Criminology-Oxford-1-1024x589.jpg.avif',
+    'ages' => array (
+      'min' => 16,
+      'max' => 18,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Explore criminal behaviour, justice systems, and social issues through discussion and analysis.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'inactive',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-economics' => array (
+    'order' => 10,
+    'id' => 'uk-academic-economics',
+    'category_slug' => 'adult-academic',
+    'name' => 'Economics',
+    'tagline' => 'Academic Insights summer course',
+    'image' => 'https://cdn.prod.website-files.com/689f009387b6b6b947c8a835/691dbae2c53dc76be6885106_Programme_2-Economics-Cambridge-.jpg.avif',
+    'ages' => array (
+      'min' => 13,
+      'max' => 18,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Investigate markets, supply and demand, trade, economic policy, and analytical reasoning.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'active',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-engineering' => array (
+    'order' => 11,
+    'id' => 'uk-academic-engineering',
+    'category_slug' => 'adult-academic',
+    'name' => 'Engineering',
+    'tagline' => 'Academic Insights summer course',
+    'image' => 'https://cdn.prod.website-files.com/689f009387b6b6b947c8a835/6a0d7c4b7c225a084384910a_Programme_1_Engineering-London-1-1024x700.jpg.avif',
+    'ages' => array (
+      'min' => 13,
+      'max' => 18,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Explore engineering design and problem-solving across mechanical, civil, and electrical disciplines.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'active',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-english-literature' => array (
+    'order' => 12,
+    'id' => 'uk-academic-english-literature',
+    'category_slug' => 'adult-academic',
+    'name' => 'English Literature',
+    'tagline' => 'Academic Insights summer course',
+    'image' => 'https://cdn.prod.website-files.com/689f009387b6b6b947c8a835/691dbaebbd8188ca830615d7_Programme_1-English-Literature-Cambridge-.jpg.avif',
+    'ages' => array (
+      'min' => 16,
+      'max' => 18,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Analyse classic and modern literary works while strengthening interpretation and critical discussion.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'inactive',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-history' => array (
+    'order' => 13,
+    'id' => 'uk-academic-history',
+    'category_slug' => 'adult-academic',
+    'name' => 'History',
+    'tagline' => 'Academic Insights summer course',
+    'image' => 'https://cdn.prod.website-files.com/689f009387b6b6b947c8a835/691dbaf00fa055b871aff911_Programme_1-History-Oxford-1.jpg.avif',
+    'ages' => array (
+      'min' => 16,
+      'max' => 18,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Study influential historical events, people, and movements through research and critical analysis.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'inactive',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-international-relations' => array (
+    'order' => 14,
+    'id' => 'uk-academic-international-relations',
+    'category_slug' => 'adult-academic',
+    'name' => 'International Relations',
+    'tagline' => 'Academic Insights summer course',
+    'image' => 'https://cdn.prod.website-files.com/689f009387b6b6b947c8a835/691dbaf13106a6fe8a3b7ac3_Programme_1-International-Relat.jpg.avif',
+    'ages' => array (
+      'min' => 13,
+      'max' => 18,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Examine global politics, diplomacy, international law, and conflict resolution.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'inactive',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-law' => array (
+    'order' => 15,
+    'id' => 'uk-academic-law',
+    'category_slug' => 'adult-academic',
+    'name' => 'Law',
+    'tagline' => 'Academic Insights summer course',
+    'image' => 'https://cdn.prod.website-files.com/689f009387b6b6b947c8a835/691dbaf8261268705e800796_Programme_1-Law-Summer-Programm.jpg.avif',
+    'ages' => array (
+      'min' => 13,
+      'max' => 18,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Discover legal systems and judicial principles while developing structured legal reasoning.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'inactive',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-mathematics' => array (
+    'order' => 16,
+    'id' => 'uk-academic-mathematics',
+    'category_slug' => 'adult-academic',
+    'name' => 'Mathematics',
+    'tagline' => 'Academic Insights summer course',
+    'image' => 'https://cdn.prod.website-files.com/689f009387b6b6b947c8a835/691dbafbe7d2951439a57353_Programme_1-Mathematics-Cambridge.jpg.avif',
+    'ages' => array (
+      'min' => 15,
+      'max' => 18,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Strengthen mathematical reasoning through algebra, calculus, statistics, and problem-solving.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'inactive',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-medicine' => array (
+    'order' => 17,
+    'id' => 'uk-academic-medicine',
+    'category_slug' => 'adult-academic',
+    'name' => 'Medicine',
+    'tagline' => 'Academic Insights summer course',
+    'image' => 'https://cdn.prod.website-files.com/689f009387b6b6b947c8a835/6a0c38f066d265dc0b702051_Programme_2_Medicine-Cambridge.jpg.avif',
+    'ages' => array (
+      'min' => 13,
+      'max' => 18,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Explore anatomy, biomedical science, healthcare practice, and medical decision-making.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'active',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-natural-sciences' => array (
+    'order' => 18,
+    'id' => 'uk-academic-natural-sciences',
+    'category_slug' => 'adult-academic',
+    'name' => 'Natural Sciences',
+    'tagline' => 'Academic Insights summer course',
+    'image' => 'https://cdn.prod.website-files.com/689f009387b6b6b947c8a835/691dbb01a70234789514b70b_Programme_1_Natural-Sciences-Cambridge.jpg.avif',
+    'ages' => array (
+      'min' => 13,
+      'max' => 15,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Discover the links between biology, chemistry, and physics through interdisciplinary scientific study.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'inactive',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-philosophy-politics-and-economics' => array (
+    'order' => 19,
+    'id' => 'uk-academic-philosophy-politics-and-economics',
+    'category_slug' => 'adult-academic',
+    'name' => 'Philosophy, Politics and Economics',
+    'tagline' => 'Academic Insights summer course',
+    'image' => 'https://cdn.prod.website-files.com/689f009387b6b6b947c8a835/691dbb02925d7372f05753e9_Programme_1_Philosophy-Cambridge-1.jpg.avif',
+    'ages' => array (
+      'min' => 16,
+      'max' => 18,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Connect major ideas in philosophy, political thought, and economics through critical analysis.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'inactive',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-physics' => array (
+    'order' => 20,
+    'id' => 'uk-academic-physics',
+    'category_slug' => 'adult-academic',
+    'name' => 'Physics',
+    'tagline' => 'Academic Insights summer course',
+    'image' => 'https://cdn.prod.website-files.com/689f009387b6b6b947c8a835/691dbb03e8e610e43496b9dc_Programme_1_Physics-Cambridge-.jpg.avif',
+    'ages' => array (
+      'min' => 13,
+      'max' => 18,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Investigate the laws of physics, from mechanics and forces to modern physical theory.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'inactive',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-psychology' => array (
+    'order' => 21,
+    'id' => 'uk-academic-psychology',
+    'category_slug' => 'adult-academic',
+    'name' => 'Psychology',
+    'tagline' => 'Academic Insights summer course',
+    'image' => 'https://cdn.prod.website-files.com/689f009387b6b6b947c8a835/691dbb04c6b5514ad83baa46_Programme_1_Psychology-Cambridge.jpg.avif',
+    'ages' => array (
+      'min' => 13,
+      'max' => 18,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Explore cognition, emotion, human behaviour, and methods used in psychological research.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'inactive',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-veterinary-studies' => array (
+    'order' => 22,
+    'id' => 'uk-academic-veterinary-studies',
+    'category_slug' => 'adult-academic',
+    'name' => 'Veterinary Studies',
+    'tagline' => 'Academic Insights summer course',
+    'image' => 'https://cdn.prod.website-files.com/689f009387b6b6b947c8a835/691dbb0a15c5edfbfaeb48ba_Programme_1_Veterinary-Sydney.jpg.avif',
+    'ages' => array (
+      'min' => 15,
+      'max' => 18,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Learn introductory principles of veterinary medicine, animal care, and animal welfare.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'inactive',
+    'gallery' => array (
+    ),
+  ),
 );
