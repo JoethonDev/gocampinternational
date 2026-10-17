@@ -10,6 +10,7 @@
 // 1. AT THE VERY TOP: Check if user is logged in
 require_once 'auth-check.php';
 require_once 'helpers.php';
+require_once __DIR__ . '/../includes/section-visibility.php';
 
 // 2. Define file path and load data
 $file_path = __DIR__ . '/../data/all_programs.php';
@@ -90,6 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $new_data['color'] = $_POST['color'] ?? 'primary';
             $new_data['description'] = $_POST['description'] ?? '';
             $new_data['status'] = $_POST['status'] ?? 'active';
+            $new_data['section_visibility'] = gocamp_read_visibility($_POST['section_visibility'] ?? [], 'program', $new_data['section_visibility'] ?? []);
             // Gallery - Reads from text input `gallery_path[]` populated by modal
             $new_data['gallery'] = array_values(array_filter($_POST['gallery_path'] ?? []));
 
@@ -223,6 +225,7 @@ require_once 'includes/admin-header.php';
 
 <form action="edit-program.php<?= $is_new_item ? '' : '?id=' . htmlspecialchars($data['id']) ?>" method="POST" enctype="multipart/form-data" class="animate-fade-in delay-1">
 <input type="hidden" name="csrf" value="<?= htmlspecialchars(csrf_token()) ?>">
+<?php $visibilityEntity = "program"; $visibilityRecord = $data; require __DIR__ . "/includes/visibility-controls.php"; ?>
 
     <?php if (!$is_new_item): ?>
         <input type="hidden" name="original_id" value="<?= htmlspecialchars($data['id']) ?>">
