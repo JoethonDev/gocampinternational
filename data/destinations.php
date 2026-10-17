@@ -52,6 +52,7 @@ $destinations = array (
     ),
     'gallery' => 
     array (
+      0 => '/images/53795_12d48e8ce0e31dc1.webp',
     ),
     'program_ids' => 
     array (
@@ -100,6 +101,7 @@ $destinations = array (
     ),
     'gallery' => 
     array (
+      0 => '/images/599389_484906048191135_693827616_n_f7da433507459ea3.webp',
     ),
     'program_ids' => 
     array (
@@ -264,6 +266,7 @@ $destinations = array (
     ),
     'gallery' => 
     array (
+      0 => '/images/53796_759c92161983887e.webp',
     ),
     'faq' => 
     array (
