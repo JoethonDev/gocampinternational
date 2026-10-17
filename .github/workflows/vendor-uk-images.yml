@@ -5,7 +5,6 @@ on:
       - main
       - develop
       - feat/uk-academic-programs-reviewed
-      - feat/uk-academics-tennis-soccer-20261017
     paths:
       - data/all_programs.php
       - data/destinations.php
@@ -37,8 +36,6 @@ jobs:
       - name: Install image codecs
         run: python -m pip install 'Pillow>=11,<13' 'pillow-avif-plugin>=1.5,<2'
       - name: Vendor referenced CDN images
-        env:
-          IMAGE_IMPORT_EXTRA_HOSTS: framerusercontent.com
         run: python scripts/vendor_uk_academic_images.py
       - name: Lint affected PHP catalogs
         run: |
