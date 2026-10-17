@@ -1,0 +1,183 @@
+#!/usr/bin/env python3
+"""One-shot reviewed UK catalog migration for InfinityFree development only.
+
+prepare: securely download runtime PHP catalogs, merge only reviewed records,
+         and create an encrypted rollback archive for GitHub Actions artifacts.
+apply:   verify downloaded live content is unchanged, upload staged catalogs,
+         roll back on any error, then store a harmless completion marker.
+Do not copy credentials, backup contents, or runtime data into logs.
+"""
+from __future__ import annotations
+
+from ftplib import FTP_TLS, error_perm
+from io import BytesIO
+import hashlib
+import json
+import os
+from pathlib import Path
+import secrets
+import ssl
+import subprocess
+import sys
+import tarfile
+
+FILES = ("all_programs.php", "programs.php", "destinations.php")
+MARKER = "/htdocs/.gocamp-uk-catalog-migrated-20261017"
+DIRECTORY = "/htdocs/data"
+MAX_FILE = 5 * 1024 * 1024
+WORK = Path(os.environ.get("RUNNER_TEMP", "/tmp")) / "gocamp-uk-catalog"
+ROOT = Path(__file__).resolve().parents[1]
+MIGRATOR = ROOT / "deploy" / "migrations" / "apply-uk-catalog.php"
+AAD = b"GoCamp development catalog 2026-10-17"
+
+
+def connect() -> FTP_TLS:
+    user = os.environ.get("INFINITYFREE_FTP_USERNAME")
+    password = os.environ.get("INFINITYFREE_FTP_PASSWORD")
+    host = os.environ.get("INFINITYFREE_FTP_HOST", "ftpupload.net")
+    if not user or not password or host != "ftpupload.net":
+        raise RuntimeError("Missing InfinityFree development FTPS secrets or unexpected FTP host")
+    context = ssl.create_default_context()
+    context.minimum_version = ssl.TLSVersion.TLSv1_2
+    ftp = FTP_TLS(context=context, timeout=50)
+    ftp.connect(host, int(os.environ.get("INFINITYFREE_FTP_PORT", "21")))
+    ftp.login(user, password)
+    ftp.prot_p()
+    ftp.set_pasv(True)
+    return ftp
+
+
+def remote_get(ftp: FTP_TLS, path: str) -> bytes:
+    data = bytearray()
+
+    def collect(block: bytes) -> None:
+        data.extend(block)
+        if len(data) > MAX_FILE:
+            raise RuntimeError("Oversized remote catalog; aborting")
+
+    ftp.retrbinary("RETR " + path, collect)
+    return bytes(data)
+
+
+def marker_exists(ftp: FTP_TLS) -> bool:
+    try:
+        data = remote_get(ftp, MARKER)
+    except error_perm as exc:
+        if str(exc).startswith("550"):
+            return False
+        raise
+    if data != b"uk-catalog-20261017\n":
+        raise RuntimeError("Unexpected migration marker contents; manual review required")
+    return True
+
+
+def store(ftp: FTP_TLS, path: str, data: bytes) -> None:
+    ftp.storbinary("STOR " + path, BytesIO(data), blocksize=256 * 1024)
+
+
+def encrypt_backup(originals: dict[str, bytes], password: str) -> bytes:
+    # Public GitHub repositories should NEVER publish unencrypted FTP snapshots.
+    from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+
+    plain = BytesIO()
+    with tarfile.open(fileobj=plain, mode="w:gz") as archive:
+        for name, content in originals.items():
+            info = tarfile.TarInfo(name=name)
+            info.size = len(content)
+            info.mode = 0o600
+            archive.addfile(info, BytesIO(content))
+    salt = secrets.token_bytes(16)
+    nonce = secrets.token_bytes(12)
+    key = hashlib.pbkdf2_hmac("sha256", password.encode("utf-8"), salt, 500_000, dklen=32)
+    return b"GOCAMPFTPS1" + salt + nonce + AESGCM(key).encrypt(nonce, plain.getvalue(), AAD)
+
+
+def prepare() -> None:
+    live = WORK / "live"
+    stage = WORK / "staged"
+    live.mkdir(parents=True, exist_ok=True)
+    stage.mkdir(parents=True, exist_ok=True)
+    with connect() as ftp:
+        if marker_exists(ftp):
+            (WORK / "skip").write_text("already-applied", encoding="ascii")
+            print("Reviewed UK catalog migration already applied; no changes made.")
+            return
+        originals = {}
+        for name in FILES:
+            contents = remote_get(ftp, DIRECTORY + "/" + name)
+            originals[name] = contents
+            (live / name).write_bytes(contents)
+    proc = subprocess.run(["php", str(MIGRATOR), str(ROOT), str(live), str(stage)],
+                          check=True, capture_output=True, text=True)
+    plan = json.loads(proc.stdout.strip())
+    changed = plan["changed"]
+    if not set(changed).issubset(FILES):
+        raise RuntimeError("Unexpected migration output paths")
+    for name in changed:
+        subprocess.run(["php", "-l", str(stage / name)], check=True,
+                       capture_output=True, text=True)
+    hashes = {name: hashlib.sha256(blob).hexdigest() for name, blob in originals.items()}
+    (WORK / "manifest.json").write_text(json.dumps({"changed": changed, "hashes": hashes}), encoding="utf-8")
+    (WORK / "backup.enc").write_bytes(encrypt_backup(originals, os.environ["INFINITYFREE_FTP_PASSWORD"]))
+    print(f"Reviewed development catalog merge prepared: {len(changed)} data file(s) changed. "
+          "An encrypted rollback artifact must be saved before applying. "
+          "Other admin-edited content remains intact.")
+
+
+def apply() -> None:
+    if (WORK / "skip").exists():
+        print("Catalog migration previously completed; no upload.")
+        return
+    manifest = json.loads((WORK / "manifest.json").read_text(encoding="utf-8"))
+    changed = manifest["changed"]
+    originals = {name: (WORK / "live" / name).read_bytes() for name in FILES}
+    stage = {name: (WORK / "staged" / name).read_bytes() for name in changed}
+    if not (WORK / "backup.enc").is_file():
+        raise RuntimeError("Missing encrypted rollback backup; refusing to upload")
+    with connect() as ftp:
+        if marker_exists(ftp):
+            print("Migration already applied in another run; skipping.")
+            return
+        # Avoid overwriting changes an admin made after preparation.
+        for name in FILES:
+            current = remote_get(ftp, DIRECTORY + "/" + name)
+            digest = hashlib.sha256(current).hexdigest()
+            if digest != manifest["hashes"][name]:
+                raise RuntimeError("Admin data changed during migration: " + name + ". No files uploaded.")
+        touched = []
+        try:
+            for name in changed:
+                touched.append(name)  # Includes an interrupted STOR for rollback.
+                store(ftp, DIRECTORY + "/" + name, stage[name])
+                if hashlib.sha256(remote_get(ftp, DIRECTORY + "/" + name)).digest() != hashlib.sha256(stage[name]).digest():
+                    raise RuntimeError("Uploaded catalog verification failed for " + name)
+            store(ftp, MARKER, b"uk-catalog-20261017\n")
+        except Exception:
+            restored = []
+            for name in reversed(touched):
+                try:
+                    store(ftp, DIRECTORY + "/" + name, originals[name])
+                    restored.append(name)
+                except Exception as rollback_error:
+                    print(f"URGENT: automatic rollback failed for {name}: {type(rollback_error).__name__}",
+                          file=sys.stderr)
+            print(f"Migration failed; restored {len(restored)} of {len(touched)} touched files.",
+                  file=sys.stderr)
+            raise
+    print(f"Applied and verified {len(changed)} reviewed catalog changes on InfinityFree development. "
+          "One-time migration marker written; production remains untouched.")
+
+
+def main() -> None:
+    if len(sys.argv) != 2 or sys.argv[1] not in ("prepare", "apply"):
+        raise SystemExit("Usage: python apply-uk-content-migration.py prepare|apply")
+    {"prepare": prepare, "apply": apply}[sys.argv[1]]()
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except (OSError, RuntimeError, ValueError, subprocess.CalledProcessError,
+            error_perm, json.JSONDecodeError) as exc:
+        print("Development catalog migration blocked: " + str(exc).splitlines()[0], file=sys.stderr)
+        sys.exit(1)
