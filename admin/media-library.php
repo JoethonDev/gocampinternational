@@ -37,6 +37,21 @@ if ($query !== '') {
     $images = array_values(array_filter($images, static fn(array $file): bool => stripos($file['name'], $query) !== false));
 }
 
+$totalImages = count($images);
+$perPage = 24;
+$totalPages = max(1, (int)ceil($totalImages / $perPage));
+$page = max(1, (int)($_GET['page'] ?? 1));
+$page = min($page, $totalPages);
+$offset = ($page - 1) * $perPage;
+$images = array_slice($images, $offset, $perPage);
+
+function media_library_page_url(int $targetPage, string $filter, string $query): string {
+    $params = ['page' => $targetPage];
+    if ($filter !== 'all') $params['folder'] = $filter;
+    if ($query !== '') $params['q'] = $query;
+    return '/admin/media-library?' . http_build_query($params);
+}
+
 $pageTitle = 'Image Library';
 require_once __DIR__ . '/includes/admin-header.php';
 ?>
@@ -46,7 +61,7 @@ require_once __DIR__ . '/includes/admin-header.php';
         <h1 class="h2 fw-bold mb-1"><i class="bi bi-images me-2"></i>Image Library</h1>
         <p class="text-muted mb-0">View uploaded and site images, then rename them without breaking saved program or destination references.</p>
     </div>
-    <span class="badge bg-secondary rounded-pill fs-6"><?= count($images) ?> images</span>
+    <span class="badge bg-secondary rounded-pill fs-6"><?= $totalImages ?> images</span>
 </div>
 
 <?php if ($notice): ?>
@@ -139,6 +154,36 @@ require_once __DIR__ . '/includes/admin-header.php';
         </div>
     <?php endforeach; ?>
 </div>
+
+<?php if ($totalPages > 1): ?>
+<nav class="mt-4" aria-label="Image library pages">
+    <ul class="pagination justify-content-center flex-wrap">
+        <li class="page-item <?= $page <= 1 ? 'disabled' : '' ?>">
+            <a class="page-link" href="<?= htmlspecialchars(media_library_page_url(max(1, $page - 1), $filter, $query), ENT_QUOTES, 'UTF-8') ?>" aria-label="Previous page">&laquo;</a>
+        </li>
+        <?php
+        $startPage = max(1, $page - 2);
+        $endPage = min($totalPages, $page + 2);
+        if ($startPage > 1): ?>
+            <li class="page-item"><a class="page-link" href="<?= htmlspecialchars(media_library_page_url(1, $filter, $query), ENT_QUOTES, 'UTF-8') ?>">1</a></li>
+            <?php if ($startPage > 2): ?><li class="page-item disabled"><span class="page-link">&hellip;</span></li><?php endif; ?>
+        <?php endif; ?>
+        <?php for ($p = $startPage; $p <= $endPage; $p++): ?>
+            <li class="page-item <?= $p === $page ? 'active' : '' ?>">
+                <a class="page-link" href="<?= htmlspecialchars(media_library_page_url($p, $filter, $query), ENT_QUOTES, 'UTF-8') ?>" <?= $p === $page ? 'aria-current="page"' : '' ?>><?= $p ?></a>
+            </li>
+        <?php endfor; ?>
+        <?php if ($endPage < $totalPages): ?>
+            <?php if ($endPage < $totalPages - 1): ?><li class="page-item disabled"><span class="page-link">&hellip;</span></li><?php endif; ?>
+            <li class="page-item"><a class="page-link" href="<?= htmlspecialchars(media_library_page_url($totalPages, $filter, $query), ENT_QUOTES, 'UTF-8') ?>"><?= $totalPages ?></a></li>
+        <?php endif; ?>
+        <li class="page-item <?= $page >= $totalPages ? 'disabled' : '' ?>">
+            <a class="page-link" href="<?= htmlspecialchars(media_library_page_url(min($totalPages, $page + 1), $filter, $query), ENT_QUOTES, 'UTF-8') ?>" aria-label="Next page">&raquo;</a>
+        </li>
+    </ul>
+    <p class="text-center text-muted small">Page <?= $page ?> of <?= $totalPages ?> · showing <?= count($images) ?> of <?= $totalImages ?> images</p>
+</nav>
+<?php endif; ?>
 <?php endif; ?>
 
 <script>
