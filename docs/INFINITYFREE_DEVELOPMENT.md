@@ -15,11 +15,11 @@ Development only. The `develop` branch deploys to InfinityFree over explicit FTP
 - Website: https://gocampinternational.freedev.app/
 - Host: `ftpupload.net`; port `21`; explicit FTPS with certificate validation.
 - Remote directory: `/htdocs/`.
-- Only merges/pushes to `develop` automatically deploy. No production deployment.
+- Only pushes to `develop` run this workflow. By default they check FTPS connectivity WITHOUT uploading until the environment variable below is enabled. No production deployment.
 
 ## First test
 
-Back up existing development runtime content. Once this PR is merged into `develop`, open Actions -> Deploy InfinityFree development (FTPS) -> Run workflow. Choose `develop` and `dry_run=true` to test authentication and directory access without uploading. Then rerun with `dry_run=false` after reviewing the results.
+Back up existing development runtime content. Once this PR is merged into `develop`, the first push-triggered workflow automatically runs as a DRY RUN because auto-deployment is disabled by default. Check its Actions logs for successful FTPS authentication and directory access. In GitHub Settings -> Environments -> infinityfree-development -> Environment variables, add `INFINITYFREE_DEPLOY_ENABLED` with value `true` **only after that dry run succeeds**. Trigger a new push to `develop` (or rerun the workflow from Actions if available) to upload. Later pushes to `develop` deploy automatically. To pause uploads, set the variable back to `false` or delete it. GitHub's manual Run workflow button may only appear when the workflow file also exists on the repository's default branch; the automatic dry-run/enable flow does not depend on that button.
 
 ## Preserved live files
 
