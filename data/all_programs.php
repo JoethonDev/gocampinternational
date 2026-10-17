@@ -998,3 +998,7 @@ $all_programs = array (
     ),
   ),
 );
+
+// Inactive academic course drafts imported from Immerse Education.
+// Admin saves may flatten this include into the generated master array.
+$all_programs += require __DIR__ . '/immerse_academic_programs.php';
