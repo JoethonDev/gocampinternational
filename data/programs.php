@@ -102,7 +102,7 @@ $programs = array (
     'name' => 'Adult Academic Programs',
     'slug' => 'adult-academic',
     'banner' => '/images/cambridge_banner.webp',
-    'intro' => 'Our UK programs are designed for a range of ages and goals, from classic English tuition and exam preparation to specialized academic courses.',
+    'intro' => '<p>Our UK programs are designed for a range of ages and goals, from classic English tuition and exam preparation to specialized academic courses.</p>\n<p>Academic summer school is tailored to inspire a lifelong love of learning and equip students with the skills and knowledge needed for future academic success.</p>\n<p>Students can anticipate a transformative and intellectually enriching experience. Throughout the course, students can engage in stimulating lectures and seminars led by expert tutors and industry professionals, gaining insights into their chosen subjects.</p>\n<p>The curriculum blends theoretical knowledge with practical applications, encouraging critical thinking and problem-solving. Beyond the classroom, students can connect with like-minded peers from around the world in a collaborative learning environment.</p>',
     'intro_image' => '/images/inner_england_.webp',
     'sections' => 
     array (
