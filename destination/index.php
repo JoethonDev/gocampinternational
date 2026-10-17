@@ -115,52 +115,8 @@ require_once __DIR__ . '/../includes/header.php';
         }
     }
 
-        <?php /*
-        // Original Gallery section logic
-        $hasGalleryImages = false;
-        if (!empty($destinationData['program_ids'])) {
-            foreach ($destinationData['program_ids'] as $program_id) {
-                if (isset($all_programs[$program_id]) && $all_programs[$program_id]['status'] === 'active') {
-                    $program = $all_programs[$program_id];
-                    $gallery = $program['gallery'] ?? [];
-                    if (!empty($gallery)) {
-                        $hasGalleryImages = true;
-                        break;
-                    }
-                }
-            }
-        }
-        if ($hasGalleryImages && gocamp_entity_section_visible($destinationData, "destination", "gallery")) : ?>
-        <section class="section-padding bg-white" id="destination-gallery">
-            <div class="container">
-                <div class="text-center mb-5">
-                    <h2 class="display-5 fw-bold text-brand-dark mb-3">Gallery: <?= htmlspecialchars($destinationData['name']) ?></h2>
-                    <p class="lead text-muted mb-0">Photos grouped by program</p>
-                </div>
-                <div class="row g-5">
-                    <?php
-                    foreach ($destinationData['program_ids'] as $program_id) {
-                        if (isset($all_programs[$program_id]) && $all_programs[$program_id]['status'] === 'active') {
-                            $program = $all_programs[$program_id];
-                            $gallery = $program['gallery'] ?? [];
-                            if (!empty($gallery)) {
-                                echo '<div class="col-12 mb-4">';
-                                echo '<h3 class="fw-bold mb-3 text-brand-secondary">' . htmlspecialchars($program['name']) . '</h3>';
-                                echo '<div class="row g-2">';
-                                foreach ($gallery as $img) {
-                                    echo '<div class="col-6 col-md-3 mb-2"><img src="' . htmlspecialchars($img) . '" alt="' . htmlspecialchars($program['name']) . ' photo" class="img-fluid rounded shadow-sm w-100" style="object-fit:cover;max-height:180px;" loading="lazy"></div>';
-                                }
-                                echo '</div>';
-                                echo '</div>';
-                            }
-                        }
-                    }
-                    ?>
-                </div>
-            </div>
-        </section>
-        <?php endif; ?>
-        */ ?>
+    ?>
+
         <?php
         // Only show Gallery section if there are any images in any program
         $hasGalleryImages = false;
@@ -176,7 +132,7 @@ require_once __DIR__ . '/../includes/header.php';
                 }
             }
         }
-        if ($hasGalleryImages) : ?>
+        if ($hasGalleryImages && gocamp_entity_section_visible($destinationData, "destination", "gallery")) : ?>
         <section class="section-padding bg-white" id="destination-gallery">
             <div class="container">
                 <div class="text-center mb-5">
