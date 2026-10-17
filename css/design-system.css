@@ -364,8 +364,8 @@ textarea { resize: vertical; }
 /* Wide Bootstrap gutters exceed the 12–16px container padding below 1200px
    (especially g-5/gx-lg-5); keep rows fully inside their containers. */
 @media (max-width: 1199.98px) {
-  .page-content .row.g-5,
-  .page-content .row.gx-lg-5 {
+  #main-content .row.g-5,
+  #main-content .row.gx-lg-5 {
     --bs-gutter-x: 1.5rem;
   }
 }
@@ -380,7 +380,7 @@ textarea { resize: vertical; }
 .page-content .fb-page,
 .page-content .fb_iframe_widget { min-width: 0; display: block; }
 @media (max-width: 767.98px) {
-  .page-content .row.g-5, .page-content .row.gx-lg-5 {
+  #main-content .row.g-5, #main-content .row.gx-lg-5 {
     --bs-gutter-x: 1.25rem;
   }
 }
