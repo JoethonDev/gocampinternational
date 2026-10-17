@@ -88,5 +88,29 @@
             </div>
         </div>
     </div>
-    </body>
+    <script>
+document.addEventListener('click', function (event) {
+  const link = event.target.closest('a[href*="/admin/item-action"]');
+  if (!link) return;
+  const url = new URL(link.href, window.location.href);
+  if (!['/admin/item-action', '/admin/item-action.php'].includes(url.pathname)) return;
+  event.preventDefault();
+  const form = document.createElement('form');
+  form.method = 'POST';
+  form.action = '/admin/item-action.php';
+  for (const key of ['action', 'type', 'slug', 'file']) {
+    if (!url.searchParams.has(key)) continue;
+    const input = document.createElement('input');
+    input.type = 'hidden'; input.name = key; input.value = url.searchParams.get(key);
+    form.appendChild(input);
+  }
+  const token = document.createElement('input');
+  token.type = 'hidden'; token.name = 'csrf';
+  token.value = document.querySelector('meta[name="csrf-token"]')?.content || '';
+  form.appendChild(token);
+  document.body.appendChild(form);
+  form.submit();
+});
+</script>
+</body>
 </html>
