@@ -16,7 +16,8 @@ require_once __DIR__ . '/../init.php';
 // 2. Or, create a temporary PHP file with: echo password_hash('YourSecurePassword', PASSWORD_DEFAULT);
 // 3. Paste the resulting hash string below.
 $ADMIN_USERNAME = 'admin';
-$ADMIN_PASSWORD_HASH = '$2a$16$lf4CcujFKAt8bqe5fbaYz.ZZT6qjMoW982hqDEC9LxaJ9a.L9cNdK'; // Default: 'Zeinab2025$#@'
+// NOTE: bcrypt cost 12 (~200-300ms per verify). Previous cost-16 hash took 4-6s on password_verify — do NOT raise cost above 12 on this hosting.
+$ADMIN_PASSWORD_HASH = '$2y$12$RndybMoz7OfG8YfN3bcvaud7vGPQOH5ud41KNddcNpd498pbilLaG'; // Default: 'Zeinab2025$#@'
 
 // --- LOGIC ---
 $error_message = '';
@@ -30,8 +31,12 @@ $error_message = '';
 // --- ADMIN ROUTING FOR LOGGED-IN USERS ---
 if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] === true) {
     // Route to admin pages if user is logged in
-    $requestUri = $_SERVER['REQUEST_URI'];
+    $requestUri = $_SERVER['REQUEST_URI'] ?? '/admin';
     $path = trim(parse_url($requestUri, PHP_URL_PATH), '/');
+    // Normalize: accept both /admin/dashboard and legacy /admin/dashboard.php links.
+    if (str_ends_with($path, '.php')) {
+        $path = substr($path, 0, -4);
+    }
 
     if ($path === 'admin/dashboard') {
         include __DIR__ . '/dashboard.php';
@@ -49,6 +54,14 @@ if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] === true) {
         include __DIR__ . '/trash.php';
         exit;
     }
+    if ($path === 'admin/inquiries') {
+        include __DIR__ . '/inquiries.php';
+        exit;
+    }
+    if ($path === 'admin/view-inquiry') {
+        include __DIR__ . '/view-inquiry.php';
+        exit;
+    }
     // Handle admin edit pages with query parameters
     if (preg_match('/^admin\/(edit-destination|edit-program|edit-program-category|edit-faq|item-action)$/', $path)) {
         $page = basename($path);
@@ -56,27 +69,73 @@ if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] === true) {
         exit;
     }
     // Default: redirect to dashboard if logged in and on /admin
-    if ($path === 'admin' || $path === 'admin/') {
+    // NOTE: $path is trimmed of '/' so it can only ever be 'admin' (never 'admin/').
+    if ($path === 'admin') {
         header('Location: /admin/dashboard');
         exit;
     }
 }
 
+// CSRF token for login form
+if (empty($_SESSION['csrf'])) {
+    $_SESSION['csrf'] = bin2hex(random_bytes(32));
+}
+
 // 2. Check if the form was submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = $_POST['username'] ?? '';
-    $password = $_POST['password'] ?? '';
-
-    // Verify username and password
-    if ($username === $ADMIN_USERNAME && password_verify($password, $ADMIN_PASSWORD_HASH)) {
-        // SUCCESS: Set session and redirect
-        $_SESSION['is_admin'] = true;
-        
-        header('Location: /admin/dashboard');
-        exit;
+    // Rate-limit: block >5 attempts in 10 minutes
+    $attempts = (int)($_SESSION['login_attempts'] ?? 0);
+    $lastAttempt = (int)($_SESSION['last_attempt'] ?? 0);
+    if ($attempts >= 5 && (time() - $lastAttempt) < 600) {
+        $error_message = 'Too many attempts, try again later.';
     } else {
-        // FAILED: Show an error
-        $error_message = 'Invalid username or password.';
+        // Reset counter after window expires
+        if ((time() - $lastAttempt) >= 600) {
+            $attempts = 0;
+            $_SESSION['login_attempts'] = 0;
+        }
+
+        $csrf = $_POST['csrf'] ?? '';
+        if (!is_string($csrf) || !hash_equals((string)($_SESSION['csrf'] ?? ''), $csrf)) {
+            usleep(150000);
+            $_SESSION['login_attempts'] = $attempts + 1;
+            $_SESSION['last_attempt'] = time();
+            $error_message = 'Invalid username or password.';
+        } else {
+            $username = $_POST['username'] ?? '';
+            $password = $_POST['password'] ?? '';
+
+            // Timing-safe username check with early fail (generic error kept)
+            $userOk = is_string($username)
+                && strlen($username) === strlen($ADMIN_USERNAME)
+                && hash_equals($ADMIN_USERNAME, $username);
+            if (!$userOk) {
+                usleep(150000);
+                $_SESSION['login_attempts'] = $attempts + 1;
+                $_SESSION['last_attempt'] = time();
+                $error_message = 'Invalid username or password.';
+            } elseif (password_verify($password, $ADMIN_PASSWORD_HASH)) {
+                // Log if hash should be rotated to current cost (admin should update hash constant)
+                if (password_needs_rehash($ADMIN_PASSWORD_HASH, PASSWORD_BCRYPT, ['cost' => 12])) {
+                    error_log('admin login: ADMIN_PASSWORD_HASH needs rehash to cost 12 — update constant in admin/index.php');
+                }
+                // SUCCESS: Set session and redirect
+                session_regenerate_id(true);
+                $_SESSION['is_admin'] = true;
+                $_SESSION['login_time'] = time();
+                $_SESSION['login_attempts'] = 0;
+                unset($_SESSION['last_attempt']);
+
+                header('Location: /admin/dashboard');
+                exit;
+            } else {
+                usleep(150000);
+                $_SESSION['login_attempts'] = $attempts + 1;
+                $_SESSION['last_attempt'] = time();
+                // FAILED: Show a generic error
+                $error_message = 'Invalid username or password.';
+            }
+        }
     }
 }
 
@@ -141,8 +200,9 @@ $pageTitle = 'Admin Login';
 
     <main class="login-card p-4 p-md-5">
         <form method="POST" action="">
+            <input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['csrf'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
             <div class="text-center mb-4">
-                <img class="mb-4" src="/images/logo.png" alt="Go Camp International" style="height: 60px;">
+                <img class="mb-4" src="/images/logo.webp" alt="Go Camp International" style="height: 60px;">
                 <h1 class="h4 mb-3 fw-bold text-primary">Admin Access</h1>
                 <p class="text-muted small">Please sign in to continue to the dashboard.</p>
             </div>

@@ -17,31 +17,40 @@ if (!isset($destinationData) || !is_array($destinationData) || (isset($destinati
 
 // --- Coming Soon Handling ---
 if (isset($destinationData['status']) && $destinationData['status'] === 'coming-soon') {
-    $pageTitle = 'Coming Soon: ' . htmlspecialchars($destinationData['name']);
+    $pageTitle = 'Coming Soon: ' . ($destinationData['name'] ?? 'Destination');
     $pageDescription = 'This destination will be available soon.';
     require_once __DIR__ . '/../includes/header.php';
-    require_once __DIR__ . '/../includes/navigation.php';
-    echo '<main><div class="container text-center py-5 my-5">';
+    echo '<div class="page-content"><div class="container text-center py-5 my-5">';
     echo '<h1 class="display-3 fw-bold text-brand-primary mb-4">Coming Soon</h1>';
-    echo '<h2 class="mb-3">' . htmlspecialchars($destinationData['name']) . ' is not available yet.</h2>';
+    echo '<h2 class="mb-3">' . htmlspecialchars($destinationData['name'] ?? 'This destination') . ' is not available yet.</h2>';
     echo '<p class="lead text-muted mb-4">Please check back later for updates on this destination.</p>';
     echo '<a href="/" class="btn btn-primary btn-lg"><i class="bi bi-house-door-fill me-2"></i>Go to Homepage</a>';
-    echo '</div></main>';
+    echo '</div></div>';
     require_once __DIR__ . '/../includes/footer.php';
     exit;
 }
 
 require_once __DIR__ . '/../data/all_programs.php';
 
-$pageTitle = 'Go Camp :: ' . htmlspecialchars($destinationData['name']);
-$pageDescription = htmlspecialchars($destinationData['tagline']);
+// Store raw values; header.php escapes on output. Use !empty so empty strings fall back.
+$destinationName = $destinationData['name'] ?? 'Destination';
+$destinationTagline = !empty($destinationData['tagline']) ? $destinationData['tagline'] : 'Discover Your Adventure';
+$destinationBanner = !empty($destinationData['banner']) ? $destinationData['banner'] : '/images/hero.webp';
+$destinationIntro = $destinationData['intro'] ?? '';
+$destinationIntroImage = !empty($destinationData['intro_image']) ? $destinationData['intro_image'] : '/images/placeholder.webp';
+$destinationGallery = $destinationData['gallery'] ?? [];
+$destinationSections = $destinationData['sections'] ?? [];
+$destinationStats = $destinationData['stats'] ?? [];
+$destinationFaq = $destinationData['faq'] ?? [];
 
-// --- Include Header and Navigation ---
+$pageTitle = 'Go Camp :: ' . $destinationName;
+$pageDescription = substr(strip_tags($destinationTagline), 0, 160);
+
+// --- Include Header (header.php already includes navigation.php and opens <main id="main-content">) ---
 require_once __DIR__ . '/../includes/header.php';
-require_once __DIR__ . '/../includes/navigation.php';
 ?>
 
-<main>
+<div class="page-content">
     <?php
     // --- 1. HERO SECTION ---
     require_once __DIR__ . '/../sections/destination-hero.php';
@@ -208,7 +217,7 @@ require_once __DIR__ . '/../includes/navigation.php';
     // --- 6. TESTIMONIALS ---
     require_once __DIR__ . '/../sections/testimonials.php';
     ?>
-</main>
+</div>
 
 <?php
 // --- Include Footer ---

@@ -222,6 +222,7 @@
      */
     handleNavbarScroll: function () {
       const navbar = document.querySelector(".navbar");
+      if (!navbar) return;
       let lastScroll = 0;
 
       window.addEventListener(
@@ -276,14 +277,20 @@
 
     /**
      * Enhance dropdown behavior
+     * Hover-to-open only applies on desktop (>=992px). A resize listener closes
+     * any hover-opened menus when switching to mobile so Bootstrap click-toggle
+     * remains the single source of truth on small screens.
      */
     handleDropdowns: function () {
-      // On desktop, open dropdown on hover
-      if (window.innerWidth >= 992) {
+      const bindHover = () => {
         document.querySelectorAll(".nav-item.dropdown").forEach((dropdown) => {
+          // Avoid double-binding when re-run on resize.
+          if (dropdown.dataset.hoverBound === "true") return;
+          dropdown.dataset.hoverBound = "true";
           let timeout;
 
           dropdown.addEventListener("mouseenter", function () {
+            if (window.innerWidth < 992) return;
             clearTimeout(timeout);
             const dropdownMenu = this.querySelector(".dropdown-menu");
             if (dropdownMenu && !dropdownMenu.classList.contains("show")) {
@@ -292,6 +299,7 @@
           });
 
           dropdown.addEventListener("mouseleave", function () {
+            if (window.innerWidth < 992) return;
             timeout = setTimeout(() => {
               const dropdownMenu = this.querySelector(".dropdown-menu");
               if (dropdownMenu && dropdownMenu.classList.contains("show")) {
@@ -300,7 +308,24 @@
             }, 300);
           });
         });
-      }
+      };
+
+      bindHover();
+
+      // Re-run binding on resize (guarded against duplicates) and close any
+      // open hover menus when crossing below the desktop breakpoint.
+      let resizeTimer;
+      window.addEventListener("resize", () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+          bindHover();
+          if (window.innerWidth < 992) {
+            document
+              .querySelectorAll(".nav-item.dropdown .dropdown-menu.show")
+              .forEach((menu) => menu.classList.remove("show"));
+          }
+        }, 200);
+      });
     },
   };
 
@@ -358,7 +383,8 @@
 
             // Close modal after 2 seconds
             setTimeout(() => {
-              const modal = bootstrap.Modal.getInstance(
+              if (!window.bootstrap) return;
+              const modal = window.bootstrap.Modal.getInstance(
                 document.getElementById("ctaModal")
               );
               if (modal) modal.hide();
@@ -827,21 +853,23 @@
 
     /**
      * Add enhancements to Bootstrap carousels
+     * Guarded: silently skips when Bootstrap JS is not loaded.
      */
     enhanceCarousels: function () {
+      if (!window.bootstrap || !window.bootstrap.Carousel) return;
       document.querySelectorAll(".carousel").forEach((carousel) => {
         // Pause carousel on hover
         carousel.addEventListener("mouseenter", function () {
-          bootstrap.Carousel.getInstance(this)?.pause();
+          window.bootstrap.Carousel.getInstance(this)?.pause();
         });
 
         carousel.addEventListener("mouseleave", function () {
-          bootstrap.Carousel.getInstance(this)?.cycle();
+          window.bootstrap.Carousel.getInstance(this)?.cycle();
         });
 
         // Add keyboard navigation
         carousel.addEventListener("keydown", function (e) {
-          const instance = bootstrap.Carousel.getInstance(this);
+          const instance = window.bootstrap.Carousel.getInstance(this);
           if (!instance) return;
 
           if (e.key === "ArrowLeft") {

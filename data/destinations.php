@@ -10,9 +10,9 @@ $destinations = array (
     'name' => 'Italy',
     'slug' => 'italy',
     'status' => 'active',
-    'banner' => '/images/it_banner_new.jpg',
+    'banner' => '/images/it_banner_new.webp',
     'tagline' => '',
-    'intro_image' => '/images/it_inn_banner.jpg',
+    'intro_image' => '/images/it_inn_banner.webp',
     'intro_text' => '<p class="lead text-muted mb-4">Italy offers the perfect blend of outdoor adventure, cultural enrichment, and unforgettable experiences. Our programs are designed to challenge, inspire, and create lifelong memories.</p>',
     'highlights' => 
     array (
@@ -42,9 +42,9 @@ $destinations = array (
     'name' => 'Switzerland',
     'slug' => 'switzerland',
     'status' => 'active',
-    'banner' => '/images/swiss_banner.jpg',
+    'banner' => '/images/swiss_banner.webp',
     'tagline' => '',
-    'intro_image' => '/images/swiss_1.jpg',
+    'intro_image' => '/images/swiss_1.webp',
     'intro_text' => '<p class="lead text-muted mb-4">Enjoy high-quality Swiss facilities, pure mountain air, and a natural environment of meadows, forests, and wildlife. Highlights include hikes to taste homemade <strong>cheese and chocolate</strong>.</p>',
     'highlights' => 
     array (
@@ -70,9 +70,9 @@ $destinations = array (
     'name' => 'Germany',
     'slug' => 'germany',
     'status' => 'coming-soon',
-    'banner' => '/images/germany_banner.jpg',
+    'banner' => '/images/germany_banner.webp',
     'tagline' => 'Language, Academia, and Culture',
-    'intro_image' => '/images/germany_1.jpg',
+    'intro_image' => '/images/germany_1.webp',
     'intro_text' => '<p class="lead text-muted mb-4">The best way to learn German is through full immersion in one of our many schools and summer centers across Germany. We also offer university pathway programs for higher education.</p>',
     'highlights' => 
     array (
@@ -115,9 +115,9 @@ $destinations = array (
     'name' => 'Spain',
     'slug' => 'spain',
     'status' => 'coming-soon',
-    'banner' => '/images/spainr_banner_new.jpg',
+    'banner' => '/images/spainr_banner_new.webp',
     'tagline' => 'Sun, Language, and Soccer',
-    'intro_image' => '/images/spain_22.jpg',
+    'intro_image' => '/images/spain_22.webp',
     'intro_text' => '<p class="lead text-muted mb-4">Spain is a perfect destination for our summer camps, where students can learn Spanish or English combined with activities like water sports and world-class soccer training.</p>',
     'highlights' => 
     array (
@@ -160,9 +160,9 @@ $destinations = array (
     'name' => 'USA & Canada',
     'slug' => 'usa',
     'status' => 'coming-soon',
-    'banner' => '/images/usa_banner.jpg',
+    'banner' => '/images/usa_banner.webp',
     'tagline' => 'Diverse Camps from Coast to Coast',
-    'intro_image' => '/images/usa_1.jpg',
+    'intro_image' => '/images/usa_1.webp',
     'intro_text' => '<p class="lead text-muted mb-4">The USA offers a vast array of programs catering to every interest, from academics and technology to sports and the arts in iconic cities.</p>',
     'highlights' => 
     array (
@@ -205,9 +205,9 @@ $destinations = array (
     'name' => 'Canada',
     'slug' => 'canada',
     'status' => 'trash',
-    'banner' => '/images/canada_banner.jpg',
+    'banner' => '/images/canada_banner.webp',
     'tagline' => 'Urban Excitement & Natural Wonders',
-    'intro_image' => '/images/canada_1.jpg',
+    'intro_image' => '/images/canada_1.webp',
     'intro_text' => '<p class="lead text-muted mb-4">Canada offers a unique blend of urban excitement and breathtaking natural landscapes. Our programs provide an incredible opportunity to learn new skills and enjoy thrilling adventures.</p>',
     'highlights' => 
     array (
@@ -278,9 +278,9 @@ $destinations = array (
     'name' => 'France',
     'slug' => 'france',
     'status' => 'coming-soon',
-    'banner' => '/images/france_banner.jpg',
+    'banner' => '/images/france_banner.webp',
     'tagline' => 'Culture, Language, and Art de Vivre',
-    'intro_image' => '/images/france_banner.jpg',
+    'intro_image' => '/images/france_banner.webp',
     'intro_text' => '<p class="lead text-muted mb-4">Information about our exciting new programs in France is coming soon. Please contact us for more details.</p>',
     'highlights' => 
     array (

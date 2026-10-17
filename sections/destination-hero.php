@@ -15,10 +15,10 @@
  * - 'highlights' (array) - An array of highlight arrays, each with 'icon' and 'text'.
  */
 
-// --- Variable Safety Checks ---
-$banner       = $destinationData['banner'] ?? '/images/hero.jpg';
-$name         = $destinationData['name'] ?? 'Destination';
-$tagline      = $destinationData['tagline'] ?? 'Discover Your Adventure';
+// --- Variable Safety Checks (use !empty so empty strings fall back to defaults) ---
+$banner       = !empty($destinationData['banner']) ? $destinationData['banner'] : '/images/hero.webp';
+$name         = !empty($destinationData['name']) ? $destinationData['name'] : 'Destination';
+$tagline      = !empty($destinationData['tagline']) ? $destinationData['tagline'] : 'Discover Your Adventure';
 $highlights   = $destinationData['highlights'] ?? [];
 
 ?>
@@ -30,11 +30,6 @@ $highlights   = $destinationData['highlights'] ?? [];
                 background-size: cover;
                 background-position: center;
                 background-attachment: fixed;">
-    </div>
-
-    <!-- Gradient Overlay -->
-    <div class="position-absolute top-0 start-0 w-100 h-100"
-         style="background: linear-gradient(135deg, rgba(0, 164, 192, 0.85) 0%, rgba(133, 185, 46, 0.75) 100%);">
     </div>
 
     <!-- Hero Content -->

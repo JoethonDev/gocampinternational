@@ -18,7 +18,7 @@ if (!isset($category) || !is_array($category)) {
 $categorySlug = $category['slug'] ?? 'unknown';
 $name = $category['name'] ?? 'Untitled Category';
 $intro = $category['intro'] ?? 'Discover amazing programs in this category.';
-$image = $category['banner'] ?? '/images/placeholder.jpg';
+$image = $category['banner'] ?? '/images/placeholder.webp';
 $program_count = $program_count ?? 0;
 
 // --- Extract plain text from intro for card display ---

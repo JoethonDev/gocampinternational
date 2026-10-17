@@ -11,7 +11,7 @@ $all_programs = array (
     'id' => 'germany-university-pathway',
     'category_slug' => 'adult-academic',
     'name' => 'University Pathway',
-    'image' => '/images/germ_1.jpg',
+    'image' => '/images/germ_1.webp',
     'ages' => 
     array (
       'min' => 17,
@@ -36,12 +36,12 @@ $all_programs = array (
     'status' => 'inactive',
     'gallery' => 
     array (
-      0 => '/images/germ_1.jpg',
-      1 => '/images/germ_2.jpg',
-      2 => '/images/germ_3.jpg',
-      3 => '/images/germ_4.jpg',
-      4 => '/images/germ_5.jpg',
-      5 => '/images/germ_6.jpg',
+      0 => '/images/germ_1.webp',
+      1 => '/images/germ_2.webp',
+      2 => '/images/germ_3.webp',
+      3 => '/images/germ_4.webp',
+      4 => '/images/germ_5.webp',
+      5 => '/images/germ_6.webp',
     ),
   ),
   'usa-pre-university' => 
@@ -50,7 +50,7 @@ $all_programs = array (
     'id' => 'usa-pre-university',
     'category_slug' => 'adult-academic',
     'name' => 'Pre-University Camp',
-    'image' => '/images/usa_3.jpg',
+    'image' => '/images/usa_3.webp',
     'ages' => 
     array (
       'min' => 16,
@@ -75,9 +75,9 @@ $all_programs = array (
     'status' => 'inactive',
     'gallery' => 
     array (
-      0 => '/images/usa_1.jpg',
-      1 => '/images/usa_2.jpg',
-      2 => '/images/usa_3.jpg',
+      0 => '/images/usa_1.webp',
+      1 => '/images/usa_2.webp',
+      2 => '/images/usa_3.webp',
     ),
   ),
   'uk-young-professional' => 
@@ -169,7 +169,7 @@ $all_programs = array (
     'category_slug' => 'kids-camps',
     'name' => 'Junior Discovery',
     'tagline' => 'Empowering students to explore their potential through experiential education and blending culture, and adventure.',
-    'image' => '/images/Junior_7.jpg',
+    'image' => '/images/Junior_7.webp',
     'ages' => 
     array (
       'min' => '12',
@@ -204,16 +204,16 @@ $all_programs = array (
     ),
     'gallery' => 
     array (
-      0 => '/images/italy_1.jpg',
-      1 => '/images/italy_2.jpg',
-      2 => '/images/italy_3.jpg',
-      3 => '/images/Junior_1.jpg',
-      4 => '/images/Junior_2.jpg',
-      5 => '/images/Junior_3.jpg',
-      6 => '/images/Junior_4.jpg',
-      7 => '/images/Junior_5.jpg',
-      8 => '/images/Junior_6.jpg',
-      9 => '/images/Junior_7.jpg',
+      0 => '/images/italy_1.webp',
+      1 => '/images/italy_2.webp',
+      2 => '/images/italy_3.webp',
+      3 => '/images/Junior_1.webp',
+      4 => '/images/Junior_2.webp',
+      5 => '/images/Junior_3.webp',
+      6 => '/images/Junior_4.webp',
+      7 => '/images/Junior_5.webp',
+      8 => '/images/Junior_6.webp',
+      9 => '/images/Junior_7.webp',
     ),
   ),
   'germany-children-summer' => 
@@ -222,7 +222,7 @@ $all_programs = array (
     'id' => 'germany-children-summer',
     'category_slug' => 'kids-camps',
     'name' => 'Children Summer Camps',
-    'image' => '/images/germany_2.jpg',
+    'image' => '/images/germany_2.webp',
     'ages' => 
     array (
       'min' => 8,
@@ -255,7 +255,7 @@ $all_programs = array (
     'id' => 'spain-language-water-sports',
     'category_slug' => 'language-and-activity-camps',
     'name' => 'Language & Water Sports',
-    'image' => '/images/spain_1_g.jpg',
+    'image' => '/images/spain_1_g.webp',
     'ages' => 
     array (
       'min' => 10,
@@ -280,12 +280,12 @@ $all_programs = array (
     'status' => 'inactive',
     'gallery' => 
     array (
-      0 => '/images/spain_1_g.jpg',
-      1 => '/images/spain_2_g.jpg',
-      2 => '/images/spain_3_g.jpg',
-      3 => '/images/spain_4_g.jpg',
-      4 => '/images/spain_5_g.jpg',
-      5 => '/images/spain_6_g.jpg',
+      0 => '/images/spain_1_g.webp',
+      1 => '/images/spain_2_g.webp',
+      2 => '/images/spain_3_g.webp',
+      3 => '/images/spain_4_g.webp',
+      4 => '/images/spain_5_g.webp',
+      5 => '/images/spain_6_g.webp',
     ),
   ),
   'canada-english-ski' => 
@@ -294,7 +294,7 @@ $all_programs = array (
     'id' => 'canada-english-ski',
     'category_slug' => 'language-and-activity-camps',
     'name' => 'English & Ski (Winter)',
-    'image' => '/images/canada_3.jpg',
+    'image' => '/images/canada_3.webp',
     'ages' => 
     array (
       'min' => 13,
@@ -370,7 +370,7 @@ $all_programs = array (
     'category_slug' => 'soccer-camps',
     'name' => 'Football with AC Milan',
     'tagline' => 'Unparalleled football training under the guidance of AC Milan’s Youth Team and Academy coaches.',
-    'image' => '/images/Footbal-17.jpg',
+    'image' => '/images/Footbal-17.webp',
     'ages' => 
     array (
       'min' => '8',
@@ -409,14 +409,14 @@ $all_programs = array (
     ),
     'gallery' => 
     array (
-      0 => '/images/09-07-2025-Football_Milan__X0A7085.jpg',
-      1 => '/images/09-07-2025-Football_Milan__X0A7671.jpg',
-      2 => '/images/09-07-2025-Football_Milan__X0A7922.jpg',
-      3 => '/images/09-07-2025-Football_Milan__X0A8055.jpg',
-      4 => '/images/Copia_di_09-07-2025-Football_Milan__X0A7714.jpg',
-      5 => '/images/Copia_di_12-07-2025-Football_Milan__X0A0371.jpg',
-      6 => '/images/Footbal-1.jpg',
-      7 => '/images/Footbal-17.jpg',
+      0 => '/images/09-07-2025-Football_Milan__X0A7085.webp',
+      1 => '/images/09-07-2025-Football_Milan__X0A7671.webp',
+      2 => '/images/09-07-2025-Football_Milan__X0A7922.webp',
+      3 => '/images/09-07-2025-Football_Milan__X0A8055.webp',
+      4 => '/images/Copia_di_09-07-2025-Football_Milan__X0A7714.webp',
+      5 => '/images/Copia_di_12-07-2025-Football_Milan__X0A0371.webp',
+      6 => '/images/Footbal-1.webp',
+      7 => '/images/Footbal-17.webp',
     ),
   ),
   'spain-soccer-camp' => 
@@ -425,7 +425,7 @@ $all_programs = array (
     'id' => 'spain-soccer-camp',
     'category_slug' => 'soccer-camps',
     'name' => 'Pro Soccer Camp',
-    'image' => '/images/spain_4_g.jpg',
+    'image' => '/images/spain_4_g.webp',
     'ages' => 
     array (
       'min' => 8,
@@ -458,7 +458,7 @@ $all_programs = array (
     'id' => 'canada-adventure-summer',
     'category_slug' => 'special-interests-camps',
     'name' => 'Adventure Summer Camp',
-    'image' => '/images/canada_2.jpg',
+    'image' => '/images/canada_2.webp',
     'ages' => 
     array (
       'min' => 12,
@@ -483,9 +483,9 @@ $all_programs = array (
     'status' => 'inactive',
     'gallery' => 
     array (
-      0 => '/images/canada_1.jpg',
-      1 => '/images/canada_2.jpg',
-      2 => '/images/canada_3.jpg',
+      0 => '/images/canada_1.webp',
+      1 => '/images/canada_2.webp',
+      2 => '/images/canada_3.webp',
     ),
   ),
   'italy-fashion' => 
@@ -495,7 +495,7 @@ $all_programs = array (
     'category_slug' => 'special-interests-camps',
     'name' => 'Fashion',
     'tagline' => 'Immerse yourself in the world of fashion design in the heart of Milan.',
-    'image' => '/images/Fashion_85.jpg',
+    'image' => '/images/Fashion_85.webp',
     'ages' => 
     array (
       'min' => '15',
@@ -530,13 +530,13 @@ $all_programs = array (
     ),
     'gallery' => 
     array (
-      0 => '/images/Copia_di_09-07-2025-Fashion__X0A7481.jpg',
-      1 => '/images/Fashion_0.jpg',
-      2 => '/images/Copia_di_03-07-2025-Fashion__X0A6485.jpg',
-      3 => '/images/Fashion_158.jpg',
-      4 => '/images/Fashion_6.jpg',
-      5 => '/images/Fashion_85.jpg',
-      6 => '/images/Fashion_93.jpg',
+      0 => '/images/Copia_di_09-07-2025-Fashion__X0A7481.webp',
+      1 => '/images/Fashion_0.webp',
+      2 => '/images/Copia_di_03-07-2025-Fashion__X0A6485.webp',
+      3 => '/images/Fashion_158.webp',
+      4 => '/images/Fashion_6.webp',
+      5 => '/images/Fashion_85.webp',
+      6 => '/images/Fashion_93.webp',
     ),
   ),
   'italy-food' => 
@@ -546,7 +546,7 @@ $all_programs = array (
     'category_slug' => 'special-interests-camps',
     'name' => 'Food',
     'tagline' => 'Hands-on experience in Italian cooking, baking, and pastry making, in partnership with IN CONGUSTO INSTITUTE.',
-    'image' => '/images/Kitchen_113.jpg',
+    'image' => '/images/Kitchen_113.webp',
     'ages' => 
     array (
       'min' => '15',
@@ -589,12 +589,12 @@ $all_programs = array (
     ),
     'gallery' => 
     array (
-      0 => '/images/Copia_di_03-07-2025-Kitchen_CongustoIstitute__X0A5580.jpg',
-      1 => '/images/Copia_di_03-07-2025-Kitchen_CongustoIstitute__X0A6231.jpg',
-      2 => '/images/Kitchen_110.jpg',
-      3 => '/images/Kitchen_113.jpg',
-      4 => '/images/Kitchen_3.jpg',
-      5 => '/images/Kitchen_82.jpg',
+      0 => '/images/Copia_di_03-07-2025-Kitchen_CongustoIstitute__X0A5580.webp',
+      1 => '/images/Copia_di_03-07-2025-Kitchen_CongustoIstitute__X0A6231.webp',
+      2 => '/images/Kitchen_110.webp',
+      3 => '/images/Kitchen_113.webp',
+      4 => '/images/Kitchen_3.webp',
+      5 => '/images/Kitchen_82.webp',
     ),
   ),
   'italy-outdoor-exploration' => 
@@ -604,7 +604,7 @@ $all_programs = array (
     'category_slug' => 'special-interests-camps',
     'name' => 'Outdoor Exploration',
     'tagline' => 'Challenge yourself with thrilling outdoor adventures',
-    'image' => '/images/exploration_5.jpg',
+    'image' => '/images/exploration_5.webp',
     'ages' => 
     array (
       'min' => '12',
@@ -652,11 +652,11 @@ $all_programs = array (
     'status' => 'active',
     'gallery' => 
     array (
-      0 => '/images/exploration_1.jpg',
-      1 => '/images/exploration_2.jpg',
-      2 => '/images/exploration_3.jpg',
-      3 => '/images/exploration_4.jpg',
-      4 => '/images/exploration_5.jpg',
+      0 => '/images/exploration_1.webp',
+      1 => '/images/exploration_2.webp',
+      2 => '/images/exploration_3.webp',
+      3 => '/images/exploration_4.webp',
+      4 => '/images/exploration_5.webp',
     ),
   ),
   'italy-sea-quest' => 
@@ -666,7 +666,7 @@ $all_programs = array (
     'category_slug' => 'special-interests-camps',
     'name' => 'Sea Quest',
     'tagline' => 'Two-week sailing expedition along Italy\'s stunning coastline',
-    'image' => '/images/italy_3.jpg',
+    'image' => '/images/italy_3.webp',
     'ages' => 
     array (
       'min' => '14',
@@ -723,7 +723,7 @@ $all_programs = array (
     'category_slug' => '',
     'name' => 'Tennis',
     'tagline' => 'High-Performance Junior Tennis Camp for elite training in an iconic Italian destination.',
-    'image' => '/images/Tennis_MG_2934-187__3_.jpg',
+    'image' => '/images/Tennis_MG_2934-187__3_.webp',
     'ages' => 
     array (
       'min' => '',
@@ -764,12 +764,12 @@ $all_programs = array (
     ),
     'gallery' => 
     array (
-      0 => '/images/Tennis_MG_2934-187__1_.jpg',
-      1 => '/images/Tennis_MG_2934-187__1_.png',
-      2 => '/images/Tennis_MG_2934-187__2_.jpg',
-      3 => '/images/Tennis_MG_2934-187__2_.png',
-      4 => '/images/Tennis_MG_2934-187__3_.jpg',
-      5 => '/images/Tennis_MG_2934-187__3_.png',
+      0 => '/images/Tennis_MG_2934-187__1_.webp',
+      1 => '/images/Tennis_MG_2934-187__1_.webp',
+      2 => '/images/Tennis_MG_2934-187__2_.webp',
+      3 => '/images/Tennis_MG_2934-187__2_.webp',
+      4 => '/images/Tennis_MG_2934-187__3_.webp',
+      5 => '/images/Tennis_MG_2934-187__3_.webp',
     ),
   ),
   'italy-sailing' => 
@@ -779,7 +779,7 @@ $all_programs = array (
     'category_slug' => '',
     'name' => 'Sailing',
     'tagline' => 'A thrilling sailing voyage exploring the stunning islands off Italy’s coast for core nautical skills and teamwork.',
-    'image' => '/images/sailing_7.jpg',
+    'image' => '/images/sailing_7.webp',
     'ages' => 
     array (
       'min' => '12',
@@ -813,15 +813,15 @@ $all_programs = array (
     ),
     'gallery' => 
     array (
-      0 => '/images/sailing_1.jpg',
-      1 => '/images/sailing_2.jpg',
-      2 => '/images/sailing_3.jpg',
-      3 => '/images/sailing_4.jpg',
-      4 => '/images/sailing_5.jpg',
-      5 => '/images/sailing_6.jpg',
-      6 => '/images/sailing_7.jpg',
-      7 => '/images/sailing_8.jpg',
-      8 => '/images/sailing_9.jpg',
+      0 => '/images/sailing_1.webp',
+      1 => '/images/sailing_2.webp',
+      2 => '/images/sailing_3.webp',
+      3 => '/images/sailing_4.webp',
+      4 => '/images/sailing_5.webp',
+      5 => '/images/sailing_6.webp',
+      6 => '/images/sailing_7.webp',
+      7 => '/images/sailing_8.webp',
+      8 => '/images/sailing_9.webp',
     ),
   ),
   'usa-global-leadership' => 
@@ -830,7 +830,7 @@ $all_programs = array (
     'id' => 'usa-global-leadership',
     'category_slug' => 'young-leader-program',
     'name' => 'Global Leadership Training',
-    'image' => '/images/usa_2.jpg',
+    'image' => '/images/usa_2.webp',
     'ages' => 
     array (
       'min' => 15,
@@ -863,7 +863,7 @@ $all_programs = array (
     'id' => 'switzerland-adventure-camp',
     'category_slug' => 'special-interests-camps',
     'name' => 'Adventure Camp',
-    'image' => '/images/swiss_2.jpg',
+    'image' => '/images/swiss_2.webp',
     'ages' => 
     array (
       'min' => '10',
@@ -899,10 +899,10 @@ $all_programs = array (
     'level' => '',
     'gallery' => 
     array (
-      0 => '/images/swiss_1.jpg',
-      1 => '/images/swiss_2.jpg',
-      2 => '/images/swiss_3.jpg',
-      3 => '/images/swiss_5.jpg',
+      0 => '/images/swiss_1.webp',
+      1 => '/images/swiss_2.webp',
+      2 => '/images/swiss_3.webp',
+      3 => '/images/swiss_5.webp',
     ),
   ),
   'switzerland-film-academy' => 
@@ -911,7 +911,7 @@ $all_programs = array (
     'id' => 'switzerland-film-academy',
     'category_slug' => 'special-interests-camps',
     'name' => 'Film Academy Camp',
-    'image' => '/images/swiss_4.jpg',
+    'image' => '/images/swiss_4.webp',
     'ages' => 
     array (
       'min' => '14',
@@ -947,7 +947,7 @@ $all_programs = array (
     'level' => '',
     'gallery' => 
     array (
-      0 => '/images/swiss_4.jpg',
+      0 => '/images/swiss_4.webp',
     ),
   ),
   'switzerland-ski-camp' => 
@@ -956,7 +956,7 @@ $all_programs = array (
     'id' => 'switzerland-ski-camp',
     'category_slug' => 'special-interests-camps',
     'name' => 'Ski Camp (Winter)',
-    'image' => '/images/Winter-2.png',
+    'image' => '/images/Winter-2.webp',
     'ages' => 
     array (
       'min' => '8',
@@ -992,7 +992,7 @@ $all_programs = array (
     'level' => '',
     'gallery' => 
     array (
-      0 => '/images/Winter-2.png',
+      0 => '/images/Winter-2.webp',
       1 => '/images/Winter-day-camps-zip-line-1.webp',
       2 => '/images/Winter-day-camps-zip-line-2.webp',
     ),

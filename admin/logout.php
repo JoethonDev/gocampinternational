@@ -11,6 +11,11 @@ require_once __DIR__ . '/../init.php';
 // Unset all session variables
 $_SESSION = [];
 
+// Clear the session cookie
+if (ini_get('session.use_cookies')) {
+    setcookie(session_name(), '', time() - 42000, '/');
+}
+
 // Destroy the session
 session_destroy();
 

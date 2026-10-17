@@ -47,7 +47,7 @@ require_once 'includes/admin-header.php';
                 <a href="mailto:<?= htmlspecialchars($inquiry['data']['email'] ?? '') ?>" class="btn btn-primary px-4 d-inline-flex align-items-center">
                     <i class="bi bi-reply-fill me-2"></i> Reply via Email
                 </a>
-                <button class="btn btn-light border text-danger d-inline-flex align-items-center" onclick="if(confirm('Delete this inquiry?')) { window.location.href='/admin/item-action.php?action=delete-inquiry&file=<?= urlencode($filename) ?>'; }" title="Delete Inquiry">
+                <button class="btn btn-light border text-danger d-inline-flex align-items-center" onclick="if(confirm('Delete this inquiry?')) { window.location.href='/admin/item-action.php?action=delete-inquiry&file=<?= urlencode($filename) ?>&csrf=<?= urlencode(csrf_token()) ?>'; }" title="Delete Inquiry">
                     <i class="bi bi-trash me-2"></i> Delete
                 </button>
             </div>

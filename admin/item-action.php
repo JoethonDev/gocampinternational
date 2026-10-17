@@ -7,16 +7,72 @@
  */
 
 // 1. AT THE VERY TOP: Check if user is logged in
+require_once __DIR__ . '/../init.php';
 require_once 'helpers.php';
 require_once 'auth-check.php';
 
+// Accept both GET and POST (legacy admin links use GET) but always require a valid CSRF token.
+$csrf = $_REQUEST['csrf'] ?? '';
+if (!csrf_check($csrf)) {
+    http_response_code(403);
+    exit('Invalid CSRF token.');
+}
+
 // 2. Get and validate parameters
-$action = $_GET['action'] ?? null;
-$type = $_GET['type'] ?? null;
-$slug = $_GET['slug'] ?? null; // 'slug' is used as the key (even if it's an 'id')
+$action = $_REQUEST['action'] ?? null;
+$type = $_REQUEST['type'] ?? null;
+$slug = $_REQUEST['slug'] ?? null; // 'slug' is used as the key (even if it's an 'id')
+
+// Allowlisted actions/types
+$allowedActions = ['duplicate', 'soft-delete', 'restore', 'perm-delete', 'delete-inquiry'];
+$allowedTypes = ['dest', 'prog', 'master_prog'];
+
+if (!is_string($action) || !in_array($action, $allowedActions, true)) {
+    header('Location: /admin/dashboard');
+    exit;
+}
+
+// Handle inquiry-file deletion (uses ?file= instead of type/slug)
+if ($action === 'delete-inquiry') {
+    $file = $_REQUEST['file'] ?? '';
+    if (!is_string($file)) {
+        header('Location: /admin/inquiries.php');
+        exit;
+    }
+    $base = basename($file);
+    // Allowlist: date_timestamp_type_uniqid.json style filenames, .json only
+    if (!preg_match('/^[a-zA-Z0-9._-]+\.json$/', $base)) {
+        header('Location: /admin/inquiries.php');
+        exit;
+    }
+    $inquiryDir = realpath(__DIR__ . '/../data/inquiries');
+    if ($inquiryDir === false) {
+        header('Location: /admin/inquiries.php');
+        exit;
+    }
+    $target = $inquiryDir . DIRECTORY_SEPARATOR . $base;
+    // Ensure resolved path stays inside inquiries dir
+    if (is_file($target)) {
+        @unlink($target);
+    }
+    header('Location: ' . '/admin/inquiries.php');
+    exit;
+}
 
 if (!$action || !$type || !$slug) {
     header('Location: /admin/dashboard'); // Invalid request
+    exit;
+}
+
+// Validate type allowlist
+if (!is_string($type) || !in_array($type, $allowedTypes, true)) {
+    header('Location: /admin/dashboard');
+    exit;
+}
+
+// Validate slug format (alphanumeric, dash, underscore)
+if (!is_string($slug) || !preg_match('/^[a-zA-Z0-9_-]+$/', $slug)) {
+    header('Location: /admin/dashboard');
     exit;
 }
 
@@ -103,9 +159,18 @@ switch ($action) {
         save_php_file($file_path, $variable_name, $data);
         $redirect_to = 'trash.php'; // Always redirect to trash page
         break;
+
+    case 'delete-inquiry':
+        // Handled earlier (file-based); no-op here.
+        $redirect_to = 'inquiries.php';
+        break;
 }
 
-// 5. Redirect back
-header("Location: $redirect_to");
+// 5. Redirect back (encode target; only allow known local pages)
+$allowedRedirects = ['dashboard.php', 'programs.php', 'trash.php', 'inquiries.php'];
+if (!in_array($redirect_to, $allowedRedirects, true)) {
+    $redirect_to = 'dashboard.php';
+}
+header('Location: /admin/' . urlencode($redirect_to));
 exit;
 ?>

@@ -126,8 +126,8 @@ body {
                     </div>
                     <div class="d-flex gap-2 position-relative" style="z-index: 2;">
                         <a href="/admin/edit-program?id=<?= htmlspecialchars($id) ?>" class="btn btn-sm btn-light border rounded p-1" title="Edit"><i class="bi bi-pencil"></i></a>
-                        <a href="/admin/item-action?action=duplicate&type=master_prog&slug=<?= htmlspecialchars($id) ?>" class="btn btn-sm btn-light border rounded p-1" title="Duplicate"><i class="bi bi-files"></i></a>
-                        <a href="/admin/item-action?action=soft-delete&type=master_prog&slug=<?= htmlspecialchars($id) ?>" class="btn btn-sm btn-light border rounded p-1 text-danger" title="Delete"><i class="bi bi-trash"></i></a>
+                        <a href="/admin/item-action?action=duplicate&type=master_prog&slug=<?= htmlspecialchars($id) ?>&csrf=<?= urlencode(csrf_token()) ?>" class="btn btn-sm btn-light border rounded p-1" title="Duplicate"><i class="bi bi-files"></i></a>
+                        <a href="/admin/item-action?action=soft-delete&type=master_prog&slug=<?= htmlspecialchars($id) ?>&csrf=<?= urlencode(csrf_token()) ?>" class="btn btn-sm btn-light border rounded p-1 text-danger" title="Delete"><i class="bi bi-trash"></i></a>
                     </div>
                 </div>
             <?php endif; ?>

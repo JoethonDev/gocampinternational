@@ -283,7 +283,7 @@ a:hover, a:focus {
 .hero-section {
   position: relative;
   overflow: hidden;
-  min-height: 90vh;
+  /* min-height: 90vh; */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -758,7 +758,7 @@ a:hover, a:focus {
   h2, .h2 { font-size: var(--font-size-2xl); }
   
   .hero-section {
-    min-height: 70vh;
+    /* min-height: 70vh; */
   }
   
   .program-card-home {
@@ -797,7 +797,7 @@ a:hover, a:focus {
 
 @media (max-width: 575.98px) {
   .hero-section {
-    min-height: 60vh;
+    /* min-height: 60vh; */
   }
   
   .hero-section h1 {
@@ -894,3 +894,21 @@ button:focus-visible,
 /* ============================================
    END OF STYLESHEET
    ============================================ */
+
+/* Touch devices have no hover: keep carousel arrows visible for usability. */
+@media (hover: none) {
+  .carousel-control-prev,
+  .carousel-control-next {
+    opacity: 1;
+  }
+}
+
+/* iOS Safari ignores background-attachment: fixed (janky/parallax bugs):
+   force scroll attachment on small screens, including inline styles. */
+@media (max-width: 768px) {
+  .parallax,
+  [style*="background-attachment:fixed"],
+  [style*="background-attachment: fixed"] {
+    background-attachment: scroll !important;
+  }
+}

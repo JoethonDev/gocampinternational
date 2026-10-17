@@ -9,6 +9,13 @@
     
     // Wait for DOM to be ready
     document.addEventListener('DOMContentLoaded', function() {
+        // NOTE: js/main.js also ships a generic ProgramFilter for [data-filter] cards.
+        // This file handles the dedicated Programs-page controls (#programSearch etc.).
+        // Both can coexist; each module silently no-ops when its own target IDs are
+        // absent so no console errors are thrown on pages without those elements.
+        // Guard against double-initialization (e.g. script included twice).
+        if (window.__gocampProgramsInit) return;
+        window.__gocampProgramsInit = true;
         initProgramFilters();
         initProgramModal();
         initStickyElements();
@@ -29,6 +36,8 @@
         const resultsCount = document.getElementById('resultsCount');
         const noResultsMessage = document.getElementById('noResultsMessage');
         
+        // Silent early-return: this Programs-page filter UI only exists on
+        // program listing pages. Missing IDs mean "nothing to enhance", not an error.
         if (!searchInput || !categoryFilter || !ageFilter) return;
         
         // Debounce function for search input
@@ -185,9 +194,10 @@
      */
     function initProgramModal() {
         const modalElement = document.getElementById('programDetailModal');
-        if (!modalElement) return;
+        // Silent early-return when the modal markup is absent; also require Bootstrap.
+        if (!modalElement || !window.bootstrap || !window.bootstrap.Modal) return;
         
-        const modal = new bootstrap.Modal(modalElement);
+        const modal = new window.bootstrap.Modal(modalElement);
         const modalContent = document.getElementById('programDetailContent');
         const template = document.getElementById('programDetailTemplate');
         

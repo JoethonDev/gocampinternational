@@ -20,7 +20,8 @@ $error_message = '';
 
 // 3. --- SAVE/CREATE LOGIC (No changes needed, reads text input) ---
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['name'])) {
+    if (!csrf_check($_POST['csrf'] ?? '')) { $error_message = 'Invalid CSRF token. Please reload and try again.'; }
+    elseif (isset($_POST['name'])) {
         $slug = $_POST['slug'] ?? null;
         $original_slug = $_POST['original_slug'] ?? $slug;
 
@@ -104,7 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if (save_php_file($file_path, 'destinations', $destinations)) {
                 $success_message = 'Successfully saved destination!';
-                if (empty($_POST['original_slug'])) { header("Location: /admin/edit-destination?slug=$slug&created=true"); exit; }
+                if (empty($_POST['original_slug'])) { header('Location: /admin/edit-destination?slug=' . urlencode($slug) . '&created=true'); exit; }
                 $data = $new_data;
             } else { $error_message = 'Error saving data.'; }
         }
@@ -194,6 +195,7 @@ require_once 'includes/admin-header.php';
     </div>
 </template>
 <form action="edit-destination.php<?= $is_new_item ? '' : '?slug=' . htmlspecialchars($data['slug']) ?>" method="POST" enctype="multipart/form-data" class="animate-fade-in delay-1">
+<input type="hidden" name="csrf" value="<?= htmlspecialchars(csrf_token()) ?>">
 
     <?php if (!$is_new_item): ?> <input type="hidden" name="original_slug" value="<?= htmlspecialchars($data['slug']) ?>"> <?php endif; ?>
 
@@ -417,7 +419,7 @@ require_once 'includes/admin-header.php';
     </div>
 </form>
 
-<?php if (!$is_new_item): ?><form id="trashForm" action="item-action.php?action=soft-delete&type=dest&slug=<?= htmlspecialchars($data['slug']) ?>" method="POST"></form><?php endif; ?>
+<?php if (!$is_new_item): ?><form id="trashForm" action="item-action.php?action=soft-delete&type=dest&slug=<?= urlencode($data['slug']) ?>&csrf=<?= urlencode(csrf_token()) ?>" method="POST"><input type="hidden" name="csrf" value="<?= htmlspecialchars(csrf_token()) ?>"></form><?php endif; ?>
 
 <?php
 // 6. Include Footer

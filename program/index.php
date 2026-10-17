@@ -13,13 +13,12 @@ require_once __DIR__ . '/../data/all_programs.php';
 require_once __DIR__ . '/../data/destinations.php';
 require_once __DIR__ . '/../data/programs.php';
 
-// --- Include Header and Navigation ---
+// --- Include Header (header.php already includes navigation.php and opens <main id="main-content">) ---
 require_once __DIR__ . '/../includes/header.php';
-require_once __DIR__ . '/../includes/navigation.php';
 
 // --- Prepare all programs with destination information ---
 $allPrograms = [];
-foreach ($all_programs as $program_id => $program) {
+foreach (($all_programs ?? []) as $program_id => $program) {
     if (!isset($program['status']) || $program['status'] !== 'active') {
         continue;
     }
@@ -27,7 +26,7 @@ foreach ($all_programs as $program_id => $program) {
     $destination_name = 'Multiple Locations'; // Default
     $destination_slug = '#';
     $destination_trashed = false;
-    foreach ($destinations as $dest) {
+    foreach (($destinations ?? []) as $dest) {
         if (isset($dest['program_ids']) && in_array($program_id, $dest['program_ids'])) {
             $destination_name = $dest['name'];
             $destination_slug = $dest['slug'];
@@ -81,7 +80,7 @@ foreach ($programsByCategory as &$catData) {
 }
 unset($catData);
 ?>
-<main>
+<div class="page-content">
     <!-- Hero Section -->
     <section class="py-5 text-center bg-light">
         <div class="container">
@@ -167,7 +166,7 @@ unset($catData);
     // --- Final CTA Banner ---
     // require_once __DIR__ . '/../sections/booking-cta-banner.php';
     ?>
-</main>
+</div>
 
 <?php
 // --- Include Footer ---

@@ -9,8 +9,12 @@
         <h2 class="section-title text-center mb-5">Our Destinations</h2>
         <div class="row g-4 justify-content-center">
             <?php
-            // Use $public_destinations if set, otherwise fallback to $destinations
+            // Use $public_destinations if set, otherwise fallback to $destinations.
+            // Unified rule: only show destinations with status === 'active'.
             $dest_list = isset($public_destinations) ? $public_destinations : (isset($destinations) ? $destinations : []);
+            $dest_list = array_filter($dest_list, function ($d) {
+                return isset($d['status']) && $d['status'] === 'active';
+            });
             ?>
             <?php if (!empty($dest_list)): ?>
                 <?php foreach ($dest_list as $destination): ?>

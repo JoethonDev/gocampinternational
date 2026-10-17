@@ -50,8 +50,8 @@ require_once 'includes/admin-header.php';
                                 </div>
                                 <div class="d-flex gap-2 position-relative" style="z-index: 2;">
                                     <a href="/admin/edit-destination?slug=<?= htmlspecialchars($slug) ?>" class="btn btn-sm btn-light border rounded p-1" title="Edit"><i class="bi bi-pencil"></i></a>
-                                    <a href="/admin/item-action?action=duplicate&type=dest&slug=<?= htmlspecialchars($slug) ?>" class="btn btn-sm btn-light border rounded p-1" title="Duplicate"><i class="bi bi-files"></i></a>
-                                    <a href="/admin/item-action?action=soft-delete&type=dest&slug=<?= htmlspecialchars($slug) ?>" class="btn btn-sm btn-light border rounded p-1 text-danger" title="Delete"><i class="bi bi-trash"></i></a>
+                                    <a href="/admin/item-action?action=duplicate&type=dest&slug=<?= htmlspecialchars($slug) ?>&csrf=<?= urlencode(csrf_token()) ?>" class="btn btn-sm btn-light border rounded p-1" title="Duplicate"><i class="bi bi-files"></i></a>
+                                    <a href="/admin/item-action?action=soft-delete&type=dest&slug=<?= htmlspecialchars($slug) ?>&csrf=<?= urlencode(csrf_token()) ?>" class="btn btn-sm btn-light border rounded p-1 text-danger" title="Delete"><i class="bi bi-trash"></i></a>
                                 </div>
                             </div>
                         <?php endif; ?>
@@ -90,8 +90,8 @@ require_once 'includes/admin-header.php';
                                 </div>
                                 <div class="d-flex gap-2 position-relative" style="z-index: 2;">
                                     <a href="/admin/edit-program-category?slug=<?= htmlspecialchars($slug) ?>" class="btn btn-sm btn-light border rounded p-1" title="Edit"><i class="bi bi-pencil"></i></a>
-                                    <a href="/admin/item-action?action=duplicate&type=prog&slug=<?= htmlspecialchars($slug) ?>" class="btn btn-sm btn-light border rounded p-1" title="Duplicate"><i class="bi bi-files"></i></a>
-                                    <a href="/admin/item-action?action=soft-delete&type=prog&slug=<?= htmlspecialchars($slug) ?>" class="btn btn-sm btn-light border rounded p-1 text-danger" title="Delete"><i class="bi bi-trash"></i></a>
+                                    <a href="/admin/item-action?action=duplicate&type=prog&slug=<?= htmlspecialchars($slug) ?>&csrf=<?= urlencode(csrf_token()) ?>" class="btn btn-sm btn-light border rounded p-1" title="Duplicate"><i class="bi bi-files"></i></a>
+                                    <a href="/admin/item-action?action=soft-delete&type=prog&slug=<?= htmlspecialchars($slug) ?>&csrf=<?= urlencode(csrf_token()) ?>" class="btn btn-sm btn-light border rounded p-1 text-danger" title="Delete"><i class="bi bi-trash"></i></a>
                                 </div>
                             </div>
                         <?php endif; ?>

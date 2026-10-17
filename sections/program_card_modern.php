@@ -16,8 +16,8 @@ if (!isset($program) || !is_array($program)) {
 // --- Data Extraction ---
 $programId = $program['id'] ?? uniqid();
 $name = $program['name'] ?? 'Untitled Program';
-$tagline = $program['tagline'] ?? 'No description.';
-$image = $program['image'] ?? '/images/placeholder.jpg';
+$tagline = !empty($program['tagline']) ? $program['tagline'] : 'No description.';
+$image = !empty($program['image']) ? $program['image'] : '/images/placeholder.webp';
 $ages = isset($program['ages']) && !empty($program['ages']) ? $program['ages'] : null;
 $duration = isset($program['duration']) && $program['duration'] > 0 ? $program['duration'] : null;
 $level = isset($program['level']) && !empty($program['level']) ? $program['level'] : 'All';
@@ -80,12 +80,12 @@ $colors = $colorClasses[$color] ?? $colorClasses['primary'];
             </div>
             <?php endif; ?>
             */ ?>
-            <?php if ($ages && isset($ages['min']) && isset($ages['max'])): ?>
+            <?php if ($ages && !empty($ages['min']) && !empty($ages['max'])): ?>
             <div class="position-absolute bottom-0 start-0 w-100 p-3">
                 <div class="d-flex align-items-center gap-3 text-white">
                     <div class="d-flex align-items-center bg-white bg-opacity-25 backdrop-blur rounded-pill px-3 py-2">
                         <i class="bi bi-people-fill me-2"></i>
-                        <span class="fw-bold"><?= $ages['min'] ?>-<?= $ages['max'] ?> years</span>
+                        <span class="fw-bold"><?= (int) $ages['min'] ?>-<?= (int) $ages['max'] ?> years</span>
                     </div>
                 </div>
             </div>
