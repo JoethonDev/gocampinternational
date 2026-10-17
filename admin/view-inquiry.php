@@ -47,7 +47,12 @@ require_once 'includes/admin-header.php';
                 <a href="mailto:<?= htmlspecialchars($inquiry['data']['email'] ?? '') ?>" class="btn btn-primary px-4 d-inline-flex align-items-center">
                     <i class="bi bi-reply-fill me-2"></i> Reply via Email
                 </a>
-                <button class="btn btn-light border text-danger d-inline-flex align-items-center" onclick="if(confirm('Delete this inquiry?')) { window.location.href='/admin/item-action.php?action=delete-inquiry&file=<?= urlencode($filename) ?>&csrf=<?= urlencode(csrf_token()) ?>'; }" title="Delete Inquiry">
+                <form method="POST" action="/admin/item-action.php" onsubmit="return confirm('Delete this inquiry?');" class="d-inline">
+                    <input type="hidden" name="action" value="delete-inquiry">
+                    <input type="hidden" name="file" value="<?= htmlspecialchars($filename, ENT_QUOTES, 'UTF-8') ?>">
+                    <input type="hidden" name="csrf" value="<?= htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8') ?>">
+                    <button type="submit" class="btn btn-light border text-danger d-inline-flex align-items-center" title="Delete Inquiry"><i class="bi bi-trash me-2"></i> Delete</button>
+                </form>
                     <i class="bi bi-trash me-2"></i> Delete
                 </button>
             </div>
