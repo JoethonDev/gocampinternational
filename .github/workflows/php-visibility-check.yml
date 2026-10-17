@@ -17,3 +17,19 @@ jobs:
         run: find . -type f -name '*.php' -not -path './vendor/*' -print0 | xargs -0 -n1 php -l
       - name: Test visibility behavior
         run: php tests/section-visibility-test.php
+
+      - name: HTTP smoke tests for PHP routes
+        run: |
+          php -S 127.0.0.1:8765 local-router.php >/tmp/gocamp-server.log 2>&1 &
+          PID=$!
+          trap 'kill "$PID" 2>/dev/null || true' EXIT
+          sleep 2
+          for path in / /destinations/uk /programs "/program/category?category=adult-academic" /admin; do
+            echo "Checking $path"
+            http_code=$(curl -sS -L -o /tmp/gocamp-response -w "%{http_code}" "http://127.0.0.1:8765$path")
+            if [ "$http_code" != "200" ]; then
+              cat /tmp/gocamp-server.log
+              cat /tmp/gocamp-response
+              exit 1
+            fi
+          done
