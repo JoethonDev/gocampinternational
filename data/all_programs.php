@@ -1018,8 +1018,12 @@ $all_programs = array (
       0 => 'Academic',
     ),
     'highlights' => array (
+      0 => 'Explore architectural design, technical drawing and the built environment',
+      1 => 'Examine architectural history, materials and adaptive reuse',
+      2 => 'Develop a personal design project using practical creative techniques',
+      3 => 'Strengthen visual communication and critical thinking with tutor feedback',
     ),
-    'description' => 'Explore architectural design principles, building techniques, and hands-on design projects.',
+    'description' => '<p>Discover how thoughtful design shapes the spaces in which we live, study and connect. This Architecture summer course introduces the creative and technical foundations of the built environment, taking inspiration from Cambridge and its historic and contemporary buildings. Explore architectural history, drawing, design principles and the decisions behind successful spaces.</p><p>Move from first ideas to more developed designs as you investigate form, function, materials and sustainable approaches, including how existing buildings can be adapted for new purposes. Practical design exercises encourage you to observe your surroundings, explain your ideas clearly and experiment with solutions to real architectural challenges.</p><p>Through discussions, project work and individual feedback, build your visual communication, creative problem-solving and critical-thinking skills. Whether you are considering architecture, urban planning or a related design field, this is an inspiring introduction to the way architects turn imagination into places that work for people.</p>',
     'includes' => array (
     ),
     'excludes' => array (
@@ -1047,8 +1051,12 @@ $all_programs = array (
       0 => 'Academic',
     ),
     'highlights' => array (
+      0 => 'Study machine learning, algorithms and neural networks',
+      1 => 'Explore real-world AI applications through coding and problem-solving',
+      2 => 'Discuss AI ethics, responsible innovation and societal impact',
+      3 => 'Develop independent ideas and technical confidence in a guided project',
     ),
-    'description' => 'Discover machine learning, algorithms, AI applications, and their impact on society.',
+    'description' => '<p>Explore the technology reshaping the world, from recommendation systems and intelligent applications to advances in robotics and generative AI. This Artificial Intelligence summer course introduces the logic behind machine learning, algorithms and neural networks, showing how computers can recognise patterns, learn from data and help solve complex problems.</p><p>Build your understanding through interactive coding activities, thought-provoking discussions and practical problem-solving. Investigate the difference between designing an algorithm and training a model, consider how data influences outcomes, and discover the opportunities AI is creating across research, business, healthcare and everyday life.</p><p>Responsible innovation is part of the journey. Discuss bias, reliability, privacy and the ethical questions raised by increasingly capable systems while developing your own ideas through an academic project. The course develops computational thinking, curiosity and the confidence to approach a rapidly changing field with both technical insight and sound judgement.</p>',
     'includes' => array (
     ),
     'excludes' => array (
@@ -1134,8 +1142,12 @@ $all_programs = array (
       0 => 'Academic',
     ),
     'highlights' => array (
+      0 => 'Learn business strategy, pricing, marketing and management fundamentals',
+      1 => 'Explore entrepreneurship and how new ventures develop',
+      2 => 'Analyse real-world business choices through case studies and discussion',
+      3 => 'Build leadership, teamwork and presentation skills through project work',
     ),
-    'description' => 'Learn the foundations of business strategy, management principles, and practical business decision-making.',
+    'description' => '<p>Step into the world of business and learn what it takes to turn a promising idea into a successful organisation. Our Business Management summer course explores how companies make decisions, create value and respond to changing markets. Discover the fundamentals of strategy, management, marketing, pricing and leadership through engaging examples and discussion.</p><p>Think like an entrepreneur as you investigate the choices behind launching a new venture: understanding customers, positioning a product, planning resources and considering how a business might grow. Practical case studies and collaborative challenges encourage you to balance creative thinking with commercial judgement, while presenting your ideas helps develop persuasive communication.</p><p>Set within an inspiring UK academic environment, this course offers a first look at the questions future founders and managers face. You will develop the confidence to evaluate opportunities, work effectively with others and explain your reasoning, building valuable foundations for further study in business, economics or entrepreneurship.</p>',
     'includes' => array (
     ),
     'excludes' => array (
@@ -1192,8 +1204,12 @@ $all_programs = array (
       0 => 'Academic',
     ),
     'highlights' => array (
+      0 => 'Develop programming, logic and computational-thinking fundamentals',
+      1 => 'Practise designing, testing and improving algorithms',
+      2 => 'Explore software development and age-appropriate advanced computing topics',
+      3 => 'Apply problem-solving skills in practical projects and discussions',
     ),
-    'description' => 'Build computational-thinking, programming, and problem-solving skills through introductory computing.',
+    'description' => '<p>Discover how software turns ideas into systems that transform everyday life. In our Computer Science summer course, students explore the foundations of computational thinking, programming and logical problem-solving in an engaging UK academic environment. Understand how programs are structured, why algorithms matter and how thoughtful design helps computers solve challenges efficiently.</p><p>Through practical exercises, develop confidence in breaking large problems into manageable steps, writing and testing code, and reasoning about the solutions you create. The curriculum introduces core computing concepts while offering a pathway to investigate topics such as data structures, algorithmic efficiency, software engineering and introductory artificial intelligence as appropriate to the learning group.</p><p>Computer Science is as much about asking good questions as writing code. Project-based learning and discussion help you develop analytical skills, creativity and the ability to explain technical decisions. Whether you are new to programming or considering more advanced study, gain a stronger foundation for exploring technology at university and beyond.</p>',
     'includes' => array (
     ),
     'excludes' => array (
@@ -1279,8 +1295,12 @@ $all_programs = array (
       0 => 'Academic',
     ),
     'highlights' => array (
+      0 => 'Examine markets, supply and demand, trade and inflation',
+      1 => 'Investigate economic policy, global development and inequality',
+      2 => 'Build confidence interpreting data, graphs and economic evidence',
+      3 => 'Develop critical arguments through seminars and practical research',
     ),
-    'description' => 'Investigate markets, supply and demand, trade, economic policy, and analytical reasoning.',
+    'description' => '<p>Why do prices rise, what shapes international trade, and how do governments respond to economic challenges? Our Economics summer course brings these questions to life, connecting economic theory with decisions made by businesses, policymakers and individuals. Explore supply and demand, market structures, inflation, growth and inequality in the context of a connected global economy.</p><p>Learn to look beyond headlines by examining data, interpreting graphs and questioning the assumptions behind different economic arguments. Seminars, collaborative research and case-study discussions introduce the ways economists evaluate incentives, trade-offs and public policy, while London\'s position in global finance offers a compelling context for understanding markets and investment decisions.</p><p>As you develop your own evidence-based viewpoint, you will practise making clear arguments, analysing unfamiliar situations and communicating complex ideas confidently. This course provides a stimulating foundation for students interested in economics, finance, politics, business or international relations.</p>',
     'includes' => array (
     ),
     'excludes' => array (
@@ -1308,8 +1328,12 @@ $all_programs = array (
       0 => 'Academic',
     ),
     'highlights' => array (
+      0 => 'Discover engineering design, mechanics, materials and structures',
+      1 => 'Explore robotics, electronics or control systems through age-appropriate topics',
+      2 => 'Apply engineering reasoning to practical challenges and projects',
+      3 => 'Develop teamwork, creativity and systematic problem-solving',
     ),
-    'description' => 'Explore engineering design and problem-solving across mechanical, civil, and electrical disciplines.',
+    'description' => '<p>Discover the creativity behind engineering and see how scientific ideas become practical solutions. Our Engineering summer course introduces the principles that help engineers design, build, test and improve the structures, machines and technologies around us. Study the connections between mathematics, mechanics, materials and the real-world challenges that inspire innovation.</p><p>Through analytical exercises and hands-on project work, explore the process of identifying a problem, developing a design and testing whether it performs as intended. Depending on the learning group, topics may include structural design, electronics, robotics, fluid mechanics, control systems and the growing role of computing and machine learning in engineering.</p><p>With opportunities for discussion, independent research and feedback, you will strengthen your ability to think systematically, work creatively and communicate technical decisions. Whether your interests lie in civil, mechanical, electrical or emerging engineering fields, this experience offers a valuable introduction to university-style engineering study.</p>',
     'includes' => array (
     ),
     'excludes' => array (
@@ -1482,8 +1506,12 @@ $all_programs = array (
       0 => 'Academic',
     ),
     'highlights' => array (
+      0 => 'Explore human anatomy, physiology, genetics and biomedical science',
+      1 => 'Understand disease, diagnostics and the immune response',
+      2 => 'Investigate contemporary medical research and approaches to treatment',
+      3 => 'Develop clinical reasoning, ethical awareness and research skills',
     ),
-    'description' => 'Explore anatomy, biomedical science, healthcare practice, and medical decision-making.',
+    'description' => '<p>Explore the science of the human body and the challenges that make modern medicine such a vital field. Our Medicine summer course introduces key ideas in anatomy, physiology and biomedical science, helping students understand how cells, organs and body systems work together to keep us healthy.</p><p>Go further by investigating what happens when disease disrupts those systems. Examine genetics, infections, the immune response and the methods used to identify and treat illness. Academic discussion and case-based activities bring clinical reasoning to life, while emerging research topics such as cancer biology, biomarkers and personalised medicine reveal how healthcare continues to evolve.</p><p>Medicine also asks important human questions. Consider patient care, ethical decisions and the responsibilities of healthcare professionals as you develop curiosity, evidence-based thinking and confident communication. Guided research and feedback offer an insightful foundation for students interested in medicine, medical science, healthcare or related university pathways.</p>',
     'includes' => array (
     ),
     'excludes' => array (
@@ -1657,17 +1685,17 @@ $all_programs = array (
       1 => 'Skill Development',
     ),
     'highlights' => array (
-      0 => 'Structured coaching in technique, tactics, fitness and match-day mindset.',
-      1 => 'Ability-based training, technical drills, footwork and competitive match play.',
-      2 => 'UK Exsportise reference programme: 15 hours of tennis coaching and 15 hours of English per week, with a 1:6 coach-to-player ratio.',
-      3 => 'UK reference programme includes residential boarding and three daily meals; details depend on destination.',
+      0 => 'Focused tennis coaching to develop technique, movement and match confidence.',
+      1 => 'Ability-aware drills, tactical challenges and purposeful match practice.',
+      2 => 'Develop consistency, court positioning and decision-making under pressure.',
+      3 => 'Build sportsmanship, resilience and friendships through an active camp experience.',
     ),
-    'description' => '<p>Find your rhythm, sharpen your strokes and step onto the court with confidence. Tennis Academy brings together focused coaching, tactical learning and purposeful match play to help junior players progress at their own pace. Players develop their serve, forehand, backhand, movement and decision-making while building resilience, focus and sportsmanship.</p><p>Our UK tennis programme is informed by the Exsportise Tennis Academy approach, combining technical, tactical, physical and mental development. At Exsportise\'s UK residential programme, players aged 9–17 receive 15 hours of tennis coaching plus 15 hours of English tuition each week, with ability-based training groups and a 1:6 coaching ratio. At least one year of previous playing experience is required for that UK programme.</p><p>This programme is featured for both the United Kingdom and Switzerland. Specific Swiss campus arrangements, dates, coaching hours and inclusions are subject to separate confirmation and should not be inferred from the UK Exsportise programme.</p>',
+    'description' => '<p>Discover how rewarding tennis can be when every session brings a fresh opportunity to improve. Our Tennis Academy is designed for young players who want to strengthen their game, enjoy purposeful practice and build confidence on and off the court. Whether refining familiar strokes or learning smarter ways to approach a rally, students are encouraged to make steady progress at a level that suits their experience.</p><p>Coaching focuses on the fundamentals that make a difference in matches: serving, forehand and backhand technique, footwork, court positioning, shot selection and tactical awareness. Structured drills and friendly match-play challenges give participants the chance to put these skills into action while developing focus, resilience and sportsmanship.</p><p>Alongside personal improvement, the experience celebrates teamwork, encouragement and international friendships. Specific schedules, accommodation, language lessons and other inclusions vary by destination and will be confirmed for the selected camp.</p>',
     'includes' => array (
-      0 => 'Tennis technique and match-play development',
-      1 => 'Age- and ability-appropriate coaching, conditioning and confidence-building',
-      2 => 'UK Exsportise reference offering: 15 hours tennis plus 15 hours English weekly',
-      3 => 'UK Exsportise reference offering: residential accommodation, three meals daily and course feedback',
+      0 => 'Tennis technique and footwork development',
+      1 => 'Ability-appropriate tactical coaching and match-play practice',
+      2 => 'Individual improvement goals and practical feedback',
+      3 => 'Sportsmanship, confidence and teamwork activities',
     ),
     'excludes' => array (
     ),

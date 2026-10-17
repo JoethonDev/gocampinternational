@@ -12,7 +12,7 @@ function gocamp_visibility_options(string $entity): array {
                 'highlights' => ['Hero highlights', true],
                 'stats' => ['Statistics', true],
                 'programs' => ['Linked programs', true],
-                'gallery' => ['Program photo gallery', true],
+                'gallery' => ['Program photo gallery', false],
                 'destination_gallery' => ['Destination photo gallery', false],
                 'faq' => ['FAQs', true],
                 'testimonials' => ['Testimonials', true],
@@ -43,7 +43,7 @@ function gocamp_visibility_options(string $entity): array {
                 'modal_description' => ['Detail modal: description', true],
                 'modal_highlights' => ['Detail modal: highlights', true],
                 'modal_schedule' => ['Detail modal: schedule', true],
-                'modal_gallery' => ['Detail modal: gallery', true],
+                'modal_gallery' => ['Detail modal: gallery', false],
                 'modal_includes' => ['Detail modal: includes', false],
                 'modal_excludes' => ['Detail modal: excludes', false],
             ];
@@ -58,7 +58,19 @@ function gocamp_section_visible(array $record, string $key, bool $default = true
     }
     return filter_var($visibility[$key], FILTER_VALIDATE_BOOLEAN);
 }
+/**
+ * Gallery display is disabled across destinations, program details and
+ * program categories. Keep saved media paths for a future re-enable.
+ */
+function gocamp_gallery_disabled_by_policy(string $entity, string $key): bool {
+    return ($entity === 'destination' && in_array($key, ['gallery', 'destination_gallery'], true))
+        || ($entity === 'program' && $key === 'modal_gallery')
+        || ($entity === 'category' && $key === 'gallery');
+}
 function gocamp_entity_section_visible(array $record, string $entity, string $key): bool {
+    if (gocamp_gallery_disabled_by_policy($entity, $key)) {
+        return false;
+    }
     $options = gocamp_visibility_options($entity);
     return gocamp_section_visible($record, $key, (bool)($options[$key][1] ?? true));
 }
