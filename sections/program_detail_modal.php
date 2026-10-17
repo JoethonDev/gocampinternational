@@ -7,6 +7,8 @@
  * @var array $program - An associative array with all program details.
  */
 
+require_once __DIR__ . '/../includes/section-visibility.php';
+
 // --- Variable Safety Checks ---
 if (!isset($program) || !is_array($program)) { return; }
 
@@ -46,8 +48,8 @@ $gallery      = isset($program['gallery']) && !empty($program['gallery']) ? $pro
             </div>
             <div class="modal-body p-4">
                 <?php 
-                $hasDetails = $ages || $duration || $level || $price;
-                $hasGallery = (is_array($gallery) && count($gallery) > 0);
+                $hasDetails = gocamp_entity_section_visible($program, 'program', 'modal_details') && ($ages || $duration || $level || $price);
+                $hasGallery = gocamp_entity_section_visible($program, 'program', 'modal_gallery') && (is_array($gallery) && count($gallery) > 0);
                 ?>
                 <ul class="nav nav-tabs mb-4" id="programTabNav-<?= htmlspecialchars($programId) ?>" role="tablist">
                     <li class="nav-item" role="presentation">
@@ -77,8 +79,10 @@ $gallery      = isset($program['gallery']) && !empty($program['gallery']) ? $pro
                             <?php endif; ?>
                         </div>
                         <?php endif; ?>
+                        <?php if (gocamp_entity_section_visible($program, "program", "modal_description")): ?>
                         <div class="prose"><?= $description ?></div>
-                        <?php if ($highlights) : ?>
+                        <?php endif; ?>
+                        <?php if ($highlights && gocamp_entity_section_visible($program, "program", "modal_highlights")) : ?>
                             <div class="mt-4">
                                 <h4 class="fw-bold text-brand-dark mb-3">Program Highlights</h4>
                                 <div class="row g-3">
@@ -88,7 +92,7 @@ $gallery      = isset($program['gallery']) && !empty($program['gallery']) ? $pro
                                 </div>
                             </div>
                         <?php endif; ?>
-                        <?php if ($schedule) : ?>
+                        <?php if ($schedule && gocamp_entity_section_visible($program, "program", "modal_schedule")) : ?>
                             <div class="mt-4">
                                 <h4 class="fw-bold text-brand-dark mb-4">Daily Schedule</h4>
                                 <?php foreach ($schedule as $time => $activity) : ?>
@@ -96,6 +100,12 @@ $gallery      = isset($program['gallery']) && !empty($program['gallery']) ? $pro
                                         <?= htmlspecialchars($time) ?></div><div class="flex-grow-1 p-3 rounded bg-light"><p class="mb-0 fw-medium text-dark"><?= htmlspecialchars($activity) ?></p></div></div>
                                 <?php endforeach; ?>
                             </div>
+                        <?php endif; ?>
+                        <?php if ($includes && gocamp_entity_section_visible($program, 'program', 'modal_includes')): ?>
+                        <div class="mt-4"><h4 class="fw-bold">What's Included</h4><ul><?php foreach ($includes as $item): ?><li><?= htmlspecialchars($item) ?></li><?php endforeach; ?></ul></div>
+                        <?php endif; ?>
+                        <?php if ($excludes && gocamp_entity_section_visible($program, 'program', 'modal_excludes')): ?>
+                        <div class="mt-4"><h4 class="fw-bold">Not Included</h4><ul><?php foreach ($excludes as $item): ?><li><?= htmlspecialchars($item) ?></li><?php endforeach; ?></ul></div>
                         <?php endif; ?>
                     </div>
                     <?php if ($hasGallery): ?>
