@@ -262,11 +262,12 @@ require_once __DIR__ . '/../includes/header.php';
     </section>
     <?php endif; ?>
 
-    <?php /*
-    <?php foreach ($relatedPrograms as $program) {
-        include __DIR__ . '/../sections/program_detail_modal.php';
-    } ?>
-    */ ?>
+    <?php if (gocamp_entity_section_visible($programData, 'category', 'programs')): ?>
+    <?php foreach ($relatedPrograms as $program): ?>
+        <?php require __DIR__ . '/../sections/program_detail_modal.php'; ?>
+    <?php endforeach; ?>
+    <?php endif; ?>
+
 
 
     <?php if (gocamp_entity_section_visible($programData, 'category', 'gallery') && !empty($categoryGallery)): ?>
