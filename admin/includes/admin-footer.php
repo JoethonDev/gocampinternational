@@ -23,9 +23,9 @@
     
     <style> /* Basic styles for media library */
         .media-library-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 1rem; max-height: 50vh; overflow-y: auto; }
-        .media-library-item { border: 1px solid #dee2e6; border-radius: 0.25rem; padding: 0.5rem; text-align: center; cursor: pointer; transition: background-color 0.2s ease; }
-        .media-library-item:hover { background-color: #e9ecef; }
-        .media-library-item.selected { border-color: var(--bs-primary); background-color: var(--bs-primary-bg-subtle); }
+        .media-library-item { border: 1px solid var(--input-border); border-radius: var(--radius-md); padding: 0.5rem; text-align: center; cursor: pointer; background: var(--bg-card); color: var(--text-main); transition: background-color 0.15s ease, border-color 0.15s ease; }
+        .media-library-item:hover { background-color: var(--bg-body); border-color: var(--primary-color); }
+        .media-library-item.selected { border-color: var(--primary-color); background-color: rgba(var(--primary-rgb), 0.12); }
         .media-library-item img { max-width: 100%; height: 80px; object-fit: cover; margin-bottom: 0.5rem; display: block; margin-left: auto; margin-right: auto;}
         .media-library-item small { display: block; word-break: break-all; font-size: 0.75rem; }
         #media-upload-progress { display: none; }
@@ -42,7 +42,7 @@
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fontawesome-iconpicker/3.2.0/js/fontawesome-iconpicker.min.js" integrity="sha512-7dlzSK4Ulfm85ypS8/ya0xLf3NpXiML3s6HTLu4qDq7WiJWtLLyrXb9putdP3/1umwTmzIvhuu9EW7gHYSVtCQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     
-    <script src="/admin/js/admin-scripts.js?v=2.3"></script> <div class="modal fade" id="mediaSelectorModal" tabindex="-1" aria-labelledby="mediaSelectorModalLabel" aria-hidden="true" data-bs-backdrop="static">
+    <script src="/admin/js/admin-scripts.js?v=2.4"></script> <div class="modal fade" id="mediaSelectorModal" tabindex="-1" aria-labelledby="mediaSelectorModalLabel" aria-hidden="true" data-bs-backdrop="static">
         <div class="modal-dialog modal-lg modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
