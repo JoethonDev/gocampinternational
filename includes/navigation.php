@@ -10,7 +10,7 @@
 require_once __DIR__ . '/../data/programs.php';
 require_once __DIR__ . '/../data/destinations.php';
 ?>
-<nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background-color: var(--brand-primary);">
+<nav class="navbar navbar-expand-xl navbar-dark fixed-top" style="background-color: var(--brand-primary);">
     <div class="container">
         <a class="navbar-brand" href="/">
             <img src="/images/logo.webp" alt="Go Camp International Logo" style="height: 60px;">
@@ -19,7 +19,7 @@ require_once __DIR__ . '/../data/destinations.php';
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="mainNavbar">
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
+            <ul class="navbar-nav ms-auto mb-2 mb-xl-0 align-items-xl-center">
                 <li class="nav-item">
                     <a class="nav-link" href="/">Home</a>
                 </li>
@@ -68,7 +68,7 @@ require_once __DIR__ . '/../data/destinations.php';
                     <a class="nav-link" href="/contact">Contact</a>
                 </li>
             </ul>
-            <button class="btn btn-warning ms-lg-3" data-bs-toggle="modal" data-bs-target="#ctaModal">Book Now</button>
+            <button type="button" class="btn btn-warning ms-xl-3" data-bs-toggle="modal" data-bs-target="#ctaModal">Book Now</button>
         </div>
     </div>
 </nav>
