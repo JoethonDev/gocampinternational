@@ -1,0 +1,46 @@
+name: Deploy InfinityFree development (FTPS)
+
+on:
+  push:
+    branches: [develop]
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Verify connection and deployment plan without uploading files'
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: infinityfree-development
+  cancel-in-progress: false
+
+jobs:
+  deploy-development:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    environment: infinityfree-development
+    steps:
+      - name: Check out GoCamp source
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate deployment protection rules
+        run: python -m unittest discover -s tests -p 'test_infinityfree_deploy.py' -v
+      - name: Deploy to InfinityFree over explicit TLS (port 21)
+        env:
+          INFINITYFREE_FTP_HOST: ftpupload.net
+          INFINITYFREE_FTP_PORT: '21'
+          INFINITYFREE_FTP_DIRECTORY: /htdocs/
+          INFINITYFREE_FTP_USERNAME: ${{ secrets.INFINITYFREE_FTP_USERNAME }}
+          INFINITYFREE_FTP_PASSWORD: ${{ secrets.INFINITYFREE_FTP_PASSWORD }}
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.dry_run }}" = "true" ]; then
+            python deploy/infinityfree-deploy.py --dry-run
+          else
+            python deploy/infinityfree-deploy.py
+          fi
