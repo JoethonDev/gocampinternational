@@ -537,6 +537,7 @@ $all_programs = array (
       4 => '/images/Fashion_6.webp',
       5 => '/images/Fashion_85.webp',
       6 => '/images/Fashion_93.webp',
+      7 => '/images/53774_6ceb90297448b376.webp',
     ),
   ),
   'italy-food' => 
@@ -718,7 +719,7 @@ $all_programs = array (
   ),
   'italy-tennis' => 
   array (
-    'order' => 1,
+    'order' => 4,
     'id' => 'italy-tennis',
     'category_slug' => '',
     'name' => 'Tennis',
@@ -995,6 +996,645 @@ $all_programs = array (
       0 => '/images/Winter-2.webp',
       1 => '/images/Winter-day-camps-zip-line-1.webp',
       2 => '/images/Winter-day-camps-zip-line-2.webp',
+      3 => '/images/53814_bf0ca3d656de44fd.webp',
+    ),
+  ),
+  'uk-academic-architecture' => array (
+    'order' => 1,
+    'id' => 'uk-academic-architecture',
+    'category_slug' => 'adult-academic',
+    'name' => 'Architecture',
+    'tagline' => 'Academic Insights summer course',
+    'image' => '/images/uk-academic-architecture.webp',
+    'ages' => array (
+      'min' => 13,
+      'max' => 15,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Explore architectural design principles, building techniques, and hands-on design projects.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'active',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-artificial-intelligence' => array (
+    'order' => 2,
+    'id' => 'uk-academic-artificial-intelligence',
+    'category_slug' => 'adult-academic',
+    'name' => 'Artificial Intelligence',
+    'tagline' => 'Academic Insights summer course',
+    'image' => '/images/uk-academic-artificial-intelligence.webp',
+    'ages' => array (
+      'min' => 16,
+      'max' => 18,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Discover machine learning, algorithms, AI applications, and their impact on society.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'active',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-biology' => array (
+    'order' => 3,
+    'id' => 'uk-academic-biology',
+    'category_slug' => 'adult-academic',
+    'name' => 'Biology',
+    'tagline' => 'Academic Insights summer course',
+    'image' => '/images/uk-academic-biology.webp',
+    'ages' => array (
+      'min' => 16,
+      'max' => 18,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Investigate genetics, ecology, human biology, and scientific methods in the life sciences.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'inactive',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-biotechnology' => array (
+    'order' => 4,
+    'id' => 'uk-academic-biotechnology',
+    'category_slug' => 'adult-academic',
+    'name' => 'Biotechnology',
+    'tagline' => 'Academic Insights summer course',
+    'image' => '/images/uk-academic-biotechnology.webp',
+    'ages' => array (
+      'min' => 16,
+      'max' => 18,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Examine how biotechnology applies biological science to medicine, agriculture, and the environment.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'inactive',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-business-management' => array (
+    'order' => 5,
+    'id' => 'uk-academic-business-management',
+    'category_slug' => 'adult-academic',
+    'name' => 'Business Management',
+    'tagline' => 'Academic Insights summer course',
+    'image' => '/images/uk-academic-business-management.webp',
+    'ages' => array (
+      'min' => 13,
+      'max' => 15,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Learn the foundations of business strategy, management principles, and practical business decision-making.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'active',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-chemistry' => array (
+    'order' => 6,
+    'id' => 'uk-academic-chemistry',
+    'category_slug' => 'adult-academic',
+    'name' => 'Chemistry',
+    'tagline' => 'Academic Insights summer course',
+    'image' => '/images/uk-academic-chemistry.webp',
+    'ages' => array (
+      'min' => 16,
+      'max' => 18,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Study organic and inorganic chemistry, chemical reactions, and the principles behind modern chemistry.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'inactive',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-computer-science' => array (
+    'order' => 7,
+    'id' => 'uk-academic-computer-science',
+    'category_slug' => 'adult-academic',
+    'name' => 'Computer Science',
+    'tagline' => 'Academic Insights summer course',
+    'image' => '/images/uk-academic-computer-science.webp',
+    'ages' => array (
+      'min' => 13,
+      'max' => 15,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Build computational-thinking, programming, and problem-solving skills through introductory computing.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'active',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-creative-writing' => array (
+    'order' => 8,
+    'id' => 'uk-academic-creative-writing',
+    'category_slug' => 'adult-academic',
+    'name' => 'Creative Writing',
+    'tagline' => 'Academic Insights summer course',
+    'image' => '/images/uk-academic-creative-writing.webp',
+    'ages' => array (
+      'min' => 13,
+      'max' => 15,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Develop storytelling skills and a writing voice through fiction, poetry, and other creative forms.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'inactive',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-criminology' => array (
+    'order' => 9,
+    'id' => 'uk-academic-criminology',
+    'category_slug' => 'adult-academic',
+    'name' => 'Criminology',
+    'tagline' => 'Academic Insights summer course',
+    'image' => '/images/uk-academic-criminology.webp',
+    'ages' => array (
+      'min' => 16,
+      'max' => 18,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Explore criminal behaviour, justice systems, and social issues through discussion and analysis.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'inactive',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-economics' => array (
+    'order' => 10,
+    'id' => 'uk-academic-economics',
+    'category_slug' => 'adult-academic',
+    'name' => 'Economics',
+    'tagline' => 'Academic Insights summer course',
+    'image' => '/images/uk-academic-economics.webp',
+    'ages' => array (
+      'min' => 13,
+      'max' => 18,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Investigate markets, supply and demand, trade, economic policy, and analytical reasoning.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'active',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-engineering' => array (
+    'order' => 11,
+    'id' => 'uk-academic-engineering',
+    'category_slug' => 'adult-academic',
+    'name' => 'Engineering',
+    'tagline' => 'Academic Insights summer course',
+    'image' => '/images/uk-academic-engineering.webp',
+    'ages' => array (
+      'min' => 13,
+      'max' => 18,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Explore engineering design and problem-solving across mechanical, civil, and electrical disciplines.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'active',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-english-literature' => array (
+    'order' => 12,
+    'id' => 'uk-academic-english-literature',
+    'category_slug' => 'adult-academic',
+    'name' => 'English Literature',
+    'tagline' => 'Academic Insights summer course',
+    'image' => '/images/uk-academic-english-literature.webp',
+    'ages' => array (
+      'min' => 16,
+      'max' => 18,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Analyse classic and modern literary works while strengthening interpretation and critical discussion.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'inactive',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-history' => array (
+    'order' => 13,
+    'id' => 'uk-academic-history',
+    'category_slug' => 'adult-academic',
+    'name' => 'History',
+    'tagline' => 'Academic Insights summer course',
+    'image' => '/images/uk-academic-history.webp',
+    'ages' => array (
+      'min' => 16,
+      'max' => 18,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Study influential historical events, people, and movements through research and critical analysis.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'inactive',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-international-relations' => array (
+    'order' => 14,
+    'id' => 'uk-academic-international-relations',
+    'category_slug' => 'adult-academic',
+    'name' => 'International Relations',
+    'tagline' => 'Academic Insights summer course',
+    'image' => '/images/uk-academic-international-relations.webp',
+    'ages' => array (
+      'min' => 13,
+      'max' => 18,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Examine global politics, diplomacy, international law, and conflict resolution.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'inactive',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-law' => array (
+    'order' => 15,
+    'id' => 'uk-academic-law',
+    'category_slug' => 'adult-academic',
+    'name' => 'Law',
+    'tagline' => 'Academic Insights summer course',
+    'image' => '/images/uk-academic-law.webp',
+    'ages' => array (
+      'min' => 13,
+      'max' => 18,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Discover legal systems and judicial principles while developing structured legal reasoning.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'inactive',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-mathematics' => array (
+    'order' => 16,
+    'id' => 'uk-academic-mathematics',
+    'category_slug' => 'adult-academic',
+    'name' => 'Mathematics',
+    'tagline' => 'Academic Insights summer course',
+    'image' => '/images/uk-academic-mathematics.webp',
+    'ages' => array (
+      'min' => 15,
+      'max' => 18,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Strengthen mathematical reasoning through algebra, calculus, statistics, and problem-solving.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'inactive',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-medicine' => array (
+    'order' => 17,
+    'id' => 'uk-academic-medicine',
+    'category_slug' => 'adult-academic',
+    'name' => 'Medicine',
+    'tagline' => 'Academic Insights summer course',
+    'image' => '/images/uk-academic-medicine.webp',
+    'ages' => array (
+      'min' => 13,
+      'max' => 18,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Explore anatomy, biomedical science, healthcare practice, and medical decision-making.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'active',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-natural-sciences' => array (
+    'order' => 18,
+    'id' => 'uk-academic-natural-sciences',
+    'category_slug' => 'adult-academic',
+    'name' => 'Natural Sciences',
+    'tagline' => 'Academic Insights summer course',
+    'image' => '/images/uk-academic-natural-sciences.webp',
+    'ages' => array (
+      'min' => 13,
+      'max' => 15,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Discover the links between biology, chemistry, and physics through interdisciplinary scientific study.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'inactive',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-philosophy-politics-and-economics' => array (
+    'order' => 19,
+    'id' => 'uk-academic-philosophy-politics-and-economics',
+    'category_slug' => 'adult-academic',
+    'name' => 'Philosophy, Politics and Economics',
+    'tagline' => 'Academic Insights summer course',
+    'image' => '/images/uk-academic-philosophy-politics-and-economics.webp',
+    'ages' => array (
+      'min' => 16,
+      'max' => 18,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Connect major ideas in philosophy, political thought, and economics through critical analysis.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'inactive',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-physics' => array (
+    'order' => 20,
+    'id' => 'uk-academic-physics',
+    'category_slug' => 'adult-academic',
+    'name' => 'Physics',
+    'tagline' => 'Academic Insights summer course',
+    'image' => '/images/uk-academic-physics.webp',
+    'ages' => array (
+      'min' => 13,
+      'max' => 18,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Investigate the laws of physics, from mechanics and forces to modern physical theory.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'inactive',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-psychology' => array (
+    'order' => 21,
+    'id' => 'uk-academic-psychology',
+    'category_slug' => 'adult-academic',
+    'name' => 'Psychology',
+    'tagline' => 'Academic Insights summer course',
+    'image' => '/images/uk-academic-psychology.webp',
+    'ages' => array (
+      'min' => 13,
+      'max' => 18,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Explore cognition, emotion, human behaviour, and methods used in psychological research.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'inactive',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-veterinary-studies' => array (
+    'order' => 22,
+    'id' => 'uk-academic-veterinary-studies',
+    'category_slug' => 'adult-academic',
+    'name' => 'Veterinary Studies',
+    'tagline' => 'Academic Insights summer course',
+    'image' => '/images/uk-academic-veterinary-studies.webp',
+    'ages' => array (
+      'min' => 15,
+      'max' => 18,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Learn introductory principles of veterinary medicine, animal care, and animal welfare.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'inactive',
+    'gallery' => array (
     ),
   ),
 );
