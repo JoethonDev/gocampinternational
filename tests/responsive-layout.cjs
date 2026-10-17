@@ -33,6 +33,15 @@ const routes = [
             const rect = el.getBoundingClientRect();
             return rect.width > 0 && (rect.right > viewport + 4 || rect.left < -4);
           }).slice(0, 4).map(el => `${el.tagName.toLowerCase()}.${String(el.className).replace(/\\s+/g, '.')}`);
+          const offenders = [...document.querySelectorAll('body *')].filter(el => {
+            const cs = getComputedStyle(el);
+            if (cs.display === 'none' || cs.position === 'fixed') return false;
+            const r = el.getBoundingClientRect();
+            return r.width > 0 && r.right > viewport + 3;
+          }).sort((a,b) => b.getBoundingClientRect().right - a.getBoundingClientRect().right).slice(0, 5).map(el => {
+            const r = el.getBoundingClientRect();
+            return `${el.tagName.toLowerCase()}#${el.id}.${String(el.className).replace(/\\s+/g, '.')}(right=${Math.round(r.right)},width=${Math.round(r.width)})`;
+          });
           const buttons = [...document.querySelectorAll('.page-content .btn, #main-content .btn, .navbar .btn')].filter(el => {
             const cs = getComputedStyle(el);
             return cs.display !== 'none' && el.getBoundingClientRect().width > 0;
@@ -46,6 +55,7 @@ const routes = [
             scrollWidth: document.documentElement.scrollWidth,
             viewport,
             overflowing,
+            offenders,
             invalidButtons,
             togglerVisible: (() => {
               const nav = document.querySelector('.navbar-toggler');
@@ -54,7 +64,7 @@ const routes = [
           };
         });
         if (result.scrollWidth > result.viewport + 4)
-          errors.push(`${width}px ${route}: document overflow ${result.scrollWidth - result.viewport}px`);
+          errors.push(`${width}px ${route}: document overflow ${result.scrollWidth - result.viewport}px; offenders=${result.offenders.join(', ')}`);
         if (result.overflowing.length)
           errors.push(`${width}px ${route}: components overflow: ${result.overflowing.join(', ')}`);
         if (result.invalidButtons.length)
