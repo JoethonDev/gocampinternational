@@ -1,0 +1,13 @@
+.git
+.github
+.env
+.env.*
+*.sql
+*.sql.gz
+*.sqlite
+*.sqlite3
+*.bak
+*.log
+node_modules
+vendor
+.DS_Store
