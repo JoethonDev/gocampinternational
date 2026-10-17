@@ -25,6 +25,8 @@ jobs:
         run: php tests/admin-ui-regression-test.php
       - name: Check dynamic academic copy and gallery policy
         run: php tests/academic-gallery-content-test.php
+      - name: Verify Soccer photography and gallery
+        run: php tests/soccer-media-test.php
 
       - name: Validate public routes against current catalog data
         run: |

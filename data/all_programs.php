@@ -1713,7 +1713,7 @@ $all_programs = array (
     'category_slug' => 'soccer-camps',
     'name' => 'UK Soccer Academy & Club Experience',
     'tagline' => 'Build your skills, train with ambition and explore the football cultures that inspire champions.',
-    'image' => '/images/soccer_1.webp',
+    'image' => '/images/uk-soccer-arsenal-day-hero.webp',
     'ages' => array (
       'min' => NULL,
       'max' => NULL,
@@ -1745,8 +1745,13 @@ $all_programs = array (
     'schedule' => array (
     ),
     'gallery' => array (
-      0 => '/images/soccer_2.webp',
-      1 => '/images/soccer_3.webp',
+      0 => '/images/uk-soccer-arsenal-day-hero.webp',
+      1 => '/images/uk-soccer-camp-group-hallway.webp',
+      2 => '/images/uk-soccer-camp-group-outdoor.webp',
+      3 => '/images/uk-soccer-training-session.webp',
+      4 => '/images/uk-soccer-training-huddle.webp',
+      5 => '/images/soccer_2.webp',
+      6 => '/images/soccer_3.webp',
     ),
   ),
 );
