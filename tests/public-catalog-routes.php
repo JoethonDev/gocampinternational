@@ -8,7 +8,7 @@ declare(strict_types=1);
 require __DIR__ . '/../data/destinations.php';
 require __DIR__ . '/../data/programs.php';
 
-$routes = ['destinations' => [], 'categories' => []];
+$routes = ['destinations' => [], 'categories' => [], 'screenshotDestination' => null];
 foreach ($destinations as $key => $destination) {
     $slug = $destination['slug'] ?? $key;
     if (($destination['status'] ?? '') === 'trash') {
@@ -18,7 +18,13 @@ foreach ($destinations as $key => $destination) {
         fwrite(STDERR, "Invalid public destination slug for: $key\n");
         exit(1);
     }
-    $routes['destinations'][] = '/destinations/' . $slug;
+    $route = '/destinations/' . $slug;
+    $routes['destinations'][] = $route;
+    if ($routes['screenshotDestination'] === null &&
+        ($destination['status'] ?? '') === 'active' &&
+        !empty($destination['program_ids'])) {
+        $routes['screenshotDestination'] = $route;
+    }
 }
 foreach ($programs as $key => $category) {
     $slug = $category['slug'] ?? $key;
