@@ -41,5 +41,9 @@ jobs:
           grep -q 'id="programModal-uk-young-professional"' /tmp/gocamp-programs-response
           curl -fsS http://127.0.0.1:8765/destinations/uk -o /tmp/gocamp-destination-response
           grep -q 'id="destination-intro"' /tmp/gocamp-destination-response
-          code=$(curl -sS -o /dev/null -w "%{http_code}" http://127.0.0.1:8765/admin/media-library)
+          # Pretty admin routes display the login page when signed out.
+          curl -fsS http://127.0.0.1:8765/admin/media-library -o /tmp/gocamp-media-login
+          grep -q 'Admin Access' /tmp/gocamp-media-login
+          # Direct PHP file access is protected by auth-check.php.
+          code=$(curl -sS -o /dev/null -w "%{http_code}" http://127.0.0.1:8765/admin/media-library.php)
           test "$code" = "302"
