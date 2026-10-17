@@ -25,6 +25,10 @@ jobs:
         run: php tests/admin-ui-regression-test.php
       - name: Check dynamic academic copy and gallery policy
         run: php tests/academic-gallery-content-test.php
+      - name: Validate UK Soccer gallery images
+        run: php tests/soccer-media-test.php
+      - name: Test safe Soccer image migration
+        run: php tests/soccer-image-migration-test.php
 
       - name: Check InfinityFree deployer preserves live data
         run: python3 -m unittest discover -s tests -p 'test_infinityfree_deploy.py' -v
