@@ -8,6 +8,7 @@
  */
 
 require_once __DIR__ . '/../includes/section-visibility.php';
+require_once __DIR__ . '/../includes/content-description.php';
 
 // --- Variable Safety Checks ---
 if (!isset($program) || !is_array($program)) {
@@ -18,7 +19,10 @@ if (!isset($program) || !is_array($program)) {
 // --- Data Extraction ---
 $programId = $program['id'] ?? uniqid();
 $name = $program['name'] ?? 'Untitled Program';
-$tagline = !empty($program['tagline']) ? $program['tagline'] : 'No description.';
+$descriptionPreview = gocamp_description_excerpt((string)($program['description'] ?? ''));
+if ($descriptionPreview === '') {
+    $descriptionPreview = gocamp_description_excerpt((string)($program['tagline'] ?? ''));
+}
 $image = !empty($program['image']) ? $program['image'] : '/images/placeholder.webp';
 $ages = isset($program['ages']) && !empty($program['ages']) ? $program['ages'] : null;
 $duration = isset($program['duration']) && $program['duration'] > 0 ? $program['duration'] : null;
@@ -97,8 +101,8 @@ $colors = $colorClasses[$color] ?? $colorClasses['primary'];
         <?php endif; ?>
         <div class="card-body p-4 d-flex flex-column">
             <h3 class="card-title fw-bold mb-2 text-brand-dark fs-4"><?= htmlspecialchars($name) ?></h3>
-            <?php if (gocamp_entity_section_visible($program, "program", "card_tagline")): ?>
-            <p class="card-text text-muted mb-3 flex-grow-1"><?= htmlspecialchars($tagline) ?></p>
+            <?php if ($descriptionPreview !== '' && gocamp_entity_section_visible($program, "program", "card_tagline")): ?>
+            <p class="card-text text-muted mb-3 flex-grow-1"><?= htmlspecialchars($descriptionPreview, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></p>
             <?php endif; ?>
                 <?php /*
                 // Original gallery/photo section
