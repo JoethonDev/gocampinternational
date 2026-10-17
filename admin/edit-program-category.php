@@ -12,6 +12,7 @@
 // 1. AT THE VERY TOP: Check if user is logged in
 require_once 'auth-check.php';
 require_once 'helpers.php';
+require_once __DIR__ . '/../includes/section-visibility.php';
 
 // 2. Define file path and load data
 $file_path = __DIR__ . '/../data/programs.php';
@@ -41,6 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $new_data['name'] = $_POST['name'] ?? '';
             $new_data['slug'] = $slug;
             $new_data['status'] = $_POST['status'] ?? 'active';
+            $new_data['section_visibility'] = gocamp_read_visibility($_POST['section_visibility'] ?? [], 'category', $new_data['section_visibility'] ?? []);
             $new_data['color'] = $_POST['color'] ?? 'primary';
             $new_data['intro'] = $_POST['intro'] ?? ''; 
             
@@ -54,7 +56,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $new_data['sections'][] = [
                             'title'   => $title,
                             'content' => $_POST['section_content'][$index] ?? '', // TinyMCE saves to this
-                            'image'   => $_POST['section_image'][$index] ?? '' 
+                            'image'   => $_POST['section_image'][$index] ?? '',
+                            'is_active' => (($_POST['section_active'][$index] ?? '1') === '1')
                         ];
                     }
                 }
@@ -120,6 +123,8 @@ require_once 'includes/admin-header.php';
                     <div class="col-md-12">
                         <label class="form-label fw-bold text-secondary small text-uppercase">Section Title</label>
                         <input type="text" class="form-control" name="section_title[]" placeholder="e.g. Overview">
+                    </div>
+                    <div class="col-md-12"><label class="form-label fw-bold small">Visibility</label><select class="form-select" name="section_active[]"><option value="1" selected>Visible</option><option value="0">Hidden</option></select>
                     </div>
                     <div class="col-md-12">
                         <label class="form-label fw-bold text-secondary small text-uppercase">Content</label>
@@ -211,6 +216,7 @@ require_once 'includes/admin-header.php';
 
     <form id="mainForm" action="edit-program-category.php<?= $is_new_item ? '' : '?slug=' . htmlspecialchars($data['slug']) ?>" method="POST" enctype="multipart/form-data">
     <input type="hidden" name="csrf" value="<?= htmlspecialchars(csrf_token()) ?>">
+<?php $visibilityEntity = "category"; $visibilityRecord = $data; require __DIR__ . "/includes/visibility-controls.php"; ?>
 
         <?php if (!$is_new_item): ?>
             <input type="hidden" name="original_slug" value="<?= htmlspecialchars($data['slug']) ?>">
@@ -287,6 +293,8 @@ require_once 'includes/admin-header.php';
                                             <div class="col-md-12">
                                                 <label class="form-label fw-bold text-secondary small text-uppercase">Section Title</label>
                                                 <input type="text" class="form-control" name="section_title[]" value="<?= htmlspecialchars($item['title']) ?>">
+                                            </div>
+                                            <div class="col-md-12"><label class="form-label fw-bold small">Visibility</label><select class="form-select" name="section_active[]"><option value="1" <?= ($item['is_active'] ?? true) ? 'selected' : '' ?>>Visible</option><option value="0" <?= !($item['is_active'] ?? true) ? 'selected' : '' ?>>Hidden</option></select>
                                             </div>
                                             <div class="col-md-12">
                                                 <label class="form-label fw-bold text-secondary small text-uppercase">Content</label>
