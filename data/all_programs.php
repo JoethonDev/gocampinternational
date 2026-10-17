@@ -718,7 +718,7 @@ $all_programs = array (
   ),
   'italy-tennis' => 
   array (
-    'order' => 1,
+    'order' => 4,
     'id' => 'italy-tennis',
     'category_slug' => '',
     'name' => 'Tennis',
