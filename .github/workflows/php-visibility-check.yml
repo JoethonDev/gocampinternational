@@ -23,6 +23,8 @@ jobs:
         run: php tests/media-library-rename-test.php
       - name: Test admin UI regressions
         run: php tests/admin-ui-regression-test.php
+      - name: Check dynamic academic copy and gallery policy
+        run: php tests/academic-gallery-content-test.php
 
       - name: Validate public routes against current catalog data
         run: |

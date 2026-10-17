@@ -239,17 +239,17 @@ $programs = array (
     'name' => 'Tennis',
     'slug' => 'tennis',
     'banner' => '/images/imported-5acb0b681a0332.webp',
-    'intro' => '<p>Discover a sport that rewards precision, determination and confidence. Our tennis experiences combine focused coaching, match practice and a welcoming international atmosphere. Young players develop their serve, footwork, consistency and tactical awareness while learning to rise to every challenge.</p><p>UK tennis coaching content is informed by Exsportise\'s residential tennis-and-English programme. Swiss venue details and schedules will be confirmed separately.</p>',
+    'intro' => '<p>Every great rally starts with confidence. Our Tennis category introduces young players to focused coaching, enjoyable match practice and the skills that make time on court more rewarding. Learn to combine sound technique with tactical awareness, resilience and sportsmanship, while enjoying a positive atmosphere and friendships through sport.</p><p>Explore Tennis Academy opportunities across our available destinations. Coaching formats, schedules, accommodation and additional activities are confirmed individually for each location.</p>',
     'intro_image' => '/images/imported-b4eecf3804ce9b.webp',
     'sections' => array (
       0 => array (
-        'title' => 'Develop Your Complete Game',
-        'content' => '<p>From confident first serves to smarter rallies, coaching builds technical, tactical, physical and mental strengths. Students improve footwork, shot selection and match preparation through purposeful drills and friendly competition.</p>',
+        'title' => 'Build Your All-Round Game',
+        'content' => '<p>Strengthen your serve, groundstrokes, footwork and positioning through purposeful practice. Learn to read the court, choose your shots and approach every point with confidence.</p>',
         'image' => '/images/imported-9b759cf6c4187e.webp',
       ),
       1 => array (
-        'title' => 'Tennis & English in the UK',
-        'content' => '<p>The UK Exsportise reference programme combines 15 hours of tennis coaching with 15 hours of English tuition per week, ability-based training groups and a 1:6 coach-to-player ratio. Residential accommodation and three daily meals are included in that specific UK offering; details vary by destination.</p>',
+        'title' => 'Learn Through Match Play',
+        'content' => '<p>Friendly matches, structured challenges and performance feedback help players bring technical learning into competitive situations. Discover the importance of consistency, concentration, respect and teamwork.</p>',
         'image' => '/images/imported-5acb0b681a0332.webp',
       ),
     ),
