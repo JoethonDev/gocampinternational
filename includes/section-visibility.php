@@ -68,6 +68,12 @@ function gocamp_gallery_disabled_by_policy(string $entity, string $key): bool {
         || ($entity === 'category' && $key === 'gallery');
 }
 function gocamp_entity_section_visible(array $record, string $entity, string $key): bool {
+    // Only this explicitly requested Soccer programme may display its new gallery.
+    // All other programme, category and destination galleries remain disabled.
+    if ($entity === 'program' && $key === 'modal_gallery' &&
+        ($record['id'] ?? '') === 'uk-soccer-club-experience') {
+        return !empty($record['gallery']) && gocamp_section_visible($record, $key, true);
+    }
     if (gocamp_gallery_disabled_by_policy($entity, $key)) {
         return false;
     }

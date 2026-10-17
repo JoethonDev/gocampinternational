@@ -16,10 +16,12 @@ foreach ($destinations as $slug => $destination) {
     );
 }
 foreach ($all_programs as $id => $program) {
-    check_academic_copy(
-        !gocamp_entity_section_visible($program, 'program', 'modal_gallery'),
-        "Program modal gallery remains visible: $id"
-    );
+    $galleryIsVisible = gocamp_entity_section_visible($program, 'program', 'modal_gallery');
+    if ($id === 'uk-soccer-club-experience') {
+        check_academic_copy($galleryIsVisible, 'Requested Soccer programme gallery must be visible');
+    } else {
+        check_academic_copy(!$galleryIsVisible, "Unexpected programme gallery visible: $id");
+    }
 }
 foreach ($programs as $slug => $category) {
     check_academic_copy(!gocamp_entity_section_visible($category, 'category', 'gallery'),
@@ -62,4 +64,4 @@ foreach ($shared as $id) {
     check_academic_copy(!preg_match('/\b(UK|United Kingdom|England|Switzerland|Swiss|Exsportise)\b/i', $copy),
         "Shared tennis copy has destination-specific claims: $id");
 }
-echo "Dynamic academic descriptions and all-gallery-disabled checks passed\n";
+echo "Dynamic academic copy and gallery-exception policy checks passed\n";
