@@ -93,3 +93,45 @@ jobs:
           else
             echo 'Development uploads disabled; no catalog change.'
           fi
+
+      - name: Prepare reviewed academic copy update and encrypted backup
+        if: github.event_name == 'push'
+        env:
+          GOCAMP_CATALOG_MIGRATION: academic-copy
+          INFINITYFREE_FTP_HOST: ftpupload.net
+          INFINITYFREE_FTP_PORT: '21'
+          INFINITYFREE_FTP_USERNAME: ${{ secrets.INFINITYFREE_FTP_USERNAME }}
+          INFINITYFREE_FTP_PASSWORD: ${{ secrets.INFINITYFREE_FTP_PASSWORD }}
+          INFINITYFREE_DEPLOY_ENABLED: ${{ vars.INFINITYFREE_DEPLOY_ENABLED || secrets.INFINITYFREE_DEPLOY_ENABLED }}
+        run: |
+          if [ "$INFINITYFREE_DEPLOY_ENABLED" = "true" ]; then
+            python -m pip install 'cryptography>=45,<49'
+            python deploy/apply-uk-content-migration.py prepare
+          else
+            echo 'Development uploads disabled; skipping academic content update.'
+          fi
+
+      - name: Save encrypted academic content rollback snapshot
+        if: github.event_name == 'push'
+        uses: actions/upload-artifact@v4
+        with:
+          name: infinityfree-academic-copy-backup-${{ github.run_id }}
+          path: ${{ runner.temp }}/gocamp-academic-copy/backup.enc
+          if-no-files-found: ignore
+          retention-days: 7
+
+      - name: Apply reviewed academic copy update after backup is saved
+        if: github.event_name == 'push'
+        env:
+          GOCAMP_CATALOG_MIGRATION: academic-copy
+          INFINITYFREE_FTP_HOST: ftpupload.net
+          INFINITYFREE_FTP_PORT: '21'
+          INFINITYFREE_FTP_USERNAME: ${{ secrets.INFINITYFREE_FTP_USERNAME }}
+          INFINITYFREE_FTP_PASSWORD: ${{ secrets.INFINITYFREE_FTP_PASSWORD }}
+          INFINITYFREE_DEPLOY_ENABLED: ${{ vars.INFINITYFREE_DEPLOY_ENABLED || secrets.INFINITYFREE_DEPLOY_ENABLED }}
+        run: |
+          if [ "$INFINITYFREE_DEPLOY_ENABLED" = "true" ]; then
+            python deploy/apply-uk-content-migration.py apply
+          else
+            echo 'Development uploads disabled; skipping academic content update.'
+          fi
