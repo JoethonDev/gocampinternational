@@ -8,10 +8,12 @@ function gocamp_visibility_options(string $entity): array {
         case 'destination':
             return [
                 'hero' => ['Hero banner', true],
+                'intro' => ['Destination intro text and image', false],
                 'highlights' => ['Hero highlights', true],
                 'stats' => ['Statistics', true],
                 'programs' => ['Linked programs', true],
                 'gallery' => ['Program photo gallery', true],
+                'destination_gallery' => ['Destination photo gallery', false],
                 'faq' => ['FAQs', true],
                 'testimonials' => ['Testimonials', true],
             ];
@@ -23,6 +25,14 @@ function gocamp_visibility_options(string $entity): array {
                 'programs' => ['Programs listing', true],
                 'gallery' => ['Category photo gallery', false],
                 'testimonials' => ['Testimonials', true],
+            ];
+        case 'home':
+            return [
+                'hero' => ['Homepage hero slider', true],
+                'intro' => ['Homepage introduction', true],
+                'destinations' => ['Featured destinations', true],
+                'featured_categories' => ['Featured program categories', true],
+                'testimonials' => ['Homepage testimonials', true],
             ];
         case 'program':
             return [
