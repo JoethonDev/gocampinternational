@@ -24,29 +24,16 @@ jobs:
       - name: Test admin UI regressions
         run: php tests/admin-ui-regression-test.php
 
-      - name: HTTP smoke tests for PHP routes
+      - name: Validate public routes against current catalog data
         run: |
           php -S 127.0.0.1:8765 local-router.php >/tmp/gocamp-server.log 2>&1 &
           PID=$!
           trap 'kill "$PID" 2>/dev/null || true' EXIT
           sleep 2
-          for path in / /destinations/uk /programs "/program/category?category=adult-academic" /admin; do
-            echo "Checking $path"
-            http_code=$(curl -sS -L -o /tmp/gocamp-response -w "%{http_code}" "http://127.0.0.1:8765$path")
-            if [ "$http_code" != "200" ]; then
-              cat /tmp/gocamp-server.log
-              cat /tmp/gocamp-response
-              exit 1
-            fi
-          done
-          curl -fsS http://127.0.0.1:8765/programs -o /tmp/gocamp-programs-response
-          # The previous UK Young Professional programme is now intentionally inactive.
-          ! grep -q 'id="programModal-uk-young-professional"' /tmp/gocamp-programs-response
-          grep -q 'id="programModal-uk-academic-engineering"' /tmp/gocamp-programs-response
-          grep -q 'id="programModal-tennis-academy"' /tmp/gocamp-programs-response
-          grep -q 'id="programModal-uk-soccer-club-experience"' /tmp/gocamp-programs-response
-          curl -fsS http://127.0.0.1:8765/destinations/uk -o /tmp/gocamp-destination-response
-          grep -q 'id="destination-intro"' /tmp/gocamp-destination-response
+          if ! php tests/catalog-http-smoke-test.php http://127.0.0.1:8765; then
+            cat /tmp/gocamp-server.log
+            exit 1
+          fi
           curl -fsS http://127.0.0.1:8765/admin/media-library -o /tmp/gocamp-media-login
           grep -q 'Admin Access' /tmp/gocamp-media-login
           code=$(curl -sS -o /dev/null -w "%{http_code}" http://127.0.0.1:8765/admin/media-library.php)
