@@ -360,3 +360,27 @@ textarea { resize: vertical; }
 @media (max-width: 360px) {
   .page-content .interest-grid { grid-template-columns: minmax(0, 1fr); }
 }
+
+/* Wide Bootstrap gutters exceed the 12–16px container padding below 1200px
+   (especially g-5/gx-lg-5); keep rows fully inside their containers. */
+@media (max-width: 1199.98px) {
+  .page-content .row.g-5,
+  .page-content .row.gx-lg-5 {
+    --bs-gutter-x: 1.5rem;
+  }
+}
+/* Facebook SDK writes fixed iframe widths; let the embed fit its column. */
+.page-content .fb-page,
+.page-content .fb-page > span,
+.page-content .fb_iframe_widget,
+.page-content .fb_iframe_widget span,
+.page-content .fb_iframe_widget iframe {
+  max-width: 100% !important;
+}
+.page-content .fb-page,
+.page-content .fb_iframe_widget { min-width: 0; display: block; }
+@media (max-width: 767.98px) {
+  .page-content .row.g-5, .page-content .row.gx-lg-5 {
+    --bs-gutter-x: 1.25rem;
+  }
+}
