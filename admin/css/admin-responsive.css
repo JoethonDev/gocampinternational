@@ -1,0 +1,167 @@
+/* Admin-only responsive layer. Loaded after both public CSS and admin-modern.css.
+   Keep Light, Dark and Dainty palette variables intact. */
+:root { --admin-control-radius: var(--ui-radius, 0.75rem); }
+body {
+  min-width: 0;
+  overflow-x: clip;
+  padding-top: 4.5rem;
+}
+#main-content.container {
+  width: min(100% - 2rem, 1320px);
+  max-width: 1320px;
+  min-width: 0;
+  padding-inline: 0;
+}
+#main-content .row, #main-content .row > [class*="col-"],
+#main-content .card, #main-content .accordion, #main-content .repeater-item {
+  min-width: 0;
+  max-width: 100%;
+}
+#main-content .card, #main-content .card:hover {
+  transform: none !important;
+}
+#main-content .card-body { min-width: 0; }
+#main-content input, #main-content textarea, #main-content select,
+#main-content .input-group { max-width: 100%; }
+#main-content .form-select, #main-content .form-control {
+  border-radius: var(--admin-control-radius);
+}
+#main-content textarea { resize: vertical; }
+#main-content .table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+#main-content table { max-width: none; }
+#main-content .accordion-button {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  text-align: start;
+}
+#main-content .accordion-body, #main-content .card-body {
+  overflow-wrap: anywhere;
+}
+#main-content .input-group { flex-wrap: nowrap; }
+#main-content .input-group .form-control { flex: 1 1 auto; min-width: 0; }
+#main-content .input-group .btn { flex: 0 0 auto; }
+#main-content .btn, .modal .btn {
+  border-radius: var(--admin-control-radius) !important;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0;
+  max-width: 100%;
+}
+#main-content .btn.btn-sm, .modal .btn.btn-sm {
+  border-radius: var(--ui-radius-sm, .55rem) !important;
+}
+#main-content .repeater-item .btn[data-action="remove-item"],
+#main-content .simple-repeater-item .btn[data-action="remove-item"] {
+  min-width: 2.3rem; min-height: 2.3rem; padding: 0.45rem;
+}
+.navbar.navbar-expand-xl {
+  background: var(--navbar-bg) !important;
+  border-color: var(--border-color);
+}
+.navbar.navbar-expand-xl .nav-link,
+.navbar.navbar-expand-xl .navbar-brand,
+.navbar.navbar-expand-xl .navbar-toggler {
+  color: var(--navbar-text) !important;
+}
+.navbar.navbar-expand-xl .nav-link:hover { color: var(--primary-color) !important; }
+.navbar.navbar-expand-xl .navbar-toggler {
+  border-color: var(--border-color);
+  color: var(--navbar-text);
+}
+.navbar.navbar-expand-xl .navbar-collapse { background: var(--navbar-bg) !important; }
+.navbar.navbar-expand-xl .dropdown-menu {
+  background: var(--bg-card); border-color: var(--border-color);
+}
+.navbar.navbar-expand-xl .dropdown-item { color: var(--text-main); }
+.navbar.navbar-expand-xl .dropdown-item:hover {
+  color: var(--text-main);
+  background: var(--bg-body);
+}
+#mediaSelectorModal .media-library-grid {
+  grid-template-columns: repeat(auto-fill, minmax(105px, 1fr));
+}
+#mediaSelectorModal .modal-dialog {
+  width: min(100% - 1.25rem, 920px);
+}
+@media (max-width: 1199.98px) {
+  #main-content.container { width: calc(100% - 2rem); }
+  /* Admin edit forms: two-column desktop editors become full-width on tablets. */
+  #main-content .row > .col-lg-8,
+  #main-content .row > .col-lg-4 {
+    flex: 0 0 100%;
+    width: 100%;
+    max-width: 100%;
+  }
+  #main-content .card-header .d-flex,
+  #main-content > .d-flex,
+  #main-content form > .d-flex {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  #main-content .card-header { gap: 0.5rem; }
+  .navbar .navbar-collapse {
+    overflow-y: auto !important;
+    max-height: calc(100dvh - 5rem);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--card-shadow);
+    background-color: var(--navbar-bg) !important;
+  }
+  .navbar .navbar-collapse .navbar-nav { align-items: stretch !important; }
+  .navbar .navbar-nav .nav-link { padding: 0.7rem 0.85rem; }
+  .navbar .navbar-nav .dropdown-menu { position: static; max-height: 18rem; overflow-y: auto; }
+}
+@media (max-width: 767.98px) {
+  #main-content.container { width: calc(100% - 1.5rem); margin-top: 1rem !important; }
+  #main-content .card-body { padding: 1rem !important; }
+  #main-content .card-header { padding: 1rem !important; }
+  #main-content .row.g-2 > [class*="col-4"],
+  #main-content .row.g-2 > [class*="col-7"],
+  #main-content .row.g-2 > [class*="col-3"],
+  #main-content .row.g-2 > [class*="col-2"] {
+    flex: 0 0 auto;
+    width: 100%;
+  }
+  /* Repeater controls (icon/text/trash) stack instead of exceeding phone widths. */
+  #main-content .repeater-item.row,
+  #main-content .schedule-repeater-item.row {
+    margin-inline: 0;
+    gap: 0.5rem;
+  }
+  #main-content .repeater-item.row > [class*="col-"],
+  #main-content .schedule-repeater-item.row > [class*="col-"] {
+    flex: 0 0 100%;
+    width: 100%;
+    max-width: 100%;
+    padding-inline: 0;
+  }
+  #main-content .repeater-item.row > .col-1,
+  #main-content .schedule-repeater-item.row > .col-1 { text-align: end; }
+  #main-content .repeater-item .btn[data-action="remove-item"] { width: auto !important; }
+  #main-content h1 { font-size: clamp(1.45rem, 6vw, 2rem); }
+  #main-content .input-group { min-width: 0; }
+  #main-content .input-group > .btn {
+    padding-inline: 0.65rem;
+    overflow-wrap: normal;
+    font-size: 0.8rem;
+  }
+  #mediaSelectorModal .modal-dialog { max-width: calc(100vw - 0.75rem); }
+  #mediaSelectorModal .modal-body { padding: 0.75rem !important; }
+  #mediaSelectorModal #media-search-input { width: 100% !important; }
+  #mediaSelectorModal #refresh-media-library { flex: 0 0 auto; }
+  #mediaSelectorModal .modal-body > .d-flex { flex-wrap: wrap; gap: 0.5rem; }
+  #mediaSelectorModal .media-library-grid {
+    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+    gap: 0.5rem;
+  }
+}
+@media (max-width: 380px) {
+  #main-content.container { width: calc(100% - 1rem); }
+  #main-content .btn:not(.btn-sm) { padding-inline: 0.7rem; }
+}
+@media (hover: none) {
+  #main-content .card:hover { transform: none !important; }
+}
