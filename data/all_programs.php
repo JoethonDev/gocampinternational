@@ -1643,7 +1643,7 @@ $all_programs = array (
     'category_slug' => 'tennis',
     'name' => 'Tennis Academy',
     'tagline' => 'Train with purpose, build match confidence and grow your game on and off the court.',
-    'image' => 'https://framerusercontent.com/images/bTBtmBhKG8bwetd4AG4Wd2EYLYs.jpg?height=1067&width=1600',
+    'image' => '/images/imported-9b759cf6c4187e.webp',
     'ages' => array (
       'min' => 9,
       'max' => 17,
@@ -1675,8 +1675,8 @@ $all_programs = array (
     'schedule' => array (
     ),
     'gallery' => array (
-      0 => 'https://framerusercontent.com/images/N954qt0oSjvlI46fP6pYsHgaNY0.jpg?height=1067&width=1600',
-      1 => 'https://framerusercontent.com/images/aYghOvt0fp7JHmJkjZEB8fYGAM.jpg?height=1067&width=1600',
+      0 => '/images/imported-b4eecf3804ce9b.webp',
+      1 => '/images/imported-5acb0b681a0332.webp',
     ),
   ),
   'uk-soccer-club-experience' => array (
