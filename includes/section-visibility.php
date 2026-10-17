@@ -8,7 +8,7 @@ function gocamp_visibility_options(string $entity): array {
         case 'destination':
             return [
                 'hero' => ['Hero banner', true],
-                'intro' => ['Destination intro text and image', false],
+                'intro' => ['Destination intro text and image', true],
                 'highlights' => ['Hero highlights', true],
                 'stats' => ['Statistics', true],
                 'programs' => ['Linked programs', true],

@@ -8,6 +8,7 @@
  */
 
 require_once __DIR__ . '/../includes/section-visibility.php';
+require_once __DIR__ . '/../includes/content-description.php';
 
 // --- Variable Safety Checks ---
 if (!isset($program) || !is_array($program)) { return; }
@@ -21,11 +22,10 @@ $ages         = isset($program['ages']) && !empty($program['ages']) ? $program['
 $duration     = isset($program['duration']) && $program['duration'] > 0 ? $program['duration'] : null;
 $level        = isset($program['level']) && !empty($program['level']) ? $program['level'] : null;
 $price        = isset($program['price']) && !empty($program['price']) ? $program['price'] : null;
-// NOTE: Rich-text fields may contain basic HTML from the CMS. We allow only safe
-// formatting tags and strip everything else (e.g. <script>) to block XSS while
-// keeping <p>/<ul>/<ol>/<li>/<br>/<strong>/<em>/<a>/<b>/<i> formatting.
-$allowedHtml = '<p><ul><ol><li><br><strong><em><a><b><i>';
-$description  = isset($program['description']) ? strip_tags($program['description'], $allowedHtml) : '<p>No description available.</p>';
+$descriptionRaw = (string)($program['description'] ?? '');
+$description = gocamp_description_text($descriptionRaw) !== ''
+    ? gocamp_description_markup($descriptionRaw)
+    : '<p>' . htmlspecialchars($tagline !== '' ? $tagline : 'No description available.', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '</p>';
 $highlights   = isset($program['highlights']) && !empty($program['highlights']) ? $program['highlights'] : null;
 $schedule     = isset($program['schedule']) && !empty($program['schedule']) ? $program['schedule'] : null;
 $includes     = isset($program['includes']) && !empty($program['includes']) ? $program['includes'] : null;
