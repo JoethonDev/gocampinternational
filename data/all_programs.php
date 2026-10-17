@@ -116,7 +116,7 @@ $all_programs = array (
     'excludes' => 
     array (
     ),
-    'status' => 'active',
+    'status' => 'inactive',
     'gallery' => 
     array (
     ),
@@ -157,7 +157,7 @@ $all_programs = array (
     'excludes' => 
     array (
     ),
-    'status' => 'active',
+    'status' => 'inactive',
     'gallery' => 
     array (
     ),
@@ -358,7 +358,7 @@ $all_programs = array (
     'excludes' => 
     array (
     ),
-    'status' => 'active',
+    'status' => 'inactive',
     'gallery' => 
     array (
     ),
@@ -1635,6 +1635,90 @@ $all_programs = array (
     ),
     'status' => 'inactive',
     'gallery' => array (
+    ),
+  ),
+  'tennis-academy' => array (
+    'order' => 1,
+    'id' => 'tennis-academy',
+    'category_slug' => 'tennis',
+    'name' => 'Tennis Academy',
+    'tagline' => 'Train with purpose, build match confidence and grow your game on and off the court.',
+    'image' => '/images/imported-9b759cf6c4187e.webp',
+    'ages' => array (
+      'min' => 9,
+      'max' => 17,
+    ),
+    'duration' => 1,
+    'level' => 'Beginner to Advanced',
+    'price' => NULL,
+    'color' => 'success',
+    'badges' => array (
+      0 => 'Tennis',
+      1 => 'Skill Development',
+    ),
+    'highlights' => array (
+      0 => 'Structured coaching in technique, tactics, fitness and match-day mindset.',
+      1 => 'Ability-based training, technical drills, footwork and competitive match play.',
+      2 => 'UK Exsportise reference programme: 15 hours of tennis coaching and 15 hours of English per week, with a 1:6 coach-to-player ratio.',
+      3 => 'UK reference programme includes residential boarding and three daily meals; details depend on destination.',
+    ),
+    'description' => '<p>Find your rhythm, sharpen your strokes and step onto the court with confidence. Tennis Academy brings together focused coaching, tactical learning and purposeful match play to help junior players progress at their own pace. Players develop their serve, forehand, backhand, movement and decision-making while building resilience, focus and sportsmanship.</p><p>Our UK tennis programme is informed by the Exsportise Tennis Academy approach, combining technical, tactical, physical and mental development. At Exsportise\'s UK residential programme, players aged 9–17 receive 15 hours of tennis coaching plus 15 hours of English tuition each week, with ability-based training groups and a 1:6 coaching ratio. At least one year of previous playing experience is required for that UK programme.</p><p>This programme is featured for both the United Kingdom and Switzerland. Specific Swiss campus arrangements, dates, coaching hours and inclusions are subject to separate confirmation and should not be inferred from the UK Exsportise programme.</p>',
+    'includes' => array (
+      0 => 'Tennis technique and match-play development',
+      1 => 'Age- and ability-appropriate coaching, conditioning and confidence-building',
+      2 => 'UK Exsportise reference offering: 15 hours tennis plus 15 hours English weekly',
+      3 => 'UK Exsportise reference offering: residential accommodation, three meals daily and course feedback',
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'active',
+    'schedule' => array (
+    ),
+    'gallery' => array (
+      0 => '/images/imported-b4eecf3804ce9b.webp',
+      1 => '/images/imported-5acb0b681a0332.webp',
+    ),
+  ),
+  'uk-soccer-club-experience' => array (
+    'order' => 3,
+    'id' => 'uk-soccer-club-experience',
+    'category_slug' => 'soccer-camps',
+    'name' => 'UK Soccer Academy & Club Experience',
+    'tagline' => 'Build your skills, train with ambition and explore the football cultures that inspire champions.',
+    'image' => '/images/soccer_1.webp',
+    'ages' => array (
+      'min' => NULL,
+      'max' => NULL,
+    ),
+    'duration' => NULL,
+    'level' => 'All skill levels (grouped by ability)',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Soccer',
+      1 => 'UK Football',
+    ),
+    'highlights' => array (
+      0 => 'Technical sessions focused on first touch, passing, dribbling and finishing.',
+      1 => 'Small-sided games and tactical challenges to develop match intelligence.',
+      2 => 'Strength, teamwork and confidence through age- and ability-appropriate coaching.',
+      3 => 'Discover the football traditions of Arsenal, Liverpool FC, Manchester City and Paris Saint-Germain.',
+    ),
+    'description' => '<p>Experience football as more than a game. Our UK Soccer Academy &amp; Club Experience is designed for young players who want to develop their technique, challenge themselves in training and discover the world of elite European football.</p><p>Inspired by the discipline, teamwork and attacking creativity associated with clubs such as <strong>Arsenal</strong>, <strong>Liverpool FC</strong>, <strong>Manchester City</strong> and <strong>Paris Saint-Germain</strong>, the programme blends ball mastery, position-specific exercises, passing combinations and tactical awareness with matches that encourage players to put their new skills to work.</p><p>Players can look forward to an energetic, supportive setting where they build confidence, form international friendships and learn the value of commitment and fair play. References to clubs describe football inspirations and interests; official coaching partnerships, stadium visits, club-branded experiences and destinations are not confirmed and must not be advertised as included without separate verification.</p>',
+    'includes' => array (
+      0 => 'Structured football skill-development sessions',
+      1 => 'Technical, tactical and team-based exercises',
+      2 => 'Friendly games and skill challenges',
+      3 => 'Player progress feedback, subject to local camp arrangements',
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'active',
+    'schedule' => array (
+    ),
+    'gallery' => array (
+      0 => '/images/soccer_2.webp',
+      1 => '/images/soccer_3.webp',
     ),
   ),
 );
