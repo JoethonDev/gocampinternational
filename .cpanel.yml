@@ -1,0 +1,6 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH="$HOME/public_html"
+    - /bin/mkdir -p "$DEPLOYPATH"
+    - git archive HEAD | /bin/tar -x -C "$DEPLOYPATH" --exclude=.cpanel.yml --exclude=.dockerignore --exclude=Dockerfile --exclude=render.yaml --exclude=.github --exclude='*.sql' --exclude='*.log' --exclude='.env*'
