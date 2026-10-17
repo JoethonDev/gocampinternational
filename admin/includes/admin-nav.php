@@ -6,7 +6,7 @@
  * - Added "Programs" link to the new master program editor.
  */
 ?>
-<nav class="navbar navbar-expand-lg fixed-top">
+<nav class="navbar navbar-expand-xl fixed-top">
     <div class="container">
         <a class="navbar-brand" href="/admin/dashboard">
             Go Camp Admin
@@ -15,7 +15,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="adminNavbar">
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
+            <ul class="navbar-nav ms-auto mb-2 mb-xl-0 align-items-xl-center">
                 <li class="nav-item">
                     <a class="nav-link" href="/admin/dashboard">Dashboard</a>
                 </li>
@@ -33,7 +33,7 @@
                 </li>
                 
                 <!-- Theme Switcher -->
-                <li class="nav-item dropdown ms-lg-3">
+                <li class="nav-item dropdown ms-xl-3">
                     <a class="nav-link dropdown-toggle" href="#" id="themeDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="bi bi-palette"></i> Theme
                     </a>

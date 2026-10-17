@@ -92,11 +92,7 @@ require_once __DIR__ . '/../includes/header.php';
 
 <style>
     /* ... all styles from your original file ... */
-    :root {
-        --brand-primary: #00a4c0;
-        --brand-secondary: #2C3E50;
-        --brand-accent: #F9BB08;
-    }
+    /* Global brand tokens come from /css/style.css and /css/design-system.css. */
     .hero-section {
         position: relative;
         /* height: 70vh; */
@@ -196,7 +192,7 @@ require_once __DIR__ . '/../includes/header.php';
         <div class="hero-content">
             <p class="hero-tagline text-uppercase">Program Category</p>
             <h1><?= htmlspecialchars($programData['name']) ?></h1>
-            <a href="#category-programs" class="hero-cta-btn">Explore Programs</a>
+            <a href="#category-programs" class="btn btn-warning hero-cta-btn">Explore Programs</a>
         </div>
     </section>
     <?php endif; ?>

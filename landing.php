@@ -288,7 +288,7 @@ h1, h2, h3, h4, h5, h6 {
                                 </div>
 
                                 <div class="d-grid">
-                                     <button type="submit" class="btn-submit-landing"><i class="fas fa-rocket"></i> Get My Free Consultation</button>
+                                     <button type="submit" class="btn btn-warning btn-lg btn-submit-landing"><i class="fas fa-rocket"></i> Get My Free Consultation</button>
                                 </div>
                             </form>
                              <div class="form-trust">

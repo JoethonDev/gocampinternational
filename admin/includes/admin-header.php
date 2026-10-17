@@ -32,6 +32,7 @@ $pageTitle = $pageTitle ?? 'Go Camp Admin';
     
     <!-- Admin Modern Theme -->
     <link rel="stylesheet" href="/admin/css/admin-modern.css">
+    <link rel="stylesheet" href="/admin/css/admin-responsive.css?v=1.0">
 
     <script>
         // Apply saved theme immediately to prevent flash
