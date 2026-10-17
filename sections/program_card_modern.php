@@ -180,6 +180,7 @@ $colors = $colorClasses[$color] ?? $colorClasses['primary'];
                     </button>
                 </div>
                 */ ?>
+                <button type="button" class="btn btn-outline-secondary w-100 mt-3" data-bs-toggle="modal" data-bs-target="#programModal-<?= htmlspecialchars($programId) ?>"><i class="bi bi-info-circle me-2"></i>View Program Details</button>
             </div>
         </div>
     </div>
