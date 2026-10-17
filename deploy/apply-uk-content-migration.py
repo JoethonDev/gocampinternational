@@ -23,27 +23,34 @@ import tarfile
 
 FILES = ("all_programs.php", "programs.php", "destinations.php")
 MIGRATION_SCOPE = os.environ.get("GOCAMP_CATALOG_MIGRATION", "uk-catalog")
-if MIGRATION_SCOPE not in ("uk-catalog", "academic-copy"):
+SCOPES = {
+    "uk-catalog": (
+        "/htdocs/.gocamp-uk-catalog-migrated-20261017",
+        b"uk-catalog-20261017\n",
+        "gocamp-uk-catalog",
+        "apply-uk-catalog.php",
+    ),
+    "academic-copy": (
+        "/htdocs/.gocamp-academic-copy-migrated-20261017",
+        b"academic-copy-20261017\n",
+        "gocamp-academic-copy",
+        "apply-academic-copy.php",
+    ),
+    "soccer-images": (
+        "/htdocs/.gocamp-soccer-images-migrated-20261017",
+        b"soccer-images-20261017\n",
+        "gocamp-soccer-images",
+        "apply-soccer-images.php",
+    ),
+}
+if MIGRATION_SCOPE not in SCOPES:
     raise RuntimeError("Unrecognised reviewed migration scope")
-MARKER = (
-    "/htdocs/.gocamp-uk-catalog-migrated-20261017"
-    if MIGRATION_SCOPE == "uk-catalog"
-    else "/htdocs/.gocamp-academic-copy-migrated-20261017"
-)
-MARKER_CONTENT = (
-    b"uk-catalog-20261017\n"
-    if MIGRATION_SCOPE == "uk-catalog"
-    else b"academic-copy-20261017\n"
-)
+MARKER, MARKER_CONTENT, WORK_NAME, PHP_MIGRATOR = SCOPES[MIGRATION_SCOPE]
 DIRECTORY = "/htdocs/data"
 MAX_FILE = 5 * 1024 * 1024
-WORK = Path(os.environ.get("RUNNER_TEMP", "/tmp")) / (
-    "gocamp-uk-catalog" if MIGRATION_SCOPE == "uk-catalog" else "gocamp-academic-copy"
-)
+WORK = Path(os.environ.get("RUNNER_TEMP", "/tmp")) / WORK_NAME
 ROOT = Path(__file__).resolve().parents[1]
-MIGRATOR = ROOT / "deploy" / "migrations" / (
-    "apply-uk-catalog.php" if MIGRATION_SCOPE == "uk-catalog" else "apply-academic-copy.php"
-)
+MIGRATOR = ROOT / "deploy" / "migrations" / PHP_MIGRATOR
 AAD = b"GoCamp development catalog 2026-10-17"
 
 
