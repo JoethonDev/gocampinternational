@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: gocamp-php-preview
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: PORT
+        value: "80"
+    autoDeployTrigger: commit
