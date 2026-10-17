@@ -35,5 +35,7 @@ jobs:
               exit 1
             fi
           done
-          curl -fsS http://127.0.0.1:8765/programs | grep -q 'id="programModal-uk-young-professional"'
-          curl -fsS http://127.0.0.1:8765/destinations/uk | grep -q 'id="destination-intro"'
+          curl -fsS http://127.0.0.1:8765/programs -o /tmp/gocamp-programs-response
+          grep -q 'id="programModal-uk-young-professional"' /tmp/gocamp-programs-response
+          curl -fsS http://127.0.0.1:8765/destinations/uk -o /tmp/gocamp-destination-response
+          grep -q 'id="destination-intro"' /tmp/gocamp-destination-response
