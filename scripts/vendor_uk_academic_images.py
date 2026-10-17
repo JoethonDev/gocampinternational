@@ -15,7 +15,7 @@ ROOT = Path(__file__).resolve().parents[1]
 CATALOG = ROOT / "data" / "all_programs.php"
 OUT_DIR = ROOT / "images"
 PATTERN = re.compile(
-    r"(?P<entry>  '(?P<id>uk-academic-[a-z0-9-]+)' =>\\s*array \\([\\s\\S]*?^  \\),)",
+    r"(?P<entry>  '(?P<id>uk-academic-[a-z0-9-]+)' =>\s*array \([\s\S]*?^  \),)",
     re.MULTILINE,
 )
 IMAGE = re.compile(r"(?P<prefix>'image' => )'(?P<url>https?://[^']+)'")
