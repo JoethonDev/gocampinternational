@@ -10,6 +10,7 @@
 // 1. AT THE VERY TOP: Check if user is logged in
 require_once 'auth-check.php';
 require_once 'helpers.php';
+require_once __DIR__ . '/../includes/section-visibility.php';
 
 // 2. Define file path and load data
 $file_path = __DIR__ . '/../data/destinations.php';
@@ -35,6 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $new_data['name'] = $_POST['name'] ?? '';
             $new_data['slug'] = $slug;
             $new_data['status'] = $_POST['status'] ?? 'active';
+            $new_data['section_visibility'] = gocamp_read_visibility($_POST['section_visibility'] ?? [], 'destination', $new_data['section_visibility'] ?? []);
             $new_data['tagline'] = $_POST['tagline'] ?? '';
             $new_data['intro_text'] = $_POST['intro_text'] ?? '';
 
@@ -196,6 +198,7 @@ require_once 'includes/admin-header.php';
 </template>
 <form action="edit-destination.php<?= $is_new_item ? '' : '?slug=' . htmlspecialchars($data['slug']) ?>" method="POST" enctype="multipart/form-data" class="animate-fade-in delay-1">
 <input type="hidden" name="csrf" value="<?= htmlspecialchars(csrf_token()) ?>">
+<?php $visibilityEntity = "destination"; $visibilityRecord = $data; require __DIR__ . "/includes/visibility-controls.php"; ?>
 
     <?php if (!$is_new_item): ?> <input type="hidden" name="original_slug" value="<?= htmlspecialchars($data['slug']) ?>"> <?php endif; ?>
 
