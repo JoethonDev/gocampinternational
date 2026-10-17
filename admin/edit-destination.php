@@ -39,6 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $new_data['section_visibility'] = gocamp_read_visibility($_POST['section_visibility'] ?? [], 'destination', $new_data['section_visibility'] ?? []);
             $new_data['tagline'] = $_POST['tagline'] ?? '';
             $new_data['intro_text'] = $_POST['intro_text'] ?? '';
+            $new_data['intro_image'] = $_POST['intro_image'] ?? '';
 
             $new_data['program_ids'] = $_POST['program_ids'] ?? [];
 
@@ -228,6 +229,23 @@ require_once 'includes/admin-header.php';
                         <label for="intro_text" class="form-label fw-bold small text-uppercase text-muted">Intro Text</label>
                         <textarea class="form-control tinymce-editor" id="intro_text" name="intro_text" rows="10"><?= htmlspecialchars($data['intro_text']) ?></textarea>
                     </div>
+                    <div class="mb-3">
+                        <label for="intro_image_input" class="form-label fw-bold small text-uppercase text-muted">Intro Image</label>
+                        <div class="image-upload-preview mb-2 bg-light d-flex align-items-center justify-content-center" style="min-height: 150px;">
+                            <img src="<?= !empty($data['intro_image']) ? htmlspecialchars($data['intro_image']) : '/admin/placeholder-image.png' ?>"
+                                 alt="Intro image preview" class="img-fluid media-preview-image"
+                                 style="max-height: 180px; object-fit: contain;"
+                                 onerror="this.onerror=null; this.src='/admin/placeholder-image.png'">
+                        </div>
+                        <div class="input-group">
+                            <input type="text" class="form-control media-preview-target-input" id="intro_image_input" name="intro_image"
+                                   value="<?= htmlspecialchars($data['intro_image']) ?>" placeholder="Select image..." readonly>
+                            <button class="btn btn-outline-secondary" type="button" data-bs-toggle="media-modal" data-bs-target-input="intro_image_input">Browse...</button>
+                            <button class="btn btn-outline-danger" type="button" data-action="clear-media" data-bs-target-input="intro_image_input">
+                                <i class="bi bi-x-circle me-1"></i>Remove
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -411,6 +429,9 @@ require_once 'includes/admin-header.php';
                                 data-bs-toggle="media-modal"
                                 data-bs-target-input="banner_input">
                                  Browse...
+                             </button>
+                             <button class="btn btn-outline-danger" type="button" data-action="clear-media" data-bs-target-input="banner_input" aria-label="Remove banner image">
+                                 <i class="bi bi-x-circle"></i>
                              </button>
                         </div>
                     </div>

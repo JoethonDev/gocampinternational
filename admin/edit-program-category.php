@@ -44,7 +44,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $new_data['status'] = $_POST['status'] ?? 'active';
             $new_data['section_visibility'] = gocamp_read_visibility($_POST['section_visibility'] ?? [], 'category', $new_data['section_visibility'] ?? []);
             $new_data['color'] = $_POST['color'] ?? 'primary';
-            $new_data['intro'] = $_POST['intro'] ?? ''; 
+            $new_data['intro'] = $_POST['intro'] ?? '';
+            $new_data['intro_image'] = $_POST['intro_image'] ?? '';
             
             $new_data['gallery'] = array_values(array_filter($_POST['gallery_path'] ?? []));
 
@@ -250,9 +251,29 @@ require_once 'includes/admin-header.php';
                             <input type="text" class="form-control form-control-lg" id="name" name="name" value="<?= htmlspecialchars($data['name']) ?>" placeholder="Enter category name">
                         </div>
                         
-                        <div class="mb-0">
+                        <div class="mb-4">
                             <label for="intro" class="form-label fw-bold text-secondary small text-uppercase">Intro Text</label>
                             <textarea class="form-control tinymce-editor" id="intro" name="intro" rows="10"><?= htmlspecialchars($data['intro']) ?></textarea>
+                        </div>
+
+                        <div class="mb-0">
+                            <label for="intro_image_input" class="form-label fw-bold text-secondary small text-uppercase">Intro Image</label>
+                            <div class="image-upload-preview mb-2 bg-light d-flex align-items-center justify-content-center" style="min-height: 150px;">
+                                <img src="<?= !empty($data['intro_image']) ? htmlspecialchars($data['intro_image']) : '/admin/placeholder-image.png' ?>"
+                                     alt="Intro image preview" class="img-fluid media-preview-image"
+                                     style="max-height: 180px; object-fit: contain;"
+                                     onerror="this.onerror=null; this.src='/admin/placeholder-image.png'">
+                            </div>
+                            <div class="input-group">
+                                <input type="text" class="form-control media-preview-target-input" id="intro_image_input" name="intro_image"
+                                       value="<?= htmlspecialchars($data['intro_image']) ?>" placeholder="Select image..." readonly>
+                                <button class="btn btn-outline-secondary" type="button" data-bs-toggle="media-modal" data-bs-target-input="intro_image_input">
+                                    <i class="bi bi-folder2-open me-1"></i>Browse
+                                </button>
+                                <button class="btn btn-outline-danger" type="button" data-action="clear-media" data-bs-target-input="intro_image_input">
+                                    <i class="bi bi-x-circle me-1"></i>Remove
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -390,6 +411,9 @@ require_once 'includes/admin-header.php';
                                     data-bs-toggle="media-modal"
                                     data-bs-target-input="banner_input">
                                      <i class="bi bi-folder2-open"></i>
+                                 </button>
+                                 <button class="btn btn-outline-danger" type="button" data-action="clear-media" data-bs-target-input="banner_input" aria-label="Remove banner image">
+                                     <i class="bi bi-x-circle"></i>
                                  </button>
                             </div>
                         </div>

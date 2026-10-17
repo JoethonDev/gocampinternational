@@ -31,8 +31,8 @@ $program = [
 ob_start();
 include __DIR__ . '/../sections/program_card_modern.php';
 $card = (string)ob_get_clean();
-expect_description(str_contains($card, 'Practical &amp; interactive medicine course.'), 'Program card shows saved description');
-expect_description(!str_contains($card, '>Short tagline</p>'), 'Program card prefers description to tagline');
+expect_description(!str_contains($card, 'Practical &amp; interactive medicine course.'), 'Program description stays out of the card');
+expect_description(str_contains($card, 'Short tagline'), 'Program card may show its separate tagline');
 expect_description(str_contains($card, 'data-bs-target="#programModal-test-medicine"'), 'Card links to detail modal');
 
 ob_start();
@@ -43,9 +43,9 @@ expect_description(str_contains($modal, 'Practical &amp; interactive medicine co
 
 $program['description'] = '';
 ob_start();
-include __DIR__ . '/../sections/program_card_modern.php';
-$cardFallback = (string)ob_get_clean();
-expect_description(str_contains($cardFallback, 'Short tagline'), 'Missing description falls back to tagline');
+include __DIR__ . '/../sections/program_detail_modal.php';
+$modalFallback = (string)ob_get_clean();
+expect_description(str_contains($modalFallback, 'Short tagline'), 'Program details fall back to tagline only when description is missing');
 
 $public_destinations = [
     [

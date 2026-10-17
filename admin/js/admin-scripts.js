@@ -295,24 +295,36 @@ $(document).ready(function () {
         selectButton.disabled = false;
       }
     });
+    function updateMediaPreview(input, url) {
+      if (!input) return;
+      const scope = input.closest(".repeater-item, .simple-repeater-item, .mb-0, .mb-3, .mb-4, .card-body") || input.parentElement;
+      const previewImage = scope ? scope.querySelector(".media-preview-image") : null;
+      if (previewImage) {
+        previewImage.src = url || "/admin/placeholder-image.png";
+        previewImage.onerror = function () {
+          this.onerror = null;
+          this.src = "/admin/placeholder-image.png";
+        };
+      }
+    }
+
     selectButton.addEventListener("click", function () {
       if (currentTargetInput && currentSelectedUrl) {
         currentTargetInput.value = currentSelectedUrl;
-        const inputGroup = currentTargetInput.closest(".input-group");
-        if (inputGroup) {
-          const previewImage = inputGroup.previousElementSibling;
-          if (
-            previewImage &&
-            previewImage.classList.contains("media-preview-image")
-          ) {
-            previewImage.src = currentSelectedUrl;
-            previewImage.onerror = function () {
-              this.src = "/admin/placeholder-image.png";
-            };
-          }
-        }
+        updateMediaPreview(currentTargetInput, currentSelectedUrl);
+        currentTargetInput.dispatchEvent(new Event("change", { bubbles: true }));
         mediaModal.hide();
       }
+    });
+
+    document.body.addEventListener("click", function (event) {
+      const clearButton = event.target.closest('[data-action="clear-media"]');
+      if (!clearButton) return;
+      const targetInput = document.getElementById(clearButton.dataset.bsTargetInput || "");
+      if (!targetInput) return;
+      targetInput.value = "";
+      updateMediaPreview(targetInput, "");
+      targetInput.dispatchEvent(new Event("change", { bubbles: true }));
     });
     refreshButton.addEventListener("click", loadMediaLibrary);
     searchInput.addEventListener("input", function () {
