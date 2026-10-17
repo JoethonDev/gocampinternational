@@ -582,3 +582,25 @@ option {
 }
 [data-theme="dark"] .btn-outline-danger { color: #ff8d98; border-color: #b94a56; }
 [data-theme="dark"] .btn-outline-danger:hover { color: #fff; background-color: #b94a56; }
+
+#main-content .form-control[style*="background-color: #fff"],
+#main-content .form-control[style*="background-color:#fff"] {
+    background-color: var(--input-bg) !important;
+    color: var(--input-text) !important;
+}
+.pagination .page-link {
+    background-color: var(--bg-card);
+    color: var(--text-main);
+    border-color: var(--input-border);
+}
+.pagination .page-link:hover,
+.pagination .page-item.active .page-link {
+    background-color: var(--primary-color);
+    color: #fff;
+    border-color: var(--primary-color);
+}
+.pagination .page-item.disabled .page-link {
+    background-color: var(--bg-body);
+    color: var(--text-muted);
+    border-color: var(--border-color);
+}
