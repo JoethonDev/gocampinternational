@@ -21,6 +21,8 @@ jobs:
         run: php tests/description-display-test.php
       - name: Test media library renames
         run: php tests/media-library-rename-test.php
+      - name: Test admin UI regressions
+        run: php tests/admin-ui-regression-test.php
 
       - name: Check InfinityFree deployer preserves live data
         run: python3 -m unittest discover -s tests -p 'test_infinityfree_deploy.py' -v
