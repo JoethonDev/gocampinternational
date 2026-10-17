@@ -61,7 +61,7 @@ try {
     $programs = file_get_contents($root . '/data/all_programs.php');
     $destination = file_get_contents($root . '/data/destinations.php');
     $faq = file_get_contents($root . '/data/faq.json');
-    media_expect(substr_count($programs, '/images/new-photo.webp') === 2, 'Program image and gallery updated');
+    media_expect(substr_count($programs, '/images/new-photo.webp') === 3, 'Program image, gallery and rich-text description updated');
     media_expect(str_contains($programs, '/images/old-photo.webp-backup'), 'Longer image name remains untouched');
     media_expect(str_contains($destination, '/images/new-photo.webp?version=1'), 'Query-string references are mapped');
     media_expect(json_decode($faq, true)['photo'] === '/images/new-photo.webp', 'JSON references are mapped');
