@@ -330,6 +330,7 @@ $(document).ready(function () {
         return;
       }
       const formData = new FormData();
+      formData.append("csrf", document.querySelector('meta[name="csrf-token"]')?.content || "");
       // Append all selected files
       for (let i = 0; i < fileInput.files.length; i++) {
         formData.append("media_file[]", fileInput.files[i]);
@@ -369,13 +370,13 @@ $(document).ready(function () {
             tab.show();
             loadMediaLibrary();
           } else if (response.success) {
-            uploadStatus.innerHTML = `<span class="text-success">${response.message}</span>`;
+            uploadStatus.textContent = response.message;
             var triggerEl = libraryTabButton;
             var tab = new bootstrap.Tab(triggerEl);
             tab.show();
             loadMediaLibrary();
           } else {
-            uploadStatus.innerHTML = `<span class="text-danger">Error: ${response.message}</span>`;
+            uploadStatus.textContent = `Error: ${response.message}`;
           }
         } catch (e) {
           console.error("Upload response error:", xhr.responseText);
