@@ -57,6 +57,10 @@ else
 fi
 chmod 0600 "$archive"
 
+# Application/public directories created during deployment must be web-readable.
+# Backups remain private (chmod 0700 above).
+umask 022
+
 # Publish application code. Never recursively sync the data directory.
 for file in "${root_files[@]}"; do
   install -m 0644 -- "$repo/$file" "$target/$file"
