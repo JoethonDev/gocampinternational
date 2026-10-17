@@ -50,6 +50,10 @@ if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] === true) {
         include __DIR__ . '/programs.php';
         exit;
     }
+    if ($path === 'admin/media-library') {
+        include __DIR__ . '/media-library.php';
+        exit;
+    }
     if ($path === 'admin/logout') {
         include __DIR__ . '/logout.php';
         exit;
