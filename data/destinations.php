@@ -22,6 +22,7 @@ $destinations = array (
     ),
     'gallery' => 
     array (
+      0 => '/images/italy_banner.webp',
     ),
     'faq' => 
     array (
@@ -144,6 +145,7 @@ $destinations = array (
     ),
     'gallery' => 
     array (
+      0 => '/images/banner_spain.webp',
     ),
     'program_ids' => 
     array (
@@ -271,6 +273,13 @@ $destinations = array (
       0 => 'uk-young-professional',
       1 => 'uk-pre-university',
       2 => 'uk-english-foundation',
+      3 => 'uk-academic-engineering',
+      4 => 'uk-academic-architecture',
+      5 => 'uk-academic-medicine',
+      6 => 'uk-academic-business-management',
+      7 => 'uk-academic-computer-science',
+      8 => 'uk-academic-artificial-intelligence',
+      9 => 'uk-academic-economics',
     ),
   ),
   'france' => 
