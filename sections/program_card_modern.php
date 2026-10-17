@@ -7,6 +7,8 @@
  * @var array $program - An associative array with all program details.
  */
 
+require_once __DIR__ . '/../includes/section-visibility.php';
+
 // --- Variable Safety Checks ---
 if (!isset($program) || !is_array($program)) {
     echo '<div class="alert alert-danger">Error: Program data missing.</div>';
@@ -37,6 +39,7 @@ $colors = $colorClasses[$color] ?? $colorClasses['primary'];
 
 <div class="program-card-modern position-relative h-100">
     <div class="card border-0 shadow-lg h-100 overflow-hidden" style="border-radius: 20px;">
+        <?php if (gocamp_entity_section_visible($program, "program", "card_image")): ?>
         <div class="position-relative overflow-hidden" style="height: 280px;">
             <img src="<?= htmlspecialchars($image) ?>" class="card-img-top h-100 w-100 object-fit-cover program-card-image" alt="<?= htmlspecialchars($name) ?>" loading="lazy" />
             <div class="position-absolute bottom-0 start-0 w-100 h-100" style="background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 60%);"></div>
@@ -91,9 +94,12 @@ $colors = $colorClasses[$color] ?? $colorClasses['primary'];
             </div>
             <?php endif; ?>
         </div>
+        <?php endif; ?>
         <div class="card-body p-4 d-flex flex-column">
             <h3 class="card-title fw-bold mb-2 text-brand-dark fs-4"><?= htmlspecialchars($name) ?></h3>
+            <?php if (gocamp_entity_section_visible($program, "program", "card_tagline")): ?>
             <p class="card-text text-muted mb-3 flex-grow-1"><?= htmlspecialchars($tagline) ?></p>
+            <?php endif; ?>
                 <?php /*
                 // Original gallery/photo section
                 if (!empty($program['gallery'])): ?>
@@ -138,7 +144,7 @@ $colors = $colorClasses[$color] ?? $colorClasses['primary'];
                         +<?= count($highlights) - 3 ?> more features <i class="bi bi-arrow-right ms-1"></i>
                     </button>
                 */ ?>
-            <?php if ($highlights) : ?>
+            <?php if ($highlights && gocamp_entity_section_visible($program, "program", "card_highlights")) : ?>
             <div class="mb-3">
                 <ul class="list-unstyled mb-0">
                     <?php foreach ($highlights as $highlight) : ?>
@@ -174,6 +180,7 @@ $colors = $colorClasses[$color] ?? $colorClasses['primary'];
                     </button>
                 </div>
                 */ ?>
+                <button type="button" class="btn btn-outline-secondary w-100 mt-3" data-bs-toggle="modal" data-bs-target="#programModal-<?= htmlspecialchars($programId) ?>"><i class="bi bi-info-circle me-2"></i>View Program Details</button>
             </div>
         </div>
     </div>

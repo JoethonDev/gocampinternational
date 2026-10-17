@@ -42,6 +42,10 @@ if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] === true) {
         include __DIR__ . '/dashboard.php';
         exit;
     }
+    if ($path === 'admin/site-visibility') {
+        include __DIR__ . '/edit-site-visibility.php';
+        exit;
+    }
     if ($path === 'admin/programs') {
         include __DIR__ . '/programs.php';
         exit;

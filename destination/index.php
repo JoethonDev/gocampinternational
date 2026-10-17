@@ -31,6 +31,7 @@ if (isset($destinationData['status']) && $destinationData['status'] === 'coming-
 }
 
 require_once __DIR__ . '/../data/all_programs.php';
+require_once __DIR__ . '/../includes/section-visibility.php';
 
 // Store raw values; header.php escapes on output. Use !empty so empty strings fall back.
 $destinationName = $destinationData['name'] ?? 'Destination';
@@ -53,16 +54,33 @@ require_once __DIR__ . '/../includes/header.php';
 <div class="page-content">
     <?php
     // --- 1. HERO SECTION ---
-    require_once __DIR__ . '/../sections/destination-hero.php';
+    if (gocamp_entity_section_visible($destinationData, 'destination', 'hero')) {
+        require __DIR__ . '/../sections/destination-hero.php';
+    }
 
     // --- 2. STATS COUNTER ---
-    if (!empty($destinationData['stats'])) {
+    if (gocamp_entity_section_visible($destinationData, 'destination', 'stats') && !empty($destinationData['stats'])) {
         $stats = $destinationData['stats']; 
         $sectionTitle = $destinationData['name'] . ' By The Numbers';
         require_once __DIR__ . '/../sections/stats-counter.php';
     }
     ?>
 
+    <?php if (gocamp_entity_section_visible($destinationData, 'destination', 'intro') && !empty($destinationData['intro_text'])): ?>
+    <section class="section-padding bg-white" id="destination-intro">
+        <div class="container"><div class="row align-items-center g-4">
+            <div class="<?= !empty($destinationData['intro_image']) ? 'col-lg-7' : 'col-12' ?>">
+                <h2 class="section-title">Discover <?= htmlspecialchars($destinationData['name']) ?></h2>
+                <div class="lead"><?= strip_tags($destinationData['intro_text'], '<p><br><strong><em><ul><ol><li><b><i>') ?></div>
+            </div>
+            <?php if (!empty($destinationData['intro_image'])): ?>
+            <div class="col-lg-5"><img class="img-fluid rounded-4 shadow-sm w-100" src="<?= htmlspecialchars($destinationData['intro_image']) ?>" alt="<?= htmlspecialchars($destinationData['name']) ?>" loading="lazy"></div>
+            <?php endif; ?>
+        </div></div>
+    </section>
+    <?php endif; ?>
+
+    <?php if (gocamp_entity_section_visible($destinationData, "destination", "programs")): ?>
     <section class="section-padding bg-light" id="programs">
         <div class="container">
             <?php /*
@@ -97,67 +115,22 @@ require_once __DIR__ . '/../includes/header.php';
             </div>
         </div>
     </section>
+    <?php endif; ?>
 
     <?php
     // --- MODALS (must be included for each program card) ---
     // --- MODIFIED LOOP (Phase 5) ---
-    /*
-    if (!empty($destinationData['program_ids'])) {
+    if (!empty($destinationData['program_ids']) && gocamp_entity_section_visible($destinationData, 'destination', 'programs')) {
         foreach ($destinationData['program_ids'] as $program_id) {
-            if (isset($all_programs[$program_id]) && $all_programs[$program_id]['status'] === 'active') {
+            if (isset($all_programs[$program_id]) && ($all_programs[$program_id]['status'] ?? '') === 'active') {
                 $program = $all_programs[$program_id];
-                // The modal component also uses the $program variable
                 require __DIR__ . '/../sections/program_detail_modal.php';
             }
         }
     }
-    */ ?>
-        <?php /*
-        // Original Gallery section logic
-        $hasGalleryImages = false;
-        if (!empty($destinationData['program_ids'])) {
-            foreach ($destinationData['program_ids'] as $program_id) {
-                if (isset($all_programs[$program_id]) && $all_programs[$program_id]['status'] === 'active') {
-                    $program = $all_programs[$program_id];
-                    $gallery = $program['gallery'] ?? [];
-                    if (!empty($gallery)) {
-                        $hasGalleryImages = true;
-                        break;
-                    }
-                }
-            }
-        }
-        if ($hasGalleryImages) : ?>
-        <section class="section-padding bg-white" id="destination-gallery">
-            <div class="container">
-                <div class="text-center mb-5">
-                    <h2 class="display-5 fw-bold text-brand-dark mb-3">Gallery: <?= htmlspecialchars($destinationData['name']) ?></h2>
-                    <p class="lead text-muted mb-0">Photos grouped by program</p>
-                </div>
-                <div class="row g-5">
-                    <?php
-                    foreach ($destinationData['program_ids'] as $program_id) {
-                        if (isset($all_programs[$program_id]) && $all_programs[$program_id]['status'] === 'active') {
-                            $program = $all_programs[$program_id];
-                            $gallery = $program['gallery'] ?? [];
-                            if (!empty($gallery)) {
-                                echo '<div class="col-12 mb-4">';
-                                echo '<h3 class="fw-bold mb-3 text-brand-secondary">' . htmlspecialchars($program['name']) . '</h3>';
-                                echo '<div class="row g-2">';
-                                foreach ($gallery as $img) {
-                                    echo '<div class="col-6 col-md-3 mb-2"><img src="' . htmlspecialchars($img) . '" alt="' . htmlspecialchars($program['name']) . ' photo" class="img-fluid rounded shadow-sm w-100" style="object-fit:cover;max-height:180px;" loading="lazy"></div>';
-                                }
-                                echo '</div>';
-                                echo '</div>';
-                            }
-                        }
-                    }
-                    ?>
-                </div>
-            </div>
-        </section>
-        <?php endif; ?>
-        */ ?>
+
+    ?>
+
         <?php
         // Only show Gallery section if there are any images in any program
         $hasGalleryImages = false;
@@ -173,7 +146,7 @@ require_once __DIR__ . '/../includes/header.php';
                 }
             }
         }
-        if ($hasGalleryImages) : ?>
+        if ($hasGalleryImages && gocamp_entity_section_visible($destinationData, "destination", "gallery")) : ?>
         <section class="section-padding bg-white" id="destination-gallery">
             <div class="container">
                 <div class="text-center mb-5">
@@ -204,8 +177,22 @@ require_once __DIR__ . '/../includes/header.php';
         </section>
         <?php endif; ?>
         <?php
+    ?>
+    <?php if (gocamp_entity_section_visible($destinationData, 'destination', 'destination_gallery') && !empty($destinationData['gallery'])): ?>
+    <section class="section-padding bg-light" id="destination-photo-gallery">
+        <div class="container">
+            <h2 class="section-title text-center mb-4"><?= htmlspecialchars($destinationData['name']) ?> Photos</h2>
+            <div class="row g-3">
+                <?php foreach ($destinationData['gallery'] as $image): ?>
+                <div class="col-6 col-lg-3"><img class="w-100 rounded-3 shadow-sm" src="<?= htmlspecialchars($image) ?>" alt="<?= htmlspecialchars($destinationData['name']) ?> photo" style="aspect-ratio:4/3;object-fit:cover" loading="lazy"></div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </section>
+    <?php endif; ?>
+    <?php
     // --- 4. FAQ SECTION ---
-    if (!empty($destinationData['faq'])) {
+    if (gocamp_entity_section_visible($destinationData, 'destination', 'faq') && !empty($destinationData['faq'])) {
         $faqs = $destinationData['faq']; 
         $sectionTitle = 'Questions About ' . htmlspecialchars($destinationData['name']);
         require_once __DIR__ . '/../sections/faq-section.php';
@@ -215,7 +202,9 @@ require_once __DIR__ . '/../includes/header.php';
     // require_once __DIR__ . '/../sections/booking-cta-banner.php';
     
     // --- 6. TESTIMONIALS ---
-    require_once __DIR__ . '/../sections/testimonials.php';
+    if (gocamp_entity_section_visible($destinationData, 'destination', 'testimonials')) {
+        require __DIR__ . '/../sections/testimonials.php';
+    }
     ?>
 </div>
 

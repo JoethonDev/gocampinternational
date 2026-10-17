@@ -12,6 +12,7 @@
 // --- Load required data first ---
 require_once __DIR__ . '/../data/programs.php';
 require_once __DIR__ . '/../data/all_programs.php';
+require_once __DIR__ . '/../includes/section-visibility.php';
 require_once __DIR__ . '/../data/destinations.php';
 
 // --- Get category from URL parameter (sanitized + validated) ---
@@ -190,6 +191,7 @@ require_once __DIR__ . '/../includes/header.php';
 <div class="page-content">
 
     
+    <?php if (gocamp_entity_section_visible($programData, "category", "hero")): ?>
     <section class="hero-section">
         <div class="hero-content">
             <p class="hero-tagline text-uppercase">Program Category</p>
@@ -197,6 +199,7 @@ require_once __DIR__ . '/../includes/header.php';
             <a href="#category-programs" class="hero-cta-btn">Explore Programs</a>
         </div>
     </section>
+    <?php endif; ?>
 
     <div class="bg-light border-bottom">
         <div class="container py-2">
@@ -210,50 +213,41 @@ require_once __DIR__ . '/../includes/header.php';
         </div>
     </div>
 
-    <?php /*
+    <?php if (gocamp_entity_section_visible($programData, 'category', 'intro') && !empty($programData['intro'])): ?>
     <section class="intro-section">
-        <div class="container">
-            <div class="row align-items-center g-5">
-                <div class="col-lg-6">
-                    <div class="intro-card">
-                        <h2 class="mb-4" style="color: var(--brand-secondary); font-weight: 700;">Experience Learning Like Never Before</h2>
-                        <p class="lead" style="font-size: 1.2rem; line-height: 1.8; color: #555;">
-                            <?= $programData['intro'] ?>
-                        </p>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <img src="<?= htmlspecialchars($programData['intro_image']) ?>" alt="<?= htmlspecialchars($programData['name']) ?> Introduction" class="img-fluid intro-image">
-                </div>
-            </div>
-        </div>
+        <div class="container"><div class="row align-items-center g-5">
+            <div class="col-lg-6"><div class="intro-card">
+                <h2 class="mb-4">Discover <?= htmlspecialchars($programData['name']) ?></h2>
+                <div class="lead"><?= strip_tags($programData['intro'], '<p><br><strong><em><ul><ol><li><b><i>') ?></div>
+            </div></div>
+            <?php if (!empty($programData['intro_image'])): ?>
+            <div class="col-lg-6"><img src="<?= htmlspecialchars($programData['intro_image']) ?>" alt="<?= htmlspecialchars($programData['name']) ?> Introduction" class="img-fluid intro-image"></div>
+            <?php endif; ?>
+        </div></div>
     </section>
-    */ ?>
+    <?php endif; ?>
 
-    <?php /*
-    <?php foreach ($programData['sections'] as $index => $section) : ?>
-    <section class="section-content" style="background-color: <?= ($index % 2 != 0) ? '#f8f9fa' : 'white' ?>;">
-        <div class="container">
-            <div class="row align-items-center g-5">
-                <div class="col-lg-6 <?= ($index % 2 != 0) ? 'order-lg-2' : '' ?>">
-                     <div class="content-card">
-                        <h2><i class="bi bi-stars feature-icon d-block"></i><?= $section['title'] ?></h2>
-                        <div class="text-muted" style="font-size: 1.1rem; line-height: 1.9; color: #555;">
-                            <?= $section['content'] // Content is already HTML ?>
-                        </div>
-                    </div>
+    <?php if (gocamp_entity_section_visible($programData, 'category', 'sections')): ?>
+    <?php $visibleSections = array_values(array_filter($programData['sections'] ?? [], static fn($item) => ($item['is_active'] ?? true) === true)); ?>
+    <?php foreach ($visibleSections as $index => $section): ?>
+        <section class="section-content" style="background-color: <?= ($index % 2) ? '#f8f9fa' : 'white' ?>;">
+            <div class="container"><div class="row align-items-center g-5">
+                <div class="col-lg-6 <?= ($index % 2) ? 'order-lg-2' : '' ?>"><div class="content-card">
+                    <h2><?= htmlspecialchars($section['title'] ?? '') ?></h2>
+                    <div class="text-muted"><?= strip_tags($section['content'] ?? '', '<p><br><strong><em><ul><ol><li><b><i>') ?></div>
+                </div></div>
+                <?php if (!empty($section['image'])): ?>
+                <div class="col-lg-6 <?= ($index % 2) ? 'order-lg-1' : '' ?>">
+                    <img src="<?= htmlspecialchars($section['image']) ?>" alt="<?= htmlspecialchars($section['title'] ?? '') ?>" class="img-fluid content-image" loading="lazy">
                 </div>
-                <div class="col-lg-6 <?= ($index % 2 != 0) ? 'order-lg-1' : '' ?>">
-                     <img src="<?= htmlspecialchars($section['image']) ?>" alt="<?= htmlspecialchars($section['title']) ?>" class="img-fluid content-image">
-                </div>
-            </div>
-        </div>
-    </section>
+                <?php endif; ?>
+            </div></div>
+        </section>
     <?php endforeach; ?>
-    */ ?>
+    <?php endif; ?>
 
 
-    <?php if (!empty($relatedPrograms)): ?>
+    <?php if (gocamp_entity_section_visible($programData, 'category', 'programs') && !empty($relatedPrograms)): ?>
     <section class="section-content bg-light" id="category-programs">
         <div class="container">
             <!-- Headers removed as per requirements -->
@@ -268,39 +262,36 @@ require_once __DIR__ . '/../includes/header.php';
     </section>
     <?php endif; ?>
 
-    <?php /*
-    <?php foreach ($relatedPrograms as $program) {
-        include __DIR__ . '/../sections/program_detail_modal.php';
-    } ?>
-    */ ?>
+    <?php if (gocamp_entity_section_visible($programData, 'category', 'programs')): ?>
+    <?php foreach ($relatedPrograms as $program): ?>
+        <?php require __DIR__ . '/../sections/program_detail_modal.php'; ?>
+    <?php endforeach; ?>
+    <?php endif; ?>
 
 
-    <?php if (!empty($categoryGallery)) : ?>
-    <?php /*
+
+    <?php if (gocamp_entity_section_visible($programData, 'category', 'gallery') && !empty($categoryGallery)): ?>
     <section class="gallery-section">
         <div class="container">
-             <div class="text-center mb-5">
-                <h2 class="section-title text-white">Program Gallery</h2>
-            </div>
+            <h2 class="section-title text-white">Program Gallery</h2>
             <div class="row g-3">
-                <?php foreach ($programData['gallery'] as $image) : ?>
+                <?php foreach ($categoryGallery as $image): ?>
                     <div class="col-lg-4 col-md-6">
                         <a href="<?= htmlspecialchars($image) ?>" data-toggle="lightbox" data-gallery="program-gallery">
-                            <img src="<?= htmlspecialchars($image) ?>" class="img-fluid rounded-3 shadow-sm w-100" style="height: 250px; object-fit: cover;" alt="<?= htmlspecialchars($programData['name']) ?> gallery image" />
+                            <img src="<?= htmlspecialchars($image) ?>" class="img-fluid rounded-3 shadow-sm w-100" style="height: 250px; object-fit: cover;" alt="<?= htmlspecialchars($programData['name']) ?> gallery image" loading="lazy">
                         </a>
                     </div>
                 <?php endforeach; ?>
             </div>
         </div>
     </section>
-    */ ?>
     <?php endif; ?>
 
-    <section class="cta-section text-center py-5">
-        </section>
 
     <?php
-    require_once __DIR__ . '/../sections/testimonials.php';
+    if (gocamp_entity_section_visible($programData, 'category', 'testimonials')) {
+        require __DIR__ . '/../sections/testimonials.php';
+    }
     ?>
 </div>
 

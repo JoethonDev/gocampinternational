@@ -250,9 +250,9 @@ $destinations = array (
     'name' => 'United Kingdom',
     'slug' => 'uk',
     'status' => 'active',
-    'banner' => '',
-    'tagline' => '',
-    'intro_image' => '',
+    'banner' => '/images/england_banner.webp',
+    'tagline' => 'Learn English, explore Britain, and prepare for your academic future.',
+    'intro_image' => '/images/inner_england_.webp',
     'intro_text' => '<p class="lead text-muted mb-4">Live, learn, and connect in one of the world&rsquo;s most inspiring academic cities.</p>',
     'highlights' => 
     array (
