@@ -265,7 +265,7 @@
           .forEach((link) => {
             link.addEventListener("click", () => {
               if (
-                window.innerWidth < 992 &&
+                window.innerWidth < 1200 &&
                 navbarCollapse.classList.contains("show")
               ) {
                 navbarToggler.click();
@@ -277,7 +277,7 @@
 
     /**
      * Enhance dropdown behavior
-     * Hover-to-open only applies on desktop (>=992px). A resize listener closes
+     * Hover-to-open only applies on desktop (>=1200px). A resize listener closes
      * any hover-opened menus when switching to mobile so Bootstrap click-toggle
      * remains the single source of truth on small screens.
      */
@@ -290,7 +290,7 @@
           let timeout;
 
           dropdown.addEventListener("mouseenter", function () {
-            if (window.innerWidth < 992) return;
+            if (window.innerWidth < 1200) return;
             clearTimeout(timeout);
             const dropdownMenu = this.querySelector(".dropdown-menu");
             if (dropdownMenu && !dropdownMenu.classList.contains("show")) {
@@ -299,7 +299,7 @@
           });
 
           dropdown.addEventListener("mouseleave", function () {
-            if (window.innerWidth < 992) return;
+            if (window.innerWidth < 1200) return;
             timeout = setTimeout(() => {
               const dropdownMenu = this.querySelector(".dropdown-menu");
               if (dropdownMenu && dropdownMenu.classList.contains("show")) {
@@ -319,7 +319,7 @@
         clearTimeout(resizeTimer);
         resizeTimer = setTimeout(() => {
           bindHover();
-          if (window.innerWidth < 992) {
+          if (window.innerWidth < 1200) {
             document
               .querySelectorAll(".nav-item.dropdown .dropdown-menu.show")
               .forEach((menu) => menu.classList.remove("show"));
