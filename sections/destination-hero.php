@@ -16,11 +16,17 @@
  */
 
 require_once __DIR__ . '/../includes/section-visibility.php';
+require_once __DIR__ . '/../includes/content-description.php';
 
 // --- Variable Safety Checks (use !empty so empty strings fall back to defaults) ---
 $banner       = !empty($destinationData['banner']) ? $destinationData['banner'] : '/images/hero.webp';
 $name         = !empty($destinationData['name']) ? $destinationData['name'] : 'Destination';
-$tagline      = !empty($destinationData['tagline']) ? $destinationData['tagline'] : 'Discover Your Adventure';
+$tagline      = !empty($destinationData['tagline'])
+    ? $destinationData['tagline']
+    : gocamp_description_excerpt((string)($destinationData['intro_text'] ?? ''), 170);
+if ($tagline === '') {
+    $tagline = 'Discover Your Adventure';
+}
 $highlights   = $destinationData['highlights'] ?? [];
 
 ?>
