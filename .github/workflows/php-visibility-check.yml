@@ -40,7 +40,11 @@ jobs:
             fi
           done
           curl -fsS http://127.0.0.1:8765/programs -o /tmp/gocamp-programs-response
-          grep -q 'id="programModal-uk-young-professional"' /tmp/gocamp-programs-response
+          # The previous UK Young Professional programme is now intentionally inactive.
+          ! grep -q 'id="programModal-uk-young-professional"' /tmp/gocamp-programs-response
+          grep -q 'id="programModal-uk-academic-engineering"' /tmp/gocamp-programs-response
+          grep -q 'id="programModal-tennis-academy"' /tmp/gocamp-programs-response
+          grep -q 'id="programModal-uk-soccer-club-experience"' /tmp/gocamp-programs-response
           curl -fsS http://127.0.0.1:8765/destinations/uk -o /tmp/gocamp-destination-response
           grep -q 'id="destination-intro"' /tmp/gocamp-destination-response
           curl -fsS http://127.0.0.1:8765/admin/media-library -o /tmp/gocamp-media-login
