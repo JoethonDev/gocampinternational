@@ -234,4 +234,29 @@ $programs = array (
     array (
     ),
   ),
+  'tennis' => array (
+    'status' => 'active',
+    'name' => 'Tennis',
+    'slug' => 'tennis',
+    'banner' => '/images/imported-5acb0b681a0332.webp',
+    'intro' => '<p>Discover a sport that rewards precision, determination and confidence. Our tennis experiences combine focused coaching, match practice and a welcoming international atmosphere. Young players develop their serve, footwork, consistency and tactical awareness while learning to rise to every challenge.</p><p>UK tennis coaching content is informed by Exsportise\'s residential tennis-and-English programme. Swiss venue details and schedules will be confirmed separately.</p>',
+    'intro_image' => '/images/imported-b4eecf3804ce9b.webp',
+    'sections' => array (
+      0 => array (
+        'title' => 'Develop Your Complete Game',
+        'content' => '<p>From confident first serves to smarter rallies, coaching builds technical, tactical, physical and mental strengths. Students improve footwork, shot selection and match preparation through purposeful drills and friendly competition.</p>',
+        'image' => '/images/imported-9b759cf6c4187e.webp',
+      ),
+      1 => array (
+        'title' => 'Tennis & English in the UK',
+        'content' => '<p>The UK Exsportise reference programme combines 15 hours of tennis coaching with 15 hours of English tuition per week, ability-based training groups and a 1:6 coach-to-player ratio. Residential accommodation and three daily meals are included in that specific UK offering; details vary by destination.</p>',
+        'image' => '/images/imported-5acb0b681a0332.webp',
+      ),
+    ),
+    'gallery' => array (
+      0 => '/images/imported-9b759cf6c4187e.webp',
+      1 => '/images/imported-b4eecf3804ce9b.webp',
+      2 => '/images/imported-5acb0b681a0332.webp',
+    ),
+  ),
 );
