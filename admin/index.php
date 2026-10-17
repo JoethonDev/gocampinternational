@@ -163,8 +163,18 @@ $pageTitle = 'Admin Login';
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <script>
+        (function() {
+            try {
+                const savedTheme = localStorage.getItem('admin-theme') || 'light';
+                document.documentElement.setAttribute('data-theme', savedTheme);
+            } catch (error) {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
     <!-- Admin Modern CSS -->
-    <link rel="stylesheet" href="/admin/css/admin-modern.css">
+    <link rel="stylesheet" href="/admin/css/admin-modern.css?v=2.1">
 
     <style>
         html, body {
@@ -244,12 +254,5 @@ $pageTitle = 'Admin Login';
     <!-- Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
-    <!-- Theme Script (Inline to prevent FOUC) -->
-    <script>
-        (function() {
-            const savedTheme = localStorage.getItem('admin_theme') || 'light';
-            document.documentElement.setAttribute('data-theme', savedTheme);
-        })();
-    </script>
 </body>
 </html>

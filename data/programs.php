@@ -102,7 +102,10 @@ $programs = array (
     'name' => 'Adult Academic Programs',
     'slug' => 'adult-academic',
     'banner' => '/images/cambridge_banner.webp',
-    'intro' => 'Our UK programs are designed for a range of ages and goals, from classic English tuition and exam preparation to specialized academic courses.',
+    'intro' => '<p>Our UK programs are designed for a range of ages and goals, from classic English tuition and exam preparation to specialized academic courses.</p>
+<p>Academic summer school is tailored to inspire a lifelong love of learning and equip students with the skills and knowledge needed for future academic success.&nbsp;</p>
+<p><br>Students can anticipate a transformative and intellectually enriching experience. Throughout the course, students can expect to engage in stimulating lectures and seminars led by expert tutors and industry professionals, providing them with deep insights into their chosen subjects.&nbsp;</p>
+<p><br>The curriculum is thoughtfully designed to blend theoretical knowledge with practical applications, encouraging critical thinking and problem-solving skills. The nature of the course extends beyond the classroom, offering students unique opportunities to connect with like-minded peers from around the world, fostering a diverse and collaborative learning environment.</p>',
     'intro_image' => '/images/inner_england_.webp',
     'sections' => 
     array (
@@ -229,6 +232,31 @@ $programs = array (
     ),
     'gallery' => 
     array (
+    ),
+  ),
+  'tennis' => array (
+    'status' => 'active',
+    'name' => 'Tennis',
+    'slug' => 'tennis',
+    'banner' => '/images/imported-5acb0b681a0332.webp',
+    'intro' => '<p>Every great rally starts with confidence. Our Tennis category introduces young players to focused coaching, enjoyable match practice and the skills that make time on court more rewarding. Learn to combine sound technique with tactical awareness, resilience and sportsmanship, while enjoying a positive atmosphere and friendships through sport.</p><p>Explore Tennis Academy opportunities across our available destinations. Coaching formats, schedules, accommodation and additional activities are confirmed individually for each location.</p>',
+    'intro_image' => '/images/imported-b4eecf3804ce9b.webp',
+    'sections' => array (
+      0 => array (
+        'title' => 'Build Your All-Round Game',
+        'content' => '<p>Strengthen your serve, groundstrokes, footwork and positioning through purposeful practice. Learn to read the court, choose your shots and approach every point with confidence.</p>',
+        'image' => '/images/imported-9b759cf6c4187e.webp',
+      ),
+      1 => array (
+        'title' => 'Learn Through Match Play',
+        'content' => '<p>Friendly matches, structured challenges and performance feedback help players bring technical learning into competitive situations. Discover the importance of consistency, concentration, respect and teamwork.</p>',
+        'image' => '/images/imported-5acb0b681a0332.webp',
+      ),
+    ),
+    'gallery' => array (
+      0 => '/images/imported-9b759cf6c4187e.webp',
+      1 => '/images/imported-b4eecf3804ce9b.webp',
+      2 => '/images/imported-5acb0b681a0332.webp',
     ),
   ),
 );

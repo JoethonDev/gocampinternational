@@ -116,7 +116,7 @@ $all_programs = array (
     'excludes' => 
     array (
     ),
-    'status' => 'active',
+    'status' => 'inactive',
     'gallery' => 
     array (
     ),
@@ -157,7 +157,7 @@ $all_programs = array (
     'excludes' => 
     array (
     ),
-    'status' => 'active',
+    'status' => 'inactive',
     'gallery' => 
     array (
     ),
@@ -358,7 +358,7 @@ $all_programs = array (
     'excludes' => 
     array (
     ),
-    'status' => 'active',
+    'status' => 'inactive',
     'gallery' => 
     array (
     ),
@@ -537,6 +537,7 @@ $all_programs = array (
       4 => '/images/Fashion_6.webp',
       5 => '/images/Fashion_85.webp',
       6 => '/images/Fashion_93.webp',
+      7 => '/images/53774_6ceb90297448b376.webp',
     ),
   ),
   'italy-food' => 
@@ -718,7 +719,7 @@ $all_programs = array (
   ),
   'italy-tennis' => 
   array (
-    'order' => 1,
+    'order' => 4,
     'id' => 'italy-tennis',
     'category_slug' => '',
     'name' => 'Tennis',
@@ -995,6 +996,757 @@ $all_programs = array (
       0 => '/images/Winter-2.webp',
       1 => '/images/Winter-day-camps-zip-line-1.webp',
       2 => '/images/Winter-day-camps-zip-line-2.webp',
+      3 => '/images/53814_bf0ca3d656de44fd.webp',
+    ),
+  ),
+  'uk-academic-architecture' => array (
+    'order' => 1,
+    'id' => 'uk-academic-architecture',
+    'category_slug' => 'adult-academic',
+    'name' => 'Architecture',
+    'tagline' => 'Academic Insights summer course',
+    'image' => '/images/uk-academic-architecture.webp',
+    'ages' => array (
+      'min' => 13,
+      'max' => 15,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+      0 => 'Explore architectural design, technical drawing and the built environment',
+      1 => 'Examine architectural history, materials and adaptive reuse',
+      2 => 'Develop a personal design project using practical creative techniques',
+      3 => 'Strengthen visual communication and critical thinking with tutor feedback',
+    ),
+    'description' => '<p>Discover how thoughtful design shapes the spaces in which we live, study and connect. This Architecture summer course introduces the creative and technical foundations of the built environment, taking inspiration from Cambridge and its historic and contemporary buildings. Explore architectural history, drawing, design principles and the decisions behind successful spaces.</p><p>Move from first ideas to more developed designs as you investigate form, function, materials and sustainable approaches, including how existing buildings can be adapted for new purposes. Practical design exercises encourage you to observe your surroundings, explain your ideas clearly and experiment with solutions to real architectural challenges.</p><p>Through discussions, project work and individual feedback, build your visual communication, creative problem-solving and critical-thinking skills. Whether you are considering architecture, urban planning or a related design field, this is an inspiring introduction to the way architects turn imagination into places that work for people.</p>',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'active',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-artificial-intelligence' => array (
+    'order' => 2,
+    'id' => 'uk-academic-artificial-intelligence',
+    'category_slug' => 'adult-academic',
+    'name' => 'Artificial Intelligence',
+    'tagline' => 'Academic Insights summer course',
+    'image' => '/images/uk-academic-artificial-intelligence.webp',
+    'ages' => array (
+      'min' => 16,
+      'max' => 18,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+      0 => 'Study machine learning, algorithms and neural networks',
+      1 => 'Explore real-world AI applications through coding and problem-solving',
+      2 => 'Discuss AI ethics, responsible innovation and societal impact',
+      3 => 'Develop independent ideas and technical confidence in a guided project',
+    ),
+    'description' => '<p>Explore the technology reshaping the world, from recommendation systems and intelligent applications to advances in robotics and generative AI. This Artificial Intelligence summer course introduces the logic behind machine learning, algorithms and neural networks, showing how computers can recognise patterns, learn from data and help solve complex problems.</p><p>Build your understanding through interactive coding activities, thought-provoking discussions and practical problem-solving. Investigate the difference between designing an algorithm and training a model, consider how data influences outcomes, and discover the opportunities AI is creating across research, business, healthcare and everyday life.</p><p>Responsible innovation is part of the journey. Discuss bias, reliability, privacy and the ethical questions raised by increasingly capable systems while developing your own ideas through an academic project. The course develops computational thinking, curiosity and the confidence to approach a rapidly changing field with both technical insight and sound judgement.</p>',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'active',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-biology' => array (
+    'order' => 3,
+    'id' => 'uk-academic-biology',
+    'category_slug' => 'adult-academic',
+    'name' => 'Biology',
+    'tagline' => 'Academic Insights summer course',
+    'image' => '/images/uk-academic-biology.webp',
+    'ages' => array (
+      'min' => 16,
+      'max' => 18,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Investigate genetics, ecology, human biology, and scientific methods in the life sciences.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'inactive',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-biotechnology' => array (
+    'order' => 4,
+    'id' => 'uk-academic-biotechnology',
+    'category_slug' => 'adult-academic',
+    'name' => 'Biotechnology',
+    'tagline' => 'Academic Insights summer course',
+    'image' => '/images/uk-academic-biotechnology.webp',
+    'ages' => array (
+      'min' => 16,
+      'max' => 18,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Examine how biotechnology applies biological science to medicine, agriculture, and the environment.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'inactive',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-business-management' => array (
+    'order' => 5,
+    'id' => 'uk-academic-business-management',
+    'category_slug' => 'adult-academic',
+    'name' => 'Business Management',
+    'tagline' => 'Academic Insights summer course',
+    'image' => '/images/uk-academic-business-management.webp',
+    'ages' => array (
+      'min' => 13,
+      'max' => 15,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+      0 => 'Learn business strategy, pricing, marketing and management fundamentals',
+      1 => 'Explore entrepreneurship and how new ventures develop',
+      2 => 'Analyse real-world business choices through case studies and discussion',
+      3 => 'Build leadership, teamwork and presentation skills through project work',
+    ),
+    'description' => '<p>Step into the world of business and learn what it takes to turn a promising idea into a successful organisation. Our Business Management summer course explores how companies make decisions, create value and respond to changing markets. Discover the fundamentals of strategy, management, marketing, pricing and leadership through engaging examples and discussion.</p><p>Think like an entrepreneur as you investigate the choices behind launching a new venture: understanding customers, positioning a product, planning resources and considering how a business might grow. Practical case studies and collaborative challenges encourage you to balance creative thinking with commercial judgement, while presenting your ideas helps develop persuasive communication.</p><p>Set within an inspiring UK academic environment, this course offers a first look at the questions future founders and managers face. You will develop the confidence to evaluate opportunities, work effectively with others and explain your reasoning, building valuable foundations for further study in business, economics or entrepreneurship.</p>',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'active',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-chemistry' => array (
+    'order' => 6,
+    'id' => 'uk-academic-chemistry',
+    'category_slug' => 'adult-academic',
+    'name' => 'Chemistry',
+    'tagline' => 'Academic Insights summer course',
+    'image' => '/images/uk-academic-chemistry.webp',
+    'ages' => array (
+      'min' => 16,
+      'max' => 18,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Study organic and inorganic chemistry, chemical reactions, and the principles behind modern chemistry.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'inactive',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-computer-science' => array (
+    'order' => 7,
+    'id' => 'uk-academic-computer-science',
+    'category_slug' => 'adult-academic',
+    'name' => 'Computer Science',
+    'tagline' => 'Academic Insights summer course',
+    'image' => '/images/uk-academic-computer-science.webp',
+    'ages' => array (
+      'min' => 13,
+      'max' => 15,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+      0 => 'Develop programming, logic and computational-thinking fundamentals',
+      1 => 'Practise designing, testing and improving algorithms',
+      2 => 'Explore software development and age-appropriate advanced computing topics',
+      3 => 'Apply problem-solving skills in practical projects and discussions',
+    ),
+    'description' => '<p>Discover how software turns ideas into systems that transform everyday life. In our Computer Science summer course, students explore the foundations of computational thinking, programming and logical problem-solving in an engaging UK academic environment. Understand how programs are structured, why algorithms matter and how thoughtful design helps computers solve challenges efficiently.</p><p>Through practical exercises, develop confidence in breaking large problems into manageable steps, writing and testing code, and reasoning about the solutions you create. The curriculum introduces core computing concepts while offering a pathway to investigate topics such as data structures, algorithmic efficiency, software engineering and introductory artificial intelligence as appropriate to the learning group.</p><p>Computer Science is as much about asking good questions as writing code. Project-based learning and discussion help you develop analytical skills, creativity and the ability to explain technical decisions. Whether you are new to programming or considering more advanced study, gain a stronger foundation for exploring technology at university and beyond.</p>',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'active',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-creative-writing' => array (
+    'order' => 8,
+    'id' => 'uk-academic-creative-writing',
+    'category_slug' => 'adult-academic',
+    'name' => 'Creative Writing',
+    'tagline' => 'Academic Insights summer course',
+    'image' => '/images/uk-academic-creative-writing.webp',
+    'ages' => array (
+      'min' => 13,
+      'max' => 15,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Develop storytelling skills and a writing voice through fiction, poetry, and other creative forms.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'inactive',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-criminology' => array (
+    'order' => 9,
+    'id' => 'uk-academic-criminology',
+    'category_slug' => 'adult-academic',
+    'name' => 'Criminology',
+    'tagline' => 'Academic Insights summer course',
+    'image' => '/images/uk-academic-criminology.webp',
+    'ages' => array (
+      'min' => 16,
+      'max' => 18,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Explore criminal behaviour, justice systems, and social issues through discussion and analysis.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'inactive',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-economics' => array (
+    'order' => 10,
+    'id' => 'uk-academic-economics',
+    'category_slug' => 'adult-academic',
+    'name' => 'Economics',
+    'tagline' => 'Academic Insights summer course',
+    'image' => '/images/uk-academic-economics.webp',
+    'ages' => array (
+      'min' => 13,
+      'max' => 18,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+      0 => 'Examine markets, supply and demand, trade and inflation',
+      1 => 'Investigate economic policy, global development and inequality',
+      2 => 'Build confidence interpreting data, graphs and economic evidence',
+      3 => 'Develop critical arguments through seminars and practical research',
+    ),
+    'description' => '<p>Why do prices rise, what shapes international trade, and how do governments respond to economic challenges? Our Economics summer course brings these questions to life, connecting economic theory with decisions made by businesses, policymakers and individuals. Explore supply and demand, market structures, inflation, growth and inequality in the context of a connected global economy.</p><p>Learn to look beyond headlines by examining data, interpreting graphs and questioning the assumptions behind different economic arguments. Seminars, collaborative research and case-study discussions introduce the ways economists evaluate incentives, trade-offs and public policy, while London\'s position in global finance offers a compelling context for understanding markets and investment decisions.</p><p>As you develop your own evidence-based viewpoint, you will practise making clear arguments, analysing unfamiliar situations and communicating complex ideas confidently. This course provides a stimulating foundation for students interested in economics, finance, politics, business or international relations.</p>',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'active',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-engineering' => array (
+    'order' => 11,
+    'id' => 'uk-academic-engineering',
+    'category_slug' => 'adult-academic',
+    'name' => 'Engineering',
+    'tagline' => 'Academic Insights summer course',
+    'image' => '/images/uk-academic-engineering.webp',
+    'ages' => array (
+      'min' => 13,
+      'max' => 18,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+      0 => 'Discover engineering design, mechanics, materials and structures',
+      1 => 'Explore robotics, electronics or control systems through age-appropriate topics',
+      2 => 'Apply engineering reasoning to practical challenges and projects',
+      3 => 'Develop teamwork, creativity and systematic problem-solving',
+    ),
+    'description' => '<p>Discover the creativity behind engineering and see how scientific ideas become practical solutions. Our Engineering summer course introduces the principles that help engineers design, build, test and improve the structures, machines and technologies around us. Study the connections between mathematics, mechanics, materials and the real-world challenges that inspire innovation.</p><p>Through analytical exercises and hands-on project work, explore the process of identifying a problem, developing a design and testing whether it performs as intended. Depending on the learning group, topics may include structural design, electronics, robotics, fluid mechanics, control systems and the growing role of computing and machine learning in engineering.</p><p>With opportunities for discussion, independent research and feedback, you will strengthen your ability to think systematically, work creatively and communicate technical decisions. Whether your interests lie in civil, mechanical, electrical or emerging engineering fields, this experience offers a valuable introduction to university-style engineering study.</p>',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'active',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-english-literature' => array (
+    'order' => 12,
+    'id' => 'uk-academic-english-literature',
+    'category_slug' => 'adult-academic',
+    'name' => 'English Literature',
+    'tagline' => 'Academic Insights summer course',
+    'image' => '/images/uk-academic-english-literature.webp',
+    'ages' => array (
+      'min' => 16,
+      'max' => 18,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Analyse classic and modern literary works while strengthening interpretation and critical discussion.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'inactive',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-history' => array (
+    'order' => 13,
+    'id' => 'uk-academic-history',
+    'category_slug' => 'adult-academic',
+    'name' => 'History',
+    'tagline' => 'Academic Insights summer course',
+    'image' => '/images/uk-academic-history.webp',
+    'ages' => array (
+      'min' => 16,
+      'max' => 18,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Study influential historical events, people, and movements through research and critical analysis.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'inactive',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-international-relations' => array (
+    'order' => 14,
+    'id' => 'uk-academic-international-relations',
+    'category_slug' => 'adult-academic',
+    'name' => 'International Relations',
+    'tagline' => 'Academic Insights summer course',
+    'image' => '/images/uk-academic-international-relations.webp',
+    'ages' => array (
+      'min' => 13,
+      'max' => 18,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Examine global politics, diplomacy, international law, and conflict resolution.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'inactive',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-law' => array (
+    'order' => 15,
+    'id' => 'uk-academic-law',
+    'category_slug' => 'adult-academic',
+    'name' => 'Law',
+    'tagline' => 'Academic Insights summer course',
+    'image' => '/images/uk-academic-law.webp',
+    'ages' => array (
+      'min' => 13,
+      'max' => 18,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Discover legal systems and judicial principles while developing structured legal reasoning.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'inactive',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-mathematics' => array (
+    'order' => 16,
+    'id' => 'uk-academic-mathematics',
+    'category_slug' => 'adult-academic',
+    'name' => 'Mathematics',
+    'tagline' => 'Academic Insights summer course',
+    'image' => '/images/uk-academic-mathematics.webp',
+    'ages' => array (
+      'min' => 15,
+      'max' => 18,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Strengthen mathematical reasoning through algebra, calculus, statistics, and problem-solving.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'inactive',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-medicine' => array (
+    'order' => 17,
+    'id' => 'uk-academic-medicine',
+    'category_slug' => 'adult-academic',
+    'name' => 'Medicine',
+    'tagline' => 'Academic Insights summer course',
+    'image' => '/images/uk-academic-medicine.webp',
+    'ages' => array (
+      'min' => 13,
+      'max' => 18,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+      0 => 'Explore human anatomy, physiology, genetics and biomedical science',
+      1 => 'Understand disease, diagnostics and the immune response',
+      2 => 'Investigate contemporary medical research and approaches to treatment',
+      3 => 'Develop clinical reasoning, ethical awareness and research skills',
+    ),
+    'description' => '<p>Explore the science of the human body and the challenges that make modern medicine such a vital field. Our Medicine summer course introduces key ideas in anatomy, physiology and biomedical science, helping students understand how cells, organs and body systems work together to keep us healthy.</p><p>Go further by investigating what happens when disease disrupts those systems. Examine genetics, infections, the immune response and the methods used to identify and treat illness. Academic discussion and case-based activities bring clinical reasoning to life, while emerging research topics such as cancer biology, biomarkers and personalised medicine reveal how healthcare continues to evolve.</p><p>Medicine also asks important human questions. Consider patient care, ethical decisions and the responsibilities of healthcare professionals as you develop curiosity, evidence-based thinking and confident communication. Guided research and feedback offer an insightful foundation for students interested in medicine, medical science, healthcare or related university pathways.</p>',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'active',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-natural-sciences' => array (
+    'order' => 18,
+    'id' => 'uk-academic-natural-sciences',
+    'category_slug' => 'adult-academic',
+    'name' => 'Natural Sciences',
+    'tagline' => 'Academic Insights summer course',
+    'image' => '/images/uk-academic-natural-sciences.webp',
+    'ages' => array (
+      'min' => 13,
+      'max' => 15,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Discover the links between biology, chemistry, and physics through interdisciplinary scientific study.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'inactive',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-philosophy-politics-and-economics' => array (
+    'order' => 19,
+    'id' => 'uk-academic-philosophy-politics-and-economics',
+    'category_slug' => 'adult-academic',
+    'name' => 'Philosophy, Politics and Economics',
+    'tagline' => 'Academic Insights summer course',
+    'image' => '/images/uk-academic-philosophy-politics-and-economics.webp',
+    'ages' => array (
+      'min' => 16,
+      'max' => 18,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Connect major ideas in philosophy, political thought, and economics through critical analysis.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'inactive',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-physics' => array (
+    'order' => 20,
+    'id' => 'uk-academic-physics',
+    'category_slug' => 'adult-academic',
+    'name' => 'Physics',
+    'tagline' => 'Academic Insights summer course',
+    'image' => '/images/uk-academic-physics.webp',
+    'ages' => array (
+      'min' => 13,
+      'max' => 18,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Investigate the laws of physics, from mechanics and forces to modern physical theory.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'inactive',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-psychology' => array (
+    'order' => 21,
+    'id' => 'uk-academic-psychology',
+    'category_slug' => 'adult-academic',
+    'name' => 'Psychology',
+    'tagline' => 'Academic Insights summer course',
+    'image' => '/images/uk-academic-psychology.webp',
+    'ages' => array (
+      'min' => 13,
+      'max' => 18,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Explore cognition, emotion, human behaviour, and methods used in psychological research.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'inactive',
+    'gallery' => array (
+    ),
+  ),
+  'uk-academic-veterinary-studies' => array (
+    'order' => 22,
+    'id' => 'uk-academic-veterinary-studies',
+    'category_slug' => 'adult-academic',
+    'name' => 'Veterinary Studies',
+    'tagline' => 'Academic Insights summer course',
+    'image' => '/images/uk-academic-veterinary-studies.webp',
+    'ages' => array (
+      'min' => 15,
+      'max' => 18,
+    ),
+    'duration' => 2,
+    'level' => 'Academic',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Academic',
+    ),
+    'highlights' => array (
+    ),
+    'description' => 'Learn introductory principles of veterinary medicine, animal care, and animal welfare.',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'inactive',
+    'gallery' => array (
+    ),
+  ),
+  'tennis-academy' => array (
+    'order' => 1,
+    'id' => 'tennis-academy',
+    'category_slug' => 'tennis',
+    'name' => 'Tennis Academy',
+    'tagline' => 'Train with purpose, build match confidence and grow your game on and off the court.',
+    'image' => '/images/imported-9b759cf6c4187e.webp',
+    'ages' => array (
+      'min' => 9,
+      'max' => 17,
+    ),
+    'duration' => 1,
+    'level' => 'Beginner to Advanced',
+    'price' => NULL,
+    'color' => 'success',
+    'badges' => array (
+      0 => 'Tennis',
+      1 => 'Skill Development',
+    ),
+    'highlights' => array (
+      0 => 'Focused tennis coaching to develop technique, movement and match confidence.',
+      1 => 'Ability-aware drills, tactical challenges and purposeful match practice.',
+      2 => 'Develop consistency, court positioning and decision-making under pressure.',
+      3 => 'Build sportsmanship, resilience and friendships through an active camp experience.',
+    ),
+    'description' => '<p>Discover how rewarding tennis can be when every session brings a fresh opportunity to improve. Our Tennis Academy is designed for young players who want to strengthen their game, enjoy purposeful practice and build confidence on and off the court. Whether refining familiar strokes or learning smarter ways to approach a rally, students are encouraged to make steady progress at a level that suits their experience.</p><p>Coaching focuses on the fundamentals that make a difference in matches: serving, forehand and backhand technique, footwork, court positioning, shot selection and tactical awareness. Structured drills and friendly match-play challenges give participants the chance to put these skills into action while developing focus, resilience and sportsmanship.</p><p>Alongside personal improvement, the experience celebrates teamwork, encouragement and international friendships. Specific schedules, accommodation, language lessons and other inclusions vary by destination and will be confirmed for the selected camp.</p>',
+    'includes' => array (
+      0 => 'Tennis technique and footwork development',
+      1 => 'Ability-appropriate tactical coaching and match-play practice',
+      2 => 'Individual improvement goals and practical feedback',
+      3 => 'Sportsmanship, confidence and teamwork activities',
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'active',
+    'schedule' => array (
+    ),
+    'gallery' => array (
+      0 => '/images/imported-b4eecf3804ce9b.webp',
+      1 => '/images/imported-5acb0b681a0332.webp',
+    ),
+  ),
+  'uk-soccer-club-experience' => array (
+    'order' => 3,
+    'id' => 'uk-soccer-club-experience',
+    'category_slug' => 'soccer-camps',
+    'name' => 'UK Soccer Academy & Club Experience',
+    'tagline' => 'Build your skills, train with ambition and explore the football cultures that inspire champions.',
+    'image' => '/images/soccer_1.webp',
+    'ages' => array (
+      'min' => NULL,
+      'max' => NULL,
+    ),
+    'duration' => NULL,
+    'level' => 'All skill levels (grouped by ability)',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Soccer',
+      1 => 'UK Football',
+    ),
+    'highlights' => array (
+      0 => 'Technical sessions focused on first touch, passing, dribbling and finishing.',
+      1 => 'Small-sided games and tactical challenges to develop match intelligence.',
+      2 => 'Strength, teamwork and confidence through age- and ability-appropriate coaching.',
+      3 => 'Discover the football traditions of Arsenal, Liverpool FC, Manchester City and Paris Saint-Germain.',
+    ),
+    'description' => '<p>Experience football as more than a game. Our UK Soccer Academy &amp; Club Experience is designed for young players who want to develop their technique, challenge themselves in training and discover the world of elite European football.</p><p>Inspired by the discipline, teamwork and attacking creativity associated with clubs such as <strong>Arsenal</strong>, <strong>Liverpool FC</strong>, <strong>Manchester City</strong> and <strong>Paris Saint-Germain</strong>, the programme blends ball mastery, position-specific exercises, passing combinations and tactical awareness with matches that encourage players to put their new skills to work.</p><p>Players can look forward to an energetic, supportive setting where they build confidence, form international friendships and learn the value of commitment and fair play. References to clubs describe football inspirations and interests; official coaching partnerships, stadium visits, club-branded experiences and destinations are not confirmed and must not be advertised as included without separate verification.</p>',
+    'includes' => array (
+      0 => 'Structured football skill-development sessions',
+      1 => 'Technical, tactical and team-based exercises',
+      2 => 'Friendly games and skill challenges',
+      3 => 'Player progress feedback, subject to local camp arrangements',
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'active',
+    'schedule' => array (
+    ),
+    'gallery' => array (
+      0 => '/images/soccer_2.webp',
+      1 => '/images/soccer_3.webp',
     ),
   ),
 );

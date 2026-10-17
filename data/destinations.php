@@ -22,6 +22,7 @@ $destinations = array (
     ),
     'gallery' => 
     array (
+      0 => '/images/italy_banner.webp',
     ),
     'faq' => 
     array (
@@ -51,12 +52,14 @@ $destinations = array (
     ),
     'gallery' => 
     array (
+      0 => '/images/53795_12d48e8ce0e31dc1.webp',
     ),
-    'program_ids' => 
+     'program_ids' => 
     array (
       0 => 'switzerland-adventure-camp',
       1 => 'switzerland-film-academy',
       2 => 'switzerland-ski-camp',
+      3 => 'tennis-academy',
     ),
     'stats' => 
     array (
@@ -99,6 +102,7 @@ $destinations = array (
     ),
     'gallery' => 
     array (
+      0 => '/images/599389_484906048191135_693827616_n_f7da433507459ea3.webp',
     ),
     'program_ids' => 
     array (
@@ -144,6 +148,7 @@ $destinations = array (
     ),
     'gallery' => 
     array (
+      0 => '/images/banner_spain.webp',
     ),
     'program_ids' => 
     array (
@@ -262,15 +267,22 @@ $destinations = array (
     ),
     'gallery' => 
     array (
+      0 => '/images/53796_759c92161983887e.webp',
     ),
     'faq' => 
     array (
     ),
-    'program_ids' => 
+     'program_ids' => 
     array (
-      0 => 'uk-young-professional',
-      1 => 'uk-pre-university',
-      2 => 'uk-english-foundation',
+      0 => 'uk-academic-engineering',
+      1 => 'uk-academic-architecture',
+      2 => 'uk-academic-medicine',
+      3 => 'uk-academic-business-management',
+      4 => 'uk-academic-computer-science',
+      5 => 'uk-academic-artificial-intelligence',
+      6 => 'uk-academic-economics',
+      7 => 'tennis-academy',
+      8 => 'uk-soccer-club-experience',
     ),
   ),
   'france' => 

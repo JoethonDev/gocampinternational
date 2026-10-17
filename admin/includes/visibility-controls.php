@@ -10,6 +10,7 @@ $visibilityOptions = gocamp_visibility_options($visibilityEntity);
     <div class="card-body px-4 pb-4">
         <p class="text-muted small">Hide or show parts of this page without deleting their content. Save changes to publish.</p>
         <?php foreach ($visibilityOptions as $visibilityKey => $visibilityOption): ?>
+            <?php if (gocamp_gallery_disabled_by_policy($visibilityEntity, $visibilityKey)) continue; ?>
             <?php $visibilityInputId = 'section-visible-' . $visibilityKey; ?>
             <div class="form-check form-switch py-2 border-bottom">
                 <input type="hidden" name="section_visibility[<?= htmlspecialchars($visibilityKey, ENT_QUOTES, 'UTF-8') ?>]" value="0">
