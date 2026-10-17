@@ -16,7 +16,7 @@
  */
 
 // --- Variable Safety Checks (use !empty so empty strings fall back to defaults) ---
-$banner       = !empty($destinationData['banner']) ? $destinationData['banner'] : '/images/hero.jpg';
+$banner       = !empty($destinationData['banner']) ? $destinationData['banner'] : '/images/hero.webp';
 $name         = !empty($destinationData['name']) ? $destinationData['name'] : 'Destination';
 $tagline      = !empty($destinationData['tagline']) ? $destinationData['tagline'] : 'Discover Your Adventure';
 $highlights   = $destinationData['highlights'] ?? [];

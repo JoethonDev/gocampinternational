@@ -9,7 +9,7 @@
     <div class="card shadow-lg border-0">
         <div class="card-body p-4 text-center">
             <div class="mb-3">
-                <img src="/images/icef_logo.png" alt="ICEF Accredited" class="img-fluid mb-3" style="max-width: 120px;">
+                <img src="/images/icef_logo.webp" alt="ICEF Accredited" class="img-fluid mb-3" style="max-width: 120px;">
             </div>
             <h4 class="mb-3">Ready for an Adventure?</h4>
             <p class="text-muted mb-4">

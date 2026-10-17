@@ -67,15 +67,16 @@ function processFileUpload($name, $type, $tmp_name, $error, $size, $allowed_type
         ];
     }
 
-    // --- Randomized filename: safe_base + '_' + random 8 bytes hex ---
+    // --- Randomized filename: safe_base + '_' + random 8 bytes hex (always .webp, except GIF) ---
     $safe_base = preg_replace('/[^a-z0-9_-]/i', '_', pathinfo($name, PATHINFO_FILENAME));
     $safe_base = substr($safe_base !== '' ? $safe_base : 'upload', 0, 50);
+    $out_ext = ($real === 'image/gif') ? 'gif' : 'webp';
     try {
         $rand = bin2hex(random_bytes(8));
     } catch (Exception $e) {
         $rand = uniqid();
     }
-    $final_filename = $safe_base . '_' . $rand . '.' . $ext;
+    $final_filename = $safe_base . '_' . $rand . '.' . $out_ext;
     $upload_path = $upload_dir_path . '/' . $final_filename;
     $counter = 1;
     while (file_exists($upload_path)) {
@@ -84,13 +85,45 @@ function processFileUpload($name, $type, $tmp_name, $error, $size, $allowed_type
         } catch (Exception $e) {
             $rand = uniqid() . $counter;
         }
-        $final_filename = $safe_base . '_' . $rand . '.' . $ext;
+        $final_filename = $safe_base . '_' . $rand . '.' . $out_ext;
         $upload_path = $upload_dir_path . '/' . $final_filename;
         $counter++;
         if ($counter > 50) {
             return ['success' => false, 'message' => 'Could not generate unique filename.', 'name' => $name];
         }
     }
+
+    // --- Compress to WebP (except GIF preserves animation); fallback to original ---
+    if ($out_ext === 'webp' && function_exists('compress_to_webp') && compress_to_webp($tmp_name, $upload_path, $real)) {
+        return [
+            'success' => true,
+            'message' => 'File uploaded successfully!',
+            'file' => [
+                'name' => $final_filename,
+                'url' => $upload_dir_url . '/' . $final_filename
+            ]
+        ];
+    }
+    if ($out_ext !== 'webp') {
+        if (move_uploaded_file($tmp_name, $upload_path)) {
+            return [
+                'success' => true,
+                'message' => 'File uploaded successfully!',
+                'file' => [
+                    'name' => $final_filename,
+                    'url' => $upload_dir_url . '/' . $final_filename
+                ]
+            ];
+        }
+        return [
+            'success' => false,
+            'message' => 'Failed to move uploaded file: ' . htmlspecialchars($name) . '. Check server permissions.',
+            'name' => $name
+        ];
+    }
+    // WebP conversion failed: store original extension instead.
+    $final_filename = $safe_base . '_' . $rand . '.' . $ext;
+    $upload_path = $upload_dir_path . '/' . $final_filename;
 
     if (move_uploaded_file($tmp_name, $upload_path)) {
         return [

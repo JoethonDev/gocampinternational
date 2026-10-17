@@ -50,6 +50,54 @@ function require_post() {
 }
 
 /**
+ * Re-encodes an image upload as compressed WebP (max 1920px, quality 82).
+ * Strips EXIF, downsizes large photos. Returns true on success.
+ * Falls back gracefully when GD/WebP is unavailable.
+ *
+ * @param string $src_tmp  Path to the uploaded temp file.
+ * @param string $dest_webp Full destination path (must end .webp).
+ * @param string $real_mime Verified MIME from finfo.
+ * @return bool
+ */
+function compress_to_webp($src_tmp, $dest_webp, $real_mime, $max_dim = 1920, $quality = 82) {
+    if (!function_exists('imagewebp')) {
+        return false;
+    }
+    switch ($real_mime) {
+        case 'image/jpeg': $img = @imagecreatefromjpeg($src_tmp); break;
+        case 'image/png': $img = @imagecreatefrompng($src_tmp); break;
+        case 'image/webp': $img = @imagecreatefromwebp($src_tmp); break;
+        default: return false; // GIFs keep original (preserve animation)
+    }
+    if ($img === false) {
+        return false;
+    }
+    $w = imagesx($img);
+    $h = imagesy($img);
+    if ($w <= 0 || $h <= 0) {
+        imagedestroy($img);
+        return false;
+    }
+    if (max($w, $h) > $max_dim) {
+        $ratio = $max_dim / max($w, $h);
+        $nw = max(1, (int)($w * $ratio));
+        $nh = max(1, (int)($h * $ratio));
+        $resized = imagecreatetruecolor($nw, $nh);
+        imagealphablending($resized, false);
+        imagesavealpha($resized, true);
+        imagecopyresampled($resized, $img, 0, 0, 0, 0, $nw, $nh, $w, $h);
+        imagedestroy($img);
+        $img = $resized;
+    } elseif ($real_mime === 'image/png' || $real_mime === 'image/webp') {
+        imagealphablending($img, false);
+        imagesavealpha($img, true);
+    }
+    $ok = @imagewebp($img, $dest_webp, $quality);
+    imagedestroy($img);
+    return (bool)$ok;
+}
+
+/**
  * Handles a file upload, validates it, and moves it to the /uploads directory.
  *
  * @param string $file_input_name The 'name' attribute of the <input type="file">.
@@ -94,15 +142,16 @@ function handle_image_upload($file_input_name, $current_image_path) {
             return $current_image_path;
         }
 
-        // --- Generate Safe, Unique, Randomized Filename ---
+        // --- Generate Safe, Unique, Randomized Filename (always .webp, except GIF) ---
         $safe_base = preg_replace('/[^a-z0-9_-]/i', '_', pathinfo($file['name'], PATHINFO_FILENAME));
         $safe_base = substr($safe_base !== '' ? $safe_base : 'upload', 0, 50);
+        $out_ext = ($real === 'image/gif') ? 'gif' : 'webp';
         try {
             $rand = bin2hex(random_bytes(8));
         } catch (Exception $e) {
             $rand = uniqid();
         }
-        $new_filename = $safe_base . '_' . $rand . '.' . $ext;
+        $new_filename = $safe_base . '_' . $rand . '.' . $out_ext;
 
         // --- Define Upload Path (ensure dir exists) ---
         // __DIR__ is /admin, so we go up one, then into /uploads/
@@ -120,7 +169,7 @@ function handle_image_upload($file_input_name, $current_image_path) {
             } catch (Exception $e) {
                 $rand = uniqid() . $counter;
             }
-            $new_filename = $safe_base . '_' . $rand . '.' . $ext;
+            $new_filename = $safe_base . '_' . $rand . '.' . $out_ext;
             $upload_path = $upload_dir . $new_filename;
             $counter++;
             if ($counter > 50) {
@@ -128,7 +177,22 @@ function handle_image_upload($file_input_name, $current_image_path) {
             }
         }
 
-        // --- Move the File ---
+        // --- Compress to WebP (except GIF); fallback to original on failure ---
+        if ($out_ext === 'webp' && compress_to_webp($tmp_name, $upload_path, $real)) {
+            return '/uploads/' . $new_filename;
+        }
+
+        // --- Move the File (GIF path, or WebP-unavailable fallback) ---
+        if ($out_ext !== 'webp') {
+            if (move_uploaded_file($tmp_name, $upload_path)) {
+                // Success! Return the *public* path for the database.
+                return '/uploads/' . $new_filename;
+            }
+            return $current_image_path;
+        }
+        // WebP conversion failed: store original extension instead.
+        $new_filename = $safe_base . '_' . $rand . '.' . $ext;
+        $upload_path = $upload_dir . $new_filename;
         if (move_uploaded_file($tmp_name, $upload_path)) {
             // Success! Return the *public* path for the database.
             return '/uploads/' . $new_filename;

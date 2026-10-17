@@ -1,0 +1,222 @@
+/* UX enhancements — additive only. Uses existing theme tokens, no color/font changes. */
+:focus-visible {
+  outline: 3px solid var(--brand-primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Sticky nav: subtle shadow once scrolled (JS toggles .scrolled) */
+.navbar.fixed-top {
+  transition: box-shadow var(--transition-base);
+}
+.navbar.fixed-top.scrolled {
+  box-shadow: var(--shadow-lg);
+}
+
+/* Active nav link (JS sets .active from pathname) */
+.navbar .nav-link.active {
+  color: var(--brand-accent) !important;
+  font-weight: var(--font-weight-bold);
+}
+
+/* Hero readability without the removed gradient overlay: keep photographic
+   background untouched, layered text shadow only (no color wash). */
+.destination-hero h1,
+.destination-hero p.lead,
+#home-hero-slider h1,
+#home-hero-slider h2,
+#home-hero-slider p.lead {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8), 0 2px 10px rgba(0, 0, 0, 0.65), 0 4px 24px rgba(0, 0, 0, 0.5);
+}
+
+/* Carousel anti-flicker: keep slides on the GPU, no layout work per frame */
+.carousel-inner {
+  transform: translateZ(0);
+}
+.carousel-item {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.carousel-item img {
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+}
+
+/* Touch devices: carousel arrows must be visible/tappable */
+@media (hover: none) {
+  .carousel-control-prev,
+  .carousel-control-next {
+    opacity: 1;
+  }
+}
+
+/* Parallax is janky on iOS — fall back to normal scroll */
+@media (max-width: 768px) {
+  .parallax,
+  [style*="background-attachment:fixed"] {
+    background-attachment: scroll !important;
+  }
+  .destination-hero {
+    min-height: 70vh !important;
+  }
+}
+
+/* Back-to-top button (brand accent, theme radius/shadow).
+   Opacity/visibility transition instead of display toggle: no layout shift. */
+#backToTop {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: var(--z-fixed);
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: var(--radius-full);
+  background: var(--brand-accent);
+  color: var(--brand-dark);
+  box-shadow: var(--shadow-lg);
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  transition: opacity 250ms ease, transform 250ms ease, visibility 250ms;
+}
+#backToTop.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+#backToTop:hover {
+  filter: brightness(0.95);
+}
+
+/* Card hover: gentle lift only, scoped to program cards (composited transform).
+   NOTE: not applied to generic .card to avoid animating large panels. */
+.program-card-home {
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+  will-change: auto;
+}
+.program-card-home:hover {
+  transform: translateY(-2px);
+}
+
+/* Honeypot anti-spam field (JS + server ignore it) */
+.hp-field {
+  position: absolute !important;
+  left: -9999px !important;
+  top: auto !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+}
+
+/* Respect users who prefer less motion */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* FAQ accordion polish (Bootstrap collapse kept, theme tokens only) */
+.accordion {
+  scroll-margin-top: calc(var(--navbar-height) + 16px);
+}
+.accordion-button {
+  transition: background-color var(--transition-base);
+}
+.accordion-button:not(.collapsed) {
+  background-color: var(--color-gray-50);
+}
+
+/* Image loading: static placeholder color + one-shot fade-in.
+   NOTE: no infinite shimmer — dozens of simultaneous infinite animations
+   jank scrolling on low-end devices. JS fades opacity 0→1 only while the
+   image is still loading; loaded/cached images are untouched. */
+.gallery-img-wrapper img,
+.program-card-home img,
+.card-img {
+  background-color: var(--color-gray-100);
+  transition: opacity 350ms ease;
+}
+img.ux-fading {
+  opacity: 0;
+}
+img.ux-fading.img-loaded {
+  opacity: 1;
+}
+
+/* Gallery hover affordance (click opens lightbox) */
+a[data-toggle="lightbox"] img,
+#destination-gallery img {
+  cursor: zoom-in;
+}
+@media (hover: hover) {
+  a[data-toggle="lightbox"] img,
+  #destination-gallery img {
+    transition: transform var(--transition-base);
+  }
+  a[data-toggle="lightbox"]:hover img,
+  #destination-gallery img:hover {
+    transform: scale(1.02);
+  }
+}
+
+/* Contrast fixes (theme palette untouched):
+   - .text-white-50 on brand-color panels fails WCAG for small text. */
+.text-white-50 {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+/* Sticky mobile CTA bar (mobile only) */
+#mobileCtaBar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: var(--z-fixed);
+  display: none;
+  gap: 0.5rem;
+  padding: 0.6rem 0.75rem calc(0.6rem + env(safe-area-inset-bottom));
+  background: var(--brand-dark);
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.18);
+}
+@media (max-width: 991.98px) {
+  #mobileCtaBar {
+    display: flex;
+  }
+  body {
+    padding-bottom: 72px;
+  }
+}
+
+/* Form submit loading state (JS toggles .is-submitting) */
+form.is-submitting button[type="submit"] {
+  pointer-events: none;
+  opacity: 0.75;
+}
+form.is-submitting button[type="submit"]::after {
+  content: "";
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  margin-left: 0.5em;
+  vertical-align: -0.125em;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: ux-spin 0.75s linear infinite;
+}
+@keyframes ux-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

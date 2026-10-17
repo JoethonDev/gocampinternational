@@ -12,12 +12,12 @@
 if (!isset($testimonials) || !is_array($testimonials) || empty($testimonials)) {
     $testimonials = [
         [
-            'image' => 'test_img.jpg',
+            'image' => 'test_img.webp',
             'name'  => 'Maria & Family (from Egypt)',
             'quote' => 'An experience that changed our perspective! The organization was flawless and the activities were both fun and educational.'
         ],
         [
-            'image' => 'about_img_3.jpg',
+            'image' => 'about_img_3.webp',
             'name'  => 'Ahmed S. (from Egypt)',
             'quote' => 'The best summer of my life! I learned so much, not just about the language but about myself. The counselors were amazing.'
         ]

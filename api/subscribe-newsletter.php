@@ -41,6 +41,9 @@ if (!is_array($input) || empty($input['email'])) {
     $input = $_POST;
 }
 
+// Honeypot: silently accept spam without saving.
+if (!empty($input['website'])) { echo json_encode(['success' => true, 'message' => 'Subscribed successfully']); exit; }
+
 $email = trim($input['email'] ?? '');
 if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
     http_response_code(400);

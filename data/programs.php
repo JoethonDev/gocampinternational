@@ -10,9 +10,9 @@ $programs = array (
     'status' => 'inactive',
     'name' => 'Language & Activity Camps',
     'slug' => 'language-and-activity-camps',
-    'banner' => '/images/activity_banner_new.jpg',
+    'banner' => '/images/activity_banner_new.webp',
     'intro' => '<p>We provide residential Language and activity programs for boys and girls from ages 8 to 17. The programs are a great combination of language classes and afternoon activities.</p>',
-    'intro_image' => '/images/langgg_1.jpg',
+    'intro_image' => '/images/langgg_1.webp',
     'sections' => 
     array (
       0 => 
@@ -20,7 +20,7 @@ $programs = array (
         'title' => 'A World of Activities',
         'content' => '<p>Afternoons are full of sport and activities, according to age. Weekends usually are planned for full day excursions to allow students to learn about the culture and famous sight-seeings of the country.</p>
 <p>Tennis, Horse-riding and soccer are examples of possible extra activities added to the program, coached by professional personnel.</p>',
-        'image' => '/images/mmaa_1.jpg',
+        'image' => '/images/mmaa_1.webp',
       ),
       1 => 
       array (
@@ -32,31 +32,31 @@ $programs = array (
 <li>German in Germany, Switzerland and Austria</li>
 <li>Spanish &amp; English in Spain</li>
 </ul>',
-        'image' => '/images/new_iiii.jpg',
+        'image' => '/images/new_iiii.webp',
       ),
       2 => 
       array (
         'title' => 'A World of Activities',
         'content' => '<p>Afternoons are full of sport and activities, according to age. Weekends usually are planned for full day excursions to allow students to learn about the culture and famous sight-seeings of the country.</p>
 <p>Tennis, Horse-riding and soccer are examples of possible extra activities added to the program, coached by professional personnel.</p>',
-        'image' => '/uploads/1_1761381038.jpg',
+        'image' => '/uploads/1_1761381038.webp',
       ),
       3 => 
       array (
         'title' => 'A World of Activities',
         'content' => '<p>Afternoons are full of sport and activities, according to age. Weekends usually are planned for full day excursions to allow students to learn about the culture and famous sight-seeings of the country.</p>
 <p>Tennis, Horse-riding and soccer are examples of possible extra activities added to the program, coached by professional personnel.</p>',
-        'image' => '/uploads/1_1761381038.jpg',
+        'image' => '/uploads/1_1761381038.webp',
       ),
     ),
     'gallery' => 
     array (
-      0 => '/images/act_1.jpg',
-      1 => '/images/act_2.jpg',
-      2 => '/images/act_3.jpg',
-      3 => '/images/act_4.jpg',
-      4 => '/images/act_5.jpg',
-      5 => '/images/act_6.jpg',
+      0 => '/images/act_1.webp',
+      1 => '/images/act_2.webp',
+      2 => '/images/act_3.webp',
+      3 => '/images/act_4.webp',
+      4 => '/images/act_5.webp',
+      5 => '/images/act_6.webp',
     ),
   ),
   'kids-camps' => 
@@ -64,16 +64,16 @@ $programs = array (
     'status' => 'active',
     'name' => 'Kids Camps',
     'slug' => 'kids-camps',
-    'banner' => '/images/bannnner.jpg',
+    'banner' => '/images/bannnner.webp',
     'intro' => 'Kids’ Camps are designed especially for young children (ages 7 to 13) to express their individuality within a truly international mix. With sensitive guidance from well-trained staff (ratio 1 to 5), kids will make big steps forward.',
-    'intro_image' => '/images/kids_2.jpg',
+    'intro_image' => '/images/kids_2.webp',
     'sections' => 
     array (
       0 => 
       array (
         'title' => 'Learning Through Play',
         'content' => '<p>Children attend language classes in the morning and participate in group activities and sports during the afternoons. Language classes incorporate themed lessons, storytelling, and fairy tales to provide an engaging platform for teaching vocabulary and grammar.</p>',
-        'image' => '/images/kids_3.jpg',
+        'image' => '/images/kids_3.webp',
       ),
       1 => 
       array (
@@ -83,17 +83,17 @@ $programs = array (
                                 <li class="d-flex align-items-start mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Build social skills and confidence through group work.</li>
                                 <li class="d-flex align-items-start"><i class="bi bi-check-circle-fill text-success me-2"></i>Give students a positive learning experience.</li>
                             </ul>',
-        'image' => '/images/kids_4.jpg',
+        'image' => '/images/kids_4.webp',
       ),
     ),
     'gallery' => 
     array (
-      0 => '/images/kids_one.jpg',
-      1 => '/images/kids_two.jpg',
-      2 => '/images/kids_three.jpg',
-      3 => '/images/kids_four.jpg',
-      4 => '/images/kids_five.jpg',
-      5 => '/images/kids_six.jpg',
+      0 => '/images/kids_one.webp',
+      1 => '/images/kids_two.webp',
+      2 => '/images/kids_three.webp',
+      3 => '/images/kids_four.webp',
+      4 => '/images/kids_five.webp',
+      5 => '/images/kids_six.webp',
     ),
   ),
   'adult-academic' => 
@@ -101,9 +101,9 @@ $programs = array (
     'status' => 'active',
     'name' => 'Adult Academic Programs',
     'slug' => 'adult-academic',
-    'banner' => '/images/cambridge_banner.jpg',
+    'banner' => '/images/cambridge_banner.webp',
     'intro' => 'Our UK programs are designed for a range of ages and goals, from classic English tuition and exam preparation to specialized academic courses.',
-    'intro_image' => '/images/inner_england_.jpg',
+    'intro_image' => '/images/inner_england_.webp',
     'sections' => 
     array (
       0 => 
@@ -116,14 +116,14 @@ $programs = array (
                                 <li><strong>First Certificate (FCE) PRE-EXAM PREPARATION:</strong> A 3-week course for students studying towards the FCE.</li>
                                 <li><strong>Young Cambridge Scholars:</strong> A subject-based course for academically gifted students, featuring lectures from University of Cambridge lecturers.</li>
                             </ul>',
-        'image' => '/images/inner_england_1.jpg',
+        'image' => '/images/inner_england_1.webp',
       ),
     ),
     'gallery' => 
     array (
-      0 => '/images/ss_1.jpg',
-      1 => '/images/ss_2.jpg',
-      2 => '/images/ss_3.jpg',
+      0 => '/images/ss_1.webp',
+      1 => '/images/ss_2.webp',
+      2 => '/images/ss_3.webp',
     ),
   ),
   'young-leader-program' => 
@@ -131,28 +131,28 @@ $programs = array (
     'status' => 'active',
     'name' => 'Young Leader Programs',
     'slug' => 'young-leader-program',
-    'banner' => '/images/young_bbb.jpg',
+    'banner' => '/images/young_bbb.webp',
     'intro' => 'Ideally suited for those interested in world issues and perfecting their English, our Young Leaders program (ages 14-18) develops skills in critical thinking, debating, and leadership.',
-    'intro_image' => '/images/young_1.jpg',
+    'intro_image' => '/images/young_1.webp',
     'sections' => 
     array (
       0 => 
       array (
         'title' => 'London & Oxford Program',
         'content' => '<p>The syllabus comprises theory lessons, interactive lectures, and real-life case studies to build language skills and confidence in public speaking, negotiation, and leadership.</p>',
-        'image' => '/images/young_new.jpg',
+        'image' => '/images/young_new.webp',
       ),
       1 => 
       array (
         'title' => 'MINI MBA (Ages 15-17)',
         'content' => '<p>This course introduces core business concepts including Management, Accounting, Entrepreneurship, and Marketing through lectures, discussions, and case studies.</p>',
-        'image' => '/images/young_3_new.jpg',
+        'image' => '/images/young_3_new.webp',
       ),
       2 => 
       array (
         'title' => 'Leadership Program in Boston (Ages 14-18)',
         'content' => '<p>Focused on general business and leadership, this program combines Business English with project work, guest lectures, and visits to famous universities.</p>',
-        'image' => '/images/young_5.jpg',
+        'image' => '/images/young_5.webp',
       ),
     ),
     'gallery' => 
@@ -164,38 +164,38 @@ $programs = array (
     'status' => 'active',
     'name' => 'Soccer Camps',
     'slug' => 'soccer-camps',
-    'banner' => '/images/sss_m.jpg',
+    'banner' => '/images/sss_m.webp',
     'intro' => 'Go Camp International offers unique Soccer Programmes with world-famous Soccer Schools in Spain and England, where students can develop their soccer skills and gain insight into the techniques of champions.',
-    'intro_image' => '/images/soccer_2.jpg',
+    'intro_image' => '/images/soccer_2.webp',
     'sections' => 
     array (
       0 => 
       array (
         'title' => 'London: Chelsea FC Soccer School',
         'content' => '<ul><li>Intensive soccer training (20 hours/week) for ages 9-17.</li><li>English plus soccer option (12 hours soccer, 15 hours English).</li><li>Specialized goalkeeping courses available.</li></ul>',
-        'image' => '/images/chelsea.jpg',
+        'image' => '/images/chelsea.webp',
       ),
       1 => 
       array (
         'title' => 'Manchester: Soccer Academy',
         'content' => '<p>The perfect city for football culture, home to the National Football Museum. The summer academy is aimed at students between 16-21 who wish to practice football and study English.</p>',
-        'image' => '/images/soccer_1.jpg',
+        'image' => '/images/soccer_1.webp',
       ),
       2 => 
       array (
         'title' => 'Madrid: Real Madrid Foundation Campus',
         'content' => '<ul><li>Standard Soccer training for boys and girls (9-17 years), with optional language courses.</li><li>Technification course for federated players with a good level of soccer.</li></ul>',
-        'image' => '/images/soccer_3.jpg',
+        'image' => '/images/soccer_3.webp',
       ),
     ),
     'gallery' => 
     array (
-      0 => '/images/gallery_1.jpg',
-      1 => '/images/gallery_2.jpg',
-      2 => '/images/gallery_4.jpg',
-      3 => '/images/gallery_3.jpg',
-      4 => '/images/gallery_5.jpg',
-      5 => '/images/gallery_6.jpg',
+      0 => '/images/gallery_1.webp',
+      1 => '/images/gallery_2.webp',
+      2 => '/images/gallery_4.webp',
+      3 => '/images/gallery_3.webp',
+      4 => '/images/gallery_5.webp',
+      5 => '/images/gallery_6.webp',
     ),
   ),
   'special-interests-camps' => 
@@ -203,28 +203,28 @@ $programs = array (
     'status' => 'trash',
     'name' => 'Special Interests Camps',
     'slug' => 'special-interests-camps',
-    'banner' => '/images/special_banner.jpg',
+    'banner' => '/images/special_banner.webp',
     'intro' => '<p>Get ready for an extreme outdoor adventure or dive deep into a creative passion. Our special interest camps are designed for students who are ready for something challenging and unique.</p>',
-    'intro_image' => '/images/adventure_1.jpg',
+    'intro_image' => '/images/adventure_1.webp',
     'sections' => 
     array (
       0 => 
       array (
         'title' => 'Parent & Child Camp',
         'content' => '<p>Don\'t want your kids to travel alone? You can travel together and enjoy a family learning holiday. While your kids are learning with their peers, you can build your English fluency in adult centers nearby.</p>',
-        'image' => '/images/kids_1_1.jpg',
+        'image' => '/images/kids_1_1.webp',
       ),
       1 => 
       array (
         'title' => 'Film Making',
         'content' => '<p>This 2-week course is taught by a professional film production company. Students will be introduced to cameras, draft ideas, film their project, and edit it into a final product to watch and share.</p>',
-        'image' => '/images/film_1.jpg',
+        'image' => '/images/film_1.webp',
       ),
       2 => 
       array (
         'title' => 'Fashion & Art Programs',
         'content' => '<p>We offer both intensive one-year courses and 2-week summer/winter schools. Students develop skills in draping, pattern cutting, sewing, illustration, and styling, as well as artistic mediums like drawing, painting, and sculpture.</p>',
-        'image' => '/images/fashion.jpg',
+        'image' => '/images/fashion.webp',
       ),
     ),
     'gallery' => 

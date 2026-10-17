@@ -35,9 +35,9 @@ require_once __DIR__ . '/../data/all_programs.php';
 // Store raw values; header.php escapes on output. Use !empty so empty strings fall back.
 $destinationName = $destinationData['name'] ?? 'Destination';
 $destinationTagline = !empty($destinationData['tagline']) ? $destinationData['tagline'] : 'Discover Your Adventure';
-$destinationBanner = !empty($destinationData['banner']) ? $destinationData['banner'] : '/images/hero.jpg';
+$destinationBanner = !empty($destinationData['banner']) ? $destinationData['banner'] : '/images/hero.webp';
 $destinationIntro = $destinationData['intro'] ?? '';
-$destinationIntroImage = !empty($destinationData['intro_image']) ? $destinationData['intro_image'] : '/images/placeholder.jpg';
+$destinationIntroImage = !empty($destinationData['intro_image']) ? $destinationData['intro_image'] : '/images/placeholder.webp';
 $destinationGallery = $destinationData['gallery'] ?? [];
 $destinationSections = $destinationData['sections'] ?? [];
 $destinationStats = $destinationData['stats'] ?? [];

@@ -35,7 +35,7 @@ require_once __DIR__ . '/includes/header.php';
 
 <div class="container-fluid p-0">
     <div class="position-relative">
-        <img src="/images/faq_banner.jpg" class="img-fluid w-100" style="height: 300px; object-fit: cover;" alt="FAQ Banner" />
+        <img src="/images/faq_banner.webp" class="img-fluid w-100" style="height: 300px; object-fit: cover;" alt="FAQ Banner" />
         <div class="position-absolute top-50 start-50 translate-middle text-center text-white">
             <h1 class="display-4 fw-bold">FAQ</h1>
         </div>

@@ -13,9 +13,9 @@ require_once __DIR__ . '/data/destinations.php';
 
 // --- Mock data for banners ---
 $banners = [
-    ['image' => 'banner.jpg', 'title' => 'Unforgettable Summers Start Here'],
-    ['image' => 'hero.jpg', 'title' => 'Discover Your Passion Abroad'],
-    ['image' => 'about_img_3.jpg', 'title' => 'Build Lifelong Friendships']
+    ['image' => 'banner.webp', 'title' => 'Unforgettable Summers Start Here'],
+    ['image' => 'hero.webp', 'title' => 'Discover Your Passion Abroad'],
+    ['image' => 'about_img_3.webp', 'title' => 'Build Lifelong Friendships']
 ];
 
 // --- Include Header (header.php already includes navigation.php and opens <main id="main-content">) ---

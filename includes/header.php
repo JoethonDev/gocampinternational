@@ -11,7 +11,7 @@ require_once __DIR__ . '/../init.php';
 // Set default values for variables if they haven't been defined on the calling page.
 $pageTitle = $pageTitle ?? 'Go Camp International';
 $pageDescription = $pageDescription ?? 'International camps offering life-changing opportunities for teenagers to learn, grow, and make global connections.';
-$ogImage = $ogImage ?? BASE_URL . '/images/logo.png';
+$ogImage = $ogImage ?? BASE_URL . '/images/logo.webp';
 ?>
 <!DOCTYPE html>
 <html lang="en">

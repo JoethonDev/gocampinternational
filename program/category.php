@@ -79,10 +79,10 @@ $programIntroRaw = $programData['intro'] ?? '';
 $pageDescription = substr(strip_tags($programIntroRaw), 0, 160);
 
 // --- Banner / intro / gallery / sections fallbacks (use !empty so empty strings fall back) ---
-$categoryBanner = !empty($programData['banner']) ? $programData['banner'] : '/images/hero.jpg';
+$categoryBanner = !empty($programData['banner']) ? $programData['banner'] : '/images/hero.webp';
 $categoryTagline = !empty($programData['tagline']) ? $programData['tagline'] : '';
 $categoryIntro = $programData['intro'] ?? '';
-$categoryIntroImage = !empty($programData['intro_image']) ? $programData['intro_image'] : '/images/placeholder.jpg';
+$categoryIntroImage = !empty($programData['intro_image']) ? $programData['intro_image'] : '/images/placeholder.webp';
 $categoryGallery = $programData['gallery'] ?? [];
 $categorySections = $programData['sections'] ?? [];
 

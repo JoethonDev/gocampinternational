@@ -28,6 +28,10 @@ $hits[] = $now;
 
 // Get JSON input
 $input = json_decode(file_get_contents('php://input'), true);
+if (!is_array($input)) { $input = $_POST; }
+
+// Honeypot: silently accept spam without saving/mailing.
+if (!empty($input['website'])) { echo json_encode(['success' => true, 'message' => 'Inquiry saved successfully']); exit; }
 
 if (!$input) {
     http_response_code(400);

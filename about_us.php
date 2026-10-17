@@ -14,7 +14,7 @@ require_once __DIR__ . '/includes/header.php';
 
 <div class="container-fluid p-0">
     <div class="position-relative">
-        <img src="/images/about_banner.jpg" class="img-fluid w-100" style="height: 300px; object-fit: cover;" alt="Students sitting on grass" />
+        <img src="/images/about_banner.webp" class="img-fluid w-100" style="height: 300px; object-fit: cover;" alt="Students sitting on grass" />
         <div class="position-absolute top-50 start-50 translate-middle text-center text-white">
             <h1 class="display-4 fw-bold">ABOUT US</h1>
         </div>
@@ -37,7 +37,7 @@ require_once __DIR__ . '/includes/header.php';
             <div class="card shadow-sm border-0 overflow-hidden mb-5">
                 <div class="row g-0">
                     <div class="col-lg-5">
-                        <img src="/images/about_1.jpg" class="img-fluid h-100" alt="About Us" />
+                        <img src="/images/about_1.webp" class="img-fluid h-100" alt="About Us" />
                     </div>
                     <div class="col-lg-7 d-flex align-items-center">
                         <div class="card-body p-5">
@@ -54,7 +54,7 @@ require_once __DIR__ . '/includes/header.php';
             <div class="card shadow-sm border-0 overflow-hidden mb-5">
                 <div class="row g-0 flex-row-reverse">
                     <div class="col-lg-5">
-                        <img src="/images/about_2.jpg" class="img-fluid h-100" alt="Academic, Sports, and Culture" />
+                        <img src="/images/about_2.webp" class="img-fluid h-100" alt="Academic, Sports, and Culture" />
                     </div>
                     <div class="col-lg-7 d-flex align-items-center">
                         <div class="card-body p-5">
@@ -74,7 +74,7 @@ require_once __DIR__ . '/includes/header.php';
             <div class="card shadow-sm border-0 overflow-hidden mb-5">
                 <div class="row g-0">
                     <div class="col-lg-5">
-                        <img src="/images/about_3.jpg" class="img-fluid h-100" alt="Collaboration and Transparency" />
+                        <img src="/images/about_3.webp" class="img-fluid h-100" alt="Collaboration and Transparency" />
                     </div>
                     <div class="col-lg-7 d-flex align-items-center">
                         <div class="card-body p-5">
@@ -95,7 +95,7 @@ require_once __DIR__ . '/includes/header.php';
              <div class="card shadow-sm border-0 overflow-hidden">
                 <div class="row g-0 flex-row-reverse">
                     <div class="col-lg-5">
-                        <img src="/images/about_img_3.jpg" class="img-fluid h-100" style="object-fit: cover;" alt="Students doing an activity"/>
+                        <img src="/images/about_img_3.webp" class="img-fluid h-100" style="object-fit: cover;" alt="Students doing an activity"/>
                     </div>
                     <div class="col-lg-7 d-flex align-items-center">
                         <div class="card-body p-5">

@@ -14,7 +14,7 @@ require_once __DIR__ . '/includes/header.php';
 
 <div class="container-fluid p-0">
     <div class="position-relative">
-        <img src="/images/contact_banner.jpg" class="img-fluid w-100" style="height: 300px; object-fit: cover;" alt="Contact Us Banner" />
+        <img src="/images/contact_banner.webp" class="img-fluid w-100" style="height: 300px; object-fit: cover;" alt="Contact Us Banner" />
         <div class="position-absolute top-50 start-50 translate-middle text-center text-white">
             <h1 class="display-4 fw-bold">CONTACT US</h1>
         </div>
@@ -41,6 +41,8 @@ require_once __DIR__ . '/includes/header.php';
                      <h3 class="card-title mb-4">Send Us a Message</h3>
                     <!-- Form can be enhanced with JS/API later -->
                     <form id="contactForm" data-form-type="contact" method="POST" action="/api/submit-contact.php">
+                        <div class="hp-field" aria-hidden="true"><label>Leave empty<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+                        <div class="status-message mb-3" role="status" aria-live="polite"></div>
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label for="contact-name" class="form-label">Name *</label>
@@ -81,7 +83,7 @@ require_once __DIR__ . '/includes/header.php';
                 <div class="card-body p-4 p-md-5 d-flex flex-column justify-content-center align-items-center text-center">
                     
                     <div class="mb-4 position-relative">
-                        <img src="/images/profile.jpg" alt="Zeinab El Sokkary" 
+                        <img src="/images/profile.webp" alt="Zeinab El Sokkary" 
                              class="rounded-circle shadow-lg" 
                              style="width: 160px; height: 160px; object-fit: cover; border: 5px solid rgba(255,255,255,0.2);">
                     </div>

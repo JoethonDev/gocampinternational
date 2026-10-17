@@ -14,7 +14,7 @@ if (!isset($program) || !is_array($program)) { return; }
 $programId    = $program['id'] ?? uniqid();
 $name         = $program['name'] ?? 'Program Details';
 $tagline      = $program['tagline'] ?? '';
-$image        = !empty($program['image']) ? $program['image'] : '/images/placeholder.jpg';
+$image        = !empty($program['image']) ? $program['image'] : '/images/placeholder.webp';
 $ages         = isset($program['ages']) && !empty($program['ages']) ? $program['ages'] : null;
 $duration     = isset($program['duration']) && $program['duration'] > 0 ? $program['duration'] : null;
 $level        = isset($program['level']) && !empty($program['level']) ? $program['level'] : null;

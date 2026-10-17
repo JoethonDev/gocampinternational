@@ -31,8 +31,12 @@ $error_message = '';
 // --- ADMIN ROUTING FOR LOGGED-IN USERS ---
 if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] === true) {
     // Route to admin pages if user is logged in
-    $requestUri = $_SERVER['REQUEST_URI'];
+    $requestUri = $_SERVER['REQUEST_URI'] ?? '/admin';
     $path = trim(parse_url($requestUri, PHP_URL_PATH), '/');
+    // Normalize: accept both /admin/dashboard and legacy /admin/dashboard.php links.
+    if (str_ends_with($path, '.php')) {
+        $path = substr($path, 0, -4);
+    }
 
     if ($path === 'admin/dashboard') {
         include __DIR__ . '/dashboard.php';
@@ -48,6 +52,14 @@ if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] === true) {
     }
     if ($path === 'admin/trash') {
         include __DIR__ . '/trash.php';
+        exit;
+    }
+    if ($path === 'admin/inquiries') {
+        include __DIR__ . '/inquiries.php';
+        exit;
+    }
+    if ($path === 'admin/view-inquiry') {
+        include __DIR__ . '/view-inquiry.php';
         exit;
     }
     // Handle admin edit pages with query parameters
@@ -190,7 +202,7 @@ $pageTitle = 'Admin Login';
         <form method="POST" action="">
             <input type="hidden" name="csrf" value="<?= htmlspecialchars($_SESSION['csrf'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
             <div class="text-center mb-4">
-                <img class="mb-4" src="/images/logo.png" alt="Go Camp International" style="height: 60px;">
+                <img class="mb-4" src="/images/logo.webp" alt="Go Camp International" style="height: 60px;">
                 <h1 class="h4 mb-3 fw-bold text-primary">Admin Access</h1>
                 <p class="text-muted small">Please sign in to continue to the dashboard.</p>
             </div>

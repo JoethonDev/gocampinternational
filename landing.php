@@ -12,6 +12,9 @@ $errors = [];
 $successMessage = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Honeypot anti-spam: bots fill .hp-field, humans leave it empty.
+    if (!empty($_POST['website'])) { $successMessage = 'Success! Your request has been submitted. Our camp advisor will contact you within 2 hours!'; }
+    else {
     // Sanitize and retrieve form data
     $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $age = filter_input(INPUT_POST, 'age', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -62,6 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $errors[] = 'Sorry, there was an error sending your message. Please try again later.';
         }
     }
+    } // end honeypot else
 }
 
 // --- SEO & META ---
@@ -213,6 +217,7 @@ h1, h2, h3, h4, h5, h6 {
                             <?php endif; ?>
 
                             <form id="landingPageForm" method="POST" action="/landing" novalidate>
+                                <div class="hp-field" aria-hidden="true"><label>Leave empty<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
                                 <!-- All form fields go here -->
                                 <div class="form-group">
                                     <label class="form-label">Child's Full Name <span class="required">*</span></label>

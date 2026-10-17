@@ -84,8 +84,11 @@ if ($path === 'landing') {
     include $page;
     exit;
 }
-// Handle admin dashboard (note: trim() strips trailing slash, so 'admin/' never occurs)
-if ($path === 'admin') {
+// Handle admin area (login + dashboard + all admin pages).
+// Forward EVERYTHING under /admin to admin/index.php — its internal router
+// serves dashboard/programs/trash/edit pages. Matching only exact 'admin'
+// 404s /admin/dashboard right after login.
+if ($path === 'admin' || str_starts_with($path, 'admin/')) {
     $page = __DIR__ . '/admin/index.php';
     if (!file_exists($page)) { http_response_code(500); echo 'Server error: missing page.'; exit; }
     include $page;
