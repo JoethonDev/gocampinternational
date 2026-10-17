@@ -66,6 +66,20 @@ require_once __DIR__ . '/../includes/header.php';
     }
     ?>
 
+    <?php if (gocamp_entity_section_visible($destinationData, 'destination', 'intro') && !empty($destinationData['intro_text'])): ?>
+    <section class="section-padding bg-white" id="destination-intro">
+        <div class="container"><div class="row align-items-center g-4">
+            <div class="<?= !empty($destinationData['intro_image']) ? 'col-lg-7' : 'col-12' ?>">
+                <h2 class="section-title">Discover <?= htmlspecialchars($destinationData['name']) ?></h2>
+                <div class="lead"><?= strip_tags($destinationData['intro_text'], '<p><br><strong><em><ul><ol><li><b><i>') ?></div>
+            </div>
+            <?php if (!empty($destinationData['intro_image'])): ?>
+            <div class="col-lg-5"><img class="img-fluid rounded-4 shadow-sm w-100" src="<?= htmlspecialchars($destinationData['intro_image']) ?>" alt="<?= htmlspecialchars($destinationData['name']) ?>" loading="lazy"></div>
+            <?php endif; ?>
+        </div></div>
+    </section>
+    <?php endif; ?>
+
     <?php if (gocamp_entity_section_visible($destinationData, "destination", "programs")): ?>
     <section class="section-padding bg-light" id="programs">
         <div class="container">
@@ -163,6 +177,20 @@ require_once __DIR__ . '/../includes/header.php';
         </section>
         <?php endif; ?>
         <?php
+    ?>
+    <?php if (gocamp_entity_section_visible($destinationData, 'destination', 'destination_gallery') && !empty($destinationData['gallery'])): ?>
+    <section class="section-padding bg-light" id="destination-photo-gallery">
+        <div class="container">
+            <h2 class="section-title text-center mb-4"><?= htmlspecialchars($destinationData['name']) ?> Photos</h2>
+            <div class="row g-3">
+                <?php foreach ($destinationData['gallery'] as $image): ?>
+                <div class="col-6 col-lg-3"><img class="w-100 rounded-3 shadow-sm" src="<?= htmlspecialchars($image) ?>" alt="<?= htmlspecialchars($destinationData['name']) ?> photo" style="aspect-ratio:4/3;object-fit:cover" loading="lazy"></div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </section>
+    <?php endif; ?>
+    <?php
     // --- 4. FAQ SECTION ---
     if (gocamp_entity_section_visible($destinationData, 'destination', 'faq') && !empty($destinationData['faq'])) {
         $faqs = $destinationData['faq']; 
