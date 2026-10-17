@@ -234,4 +234,29 @@ $programs = array (
     array (
     ),
   ),
+  'tennis' => array (
+    'status' => 'active',
+    'name' => 'Tennis',
+    'slug' => 'tennis',
+    'banner' => 'https://framerusercontent.com/images/aYghOvt0fp7JHmJkjZEB8fYGAM.jpg?height=1067&width=1600',
+    'intro' => '<p>Discover a sport that rewards precision, determination and confidence. Our tennis experiences combine focused coaching, match practice and a welcoming international atmosphere. Young players develop their serve, footwork, consistency and tactical awareness while learning to rise to every challenge.</p><p>UK tennis coaching content is informed by Exsportise\'s residential tennis-and-English programme. Swiss venue details and schedules will be confirmed separately.</p>',
+    'intro_image' => 'https://framerusercontent.com/images/N954qt0oSjvlI46fP6pYsHgaNY0.jpg?height=1067&width=1600',
+    'sections' => array (
+      0 => array (
+        'title' => 'Develop Your Complete Game',
+        'content' => '<p>From confident first serves to smarter rallies, coaching builds technical, tactical, physical and mental strengths. Students improve footwork, shot selection and match preparation through purposeful drills and friendly competition.</p>',
+        'image' => 'https://framerusercontent.com/images/bTBtmBhKG8bwetd4AG4Wd2EYLYs.jpg?height=1067&width=1600',
+      ),
+      1 => array (
+        'title' => 'Tennis & English in the UK',
+        'content' => '<p>The UK Exsportise reference programme combines 15 hours of tennis coaching with 15 hours of English tuition per week, ability-based training groups and a 1:6 coach-to-player ratio. Residential accommodation and three daily meals are included in that specific UK offering; details vary by destination.</p>',
+        'image' => 'https://framerusercontent.com/images/aYghOvt0fp7JHmJkjZEB8fYGAM.jpg?height=1067&width=1600',
+      ),
+    ),
+    'gallery' => array (
+      0 => 'https://framerusercontent.com/images/bTBtmBhKG8bwetd4AG4Wd2EYLYs.jpg?height=1067&width=1600',
+      1 => 'https://framerusercontent.com/images/N954qt0oSjvlI46fP6pYsHgaNY0.jpg?height=1067&width=1600',
+      2 => 'https://framerusercontent.com/images/aYghOvt0fp7JHmJkjZEB8fYGAM.jpg?height=1067&width=1600',
+    ),
+  ),
 );
