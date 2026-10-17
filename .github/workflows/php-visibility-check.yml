@@ -31,6 +31,8 @@ jobs:
 
       - name: Test reviewed development catalog migration safety and idempotence
         run: php tests/uk-content-migration-test.php
+      - name: Test reviewed academic editorial migration
+        run: php tests/academic-copy-migration-test.php
 
       - name: Validate public routes against current catalog data
         run: |
