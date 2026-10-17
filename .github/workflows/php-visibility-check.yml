@@ -22,6 +22,9 @@ jobs:
       - name: Test media library renames
         run: php tests/media-library-rename-test.php
 
+      - name: Check InfinityFree deployer preserves live data
+        run: python3 -m unittest discover -s tests -p 'test_infinityfree_deploy.py' -v
+
       - name: HTTP smoke tests for PHP routes
         run: |
           php -S 127.0.0.1:8765 local-router.php >/tmp/gocamp-server.log 2>&1 &
