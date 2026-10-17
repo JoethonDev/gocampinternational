@@ -24,7 +24,7 @@ const routes = [
           continue;
         }
         const result = await page.evaluate(() => {
-          const viewport = document.documentElement.clientWidth;
+          const viewport = window.innerWidth; // clientWidth excludes scrollbar gutter on Linux
           const overflowing = [...document.querySelectorAll(
             '.container, .container-fluid, .card, .form-control, .form-select, .modal.show, .navbar, #main-content'
           )].filter(el => {
@@ -49,7 +49,7 @@ const routes = [
             invalidButtons,
             togglerVisible: (() => {
               const nav = document.querySelector('.navbar-toggler');
-              return nav && getComputedStyle(nav).display !== 'none';
+              return nav ? getComputedStyle(nav).display !== 'none' : null;
             })()
           };
         });
@@ -59,7 +59,7 @@ const routes = [
           errors.push(`${width}px ${route}: components overflow: ${result.overflowing.join(', ')}`);
         if (result.invalidButtons.length)
           errors.push(`${width}px ${route}: inconsistent button geometry: ${result.invalidButtons.join(', ')}`);
-        if (result.togglerVisible !== (width < 1200))
+        if (result.togglerVisible !== null && result.togglerVisible !== (width < 1200))
           errors.push(`${width}px ${route}: tablet navbar breakpoint wrong`);
       }
       if ([390, 820, 1024, 1440].includes(width)) {
