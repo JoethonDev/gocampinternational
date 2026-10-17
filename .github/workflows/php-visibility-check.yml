@@ -27,6 +27,9 @@ jobs:
       - name: Check InfinityFree deployer preserves live data
         run: python3 -m unittest discover -s tests -p 'test_infinityfree_deploy.py' -v
 
+      - name: Test reviewed development catalog migration safety and idempotence
+        run: php tests/uk-content-migration-test.php
+
       - name: Validate public routes against current catalog data
         run: |
           php -S 127.0.0.1:8765 local-router.php >/tmp/gocamp-server.log 2>&1 &
