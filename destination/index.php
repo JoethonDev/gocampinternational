@@ -31,6 +31,7 @@ if (isset($destinationData['status']) && $destinationData['status'] === 'coming-
 }
 
 require_once __DIR__ . '/../data/all_programs.php';
+require_once __DIR__ . '/../includes/section-visibility.php';
 
 // Store raw values; header.php escapes on output. Use !empty so empty strings fall back.
 $destinationName = $destinationData['name'] ?? 'Destination';
@@ -53,16 +54,19 @@ require_once __DIR__ . '/../includes/header.php';
 <div class="page-content">
     <?php
     // --- 1. HERO SECTION ---
-    require_once __DIR__ . '/../sections/destination-hero.php';
+    if (gocamp_entity_section_visible($destinationData, 'destination', 'hero')) {
+        require __DIR__ . '/../sections/destination-hero.php';
+    }
 
     // --- 2. STATS COUNTER ---
-    if (!empty($destinationData['stats'])) {
+    if (gocamp_entity_section_visible($destinationData, 'destination', 'stats') && !empty($destinationData['stats'])) {
         $stats = $destinationData['stats']; 
         $sectionTitle = $destinationData['name'] . ' By The Numbers';
         require_once __DIR__ . '/../sections/stats-counter.php';
     }
     ?>
 
+    <?php if (gocamp_entity_section_visible($destinationData, "destination", "programs")): ?>
     <section class="section-padding bg-light" id="programs">
         <div class="container">
             <?php /*
@@ -97,6 +101,7 @@ require_once __DIR__ . '/../includes/header.php';
             </div>
         </div>
     </section>
+    <?php endif; ?>
 
     <?php
     // --- MODALS (must be included for each program card) ---
@@ -127,7 +132,7 @@ require_once __DIR__ . '/../includes/header.php';
                 }
             }
         }
-        if ($hasGalleryImages) : ?>
+        if ($hasGalleryImages && gocamp_entity_section_visible($destinationData, "destination", "gallery")) : ?>
         <section class="section-padding bg-white" id="destination-gallery">
             <div class="container">
                 <div class="text-center mb-5">
@@ -205,7 +210,7 @@ require_once __DIR__ . '/../includes/header.php';
         <?php endif; ?>
         <?php
     // --- 4. FAQ SECTION ---
-    if (!empty($destinationData['faq'])) {
+    if (gocamp_entity_section_visible($destinationData, 'destination', 'faq') && !empty($destinationData['faq'])) {
         $faqs = $destinationData['faq']; 
         $sectionTitle = 'Questions About ' . htmlspecialchars($destinationData['name']);
         require_once __DIR__ . '/../sections/faq-section.php';
@@ -215,7 +220,9 @@ require_once __DIR__ . '/../includes/header.php';
     // require_once __DIR__ . '/../sections/booking-cta-banner.php';
     
     // --- 6. TESTIMONIALS ---
-    require_once __DIR__ . '/../sections/testimonials.php';
+    if (gocamp_entity_section_visible($destinationData, 'destination', 'testimonials')) {
+        require __DIR__ . '/../sections/testimonials.php';
+    }
     ?>
 </div>
 
