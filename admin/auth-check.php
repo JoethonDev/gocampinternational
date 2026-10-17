@@ -50,8 +50,15 @@ if (!empty($_SESSION['is_admin']) && $_SESSION['is_admin'] === true) {
     }
 }
 
+// Revoke sessions created with a previous admin credential after password rotation.
+$activeAdminHash = (string)(getenv('GC_ADMIN_PASSWORD_HASH') ?: '');
+$activeAdminUser = (string)(getenv('GC_ADMIN_USERNAME') ?: 'admin');
+$expectedCredentialVersion = $activeAdminHash !== '' ? hash('sha256', $activeAdminUser . ':' . $activeAdminHash) : '';
+
 // If the admin session variable isn't set or is not true
-if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
+if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true
+    || $expectedCredentialVersion === ''
+    || !hash_equals($expectedCredentialVersion, (string)($_SESSION['admin_credential_version'] ?? ''))) {
     // Redirect them back to the login page
     header('Location: /admin/');
     exit;
