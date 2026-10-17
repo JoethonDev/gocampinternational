@@ -428,6 +428,7 @@ require_once 'includes/admin-header.php';
                         <label for="status" class="form-label fw-bold small text-uppercase text-muted">Status</label>
                         <select class="form-select" id="status" name="status">
                             <option value="active" <?= $data['status'] === 'active' ? 'selected' : '' ?>>Active</option>
+                            <option value="inactive" <?= $data['status'] === 'inactive' ? 'selected' : '' ?>>Inactive</option>
                         </select>
                     </div>
                     <div class="mb-3">
