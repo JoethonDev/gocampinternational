@@ -10,6 +10,10 @@ on:
       - data/destinations.php
       - data/programs.php
       - scripts/vendor_uk_academic_images.py
+      - scripts/map_zip_media.py
+      - 'images/537*.webp'
+      - 'images/538*.webp'
+      - 'images/599*.webp'
       - .github/workflows/vendor-uk-images.yml
   workflow_dispatch:
 
@@ -37,6 +41,8 @@ jobs:
         run: python -m pip install 'Pillow>=11,<13' 'pillow-avif-plugin>=1.5,<2'
       - name: Vendor referenced CDN images
         run: python scripts/vendor_uk_academic_images.py
+      - name: Map uploaded ZIP-only images without replacing existing covers
+        run: python scripts/map_zip_media.py
       - name: Lint affected PHP catalogs
         run: |
           php -l data/all_programs.php
