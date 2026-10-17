@@ -38,12 +38,15 @@ jobs:
           INFINITYFREE_FTP_DIRECTORY: /htdocs/
           INFINITYFREE_FTP_USERNAME: ${{ secrets.INFINITYFREE_FTP_USERNAME }}
           INFINITYFREE_FTP_PASSWORD: ${{ secrets.INFINITYFREE_FTP_PASSWORD }}
+          INFINITYFREE_DEPLOY_ENABLED: ${{ vars.INFINITYFREE_DEPLOY_ENABLED || secrets.INFINITYFREE_DEPLOY_ENABLED }}
         run: |
-          if [ "${{ github.event_name }}" = "push" ] && [ "${{ vars.INFINITYFREE_DEPLOY_ENABLED }}" != "true" ]; then
-            echo 'Automatic upload is disabled: running connection-only dry run.'
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.dry_run }}" = "true" ]; then
+            echo 'Manual dry-run requested: connecting without uploading.'
             python deploy/infinityfree-deploy.py --dry-run
-          elif [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.dry_run }}" = "true" ]; then
-            python deploy/infinityfree-deploy.py --dry-run
-          else
+          elif [ "${INFINITYFREE_DEPLOY_ENABLED:-}" = "true" ]; then
+            echo 'Development upload enabled; deploying over FTPS.'
             python deploy/infinityfree-deploy.py
+          else
+            echo 'Development upload disabled: set INFINITYFREE_DEPLOY_ENABLED=true in environment variables or secrets.'
+            python deploy/infinityfree-deploy.py --dry-run
           fi
