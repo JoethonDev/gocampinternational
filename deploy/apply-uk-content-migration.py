@@ -22,12 +22,28 @@ import sys
 import tarfile
 
 FILES = ("all_programs.php", "programs.php", "destinations.php")
-MARKER = "/htdocs/.gocamp-uk-catalog-migrated-20261017"
+MIGRATION_SCOPE = os.environ.get("GOCAMP_CATALOG_MIGRATION", "uk-catalog")
+if MIGRATION_SCOPE not in ("uk-catalog", "academic-copy"):
+    raise RuntimeError("Unrecognised reviewed migration scope")
+MARKER = (
+    "/htdocs/.gocamp-uk-catalog-migrated-20261017"
+    if MIGRATION_SCOPE == "uk-catalog"
+    else "/htdocs/.gocamp-academic-copy-migrated-20261017"
+)
+MARKER_CONTENT = (
+    b"uk-catalog-20261017\n"
+    if MIGRATION_SCOPE == "uk-catalog"
+    else b"academic-copy-20261017\n"
+)
 DIRECTORY = "/htdocs/data"
 MAX_FILE = 5 * 1024 * 1024
-WORK = Path(os.environ.get("RUNNER_TEMP", "/tmp")) / "gocamp-uk-catalog"
+WORK = Path(os.environ.get("RUNNER_TEMP", "/tmp")) / (
+    "gocamp-uk-catalog" if MIGRATION_SCOPE == "uk-catalog" else "gocamp-academic-copy"
+)
 ROOT = Path(__file__).resolve().parents[1]
-MIGRATOR = ROOT / "deploy" / "migrations" / "apply-uk-catalog.php"
+MIGRATOR = ROOT / "deploy" / "migrations" / (
+    "apply-uk-catalog.php" if MIGRATION_SCOPE == "uk-catalog" else "apply-academic-copy.php"
+)
 AAD = b"GoCamp development catalog 2026-10-17"
 
 
@@ -66,7 +82,7 @@ def marker_exists(ftp: FTP_TLS) -> bool:
         if str(exc).startswith("550"):
             return False
         raise
-    if data != b"uk-catalog-20261017\n":
+    if data != MARKER_CONTENT:
         raise RuntimeError("Unexpected migration marker contents; manual review required")
     return True
 
@@ -151,7 +167,7 @@ def apply() -> None:
                 store(ftp, DIRECTORY + "/" + name, stage[name])
                 if hashlib.sha256(remote_get(ftp, DIRECTORY + "/" + name)).digest() != hashlib.sha256(stage[name]).digest():
                     raise RuntimeError("Uploaded catalog verification failed for " + name)
-            store(ftp, MARKER, b"uk-catalog-20261017\n")
+            store(ftp, MARKER, MARKER_CONTENT)
         except Exception:
             restored = []
             for name in reversed(touched):

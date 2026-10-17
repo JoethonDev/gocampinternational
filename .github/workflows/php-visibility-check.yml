@@ -23,12 +23,16 @@ jobs:
         run: php tests/media-library-rename-test.php
       - name: Test admin UI regressions
         run: php tests/admin-ui-regression-test.php
+      - name: Check dynamic academic copy and gallery policy
+        run: php tests/academic-gallery-content-test.php
 
       - name: Check InfinityFree deployer preserves live data
         run: python3 -m unittest discover -s tests -p 'test_infinityfree_deploy.py' -v
 
       - name: Test reviewed development catalog migration safety and idempotence
         run: php tests/uk-content-migration-test.php
+      - name: Test reviewed academic editorial migration
+        run: php tests/academic-copy-migration-test.php
 
       - name: Validate public routes against current catalog data
         run: |
