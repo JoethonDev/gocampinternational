@@ -15,6 +15,8 @@
  * - 'highlights' (array) - An array of highlight arrays, each with 'icon' and 'text'.
  */
 
+require_once __DIR__ . '/../includes/section-visibility.php';
+
 // --- Variable Safety Checks (use !empty so empty strings fall back to defaults) ---
 $banner       = !empty($destinationData['banner']) ? $destinationData['banner'] : '/images/hero.webp';
 $name         = !empty($destinationData['name']) ? $destinationData['name'] : 'Destination';
@@ -47,7 +49,7 @@ $highlights   = $destinationData['highlights'] ?? [];
                 </p>
 
                 <!-- Highlights -->
-                <?php if (!empty($highlights)) : ?>
+                <?php if (!empty($highlights) && gocamp_entity_section_visible($destinationData, 'destination', 'highlights')) : ?>
                 <div class="row g-3 mb-5">
                     <?php foreach ($highlights as $highlight) : ?>
                         <div class="col-sm-6">
