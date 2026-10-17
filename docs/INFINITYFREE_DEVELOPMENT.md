@@ -15,11 +15,11 @@ Development only. The `develop` branch deploys to InfinityFree over explicit FTP
 - Website: https://gocampinternational.freedev.app/
 - Host: `ftpupload.net`; port `21`; explicit FTPS with certificate validation.
 - Remote directory: `/htdocs/`.
-- Only pushes to `develop` run this workflow. By default they check FTPS connectivity WITHOUT uploading until the environment variable below is enabled. No production deployment.
+- Only pushes to `develop` run this workflow. By default they check FTPS connectivity WITHOUT uploading until the environment variable or secret below is enabled. No production deployment.
 
 ## First test
 
-Back up existing development runtime content. Once this PR is merged into `develop`, the first push-triggered workflow automatically runs as a DRY RUN because auto-deployment is disabled by default. Check its Actions logs for successful FTPS authentication and directory access. In GitHub Settings -> Environments -> infinityfree-development -> Environment variables, add `INFINITYFREE_DEPLOY_ENABLED` with value `true` **only after that dry run succeeds**. Trigger a new push to `develop` (or rerun the workflow from Actions if available) to upload. Later pushes to `develop` deploy automatically. To pause uploads, set the variable back to `false` or delete it. GitHub's manual Run workflow button may only appear when the workflow file also exists on the repository's default branch; the automatic dry-run/enable flow does not depend on that button.
+Back up development runtime content before uploading. The workflow accepts `INFINITYFREE_DEPLOY_ENABLED` from GitHub Settings -> Environments -> `infinityfree-development` -> **Environment variables** OR **Environment secrets** (or repository variables/secrets). The value must be exactly lowercase `true`, without quotes or whitespace. The workflow is fail-closed: if no matching flag is found it runs a dry run. Do not put the enable flag in a different GitHub environment. Adding a variable does not change the outcome of a workflow run that has already started; trigger a new push to `develop`. The action logs now explain the chosen mode. For a manual workflow dispatch, selecting `dry_run=true` explicitly prevents uploads even when enabled. To pause automatic uploads, set the flag to `false` or delete it. GitHub's manual Run workflow button may only appear when the workflow file also exists on the repository's default branch.
 
 ## Preserved live files
 
