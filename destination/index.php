@@ -106,17 +106,15 @@ require_once __DIR__ . '/../includes/header.php';
     <?php
     // --- MODALS (must be included for each program card) ---
     // --- MODIFIED LOOP (Phase 5) ---
-    /*
-    if (!empty($destinationData['program_ids'])) {
+    if (!empty($destinationData['program_ids']) && gocamp_entity_section_visible($destinationData, 'destination', 'programs')) {
         foreach ($destinationData['program_ids'] as $program_id) {
-            if (isset($all_programs[$program_id]) && $all_programs[$program_id]['status'] === 'active') {
+            if (isset($all_programs[$program_id]) && ($all_programs[$program_id]['status'] ?? '') === 'active') {
                 $program = $all_programs[$program_id];
-                // The modal component also uses the $program variable
                 require __DIR__ . '/../sections/program_detail_modal.php';
             }
         }
     }
-    */ ?>
+
         <?php /*
         // Original Gallery section logic
         $hasGalleryImages = false;
