@@ -69,8 +69,12 @@ html, body {
 body {
     background-color: var(--bg-body);
     color: var(--text-main);
+    --bs-body-bg: var(--bg-body);
+    --bs-body-color: var(--text-main);
+    --bs-border-color: var(--border-color);
+    --bs-secondary-color: var(--text-muted);
+    --bs-tertiary-bg: var(--bg-card);
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    transition: background-color var(--transition-speed), color var(--transition-speed);
     padding-top: 70px; /* Adjusted for navbar */
     display: flex;
     flex-direction: column;
@@ -86,6 +90,22 @@ footer, .admin-footer {
 
 h1, h2, h3, h4, h5, h6 {
     color: var(--text-main);
+}
+
+#main-content,
+#main-content h1, #main-content h2, #main-content h3,
+#main-content h4, #main-content h5, #main-content h6,
+#main-content .form-label, #main-content .form-check-label,
+#main-content .card, #main-content .list-group-item {
+    color: var(--text-main) !important;
+}
+
+#main-content .border,
+#main-content .border-top,
+#main-content .border-end,
+#main-content .border-bottom,
+#main-content .border-start {
+    border-color: var(--border-color) !important;
 }
 
 /* Dainty Theme Text Primary Override */
@@ -335,7 +355,10 @@ a {
 }
 
 .animate-fade-in {
-    animation: fadeIn 0.4s ease-out forwards;
+    /* Page-level entry animations looked like a re-render on every admin navigation. */
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -344,9 +367,7 @@ a {
     }
 }
 
-.delay-1 { animation-delay: 0.1s; }
-.delay-2 { animation-delay: 0.2s; }
-.delay-3 { animation-delay: 0.3s; }
+.delay-1, .delay-2, .delay-3 { animation-delay: 0s !important; }
 
 /* Theme Switcher */
 .theme-switcher {
@@ -401,9 +422,22 @@ a {
 
 /* Input Group Addons */
 .input-group-text {
-    background-color: var(--border-color);
-    border-color: var(--border-color);
+    background-color: var(--bg-card);
+    border-color: var(--input-border);
     color: var(--text-main);
+}
+
+.input-group > .form-control,
+.input-group > .form-select,
+.input-group > .input-group-text,
+.input-group > .btn {
+    border-color: var(--input-border) !important;
+}
+
+.input-group > .form-control:focus,
+.input-group > .form-select:focus {
+    position: relative;
+    z-index: 3;
 }
 
 /* Image Upload */
@@ -527,3 +561,24 @@ option {
 .choices__list.choices__list--dropdown {
     z-index: 10000 !important;
 }
+
+/* Bootstrap components must follow the admin palette in every theme. */
+.form-text, .small, small { color: inherit; }
+.form-text { color: var(--text-muted) !important; }
+.table { --bs-table-bg: transparent; --bs-table-color: var(--text-main); --bs-table-border-color: var(--border-color); }
+.alert-info {
+    color: var(--text-main);
+    background-color: rgba(var(--primary-rgb), 0.12);
+    border-color: rgba(var(--primary-rgb), 0.28);
+}
+.btn-outline-secondary {
+    color: var(--text-main);
+    border-color: var(--input-border);
+}
+.btn-outline-secondary:hover {
+    color: var(--text-main);
+    background-color: var(--border-color);
+    border-color: var(--input-border);
+}
+[data-theme="dark"] .btn-outline-danger { color: #ff8d98; border-color: #b94a56; }
+[data-theme="dark"] .btn-outline-danger:hover { color: #fff; background-color: #b94a56; }
