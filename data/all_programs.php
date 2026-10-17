@@ -537,6 +537,7 @@ $all_programs = array (
       4 => '/images/Fashion_6.webp',
       5 => '/images/Fashion_85.webp',
       6 => '/images/Fashion_93.webp',
+      7 => '/images/53774_6ceb90297448b376.webp',
     ),
   ),
   'italy-food' => 
@@ -995,6 +996,7 @@ $all_programs = array (
       0 => '/images/Winter-2.webp',
       1 => '/images/Winter-day-camps-zip-line-1.webp',
       2 => '/images/Winter-day-camps-zip-line-2.webp',
+      3 => '/images/53814_bf0ca3d656de44fd.webp',
     ),
   ),
   'uk-academic-architecture' => array (
