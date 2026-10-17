@@ -10,6 +10,8 @@ $pageDescription = 'Discover life-changing international summer camps for teens.
 
 // --- Load data needed for this page ---
 require_once __DIR__ . '/data/destinations.php';
+require_once __DIR__ . '/includes/section-visibility.php';
+require_once __DIR__ . '/data/site_settings.php';
 
 // --- Mock data for banners ---
 $banners = [
@@ -25,6 +27,7 @@ require_once __DIR__ . '/includes/header.php';
 <div class="page-content">
 
     <!-- HERO SLIDER SECTION -->
+    <?php if (gocamp_entity_section_visible($site_settings, "home", "hero")): ?>
     <header id="home-hero-slider" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
             <?php foreach ($banners as $index => $banner): ?>
@@ -45,8 +48,10 @@ require_once __DIR__ . '/includes/header.php';
             <?php endforeach; ?>
         </div>
     </header>
+    <?php endif; ?>
 
     <!-- INTRODUCTION SECTION -->
+    <?php if (gocamp_entity_section_visible($site_settings, "home", "intro")): ?>
     <section class="section-padding">
         <div class="container">
             <div class="row justify-content-center">
@@ -57,6 +62,7 @@ require_once __DIR__ . '/includes/header.php';
             </div>
         </div>
     </section>
+    <?php endif; ?>
 
     <?php
     // --- DYNAMIC DESTINATIONS SECTION ---
@@ -66,7 +72,9 @@ require_once __DIR__ . '/includes/header.php';
     });
     // Make $public_destinations available to the cards section
     // The destination-cards.php should use $public_destinations if set, otherwise fallback to $destinations
-    require_once __DIR__ . '/sections/destination-cards.php';
+    if (gocamp_entity_section_visible($site_settings, 'home', 'destinations')) {
+        require __DIR__ . '/sections/destination-cards.php';
+    }
     ?>
 
     <?php
@@ -126,6 +134,7 @@ require_once __DIR__ . '/includes/header.php';
     // Limit to first 3 categories for the featured section
     $featured_categories = array_slice($featured_categories, 0, 3);
     ?>
+    <?php if (gocamp_entity_section_visible($site_settings, "home", "featured_categories")): ?>
     <section id="featured-categories" class="section-padding bg-light">
         <div class="container">
             <div class="text-center mb-5">
@@ -156,9 +165,10 @@ require_once __DIR__ . '/includes/header.php';
             </div>
         </div>
     </section>
+    <?php endif; ?>
 
     <!-- TESTIMONIALS SECTION -->
-    <?php require_once __DIR__ . '/sections/testimonials.php'; ?>
+    <?php if (gocamp_entity_section_visible($site_settings, 'home', 'testimonials')) require __DIR__ . '/sections/testimonials.php'; ?>
 
 </div>
 
