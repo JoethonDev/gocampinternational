@@ -23,6 +23,9 @@
                     <a class="nav-link" href="/admin/programs.php">Programs</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="/admin/site-visibility">Homepage Visibility</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="/admin/inquiries.php">Inquiries</a>
                 </li>
                 <li class="nav-item">
