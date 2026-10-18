@@ -5,7 +5,7 @@ ServerSignature Off
 <FilesMatch "^\.env$">
     Require all denied
 </FilesMatch>
-RedirectMatch 404 ^/data/.*$
+RedirectMatch 404 ^/data(?:/|$).*
 RedirectMatch 404 ^/.*\.jsonl$
 # Block direct execution of scripts inside public upload/image dirs
 RedirectMatch 403 ^/(uploads|images)/.*\.(php|phtml|phar|cgi|pl)$

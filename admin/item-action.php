@@ -11,17 +11,18 @@ require_once __DIR__ . '/../init.php';
 require_once 'helpers.php';
 require_once 'auth-check.php';
 
-// Accept both GET and POST (legacy admin links use GET) but always require a valid CSRF token.
-$csrf = $_REQUEST['csrf'] ?? '';
+// State-changing actions must never run from GET, even with a CSRF token.
+require_post();
+$csrf = $_POST['csrf'] ?? '';
 if (!csrf_check($csrf)) {
     http_response_code(403);
     exit('Invalid CSRF token.');
 }
 
 // 2. Get and validate parameters
-$action = $_REQUEST['action'] ?? null;
-$type = $_REQUEST['type'] ?? null;
-$slug = $_REQUEST['slug'] ?? null; // 'slug' is used as the key (even if it's an 'id')
+$action = $_POST['action'] ?? null;
+$type = $_POST['type'] ?? null;
+$slug = $_POST['slug'] ?? null; // 'slug' is used as the key (even if it's an 'id')
 
 // Allowlisted actions/types
 $allowedActions = ['duplicate', 'soft-delete', 'restore', 'perm-delete', 'delete-inquiry'];
@@ -34,7 +35,7 @@ if (!is_string($action) || !in_array($action, $allowedActions, true)) {
 
 // Handle inquiry-file deletion (uses ?file= instead of type/slug)
 if ($action === 'delete-inquiry') {
-    $file = $_REQUEST['file'] ?? '';
+    $file = $_POST['file'] ?? '';
     if (!is_string($file)) {
         header('Location: /admin/inquiries.php');
         exit;

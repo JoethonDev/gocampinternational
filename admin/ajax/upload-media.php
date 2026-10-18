@@ -8,6 +8,19 @@
 require_once __DIR__ . '/../auth-check.php'; // Basic security
 
 header('Content-Type: application/json');
+require_once __DIR__ . '/../helpers.php';
+if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
+    http_response_code(405);
+    header('Allow: POST');
+    echo json_encode(['success' => false, 'message' => 'Method not allowed']);
+    exit;
+}
+if (!csrf_check($_POST['csrf'] ?? '')) {
+    http_response_code(403);
+    echo json_encode(['success' => false, 'message' => 'Invalid CSRF token']);
+    exit;
+}
+
 
 $response = ['success' => false, 'message' => 'An unknown error occurred.'];
 $upload_dir_path = __DIR__ . '/../../images';
@@ -145,6 +158,11 @@ function processFileUpload($name, $type, $tmp_name, $error, $size, $allowed_type
 
 // Support multiple uploads
 if (isset($_FILES['media_file'])) {
+    if (is_array($_FILES['media_file']['name']) && count($_FILES['media_file']['name']) > 10) {
+        http_response_code(413);
+        echo json_encode(['success' => false, 'message' => 'Maximum 10 files per upload']);
+        exit;
+    }
     $allowed_types = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
     $files = $_FILES['media_file'];
     $results = [];
@@ -170,7 +188,7 @@ if (isset($_FILES['media_file'])) {
     }
 
     $response = [
-        'success' => true,
+        'success' => count(array_filter($results, static fn($result) => $result['success'])) > 0,
         'results' => $results
     ];
 } else {

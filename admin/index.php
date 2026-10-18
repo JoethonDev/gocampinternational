@@ -10,20 +10,21 @@
 require_once __DIR__ . '/../init.php';
 
 // --- CONFIGURATION ---
-// !! IMPORTANT: Change 'YourSecurePassword' to a strong, unique password.
-// To generate your hash:
-// 1. Visit a free online tool for "bcrypt password generator"
-// 2. Or, create a temporary PHP file with: echo password_hash('YourSecurePassword', PASSWORD_DEFAULT);
-// 3. Paste the resulting hash string below.
-$ADMIN_USERNAME = 'admin';
-// NOTE: bcrypt cost 12 (~200-300ms per verify). Previous cost-16 hash took 4-6s on password_verify — do NOT raise cost above 12 on this hosting.
-$ADMIN_PASSWORD_HASH = '$2y$12$RndybMoz7OfG8YfN3bcvaud7vGPQOH5ud41KNddcNpd498pbilLaG'; // Default: 'Zeinab2025$#@'
+// Set GC_ADMIN_PASSWORD_HASH in the server environment to a password_hash()
+// generated with PHP. No built-in password or reusable fallback is provided.
+$ADMIN_USERNAME = (string)(getenv('GC_ADMIN_USERNAME') ?: 'admin');
+$ADMIN_PASSWORD_HASH = (string)(getenv('GC_ADMIN_PASSWORD_HASH') ?: '');
+$ADMIN_CREDENTIAL_VERSION = $ADMIN_PASSWORD_HASH !== ''
+    ? hash('sha256', $ADMIN_USERNAME . ':' . $ADMIN_PASSWORD_HASH)
+    : '';
 
 // --- LOGIC ---
 $error_message = '';
 
 // 1. Check if user is already logged in
-// if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] === true) {
+// if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] === true
+    && $ADMIN_CREDENTIAL_VERSION !== ''
+    && hash_equals($ADMIN_CREDENTIAL_VERSION, (string)($_SESSION['admin_credential_version'] ?? ''))) {
 //     header('Location: /admin/');
 //     exit;
 // }
@@ -122,14 +123,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['login_attempts'] = $attempts + 1;
                 $_SESSION['last_attempt'] = time();
                 $error_message = 'Invalid username or password.';
-            } elseif (password_verify($password, $ADMIN_PASSWORD_HASH)) {
+            } elseif (is_string($password) && $ADMIN_PASSWORD_HASH !== '' && password_verify($password, $ADMIN_PASSWORD_HASH)) {
                 // Log if hash should be rotated to current cost (admin should update hash constant)
                 if (password_needs_rehash($ADMIN_PASSWORD_HASH, PASSWORD_BCRYPT, ['cost' => 12])) {
-                    error_log('admin login: ADMIN_PASSWORD_HASH needs rehash to cost 12 — update constant in admin/index.php');
+                    error_log('admin login: GC_ADMIN_PASSWORD_HASH needs rehash to cost 12');
                 }
                 // SUCCESS: Set session and redirect
                 session_regenerate_id(true);
                 $_SESSION['is_admin'] = true;
+                $_SESSION['admin_credential_version'] = $ADMIN_CREDENTIAL_VERSION;
+                $_SESSION['csrf'] = bin2hex(random_bytes(32));
                 $_SESSION['login_time'] = time();
                 $_SESSION['login_attempts'] = 0;
                 unset($_SESSION['last_attempt']);
