@@ -36,6 +36,12 @@ SCOPES = {
         "gocamp-academic-copy",
         "apply-academic-copy.php",
     ),
+    "reconcile": (
+        "/htdocs/.gocamp-reconcile-unused",
+        b"reconcile-unused\n",
+        "gocamp-reconcile",
+        "apply-reconcile.php",
+    ),
     "germany-language": (
         "/htdocs/.gocamp-germany-language-migrated-20261019",
         b"germany-language-20261019\n",
@@ -89,6 +95,8 @@ def remote_get(ftp: FTP_TLS, path: str) -> bytes:
 
 
 def marker_exists(ftp: FTP_TLS) -> bool:
+    if MIGRATION_SCOPE == "reconcile":
+        return False  # Re-run diff-based reconciliation on every deployment.
     try:
         data = remote_get(ftp, MARKER)
     except error_perm as exc:
@@ -180,7 +188,8 @@ def apply() -> None:
                 store(ftp, DIRECTORY + "/" + name, stage[name])
                 if hashlib.sha256(remote_get(ftp, DIRECTORY + "/" + name)).digest() != hashlib.sha256(stage[name]).digest():
                     raise RuntimeError("Uploaded catalog verification failed for " + name)
-            store(ftp, MARKER, MARKER_CONTENT)
+            if MIGRATION_SCOPE != "reconcile":
+                store(ftp, MARKER, MARKER_CONTENT)
         except Exception:
             restored = []
             for name in reversed(touched):
