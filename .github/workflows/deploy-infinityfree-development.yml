@@ -51,12 +51,12 @@ jobs:
             python deploy/infinityfree-deploy.py --dry-run
           fi
 
-      # Catalogs are intentionally skipped by the normal code-only deployment.
-      # The reviewed, one-time migration below merges only the requested UK records
-      # and persists an ENCRYPTED rollback snapshot before uploading modified data.
-      - name: Prepare reviewed UK catalog migration and encrypted backup
+
+      # Recurring, idempotent reconciliation of explicitly Git-managed catalog records.
+      - name: Prepare reconciled catalogs and encrypted rollback snapshot
         if: github.event_name == 'push'
         env:
+          GOCAMP_CATALOG_MIGRATION: reconcile
           INFINITYFREE_FTP_HOST: ftpupload.net
           INFINITYFREE_FTP_PORT: '21'
           INFINITYFREE_FTP_USERNAME: ${{ secrets.INFINITYFREE_FTP_USERNAME }}
@@ -67,21 +67,22 @@ jobs:
             python -m pip install 'cryptography>=45,<49'
             python deploy/apply-uk-content-migration.py prepare
           else
-            echo 'Development uploads disabled; skipping catalog migration.'
+            echo 'Catalog reconcile disabled (development uploads disabled).'
           fi
 
-      - name: Save encrypted development catalog rollback snapshot
+      - name: Save encrypted reconciliation rollback backup
         if: github.event_name == 'push'
         uses: actions/upload-artifact@v4
         with:
-          name: infinityfree-catalog-backup-${{ github.run_id }}
-          path: ${{ runner.temp }}/gocamp-uk-catalog/backup.enc
+          name: infinityfree-catalog-reconcile-backup-${{ github.run_id }}
+          path: ${{ runner.temp }}/gocamp-reconcile/backup.enc
           if-no-files-found: ignore
           retention-days: 7
 
-      - name: Apply reviewed catalog migration only after backup is saved
+      - name: Apply reconciled catalog after backup
         if: github.event_name == 'push'
         env:
+          GOCAMP_CATALOG_MIGRATION: reconcile
           INFINITYFREE_FTP_HOST: ftpupload.net
           INFINITYFREE_FTP_PORT: '21'
           INFINITYFREE_FTP_USERNAME: ${{ secrets.INFINITYFREE_FTP_USERNAME }}
@@ -91,131 +92,5 @@ jobs:
           if [ "$INFINITYFREE_DEPLOY_ENABLED" = "true" ]; then
             python deploy/apply-uk-content-migration.py apply
           else
-            echo 'Development uploads disabled; no catalog change.'
-          fi
-
-      - name: Prepare reviewed academic copy update and encrypted backup
-        if: github.event_name == 'push'
-        env:
-          GOCAMP_CATALOG_MIGRATION: academic-copy
-          INFINITYFREE_FTP_HOST: ftpupload.net
-          INFINITYFREE_FTP_PORT: '21'
-          INFINITYFREE_FTP_USERNAME: ${{ secrets.INFINITYFREE_FTP_USERNAME }}
-          INFINITYFREE_FTP_PASSWORD: ${{ secrets.INFINITYFREE_FTP_PASSWORD }}
-          INFINITYFREE_DEPLOY_ENABLED: ${{ vars.INFINITYFREE_DEPLOY_ENABLED || secrets.INFINITYFREE_DEPLOY_ENABLED }}
-        run: |
-          if [ "$INFINITYFREE_DEPLOY_ENABLED" = "true" ]; then
-            python -m pip install 'cryptography>=45,<49'
-            python deploy/apply-uk-content-migration.py prepare
-          else
-            echo 'Development uploads disabled; skipping academic content update.'
-          fi
-
-      - name: Save encrypted academic content rollback snapshot
-        if: github.event_name == 'push'
-        uses: actions/upload-artifact@v4
-        with:
-          name: infinityfree-academic-copy-backup-${{ github.run_id }}
-          path: ${{ runner.temp }}/gocamp-academic-copy/backup.enc
-          if-no-files-found: ignore
-          retention-days: 7
-
-      - name: Apply reviewed academic copy update after backup is saved
-        if: github.event_name == 'push'
-        env:
-          GOCAMP_CATALOG_MIGRATION: academic-copy
-          INFINITYFREE_FTP_HOST: ftpupload.net
-          INFINITYFREE_FTP_PORT: '21'
-          INFINITYFREE_FTP_USERNAME: ${{ secrets.INFINITYFREE_FTP_USERNAME }}
-          INFINITYFREE_FTP_PASSWORD: ${{ secrets.INFINITYFREE_FTP_PASSWORD }}
-          INFINITYFREE_DEPLOY_ENABLED: ${{ vars.INFINITYFREE_DEPLOY_ENABLED || secrets.INFINITYFREE_DEPLOY_ENABLED }}
-        run: |
-          if [ "$INFINITYFREE_DEPLOY_ENABLED" = "true" ]; then
-            python deploy/apply-uk-content-migration.py apply
-          else
-            echo 'Development uploads disabled; skipping academic content update.'
-          fi
-
-      - name: Prepare reviewed Soccer imagery sync and encrypted backup
-        if: github.event_name == 'push'
-        env:
-          GOCAMP_CATALOG_MIGRATION: soccer-images
-          INFINITYFREE_FTP_HOST: ftpupload.net
-          INFINITYFREE_FTP_PORT: '21'
-          INFINITYFREE_FTP_USERNAME: ${{ secrets.INFINITYFREE_FTP_USERNAME }}
-          INFINITYFREE_FTP_PASSWORD: ${{ secrets.INFINITYFREE_FTP_PASSWORD }}
-          INFINITYFREE_DEPLOY_ENABLED: ${{ vars.INFINITYFREE_DEPLOY_ENABLED || secrets.INFINITYFREE_DEPLOY_ENABLED }}
-        run: |
-          if [ "$INFINITYFREE_DEPLOY_ENABLED" = "true" ]; then
-            python -m pip install 'cryptography>=45,<49'
-            python deploy/apply-uk-content-migration.py prepare
-          else
-            echo 'Development uploads disabled; skipping Soccer image sync.'
-          fi
-
-      - name: Save encrypted Soccer catalog rollback backup
-        if: github.event_name == 'push'
-        uses: actions/upload-artifact@v4
-        with:
-          name: infinityfree-soccer-media-backup-${{ github.run_id }}
-          path: ${{ runner.temp }}/gocamp-soccer-images/backup.enc
-          if-no-files-found: ignore
-          retention-days: 7
-
-      - name: Apply reviewed Soccer images only after backup is saved
-        if: github.event_name == 'push'
-        env:
-          GOCAMP_CATALOG_MIGRATION: soccer-images
-          INFINITYFREE_FTP_HOST: ftpupload.net
-          INFINITYFREE_FTP_PORT: '21'
-          INFINITYFREE_FTP_USERNAME: ${{ secrets.INFINITYFREE_FTP_USERNAME }}
-          INFINITYFREE_FTP_PASSWORD: ${{ secrets.INFINITYFREE_FTP_PASSWORD }}
-          INFINITYFREE_DEPLOY_ENABLED: ${{ vars.INFINITYFREE_DEPLOY_ENABLED || secrets.INFINITYFREE_DEPLOY_ENABLED }}
-        run: |
-          if [ "$INFINITYFREE_DEPLOY_ENABLED" = "true" ]; then
-            python deploy/apply-uk-content-migration.py apply
-          else
-            echo 'Development uploads disabled; skipping Soccer image sync.'
-          fi
-
-      - name: Prepare Germany language catalog update and encrypted backup
-        if: github.event_name == 'push'
-        env:
-          GOCAMP_CATALOG_MIGRATION: germany-language
-          INFINITYFREE_FTP_HOST: ftpupload.net
-          INFINITYFREE_FTP_PORT: '21'
-          INFINITYFREE_FTP_USERNAME: ${{ secrets.INFINITYFREE_FTP_USERNAME }}
-          INFINITYFREE_FTP_PASSWORD: ${{ secrets.INFINITYFREE_FTP_PASSWORD }}
-          INFINITYFREE_DEPLOY_ENABLED: ${{ vars.INFINITYFREE_DEPLOY_ENABLED || secrets.INFINITYFREE_DEPLOY_ENABLED }}
-        run: |
-          if [ "$INFINITYFREE_DEPLOY_ENABLED" = "true" ]; then
-            python -m pip install 'cryptography>=45,<49'
-            python deploy/apply-uk-content-migration.py prepare
-          else
-            echo 'Development uploads disabled; skipping Germany catalog migration.'
-          fi
-
-      - name: Save encrypted Germany catalog rollback snapshot
-        if: github.event_name == 'push'
-        uses: actions/upload-artifact@v4
-        with:
-          name: infinityfree-germany-catalog-backup-${{ github.run_id }}
-          path: ${{ runner.temp }}/gocamp-germany-language/backup.enc
-          if-no-files-found: ignore
-          retention-days: 7
-
-      - name: Apply reviewed Germany catalog update after backup is saved
-        if: github.event_name == 'push'
-        env:
-          GOCAMP_CATALOG_MIGRATION: germany-language
-          INFINITYFREE_FTP_HOST: ftpupload.net
-          INFINITYFREE_FTP_PORT: '21'
-          INFINITYFREE_FTP_USERNAME: ${{ secrets.INFINITYFREE_FTP_USERNAME }}
-          INFINITYFREE_FTP_PASSWORD: ${{ secrets.INFINITYFREE_FTP_PASSWORD }}
-          INFINITYFREE_DEPLOY_ENABLED: ${{ vars.INFINITYFREE_DEPLOY_ENABLED || secrets.INFINITYFREE_DEPLOY_ENABLED }}
-        run: |
-          if [ "$INFINITYFREE_DEPLOY_ENABLED" = "true" ]; then
-            python deploy/apply-uk-content-migration.py apply
-          else
-            echo 'Development uploads disabled; no Germany catalog change.'
+            echo 'No catalog changes: development uploads disabled.'
           fi
