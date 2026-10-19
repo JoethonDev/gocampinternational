@@ -54,11 +54,12 @@ $destinations = array (
     array (
       0 => '/images/53795_12d48e8ce0e31dc1.webp',
     ),
-    'program_ids' => 
+     'program_ids' => 
     array (
       0 => 'switzerland-adventure-camp',
       1 => 'switzerland-film-academy',
       2 => 'switzerland-ski-camp',
+      3 => 'tennis-academy',
     ),
     'stats' => 
     array (
@@ -71,32 +72,32 @@ $destinations = array (
   array (
     'name' => 'Germany',
     'slug' => 'germany',
-    'status' => 'coming-soon',
+    'status' => 'active',
     'banner' => '/images/germany_banner.webp',
-    'tagline' => 'Language, Academia, and Culture',
+    'tagline' => 'German Language Learning & Cultural Immersion',
     'intro_image' => '/images/germany_1.webp',
-    'intro_text' => '<p class="lead text-muted mb-4">The best way to learn German is through full immersion in one of our many schools and summer centers across Germany. We also offer university pathway programs for higher education.</p>',
+    'intro_text' => '<p class="lead text-muted mb-4">Learn German through everyday use and immersive study, with flexible options for children, teenagers and adults in selected locations across Germany and Austria.</p>',
     'highlights' => 
     array (
       0 => 
       array (
         'icon' => 'translate',
-        'text' => 'Full Language Immersion',
+        'text' => 'German Language Immersion',
       ),
       1 => 
       array (
-        'icon' => 'building-fill',
-        'text' => 'University Pathway',
+        'icon' => 'calendar-event',
+        'text' => 'Summer & Winter Camps',
       ),
       2 => 
       array (
-        'icon' => 'briefcase-fill',
-        'text' => 'Executive & Pro Courses',
+        'icon' => 'laptop',
+        'text' => 'Online Courses',
       ),
       3 => 
       array (
-        'icon' => 'people-fill',
-        'text' => 'Junior & Adult Programs',
+        'icon' => 'patch-check-fill',
+        'text' => 'Exam Preparation',
       ),
     ),
     'gallery' => 
@@ -105,6 +106,7 @@ $destinations = array (
     ),
     'program_ids' => 
     array (
+      0 => 'germany-german-language-course',
     ),
     'stats' => 
     array (
@@ -271,18 +273,17 @@ $destinations = array (
     'faq' => 
     array (
     ),
-    'program_ids' => 
+     'program_ids' => 
     array (
-      0 => 'uk-young-professional',
-      1 => 'uk-pre-university',
-      2 => 'uk-english-foundation',
-      3 => 'uk-academic-engineering',
-      4 => 'uk-academic-architecture',
-      5 => 'uk-academic-medicine',
-      6 => 'uk-academic-business-management',
-      7 => 'uk-academic-computer-science',
-      8 => 'uk-academic-artificial-intelligence',
-      9 => 'uk-academic-economics',
+      0 => 'uk-academic-engineering',
+      1 => 'uk-academic-architecture',
+      2 => 'uk-academic-medicine',
+      3 => 'uk-academic-business-management',
+      4 => 'uk-academic-computer-science',
+      5 => 'uk-academic-artificial-intelligence',
+      6 => 'uk-academic-economics',
+      7 => 'tennis-academy',
+      8 => 'uk-soccer-club-experience',
     ),
   ),
   'france' => 

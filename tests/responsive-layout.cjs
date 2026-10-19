@@ -1,15 +1,18 @@
 /* Browser responsive smoke tests for critical GoCamp routes.
    Run with: node tests/responsive-layout.cjs (Playwright installed). */
 const { chromium } = require('playwright');
-const assert = require('node:assert/strict');
+const { execFileSync } = require('node:child_process');
+const path = require('node:path');
 
 const base = process.env.TEST_BASE_URL || 'http://127.0.0.1:8765';
 const widths = [320, 390, 768, 820, 1024, 1180, 1440];
-const routes = [
-  '/', '/about', '/contact', '/faq', '/programs',
-  '/destinations/uk', '/destinations/switzerland',
-  '/program/category?category=adult-academic', '/landing', '/admin'
-];
+// Fetch public destinations and categories from the same PHP catalogs used by the app.
+const catalog = JSON.parse(execFileSync('php', [path.join(__dirname, 'public-catalog-routes.php')], { encoding: 'utf8' }));
+const routes = [...new Set([
+  '/', '/about', '/contact', '/faq', '/programs', '/landing', '/admin',
+  ...catalog.destinations, ...catalog.categories
+])];
+const screenshotRoute = catalog.screenshotDestination || catalog.destinations[0] || '/';
 
 (async () => {
   const browser = await chromium.launch({ headless: true, args: ['--no-sandbox'] });
@@ -73,7 +76,7 @@ const routes = [
           errors.push(`${width}px ${route}: tablet navbar breakpoint wrong`);
       }
       if ([390, 820, 1024, 1440].includes(width)) {
-        await page.goto(base + '/destinations/uk', { waitUntil: 'domcontentloaded' });
+        await page.goto(base + screenshotRoute, { waitUntil: 'domcontentloaded' });
         await page.screenshot({ path: `/tmp/gocamp-${width}.png`, fullPage: true });
       }
       await page.close();

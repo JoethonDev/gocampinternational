@@ -1,0 +1,96 @@
+name: Deploy InfinityFree development (FTPS)
+
+on:
+  push:
+    branches: [develop]
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Verify connection and deployment plan without uploading files'
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: infinityfree-development
+  cancel-in-progress: false
+
+jobs:
+  deploy-development:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    environment: infinityfree-development
+    steps:
+      - name: Check out GoCamp source
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate deployment protection rules
+        run: python -m unittest discover -s tests -p 'test_infinityfree_deploy.py' -v
+      - name: Deploy to InfinityFree over explicit TLS (port 21)
+        env:
+          INFINITYFREE_FTP_HOST: ftpupload.net
+          INFINITYFREE_FTP_PORT: '21'
+          INFINITYFREE_FTP_DIRECTORY: /htdocs/
+          INFINITYFREE_FTP_USERNAME: ${{ secrets.INFINITYFREE_FTP_USERNAME }}
+          INFINITYFREE_FTP_PASSWORD: ${{ secrets.INFINITYFREE_FTP_PASSWORD }}
+          INFINITYFREE_DEPLOY_ENABLED: ${{ vars.INFINITYFREE_DEPLOY_ENABLED || secrets.INFINITYFREE_DEPLOY_ENABLED }}
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.dry_run }}" = "true" ]; then
+            echo 'Manual dry-run requested: connecting without uploading.'
+            python deploy/infinityfree-deploy.py --dry-run
+          elif [ "${INFINITYFREE_DEPLOY_ENABLED:-}" = "true" ]; then
+            echo 'Development upload enabled; deploying over FTPS.'
+            python deploy/infinityfree-deploy.py
+          else
+            echo 'Development upload disabled: set INFINITYFREE_DEPLOY_ENABLED=true in environment variables or secrets.'
+            python deploy/infinityfree-deploy.py --dry-run
+          fi
+
+
+      # Recurring, idempotent reconciliation of explicitly Git-managed catalog records.
+      - name: Prepare reconciled catalogs and encrypted rollback snapshot
+        if: github.event_name == 'push'
+        env:
+          GOCAMP_CATALOG_MIGRATION: reconcile
+          INFINITYFREE_FTP_HOST: ftpupload.net
+          INFINITYFREE_FTP_PORT: '21'
+          INFINITYFREE_FTP_USERNAME: ${{ secrets.INFINITYFREE_FTP_USERNAME }}
+          INFINITYFREE_FTP_PASSWORD: ${{ secrets.INFINITYFREE_FTP_PASSWORD }}
+          INFINITYFREE_DEPLOY_ENABLED: ${{ vars.INFINITYFREE_DEPLOY_ENABLED || secrets.INFINITYFREE_DEPLOY_ENABLED }}
+        run: |
+          if [ "$INFINITYFREE_DEPLOY_ENABLED" = "true" ]; then
+            python -m pip install 'cryptography>=45,<49'
+            python deploy/apply-uk-content-migration.py prepare
+          else
+            echo 'Catalog reconcile disabled (development uploads disabled).'
+          fi
+
+      - name: Save encrypted reconciliation rollback backup
+        if: github.event_name == 'push'
+        uses: actions/upload-artifact@v4
+        with:
+          name: infinityfree-catalog-reconcile-backup-${{ github.run_id }}
+          path: ${{ runner.temp }}/gocamp-reconcile/backup.enc
+          if-no-files-found: ignore
+          retention-days: 7
+
+      - name: Apply reconciled catalog after backup
+        if: github.event_name == 'push'
+        env:
+          GOCAMP_CATALOG_MIGRATION: reconcile
+          INFINITYFREE_FTP_HOST: ftpupload.net
+          INFINITYFREE_FTP_PORT: '21'
+          INFINITYFREE_FTP_USERNAME: ${{ secrets.INFINITYFREE_FTP_USERNAME }}
+          INFINITYFREE_FTP_PASSWORD: ${{ secrets.INFINITYFREE_FTP_PASSWORD }}
+          INFINITYFREE_DEPLOY_ENABLED: ${{ vars.INFINITYFREE_DEPLOY_ENABLED || secrets.INFINITYFREE_DEPLOY_ENABLED }}
+        run: |
+          if [ "$INFINITYFREE_DEPLOY_ENABLED" = "true" ]; then
+            python deploy/apply-uk-content-migration.py apply
+          else
+            echo 'No catalog changes: development uploads disabled.'
+          fi

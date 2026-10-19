@@ -32,10 +32,16 @@ if (isset($destinationData['status']) && $destinationData['status'] === 'coming-
 
 require_once __DIR__ . '/../data/all_programs.php';
 require_once __DIR__ . '/../includes/section-visibility.php';
+require_once __DIR__ . '/../includes/content-description.php';
 
 // Store raw values; header.php escapes on output. Use !empty so empty strings fall back.
 $destinationName = $destinationData['name'] ?? 'Destination';
-$destinationTagline = !empty($destinationData['tagline']) ? $destinationData['tagline'] : 'Discover Your Adventure';
+$destinationTagline = !empty($destinationData['tagline'])
+    ? $destinationData['tagline']
+    : gocamp_description_excerpt((string)($destinationData['intro_text'] ?? ''), 170);
+if ($destinationTagline === '') {
+    $destinationTagline = 'Discover Your Adventure';
+}
 $destinationBanner = !empty($destinationData['banner']) ? $destinationData['banner'] : '/images/hero.webp';
 $destinationIntro = $destinationData['intro'] ?? '';
 $destinationIntroImage = !empty($destinationData['intro_image']) ? $destinationData['intro_image'] : '/images/placeholder.webp';
@@ -71,7 +77,7 @@ require_once __DIR__ . '/../includes/header.php';
         <div class="container"><div class="row align-items-center g-4">
             <div class="<?= !empty($destinationData['intro_image']) ? 'col-lg-7' : 'col-12' ?>">
                 <h2 class="section-title">Discover <?= htmlspecialchars($destinationData['name']) ?></h2>
-                <div class="lead"><?= strip_tags($destinationData['intro_text'], '<p><br><strong><em><ul><ol><li><b><i>') ?></div>
+                <div class="lead"><?= gocamp_description_markup((string)$destinationData['intro_text']) ?></div>
             </div>
             <?php if (!empty($destinationData['intro_image'])): ?>
             <div class="col-lg-5"><img class="img-fluid rounded-4 shadow-sm w-100" src="<?= htmlspecialchars($destinationData['intro_image']) ?>" alt="<?= htmlspecialchars($destinationData['name']) ?>" loading="lazy"></div>

@@ -17,19 +17,38 @@ jobs:
         run: find . -type f -name '*.php' -not -path './vendor/*' -print0 | xargs -0 -n1 php -l
       - name: Test visibility behavior
         run: php tests/section-visibility-test.php
+      - name: Test description display
+        run: php tests/description-display-test.php
+      - name: Test media library renames
+        run: php tests/media-library-rename-test.php
+      - name: Test admin UI regressions
+        run: php tests/admin-ui-regression-test.php
+      - name: Check dynamic academic copy and gallery policy
+        run: php tests/academic-gallery-content-test.php
+      - name: Validate UK Soccer gallery images
+        run: php tests/soccer-media-test.php
+      - name: Test safe Soccer image migration
+        run: php tests/soccer-image-migration-test.php
 
-      - name: HTTP smoke tests for PHP routes
+      - name: Check InfinityFree deployer preserves live data
+        run: python3 -m unittest discover -s tests -p 'test_infinityfree_deploy.py' -v
+
+      - name: Test reviewed development catalog migration safety and idempotence
+        run: php tests/uk-content-migration-test.php
+      - name: Test reviewed academic editorial migration
+        run: php tests/academic-copy-migration-test.php
+
+      - name: Validate public routes against current catalog data
         run: |
           php -S 127.0.0.1:8765 local-router.php >/tmp/gocamp-server.log 2>&1 &
           PID=$!
           trap 'kill "$PID" 2>/dev/null || true' EXIT
           sleep 2
-          for path in / /destinations/uk /programs "/program/category?category=adult-academic" /admin; do
-            echo "Checking $path"
-            http_code=$(curl -sS -L -o /tmp/gocamp-response -w "%{http_code}" "http://127.0.0.1:8765$path")
-            if [ "$http_code" != "200" ]; then
-              cat /tmp/gocamp-server.log
-              cat /tmp/gocamp-response
-              exit 1
-            fi
-          done
+          if ! php tests/catalog-http-smoke-test.php http://127.0.0.1:8765; then
+            cat /tmp/gocamp-server.log
+            exit 1
+          fi
+          curl -fsS http://127.0.0.1:8765/admin/media-library -o /tmp/gocamp-media-login
+          grep -q 'Admin Access' /tmp/gocamp-media-login
+          code=$(curl -sS -o /dev/null -w "%{http_code}" http://127.0.0.1:8765/admin/media-library.php)
+          test "$code" = "302"

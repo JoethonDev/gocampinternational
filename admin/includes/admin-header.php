@@ -24,23 +24,28 @@ $pageTitle = $pageTitle ?? 'Go Camp Admin';
 
     <link rel="icon" type="image/png" href="/images/favi.png">
 
+    <script>
+        // Set the admin theme before any stylesheet is parsed to prevent a
+        // light-theme flash/repaint during navigation.
+        (function() {
+            try {
+                const savedTheme = localStorage.getItem('admin-theme') || 'light';
+                document.documentElement.setAttribute('data-theme', savedTheme);
+            } catch (error) {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+            document.documentElement.setAttribute('data-theme-ready', 'true');
+        })();
+    </script>
+
     <?php
-    // Include all centralized stylesheets from the main site
-    // This respects Rule #2 (Theme Lock)
+    // Include all centralized stylesheets from the main site.
     require_once __DIR__ . '/../../includes/styles.php';
     ?>
     
     <!-- Admin Modern Theme -->
-    <link rel="stylesheet" href="/admin/css/admin-modern.css">
-    <link rel="stylesheet" href="/admin/css/admin-responsive.css?v=1.0">
-
-    <script>
-        // Apply saved theme immediately to prevent flash
-        (function() {
-            const savedTheme = localStorage.getItem('admin-theme') || 'light';
-            document.documentElement.setAttribute('data-theme', savedTheme);
-        })();
-    </script>
+    <link rel="stylesheet" href="/admin/css/admin-modern.css?v=2.1">
+    <link rel="stylesheet" href="/admin/css/admin-responsive.css?v=1.1">
     
     <style>
         /* Removed inline body styles as they are now in admin-modern.css */

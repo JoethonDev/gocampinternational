@@ -234,4 +234,29 @@ $programs = array (
     array (
     ),
   ),
+  'tennis' => array (
+    'status' => 'active',
+    'name' => 'Tennis',
+    'slug' => 'tennis',
+    'banner' => '/images/imported-5acb0b681a0332.webp',
+    'intro' => '<p>Every great rally starts with confidence. Our Tennis category introduces young players to focused coaching, enjoyable match practice and the skills that make time on court more rewarding. Learn to combine sound technique with tactical awareness, resilience and sportsmanship, while enjoying a positive atmosphere and friendships through sport.</p><p>Explore Tennis Academy opportunities across our available destinations. Coaching formats, schedules, accommodation and additional activities are confirmed individually for each location.</p>',
+    'intro_image' => '/images/imported-b4eecf3804ce9b.webp',
+    'sections' => array (
+      0 => array (
+        'title' => 'Build Your All-Round Game',
+        'content' => '<p>Strengthen your serve, groundstrokes, footwork and positioning through purposeful practice. Learn to read the court, choose your shots and approach every point with confidence.</p>',
+        'image' => '/images/imported-9b759cf6c4187e.webp',
+      ),
+      1 => array (
+        'title' => 'Learn Through Match Play',
+        'content' => '<p>Friendly matches, structured challenges and performance feedback help players bring technical learning into competitive situations. Discover the importance of consistency, concentration, respect and teamwork.</p>',
+        'image' => '/images/imported-5acb0b681a0332.webp',
+      ),
+    ),
+    'gallery' => array (
+      0 => '/images/imported-9b759cf6c4187e.webp',
+      1 => '/images/imported-b4eecf3804ce9b.webp',
+      2 => '/images/imported-5acb0b681a0332.webp',
+    ),
+  ),
 );

@@ -18,7 +18,7 @@ if (!isset($program) || !is_array($program)) {
 // --- Data Extraction ---
 $programId = $program['id'] ?? uniqid();
 $name = $program['name'] ?? 'Untitled Program';
-$tagline = !empty($program['tagline']) ? $program['tagline'] : 'No description.';
+$tagline = trim((string)($program['tagline'] ?? ''));
 $image = !empty($program['image']) ? $program['image'] : '/images/placeholder.webp';
 $ages = isset($program['ages']) && !empty($program['ages']) ? $program['ages'] : null;
 $duration = isset($program['duration']) && $program['duration'] > 0 ? $program['duration'] : null;
@@ -97,8 +97,8 @@ $colors = $colorClasses[$color] ?? $colorClasses['primary'];
         <?php endif; ?>
         <div class="card-body p-4 d-flex flex-column">
             <h3 class="card-title fw-bold mb-2 text-brand-dark fs-4"><?= htmlspecialchars($name) ?></h3>
-            <?php if (gocamp_entity_section_visible($program, "program", "card_tagline")): ?>
-            <p class="card-text text-muted mb-3"><?= htmlspecialchars($tagline) ?></p>
+            <?php if ($tagline !== '' && gocamp_entity_section_visible($program, "program", "card_tagline")): ?>
+            <p class="card-text text-muted mb-3"><?= htmlspecialchars($tagline, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></p>
             <?php endif; ?>
                 <?php /*
                 // Original gallery/photo section

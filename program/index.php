@@ -155,14 +155,12 @@ unset($catData);
     </section>
     
     <?php
-    // --- Include Modals for all programs ---
-    /*
+    // Every program card opens its matching details modal.
     if (!empty($allPrograms)) {
         foreach ($allPrograms as $program) {
             require __DIR__ . '/../sections/program_detail_modal.php';
         }
     }
-    */
     // --- Final CTA Banner ---
     // require_once __DIR__ . '/../sections/booking-cta-banner.php';
     ?>
