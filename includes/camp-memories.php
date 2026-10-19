@@ -3,7 +3,19 @@
 function gocamp_load_memories() {
     $camp_memories = [];
     $legacy = require __DIR__ . '/../data/camp_memories.php';
-    return is_array($legacy) ? ['title' => 'Go Campers Memories', 'show_facebook' => true, 'items' => $legacy] : $camp_memories;
+    if (!is_array($legacy)) {
+        return ['title' => 'Go Campers Memories', 'show_facebook' => true, 'items' => []];
+    }
+    // Current CMS format stores title, show_facebook and items together.
+    // Still accept legacy flat photo arrays for backward compatibility.
+    if (isset($legacy['items']) && is_array($legacy['items'])) {
+        return [
+            'title' => (string)($legacy['title'] ?? 'Go Campers Memories'),
+            'show_facebook' => (bool)($legacy['show_facebook'] ?? true),
+            'items' => $legacy['items'],
+        ];
+    }
+    return ['title' => 'Go Campers Memories', 'show_facebook' => true, 'items' => $legacy];
 }
 
 /** Only existing image-library files can be published by the editor. */
