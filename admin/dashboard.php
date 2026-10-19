@@ -121,6 +121,10 @@ require_once 'includes/admin-header.php';
                         </div>
                         <i class="bi bi-chevron-right text-muted"></i>
                     </a>
+                    <a href="/admin/memories" class="list-group-item list-group-item-action border-0 px-4 py-3">
+                        <span class="fw-bold">Go Campers Memories</span>
+                        <div class="small text-muted">Manage slider photos, captions, order and visibility</div>
+                    </a>
                     <a href="/admin/edit-faq" class="list-group-item list-group-item-action border-0 px-4 py-3 d-flex justify-content-between align-items-center">
                         <div class="d-flex align-items-center">
                             <div class="icon-box bg-light text-info rounded-circle me-3 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
