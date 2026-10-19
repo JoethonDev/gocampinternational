@@ -36,6 +36,12 @@ SCOPES = {
         "gocamp-academic-copy",
         "apply-academic-copy.php",
     ),
+    "germany-language": (
+        "/htdocs/.gocamp-germany-language-migrated-20261019",
+        b"germany-language-20261019\n",
+        "gocamp-germany-language",
+        "apply-germany-language.php",
+    ),
     "soccer-images": (
         "/htdocs/.gocamp-soccer-images-migrated-20261017",
         b"soccer-images-20261017\n",
