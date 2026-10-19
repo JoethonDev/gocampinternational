@@ -78,7 +78,7 @@ if ($path === 'programs') {
     include $page;
     exit;
 }
-if ($path === 'gallery') {
+if ($path === 'gallery' || $path === 'memories') {
     include __DIR__ . '/gallery.php';
     exit;
 }
