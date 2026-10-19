@@ -1,11 +1,10 @@
 <?php
 declare(strict_types=1);
 /**
- * One-time Germany language offering and Tennis copy update for InfinityFree.
- * Only replaces the requested editorial fields, keeping all other live CMS edits.
+ * Reconcile Git-managed development content while retaining unrelated CMS fields.
  */
 if (PHP_SAPI !== 'cli' || count($argv) !== 4) {
-    fwrite(STDERR, "Usage: php apply-germany-language.php REPO_ROOT LIVE_DATA OUTPUT_DIR\n");
+    fwrite(STDERR, "Usage: php apply-reconcile.php REPO_ROOT LIVE_DATA OUTPUT_DIR\n");
     exit(2);
 }
 
@@ -106,6 +105,20 @@ try {
             }
         }
     }
+    // All existing catalogue programmes participate in the requested copy rewrite.
+    // Do not create retired records or change live prices, status, media or schedules.
+    foreach ($source['all_programs'] as $id => $record) {
+        if (!isset($live['all_programs'][$id]) || !is_array($live['all_programs'][$id])) continue;
+        foreach (['description', 'tagline'] as $field) {
+            if (array_key_exists($field, $record)) {
+                $live['all_programs'][$id][$field] = $record[$field];
+            }
+        }
+    }
+    foreach ($live['all_programs'] as &$record) {
+        if (($record['tagline'] ?? '') === 'Academic Insights summer course') $record['tagline'] = '';
+    }
+    unset($record);
     // Reconcile destination information only where this project explicitly manages it.
     foreach (['germany', 'uk'] as $slug) {
         if (!isset($source['destinations'][$slug], $live['destinations'][$slug])) {
@@ -123,11 +136,17 @@ try {
     foreach (['status', 'tagline', 'intro_text', 'highlights'] as $field) {
         $live['destinations']['germany'][$field] = $germany[$field];
     }
-    // Maintain the associated Tennis category copy without changing unrelated categories.
-    if (isset($source['programs']['tennis'], $live['programs']['tennis'])) {
-        foreach (['intro', 'sections'] as $field) {
-            if (array_key_exists($field, $source['programs']['tennis'])) {
-                $live['programs']['tennis'][$field] = $source['programs']['tennis'][$field];
+    // Apply category prose while preserving live section images, titles and added sections.
+    foreach ($source['programs'] as $slug => $category) {
+        if (!isset($live['programs'][$slug]) || !is_array($live['programs'][$slug])) continue;
+        if (array_key_exists('intro', $category)) {
+            $live['programs'][$slug]['intro'] = $category['intro'];
+        }
+        foreach (($category['sections'] ?? []) as $index => $section) {
+            $existing = $live['programs'][$slug]['sections'][$index] ?? null;
+            if (is_array($existing) && ($existing['title'] ?? '') === ($section['title'] ?? '') &&
+                array_key_exists('content', $section)) {
+                $live['programs'][$slug]['sections'][$index]['content'] = $section['content'];
             }
         }
     }

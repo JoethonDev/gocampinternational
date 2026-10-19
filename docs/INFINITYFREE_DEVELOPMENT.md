@@ -23,9 +23,9 @@ Back up development runtime content before uploading. The workflow accepts `INFI
 
 ## Preserved live files
 
-The deployer overwrites allowlisted application PHP/CSS/JS only. It never deletes remote files. These tracked files are seeded only when absent: `data/all_programs.php`, `data/programs.php`, `data/destinations.php`, `data/faq.json`, `data/site_settings.php`. Both `data/inquiries/` and `uploads/` are excluded entirely. Only missing images are copied into `images/`; existing media is not overwritten.
+The deployer overwrites allowlisted application PHP/CSS/JS, including `gallery.php`. It never deletes remote files. These tracked files are seeded only when absent: `data/all_programs.php`, `data/programs.php`, `data/destinations.php`, `data/faq.json`, `data/site_settings.php`, `data/camp_memories.php`. Both `data/inquiries/` and `uploads/` are excluded entirely. Only missing images are copied into `images/`; existing media is not overwritten.
 
-GitHub edits to an already-present data file do not apply automatically. Import intentional content changes with the admin dashboard or a separately reviewed migration.
+After a push, catalog reconciliation applies the Git-managed programme descriptions and taglines and category introductions and matching section prose. Existing live prices, availability, schedules, category images and admin-created records are preserved. The earlier managed UK/Germany/Tennis/Soccer records retain their explicitly reconciled fields. Reconciliation downloads the live catalogs, saves an encrypted rollback artifact, checks for concurrent admin changes, and verifies the uploaded files. Other data files, including existing memories, remain managed by the admin dashboard.
 
 To test safety locally: `python -m unittest discover -s tests -p 'test_infinityfree_deploy.py' -v`.
 

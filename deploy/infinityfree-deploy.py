@@ -14,13 +14,13 @@ import sys
 REPO_ROOT = Path(__file__).resolve().parents[1]
 ROOT_CODE = frozenset({
     '.htaccess', '404.php', 'about_us.php', 'contact_us.php', 'faq.php',
-    'home.php', 'index.php', 'init.php', 'landing.php',
+    'home.php', 'index.php', 'init.php', 'landing.php', 'gallery.php',
 })
 CODE_DIRS = frozenset({'admin', 'api', 'css', 'destination', 'includes', 'js', 'program', 'sections'})
 CODE_EXTENSIONS = frozenset({'.php', '.js', '.css'})
 DATA_SEEDS = frozenset({
     'data/all_programs.php', 'data/destinations.php', 'data/faq.json',
-    'data/programs.php', 'data/site_settings.php',
+    'data/programs.php', 'data/site_settings.php', 'data/camp_memories.php',
 })
 IMAGE_EXTENSIONS = frozenset({'.webp', '.jpg', '.jpeg', '.png', '.gif', '.svg', '.ico'})
 
