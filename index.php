@@ -78,6 +78,10 @@ if ($path === 'programs') {
     include $page;
     exit;
 }
+if ($path === 'gallery') {
+    include __DIR__ . '/gallery.php';
+    exit;
+}
 if ($path === 'landing') {
     $page = __DIR__ . '/landing.php';
     if (!file_exists($page)) { http_response_code(500); echo 'Server error: missing page.'; exit; }

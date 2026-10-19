@@ -19,3 +19,5 @@
 <script src="/js/main.js"></script>
 <script src="/js/programs.js"></script>
 <script src="/js/ux-enhancements.js" defer></script>
+
+<script src="/js/camp-memories.js" defer></script>

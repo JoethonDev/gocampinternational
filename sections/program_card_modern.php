@@ -40,7 +40,7 @@ $colors = $colorClasses[$color] ?? $colorClasses['primary'];
 <div class="program-card-modern position-relative h-100">
     <div class="card border-0 shadow-lg h-100 overflow-hidden" style="border-radius: 20px;">
         <?php if (gocamp_entity_section_visible($program, "program", "card_image")): ?>
-        <div class="position-relative overflow-hidden" style="height: 280px;">
+        <div class="position-relative overflow-hidden program-card-media" style="height: 280px;">
             <img src="<?= htmlspecialchars($image) ?>" class="card-img-top h-100 w-100 object-fit-cover program-card-image" alt="<?= htmlspecialchars($name) ?>" loading="lazy" />
             <div class="position-absolute bottom-0 start-0 w-100 h-100" style="background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 60%);"></div>
             <div class="position-absolute top-0 start-0 w-100 p-3">
@@ -98,7 +98,7 @@ $colors = $colorClasses[$color] ?? $colorClasses['primary'];
         <div class="card-body p-4 d-flex flex-column">
             <h3 class="card-title fw-bold mb-2 text-brand-dark fs-4"><?= htmlspecialchars($name) ?></h3>
             <?php if (gocamp_entity_section_visible($program, "program", "card_tagline")): ?>
-            <p class="card-text text-muted mb-3 flex-grow-1"><?= htmlspecialchars($tagline) ?></p>
+            <p class="card-text text-muted mb-3"><?= htmlspecialchars($tagline) ?></p>
             <?php endif; ?>
                 <?php /*
                 // Original gallery/photo section

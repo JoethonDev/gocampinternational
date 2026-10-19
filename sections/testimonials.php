@@ -1,70 +1,37 @@
 <?php
-/**
- * File: /sections/testimonials.php
- *
- * Renders a testimonial slider section.
- *
- * It can use a passed $testimonials variable. If not provided, it falls back to mock data.
- * @var array $testimonials (optional) - An array of testimonial items. Each with 'image', 'name', 'quote'.
- */
-
-// --- Use provided testimonials or fall back to mock data ---
-if (!isset($testimonials) || !is_array($testimonials) || empty($testimonials)) {
-    $testimonials = [
-        [
-            'image' => 'test_img.webp',
-            'name'  => 'Maria & Family (from Egypt)',
-            'quote' => 'An experience that changed our perspective! The organization was flawless and the activities were both fun and educational.'
-        ],
-        [
-            'image' => 'about_img_3.webp',
-            'name'  => 'Ahmed S. (from Egypt)',
-            'quote' => 'The best summer of my life! I learned so much, not just about the language but about myself. The counselors were amazing.'
-        ]
-    ];
-}
+/** Photo memories with factual captions; shared by home, category and destination pages. */
+require_once __DIR__ . '/../includes/camp-memories.php';
+$memoriesConfig = gocamp_load_memories();
+$campMemories = array_values(array_filter($memoriesConfig['items'], static fn($item) => ($item['is_active'] ?? true) === true && ($item['in_slider'] ?? true) === true));
+if (!$campMemories) return;
 ?>
-<section class="section-padding">
+<section class="section-padding camp-memories" aria-labelledby="camp-memories-title">
     <div class="container">
-        <div class="row gx-lg-5 align-items-center">
-            <div class="col-lg-7 mb-5 mb-lg-0">
-                <h2 class="section-title text-center text-lg-start mb-5">What Our Families Say</h2>
-                <div id="testimonialsCarousel" class="carousel slide" data-bs-ride="carousel">
-                    <div class="carousel-inner">
-                        <?php foreach ($testimonials as $index => $testimonial) : ?>
-                        <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
-                            <div class="card shadow-lg border-0">
-                                <div class="card-body p-4 p-md-5">
-                                    <div class="row align-items-center">
-                                        <div class="col-md-4 text-center">
-                                            <img src="/images/<?= htmlspecialchars($testimonial['image']) ?>"
-                                                 class="img-fluid rounded-circle mb-3 mb-md-0"
-                                                 alt="Testimonial from <?= htmlspecialchars($testimonial['name']) ?>"
-                                                 style="width: 150px; height: 150px; object-fit: cover;"/>
-                                        </div>
-                                        <div class="col-md-8">
-                                            <i class="bi bi-quote fs-1 opacity-25 text-brand-primary"></i>
-                                            <p class="lead fst-italic mb-3">"<?= htmlspecialchars($testimonial['quote']) ?>"</p>
-                                            <footer class="blockquote-footer fs-5"><?= htmlspecialchars($testimonial['name']) ?></footer>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+        <h2 id="camp-memories-title" class="section-title text-center text-lg-start mb-5"><?= htmlspecialchars($memoriesConfig['title'], ENT_QUOTES, 'UTF-8') ?></h2>
+        <div class="row gx-lg-5 align-items-start">
+            <div class="<?= !empty($memoriesConfig['show_facebook']) ? 'col-lg-8' : 'col-12' ?> mb-5 mb-lg-0">
+                <div class="camp-memories-slider">
+                    <button type="button" class="btn btn-outline-primary camp-memories-arrow" data-memories-direction="-1" aria-label="Previous memories" aria-controls="camp-memories-track" hidden>&larr;</button>
+                <div id="camp-memories-track" class="camp-memories-track" tabindex="0" role="region" aria-label="Camper photo memories">
+                        <?php foreach ($campMemories as $memory): ?>
+                        <figure class="camp-memory card border-0 shadow-sm mb-0">
+                            <a href="/images/<?= htmlspecialchars($memory['image'], ENT_QUOTES, 'UTF-8') ?>"
+                               data-toggle="lightbox" aria-label="View photo: <?= htmlspecialchars($memory['caption'], ENT_QUOTES, 'UTF-8') ?>">
+                                <img src="/images/<?= htmlspecialchars($memory['image'], ENT_QUOTES, 'UTF-8') ?>"
+                                     alt="<?= htmlspecialchars($memory['caption'], ENT_QUOTES, 'UTF-8') ?>"
+                                     loading="lazy" decoding="async" width="640" height="480">
+                            </a>
+                            <figcaption class="p-3 text-center"><?= htmlspecialchars($memory['caption'], ENT_QUOTES, 'UTF-8') ?></figcaption>
+                        </figure>
                         <?php endforeach; ?>
-                    </div>
-                    <?php if (count($testimonials) > 1) : ?>
-                    <button class="carousel-control-prev" type="button" data-bs-target="#testimonialsCarousel" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#testimonialsCarousel" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span><span class="visually-hidden">Next</span>
-                    </button>
-                    <?php endif; ?>
                 </div>
+                    <button type="button" class="btn btn-outline-primary camp-memories-arrow" data-memories-direction="1" aria-label="Next memories" aria-controls="camp-memories-track" hidden>&rarr;</button>
+                </div>
+                <div class="text-center mt-4"><a href="/gallery" class="btn btn-outline-primary">View gallery by country</a></div>
             </div>
-            <div class="col-lg-5">
-                 <div class="card shadow-lg">
+            <?php if (!empty($memoriesConfig['show_facebook'])): ?>
+            <div class="col-lg-4">
+                <div class="card shadow-lg">
                     <div class="card-body p-2">
                         <div class="fb-page" data-href="https://www.facebook.com/GoCampGo" data-tabs="timeline" data-width="500" data-height="450" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true" data-lazy="true">
                             <blockquote cite="https://www.facebook.com/GoCampGo" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/GoCampGo">Go Camp International</a></blockquote>
@@ -75,7 +42,7 @@ if (!isset($testimonials) || !is_array($testimonials) || empty($testimonials)) {
                     </div>
                 </div>
             </div>
+            <?php endif; ?>
         </div>
     </div>
 </section>
-
