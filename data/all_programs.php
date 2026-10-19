@@ -216,6 +216,42 @@ $all_programs = array (
       9 => '/images/Junior_7.webp',
     ),
   ),
+  'germany-german-language-course' => array (
+    'order' => 1,
+    'id' => 'germany-german-language-course',
+    'category_slug' => 'language-and-activity-camps',
+    'name' => 'German Language Course',
+    'tagline' => 'Learn German through immersive study, practical communication and flexible course formats.',
+    'image' => '/images/germany_2.webp',
+    'ages' => array (
+      'min' => NULL,
+      'max' => NULL,
+    ),
+    'duration' => NULL,
+    'level' => 'All Levels',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' => array (
+      0 => 'Language',
+      1 => 'German',
+    ),
+    'highlights' => array (
+      0 => 'Summer Camps',
+      1 => 'Winter Camps',
+      2 => 'Online Courses',
+      3 => 'Exam Preparation',
+    ),
+    'description' => '<p>Learning German becomes more natural when the language is part of everyday life. Our German Language Course offers children, teenagers and adults the opportunity to build confidence in speaking, listening, reading and writing while experiencing German-speaking culture in selected locations across Germany and Austria.</p><p>Students can choose from Summer Camps, Winter Camps, Online Courses and Exam Preparation, making it easier to select a study format that matches their goals, level and schedule.</p>',
+    'includes' => array (
+    ),
+    'excludes' => array (
+    ),
+    'status' => 'active',
+    'schedule' => array (
+    ),
+    'gallery' => array (
+    ),
+  ),
   'germany-children-summer' => 
   array (
     'order' => 3,
@@ -1690,7 +1726,7 @@ $all_programs = array (
       2 => 'Develop consistency, court positioning and decision-making under pressure.',
       3 => 'Build sportsmanship, resilience and friendships through an active camp experience.',
     ),
-    'description' => '<p>Discover how rewarding tennis can be when every session brings a fresh opportunity to improve. Our Tennis Academy is designed for young players who want to strengthen their game, enjoy purposeful practice and build confidence on and off the court. Whether refining familiar strokes or learning smarter ways to approach a rally, students are encouraged to make steady progress at a level that suits their experience.</p><p>Coaching focuses on the fundamentals that make a difference in matches: serving, forehand and backhand technique, footwork, court positioning, shot selection and tactical awareness. Structured drills and friendly match-play challenges give participants the chance to put these skills into action while developing focus, resilience and sportsmanship.</p><p>Alongside personal improvement, the experience celebrates teamwork, encouragement and international friendships. Specific schedules, accommodation, language lessons and other inclusions vary by destination and will be confirmed for the selected camp.</p>',
+    'description' => '<p>Our Tennis Academy gives players from beginner to advanced the chance to train in a structured programme built around their level. At the start of the week, players are assessed and grouped by ability so coaching can focus on the areas that will help them progress most.</p><p>Sessions combine the four key areas of player development: technical, tactical, physical and mental. Through drills and match practice, players work on stroke technique, footwork, shot selection, consistency, speed, agility and decision-making while building discipline, resilience, focus and confidence on and off the court.</p>',
     'includes' => array (
       0 => 'Tennis technique and footwork development',
       1 => 'Ability-appropriate tactical coaching and match-play practice',
