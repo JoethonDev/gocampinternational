@@ -32,7 +32,7 @@ $all_programs = array (
       2 => 'TestDaf prep',
       3 => 'Guidance through every step',
     ),
-    'description' => 'This program guides you through every step to university, including language preparation and entrance exam courses.',
+    'description' => '<p>The University Pathway programme aims to help students prepare for the academic and language demands of studying in Germany. It brings together German language preparation, Studienkolleg preparation and entrance examination study, giving students a clearer understanding of the steps towards university entry.</p><p>The programme connects language development with academic preparation. Students work towards communicating more confidently in German while becoming familiar with the expectations of further study and the preparation required for the TestDaF examination.</p><p>Our approach encourages steady progress, independent study and purposeful preparation. Students are encouraged to identify the areas they need to strengthen, organise their learning and approach unfamiliar academic tasks with greater confidence.</p><p>Throughout the programme, the focus remains on building a sound foundation for the next stage of education. Language practice and entrance examination preparation support students as they work towards their chosen university pathway.</p>',
     'status' => 'inactive',
     'gallery' => 
     array (
@@ -71,7 +71,7 @@ $all_programs = array (
       2 => 'College application workshops',
       3 => 'Campus tours in Boston or LA',
     ),
-    'description' => 'Get a head start on your university applications and experience life on a US college campus.',
+    'description' => '<p>The Pre-University Camp aims to introduce students to university life in the United States while helping them prepare for the application process. Time on a US college campus gives students an opportunity to explore their interests and consider what they want from their future studies.</p><p>The programme combines SAT and ACT preparation sessions with college application workshops. Students explore the different elements of an application and consider how to communicate their interests, experiences and academic goals clearly.</p><p>Our approach connects preparation with first-hand experience of a university environment. Campus tours in Boston or Los Angeles help students place their plans in context, while encouraging curiosity, independence and thoughtful decision-making.</p><p>Throughout the camp, students focus on understanding their options, strengthening their preparation and becoming more comfortable with the transition to university. The aim is to help them approach their next steps with a clearer sense of direction.</p>',
     'status' => 'inactive',
     'gallery' => 
     array (
@@ -109,7 +109,7 @@ $all_programs = array (
       2 => 'Improve language skills and knowledge in a professional context.',
       3 => 'Designed for ambitious individuals.',
     ),
-    'description' => '<p>The Young Professionals Summer Camp is a two-week immersive English programme designed for ambitious individuals. You’ll get a unique blend of English and subject-specific learning alongside real-world industry experience, giving you the chance to explore various career paths (such as Business, Engineering, AI, and Visual Arts) while improving your language skills in a professional context.</p>',
+    'description' => '<p>The Young Professional Summer programme aims to help ambitious students explore future career interests while developing their English. This two-week experience brings together language learning, subject study and exposure to the world of work, allowing students to consider how their interests might develop beyond school.</p><p>Students explore areas such as Business, Engineering, Artificial Intelligence and Visual Arts. English is used within a professional context, helping students connect vocabulary and communication skills with the subjects and industries that interest them.</p><p>Our approach links learning with practical relevance. Students are encouraged to ask questions, explain their ideas and consider the skills different careers require, while developing confidence in using English for more than everyday conversation.</p><p>Throughout the programme, the focus is on broadening knowledge and making informed choices. Students can explore unfamiliar fields, strengthen their communication and begin to recognise the areas they would like to pursue in greater depth.</p>',
     'includes' => 
     array (
     ),
@@ -150,7 +150,7 @@ $all_programs = array (
       2 => 'Personalised feedback and support from expert instructors.',
       3 => 'Navigate the transition to higher education successfully.',
     ),
-    'description' => '<p>The Pre-University Summer Camp is a two-week academic programme designed to equip dedicated students with the skills needed for university-level studies. Led by expert instructors, the programme combines interactive lessons, masterclasses, and debate societies, ensuring you develop a strong foundation. You will also benefit from personalised feedback to help navigate the transition to higher education.</p>',
+    'description' => '<p>The Adult Pre-University programme aims to prepare dedicated students for the expectations of university-level study. Over two weeks, students explore their academic interests while developing the confidence and learning habits needed for the transition to higher education.</p><p>Expert instructors guide students through interactive lessons, masterclasses and debate societies. These activities encourage students to engage with ideas actively, ask thoughtful questions and develop a stronger foundation in their chosen field.</p><p>Our approach combines subject knowledge with independent thinking and clear communication. Personalised feedback helps students recognise their strengths, identify areas for improvement and reflect on how they approach unfamiliar academic challenges.</p><p>Throughout the programme, students practise discussing ideas, supporting their opinions and responding constructively to different perspectives. The emphasis is on becoming a more engaged and reflective learner, with a clearer understanding of what university study involves.</p>',
     'includes' => 
     array (
     ),
@@ -191,7 +191,7 @@ $all_programs = array (
       2 => 'Camp is entirely conducted in English.',
       3 => 'Develop independence, form new friendships, strengthen communication skills, and learn the value of teamwork.',
     ),
-    'description' => '<p>Junior Discovery Camp offers innovative summer programs in the heart of Italy. These camps provide a comprehensive learning environment where students can explore their potential.</p>',
+    'description' => '<p>The Junior Discovery programme aims to help young people explore their interests through a combination of education, culture and adventure in Italy. Conducted entirely in English, the camp creates opportunities to learn through experience while sharing daily life with other students.</p><p>Activities bring learning beyond the classroom, encouraging campers to take part, communicate and try something unfamiliar. Cultural discovery and shared experiences give students practical reasons to use English and connect with the people around them.</p><p>Our approach places personal development alongside exploration. Campers are encouraged to make decisions, contribute to their group and recognise the value of working together, while gradually building independence and confidence.</p><p>Throughout the camp, the focus is on strengthening communication, developing teamwork and forming new friendships. Students are supported in expressing their individuality, approaching new experiences with curiosity and discovering what they can contribute to a shared adventure.</p>',
     'includes' => 
     array (
     ),
@@ -241,7 +241,7 @@ $all_programs = array (
       2 => 'Online Courses',
       3 => 'Exam Preparation',
     ),
-    'description' => '<p>Learning German becomes more natural when the language is part of everyday life. Our German Language Course offers children, teenagers and adults the opportunity to build confidence in speaking, listening, reading and writing while experiencing German-speaking culture in selected locations across Germany and Austria.</p><p>Students can choose from Summer Camps, Winter Camps, Online Courses and Exam Preparation, making it easier to select a study format that matches their goals, level and schedule.</p>',
+    'description' => '<p>The German Language Course aims to help children, teenagers and adults develop the language skills they need for their own goals. With selected locations across Germany and Austria, the programme connects German study with opportunities to experience the language in a cultural setting.</p><p>Students can choose from Summer Camps, Winter Camps, Online Courses and Exam Preparation. These formats offer different ways to study, allowing learners to consider their current level, availability and reasons for learning German.</p><p>Our approach connects speaking, listening, reading and writing with practical communication. Students are encouraged to develop understanding as well as accuracy, building the confidence to use what they learn beyond individual classroom exercises.</p><p>Throughout their chosen course, learners focus on strengthening their foundations and extending their ability to communicate. Whether preparing for an examination or developing everyday language skills, the aim is to make German a more useful and familiar part of their lives.</p>',
     'includes' => array (
     ),
     'excludes' => array (
@@ -279,7 +279,7 @@ $all_programs = array (
       2 => 'Cultural excursions',
       3 => 'Safe, supervised environment',
     ),
-    'description' => 'A fun and effective way for children to learn German while exploring the culture and making international friends.',
+    'description' => '<p>The Children Summer Camps aim to introduce young learners to German through a combination of language lessons, activities and cultural discovery. The programme gives children an opportunity to develop their understanding of the language while spending time with international peers.</p><p>Intensive German lessons provide the foundation for learning. Afternoon activities and cultural excursions extend the experience, helping children connect the language they study with the places they visit and the people they meet.</p><p>Our approach brings learning and participation together in a supervised environment. Children are encouraged to join in, communicate and become more comfortable with unfamiliar words and situations while enjoying the social experience of camp.</p><p>Throughout the programme, the focus is on building language confidence, discovering German culture and developing friendships. Shared activities give children opportunities to cooperate, express themselves and see language as a practical part of everyday life.</p>',
     'status' => 'inactive',
     'gallery' => 
     array (
@@ -312,7 +312,7 @@ $all_programs = array (
       2 => 'Paddle Surfing & Kayaking',
       3 => 'Beach activities',
     ),
-    'description' => 'Combine language learning with exciting water sports on the beautiful Spanish coast.',
+    'description' => '<p>The Language &amp; Water Sports programme aims to combine language development with an active experience on the Spanish coast. Students can study Spanish or English while taking part in water sports that bring movement, discovery and shared challenges into their day.</p><p>Language classes are complemented by sailing, windsurfing, paddle surfing and kayaking. This combination allows students to move between focused study and outdoor activity, exploring different ways to learn and participate.</p><p>Our approach connects communication with cooperation. Students are encouraged to listen carefully, express themselves clearly and contribute to shared activities, developing confidence both in their chosen language and in their approach to new experiences.</p><p>Throughout the programme, beach activities and water sports provide opportunities to practise coordination, concentration and teamwork. The emphasis is on taking an active part in camp life while enjoying the balance of language learning and time by the sea.</p>',
     'status' => 'inactive',
     'gallery' => 
     array (
@@ -352,7 +352,7 @@ $all_programs = array (
       2 => 'Located in Whistler',
       3 => 'All equipment provided',
     ),
-    'description' => 'Improve your English and your skiing or snowboarding skills in the world-renowned resort of Whistler.',
+    'description' => '<p>The English &amp; Ski winter programme aims to help students develop their English alongside their skiing or snowboarding skills. Based in Whistler, the programme combines language study with an active experience in one of Canada\'s best-known mountain destinations.</p><p>Morning English classes provide time to focus on language development. Afternoons are devoted to skiing or snowboarding, allowing students to balance classroom learning with time on the slopes. Equipment is provided as part of the programme.</p><p>Our approach encourages students to build confidence through practice in two different settings. Language learning calls for attention and expression, while winter sports offer opportunities to develop coordination, persistence and a willingness to learn from experience.</p><p>Throughout the programme, the emphasis is on maintaining progress in English while becoming more comfortable on the snow. Students share an active winter experience and develop the confidence to approach both learning and unfamiliar situations with greater independence.</p>',
     'status' => 'inactive',
     'gallery' => 
     array (
@@ -387,7 +387,7 @@ $all_programs = array (
       2 => 'Supportive and immersive environment.',
       3 => 'Includes various activities and excursions.',
     ),
-    'description' => '<p>This Summer foundation program enhances and improves student’s language skills in a supportive and immersive environment. It features a dynamic language curriculum that includes a mix of English classes focused on speaking and listening, grammar, vocabulary, reading, and writing along with various activities and excursions.</p>',
+    'description' => '<p>The English Foundation Summer programme aims to strengthen students\' English in a supportive and immersive environment. It brings together structured language study, activities and excursions so that learning remains connected to the wider experience of camp life.</p><p>The curriculum covers speaking, listening, grammar, vocabulary, reading and writing. Students work on the different skills that support effective communication, developing their understanding of how English is used as well as their confidence in using it themselves.</p><p>Our approach balances accuracy with participation. Students are encouraged to express ideas, listen to others and build on their existing knowledge, recognising that progress comes through regular practice and a willingness to keep trying.</p><p>Throughout the programme, activities and excursions provide a broader setting for language learning. The focus is on building a stronger foundation in English while helping students become more engaged, confident and independent communicators.</p>',
     'includes' => 
     array (
     ),
@@ -426,7 +426,7 @@ $all_programs = array (
       1 => 'Tournaments & Friendly games.',
       2 => 'Specialized training for players who are goalkeepers.',
     ),
-    'description' => '<p>This program offers unparalleled football training for boys and girls aged 8 to 16. Training is conducted under the guidance of AC Milan&rsquo;s Youth Team coaches and official Milan Academy coaches.</p>',
+    'description' => '<p>The Football with AC Milan programme aims to help boys and girls aged 8 to 16 develop their football through focused training and match experience. Students have the opportunity to work on their game under the guidance of AC Milan\'s Youth Team coaches and official Milan Academy coaches.</p><p>Coaching sessions provide a setting in which players can concentrate on their skills and understand how individual contributions support a team. Specialised training is available for goalkeepers, recognising the particular demands and responsibilities of the position.</p><p>Our approach brings preparation and play together. Tournaments and friendly games give players opportunities to apply what they learn, respond to different situations and develop their understanding of the game through experience.</p><p>Throughout the programme, the emphasis is on commitment, cooperation and a positive attitude towards improvement. Players are encouraged to listen, practise with purpose and show respect for teammates, opponents and coaches as they develop greater confidence on the pitch.</p>',
     'includes' => 
     array (
       0 => 'Individual football coaching',
@@ -482,7 +482,7 @@ $all_programs = array (
       2 => 'Tactical workshops',
       3 => 'Visit famous stadiums',
     ),
-    'description' => 'For the soccer fans of FC Barcelona or Real Madrid, this camp offers professional training and an unforgettable experience.',
+    'description' => '<p>The Pro Soccer Camp aims to help young football enthusiasts develop their skills while experiencing the football culture that inspires them. Designed for fans of clubs such as FC Barcelona and Real Madrid, the programme combines training, tactical learning and visits to famous stadiums.</p><p>Players train with coaches to strengthen their technical skills and develop a clearer understanding of the game. Tactical workshops encourage them to consider positioning, choices on the ball and how individual actions contribute to a team\'s performance.</p><p>Our approach connects purposeful practice with an appreciation of football beyond the training pitch. Stadium visits offer a different perspective on the sport, while coaching activities encourage players to reflect on the skills they want to improve.</p><p>Throughout the camp, players focus on technique, game awareness and working effectively with others. The emphasis is on approaching training with commitment, responding positively to feedback and carrying a sense of respect and teamwork into every session.</p>',
     'status' => 'inactive',
     'gallery' => 
     array (
@@ -515,7 +515,7 @@ $all_programs = array (
       2 => 'Wildlife spotting',
       3 => 'Campfire stories',
     ),
-    'description' => 'Explore the great Canadian outdoors with our adventure summer camp, based in beautiful British Columbia.',
+    'description' => '<p>The Adventure Summer Camp aims to help students discover the outdoors through an active experience in British Columbia. The programme combines exploration, shared activities and time in nature, giving campers opportunities to step beyond their usual surroundings.</p><p>Canoeing on lakes and hiking in national parks introduce different ways to experience the Canadian landscape. Wildlife spotting encourages careful observation, while campfire stories bring the group together to share experiences and enjoy the social side of camp.</p><p>Our approach encourages curiosity, cooperation and respect for the environment. Campers are invited to take an active role in shared experiences, pay attention to their surroundings and recognise the importance of contributing to a group.</p><p>Throughout the programme, outdoor activities provide opportunities to build confidence and independence. The focus is on discovering new interests, developing friendships and approaching unfamiliar experiences with a thoughtful and open attitude.</p>',
     'status' => 'inactive',
     'gallery' => 
     array (
@@ -553,7 +553,7 @@ $all_programs = array (
       2 => 'Learn graphic design techniques for detailed sketches.',
       3 => 'Culmination with prototyping, transforming digital ideas into tangible creation.',
     ),
-    'description' => '<p>The Program in Fashion is perfect for young fashion enthusiasts who want to immerse themselves in the world of fashion design. Held in the heart of Milan, participants will have the chance to explore, develop, and showcase their creativity. It is ideal for those aspiring to enter the fashion industry and eager to explore various aspects of the fashion field.</p>',
+    'description' => '<p>The Fashion programme aims to help young fashion enthusiasts explore the creative process in the heart of Milan. Students have the opportunity to develop ideas, experiment with design and consider how a concept can become a tangible creation.</p><p>The programme introduces product design and brainstorming as starting points for creative development. Students explore AI software for generating product concepts and use graphic design techniques to communicate their ideas through detailed sketches.</p><p>Our approach connects imagination with the decisions involved in making a design work. Students are encouraged to consider different possibilities, develop a personal direction and refine the way they present their ideas, rather than stopping at their first concept.</p><p>Throughout the programme, the focus moves from initial inspiration towards prototyping. By bringing digital ideas into a physical form, students explore the relationship between creativity and practical development while building a clearer understanding of their interests within fashion.</p>',
     'includes' => 
     array (
     ),
@@ -605,7 +605,7 @@ $all_programs = array (
       2 => 'Hands-on experience in Italian cooking, baking, and pastry making.',
       3 => 'Exploration of the restaurant business and new culinary formats.',
     ),
-    'description' => '<p>The Italian Gastronomic Arts Summer Campus offers participants hands-on experience in Italian cooking, baking, and pastry making. The program also explores the restaurant business and new culinary formats, making it ideal for students aspiring to access careers in the food industry.</p>',
+    'description' => '<p>The Food programme aims to introduce students to Italian gastronomic arts through practical experience in cooking, baking and pastry making. Delivered in partnership with IN CONGUSTO INSTITUTE, the intensive 40-hour programme offers an opportunity to explore both culinary creativity and the wider food industry.</p><p>Hands-on activities give students a practical introduction to preparing food and understanding the care involved in culinary work. Cooking, baking and pastry making provide different ways to explore technique, develop attention to detail and turn ideas into finished dishes.</p><p>Our approach connects kitchen practice with an understanding of food as a professional field. Students also explore the restaurant business and new culinary formats, considering how food experiences are developed beyond the preparation itself.</p><p>Throughout the programme, the emphasis is on participation, thoughtful practice and discovering personal interests. Students can build a clearer picture of the skills involved in gastronomic arts while exploring possible future directions within the food industry.</p>',
     'includes' => 
     array (
       0 => 'Practical and theoretical lessons',
@@ -663,7 +663,7 @@ $all_programs = array (
       2 => 'Mountain biking',
       3 => 'Orienteering and navigation skills',
     ),
-    'description' => '<p>Every day campers will face a new outdoor activity, representing for most a totally new challenge. This program is designed for teenagers seeking adventure and personal growth through outdoor activities.</p>',
+    'description' => '<p>The Outdoor Exploration programme aims to help teenagers develop confidence through active challenges in the outdoors. Each day introduces an activity that may be entirely new, creating opportunities to explore personal strengths and approach unfamiliar experiences with an open mind.</p><p>Rock climbing, whitewater rafting and mountain biking offer different physical and practical challenges. Orienteering and navigation add another dimension, encouraging students to observe their surroundings and think carefully about the decisions they make.</p><p>Our approach places personal growth alongside adventure. Campers are encouraged to participate with commitment, listen carefully and recognise how preparation and cooperation contribute to shared experiences, while responding constructively when something feels difficult.</p><p>Throughout the programme, the focus is on developing resilience, independence and a willingness to learn. Students explore the relationship between effort and progress, discovering how unfamiliar activities can become opportunities to build confidence and connect with others.</p>',
     'schedule' => 
     array (
       '7:00 AM' => 'Breakfast & briefing',
@@ -725,7 +725,7 @@ $all_programs = array (
       2 => 'Coastal exploration',
       3 => 'Onboard living experience',
     ),
-    'description' => '<p>Sea Quest is a two-week sailing expedition around the most beautiful and famous islands of the Italian coast. This program introduces the magic of sailing and core nautical skills while voyaging along one of the Mediterranean\'s most idyllic coastlines.</p>',
+    'description' => '<p>The Sea Quest programme aims to introduce students to sailing through a two-week expedition along the Italian coast. Travelling around well-known islands provides a setting in which campers can discover core nautical skills while experiencing the rhythm of life at sea.</p><p>The voyage combines coastal exploration with practical learning aboard a sailing vessel. Students become familiar with the shared nature of onboard living and the importance of contributing to daily life as part of a group.</p><p>Our approach connects learning with the experience of the journey. Campers are encouraged to observe, ask questions and consider how communication and cooperation support a sailing expedition, while developing a greater awareness of their surroundings.</p><p>Throughout the programme, the emphasis is on building confidence, understanding basic sailing principles and participating responsibly in a shared adventure. The changing coastline offers a continuing opportunity for discovery as students explore new places and develop friendships aboard.</p>',
     'schedule' => 
     array (
       '8:00 AM' => 'Sailing instruction & navigation',
@@ -781,7 +781,7 @@ $all_programs = array (
       2 => 'Develop your game on state-of-the-art courts.',
       3 => 'Internal tournaments, and friendly matches.',
     ),
-    'description' => '<p>The High-Performance Junior Tennis Camp is perfect for young tennis players who want to experience elite training and ensures a stimulating environment, guaranteeing young athletes concrete tools for their growth. Participants will develop their game where professional players and national teams have prepared for international success.</p>',
+    'description' => '<p>The Tennis programme aims to help young players develop their game through high-performance training in an established Italian tennis setting. The camp combines sporting development with an educational and stimulating environment, giving players opportunities to practise with greater purpose.</p><p>Training takes place on modern courts in a destination where professional players and national teams have prepared for competition. Players can concentrate on improving their own game while gaining an appreciation of the commitment associated with sustained sporting development.</p><p>Our approach connects training with opportunities to put learning into practice. Internal tournaments and friendly matches allow players to explore how they respond to different opponents, make decisions during play and maintain concentration throughout a match.</p><p>Throughout the camp, players are encouraged to approach improvement with discipline and a positive attitude. The focus is on developing confidence, learning from experience and showing respect for others, while using training and match play to identify the next steps in their development.</p>',
     'includes' => 
     array (
       0 => 'Individual tennis coaching',
@@ -837,7 +837,7 @@ $all_programs = array (
       2 => 'Sail as part of a three-yacht flotilla, guided by experienced instructors.',
       3 => 'Participate in interactive lessons on marine life and local history.',
     ),
-    'description' => '<p>A thrilling sailing voyage enriched with local knowledge and new horizons for 12 to 16-year-olds. Campers navigate the Mediterranean&rsquo;s bluest waters while growing as a team. British RYA instructors and native English-speaking counselors lead the entire program in English. Through hands-on learning, campers learn sailing techniques, teamwork, and leadership, building communication skills and self-reliance. Students earn a sailing certificate of achievement.</p>',
+    'description' => '<p>The Sailing programme aims to help 12 to 16-year-olds develop nautical skills, independence and teamwork through a voyage around Italy\'s coastal islands. Conducted entirely in English, the experience combines practical sailing with the discovery of new places and life aboard 50-foot yachts.</p><p>British RYA instructors and native English-speaking counsellors lead the programme. Campers sail as part of a three-yacht flotilla, learning through participation while becoming familiar with the cooperation and communication required aboard.</p><p>Our approach connects sailing techniques with personal responsibility. Students are encouraged to contribute to the group, listen carefully and develop self-reliance, while exploring how leadership can involve supporting others as well as making decisions.</p><p>Throughout the voyage, interactive lessons on marine life and local history add context to the places students visit. Campers work towards a sailing certificate of achievement while developing practical experience, stronger communication and a greater appreciation of a shared journey at sea.</p>',
     'includes' => 
     array (
     ),
@@ -888,7 +888,7 @@ $all_programs = array (
       2 => 'Project management',
       3 => 'Visits to major organizations',
     ),
-    'description' => 'Develop the skills to become a future leader in a globalized world, with workshops and real-world case studies.',
+    'description' => '<p>The Global Leadership Training programme aims to help students develop the skills to participate confidently in an interconnected world. Workshops and real-world case studies introduce the challenges of communicating ideas, working with others and taking responsibility for shared goals.</p><p>Students explore public speaking, debate and negotiation alongside project management. Each area offers a different perspective on leadership, from explaining a viewpoint clearly to organising work and responding thoughtfully to people with different priorities.</p><p>Our approach connects leadership concepts with situations beyond the classroom. Visits to major organisations provide a wider context for considering how teams operate and how decisions affect the people around them.</p><p>Throughout the programme, students focus on critical thinking, communication and cooperation. They are encouraged to listen as carefully as they speak, support their ideas with reasoning and recognise that effective leadership involves accountability, reflection and respect for others.</p>',
     'status' => 'inactive',
     'gallery' => 
     array (
@@ -921,7 +921,7 @@ $all_programs = array (
       2 => 'Chocolate & cheese tasting',
       3 => 'Team building',
     ),
-    'description' => '<p>A classic summer camp experience in the Swiss Alps, focusing on outdoor adventure and making new friends.</p>',
+    'description' => '<p>The Adventure Camp aims to help students discover the Swiss Alps through outdoor activity and shared experiences. The programme brings together mountain exploration, time by the water and opportunities to make new friends in a classic summer camp setting.</p><p>Mountain hiking and lake activities introduce different aspects of the landscape. Chocolate and cheese tasting offer a way to explore local culture, adding variety to an experience that combines physical activity with discovery.</p><p>Our approach places teamwork alongside personal confidence. Group activities encourage campers to communicate, contribute and recognise the value of supporting one another, while taking part in experiences beyond their everyday routines.</p><p>Throughout the camp, the focus is on enjoying the outdoors, exploring new interests and building friendships. Students are encouraged to participate with curiosity, respect their surroundings and develop a greater sense of independence through the daily experiences of camp life.</p>',
     'status' => 'active',
     'includes' => 
     array (
@@ -969,7 +969,7 @@ $all_programs = array (
       2 => 'Cinematography',
       3 => 'Editing with pro software',
     ),
-    'description' => '<p>A hands-on camp for aspiring filmmakers. Write, shoot, and edit your own short film in a stunning location.</p>',
+    'description' => '<p>The Film Academy Camp aims to introduce aspiring filmmakers to the process of creating a short film. Students explore how an idea develops into a story for the screen, bringing together writing, directing, cinematography and editing in a practical creative experience.</p><p>The programme follows the journey from an initial concept to a finished film. Students write, shoot and edit their work, discovering how decisions about images, performance and sequence influence the way a story is understood.</p><p>Our approach connects creative expression with practical choices. Editing with professional software forms part of the process, while the different stages of production encourage students to plan, communicate and reflect on the relationship between their intentions and the result.</p><p>Throughout the camp, the emphasis is on developing a personal voice and learning through making. Students can explore the roles that interest them, refine their ideas and experience the satisfaction of bringing separate elements together into a film of their own.</p>',
     'status' => 'trash',
     'includes' => 
     array (
@@ -1014,7 +1014,7 @@ $all_programs = array (
       2 => 'Après-ski activities',
       3 => 'All gear included',
     ),
-    'description' => '<p>Learn to ski or improve your skills on world-famous Swiss slopes with professional instructors.</p>',
+    'description' => '<p>The Ski Camp aims to help students learn to ski or strengthen their existing skills on Swiss slopes. The winter programme combines professional instruction with the wider experience of spending time in a mountain resort, giving students a focused setting for developing confidence on the snow.</p><p>Professional ski instructors guide the learning, helping students work on their skills through practice. Access to established resorts allows campers to experience the mountain environment, with ski equipment included as part of the programme.</p><p>Our approach encourages patience, concentration and a positive response to challenges. Students are invited to focus on their own progress, recognise the value of careful practice and develop greater confidence as their familiarity with skiing grows.</p><p>Throughout the camp, time on the slopes is complemented by après-ski activities. The emphasis is on combining sporting development with an enjoyable shared winter experience, allowing students to build friendships alongside their confidence in skiing.</p>',
     'status' => 'active',
     'includes' => 
     array (
@@ -1040,7 +1040,7 @@ $all_programs = array (
     'id' => 'uk-academic-architecture',
     'category_slug' => 'adult-academic',
     'name' => 'Architecture',
-    'tagline' => 'Academic Insights summer course',
+    'tagline' => '',
     'image' => '/images/uk-academic-architecture.webp',
     'ages' => array (
       'min' => 13,
@@ -1059,7 +1059,7 @@ $all_programs = array (
       2 => 'Develop a personal design project using practical creative techniques',
       3 => 'Strengthen visual communication and critical thinking with tutor feedback',
     ),
-    'description' => '<p>Discover how thoughtful design shapes the spaces in which we live, study and connect. This Architecture summer course introduces the creative and technical foundations of the built environment, taking inspiration from Cambridge and its historic and contemporary buildings. Explore architectural history, drawing, design principles and the decisions behind successful spaces.</p><p>Move from first ideas to more developed designs as you investigate form, function, materials and sustainable approaches, including how existing buildings can be adapted for new purposes. Practical design exercises encourage you to observe your surroundings, explain your ideas clearly and experiment with solutions to real architectural challenges.</p><p>Through discussions, project work and individual feedback, build your visual communication, creative problem-solving and critical-thinking skills. Whether you are considering architecture, urban planning or a related design field, this is an inspiring introduction to the way architects turn imagination into places that work for people.</p>',
+    'description' => '<p>The Architecture programme aims to introduce students to the creative and technical thinking behind the built environment. Taking inspiration from Cambridge\'s historic and contemporary buildings, students explore how design decisions shape the spaces in which people live, study and connect.</p><p>The programme brings together architectural history, drawing and design principles. Practical design exercises encourage students to observe their surroundings, explore form and function, and consider how materials influence both the appearance and the purpose of a building.</p><p>Our approach connects imagination with thoughtful problem-solving. Students investigate sustainable design and adaptive reuse, considering how existing buildings can meet new needs. Project work and individual feedback support the development of visual communication, critical thinking and a clearer design process.</p><p>Throughout the programme, students work towards expressing and developing their own architectural ideas. The focus is on explaining decisions, testing possibilities and understanding how creative proposals can respond to the needs of people and places, providing a foundation for further exploration of architecture and design.</p>',
     'includes' => array (
     ),
     'excludes' => array (
@@ -1073,7 +1073,7 @@ $all_programs = array (
     'id' => 'uk-academic-artificial-intelligence',
     'category_slug' => 'adult-academic',
     'name' => 'Artificial Intelligence',
-    'tagline' => 'Academic Insights summer course',
+    'tagline' => '',
     'image' => '/images/uk-academic-artificial-intelligence.webp',
     'ages' => array (
       'min' => 16,
@@ -1092,7 +1092,7 @@ $all_programs = array (
       2 => 'Discuss AI ethics, responsible innovation and societal impact',
       3 => 'Develop independent ideas and technical confidence in a guided project',
     ),
-    'description' => '<p>Explore the technology reshaping the world, from recommendation systems and intelligent applications to advances in robotics and generative AI. This Artificial Intelligence summer course introduces the logic behind machine learning, algorithms and neural networks, showing how computers can recognise patterns, learn from data and help solve complex problems.</p><p>Build your understanding through interactive coding activities, thought-provoking discussions and practical problem-solving. Investigate the difference between designing an algorithm and training a model, consider how data influences outcomes, and discover the opportunities AI is creating across research, business, healthcare and everyday life.</p><p>Responsible innovation is part of the journey. Discuss bias, reliability, privacy and the ethical questions raised by increasingly capable systems while developing your own ideas through an academic project. The course develops computational thinking, curiosity and the confidence to approach a rapidly changing field with both technical insight and sound judgement.</p>',
+    'description' => '<p>The Artificial Intelligence programme aims to introduce students to the ideas behind systems that learn from data. From recommendation systems to robotics and generative AI, students explore how intelligent technologies recognise patterns, support decisions and contribute to different areas of everyday life.</p><p>The programme combines an introduction to machine learning, algorithms and neural networks with coding activities and practical problem-solving. Students investigate the difference between writing instructions for a computer and training a model, considering how data shapes the results a system produces.</p><p>Our approach connects technical understanding with responsible judgement. Discussions explore reliability, bias, privacy and the wider effects of AI, encouraging students to question how a system works as well as whether it is appropriate for a particular task.</p><p>Throughout the programme, guided project work gives students opportunities to develop their own ideas. The focus is on computational thinking, careful reasoning and clear explanation, helping students approach a changing field with curiosity and a stronger understanding of its possibilities and limitations.</p>',
     'includes' => array (
     ),
     'excludes' => array (
@@ -1106,7 +1106,7 @@ $all_programs = array (
     'id' => 'uk-academic-biology',
     'category_slug' => 'adult-academic',
     'name' => 'Biology',
-    'tagline' => 'Academic Insights summer course',
+    'tagline' => '',
     'image' => '/images/uk-academic-biology.webp',
     'ages' => array (
       'min' => 16,
@@ -1121,7 +1121,7 @@ $all_programs = array (
     ),
     'highlights' => array (
     ),
-    'description' => 'Investigate genetics, ecology, human biology, and scientific methods in the life sciences.',
+    'description' => '<p>The Biology programme aims to introduce students to the study of living systems, from the processes within organisms to their relationships with the wider environment. Students explore genetics, ecology and human biology while developing an understanding of how scientific questions are investigated.</p><p>The programme connects these areas through the methods used in the life sciences. Students consider how observations lead to questions, how evidence supports an explanation and why biological ideas need to be examined carefully rather than accepted without enquiry.</p><p>Our approach encourages students to look for connections between different scales of life. Genetics offers a perspective on inheritance, human biology explores the functioning of the body, and ecology considers how organisms interact with one another and their surroundings.</p><p>Throughout the programme, the focus is on scientific curiosity, accurate explanation and thoughtful interpretation. Students develop a foundation for further biological study while becoming more confident in asking questions and considering what the available evidence can tell them.</p>',
     'includes' => array (
     ),
     'excludes' => array (
@@ -1135,7 +1135,7 @@ $all_programs = array (
     'id' => 'uk-academic-biotechnology',
     'category_slug' => 'adult-academic',
     'name' => 'Biotechnology',
-    'tagline' => 'Academic Insights summer course',
+    'tagline' => '',
     'image' => '/images/uk-academic-biotechnology.webp',
     'ages' => array (
       'min' => 16,
@@ -1150,7 +1150,7 @@ $all_programs = array (
     ),
     'highlights' => array (
     ),
-    'description' => 'Examine how biotechnology applies biological science to medicine, agriculture, and the environment.',
+    'description' => '<p>The Biotechnology programme aims to introduce students to the ways biological science can be applied to practical challenges. Students explore the relationship between understanding living systems and using that knowledge in medicine, agriculture and environmental work.</p><p>The programme considers biotechnology across these different settings, helping students recognise how a scientific idea can become an application. The focus is on understanding the biological principles involved and the questions that arise when those principles are used for a particular purpose.</p><p>Our approach connects scientific curiosity with thoughtful evaluation. Students are encouraged to consider both the possibilities of an application and the evidence needed to understand its effects, developing the habit of asking how and why a biological approach might be useful.</p><p>Throughout the programme, students build an introductory understanding of an interdisciplinary field. The emphasis is on connecting concepts, explaining ideas clearly and recognising how biological knowledge can contribute to decisions about health, food production and the environment.</p>',
     'includes' => array (
     ),
     'excludes' => array (
@@ -1164,7 +1164,7 @@ $all_programs = array (
     'id' => 'uk-academic-business-management',
     'category_slug' => 'adult-academic',
     'name' => 'Business Management',
-    'tagline' => 'Academic Insights summer course',
+    'tagline' => '',
     'image' => '/images/uk-academic-business-management.webp',
     'ages' => array (
       'min' => 13,
@@ -1183,7 +1183,7 @@ $all_programs = array (
       2 => 'Analyse real-world business choices through case studies and discussion',
       3 => 'Build leadership, teamwork and presentation skills through project work',
     ),
-    'description' => '<p>Step into the world of business and learn what it takes to turn a promising idea into a successful organisation. Our Business Management summer course explores how companies make decisions, create value and respond to changing markets. Discover the fundamentals of strategy, management, marketing, pricing and leadership through engaging examples and discussion.</p><p>Think like an entrepreneur as you investigate the choices behind launching a new venture: understanding customers, positioning a product, planning resources and considering how a business might grow. Practical case studies and collaborative challenges encourage you to balance creative thinking with commercial judgement, while presenting your ideas helps develop persuasive communication.</p><p>Set within an inspiring UK academic environment, this course offers a first look at the questions future founders and managers face. You will develop the confidence to evaluate opportunities, work effectively with others and explain your reasoning, building valuable foundations for further study in business, economics or entrepreneurship.</p>',
+    'description' => '<p>The Business Management programme aims to introduce students to the decisions involved in building and running an organisation. Students explore how businesses create value, understand their customers and respond to changing markets, while developing an appreciation of the relationship between an idea and a workable venture.</p><p>The programme brings together strategy, management, marketing, pricing and leadership. Case studies and collaborative challenges provide opportunities to examine business choices, consider different priorities and explore how resources can be organised to support a goal.</p><p>Our approach combines entrepreneurial thinking with careful analysis. Students investigate product positioning, planning and growth, learning to balance creativity with commercial judgement. Presenting ideas helps them develop clear communication and explain the reasoning behind a proposal.</p><p>Throughout the programme, the focus is on evaluating opportunities, working constructively with others and recognising the consequences of business decisions. Students develop foundations for further study in business, economics or entrepreneurship while becoming more confident in turning broad ideas into a considered plan.</p>',
     'includes' => array (
     ),
     'excludes' => array (
@@ -1197,7 +1197,7 @@ $all_programs = array (
     'id' => 'uk-academic-chemistry',
     'category_slug' => 'adult-academic',
     'name' => 'Chemistry',
-    'tagline' => 'Academic Insights summer course',
+    'tagline' => '',
     'image' => '/images/uk-academic-chemistry.webp',
     'ages' => array (
       'min' => 16,
@@ -1212,7 +1212,7 @@ $all_programs = array (
     ),
     'highlights' => array (
     ),
-    'description' => 'Study organic and inorganic chemistry, chemical reactions, and the principles behind modern chemistry.',
+    'description' => '<p>The Chemistry programme aims to introduce students to the principles that explain how substances behave and interact. Through the study of organic and inorganic chemistry, students explore how chemical reactions connect the properties of materials with changes at a molecular level.</p><p>The programme brings together the language and concepts used to describe chemical behaviour. Students consider how different areas of chemistry relate to one another and how a clear understanding of basic principles supports more complex explanations.</p><p>Our approach encourages careful reasoning and attention to detail. Students are invited to distinguish an observation from an explanation, use chemical ideas consistently and consider the evidence behind an account of a reaction or material property.</p><p>Throughout the programme, the focus is on strengthening understanding rather than simply remembering terminology. Students develop a foundation for further study by connecting chemical concepts, explaining processes clearly and approaching unfamiliar questions in a structured and thoughtful way.</p>',
     'includes' => array (
     ),
     'excludes' => array (
@@ -1226,7 +1226,7 @@ $all_programs = array (
     'id' => 'uk-academic-computer-science',
     'category_slug' => 'adult-academic',
     'name' => 'Computer Science',
-    'tagline' => 'Academic Insights summer course',
+    'tagline' => '',
     'image' => '/images/uk-academic-computer-science.webp',
     'ages' => array (
       'min' => 13,
@@ -1245,7 +1245,7 @@ $all_programs = array (
       2 => 'Explore software development and age-appropriate advanced computing topics',
       3 => 'Apply problem-solving skills in practical projects and discussions',
     ),
-    'description' => '<p>Discover how software turns ideas into systems that transform everyday life. In our Computer Science summer course, students explore the foundations of computational thinking, programming and logical problem-solving in an engaging UK academic environment. Understand how programs are structured, why algorithms matter and how thoughtful design helps computers solve challenges efficiently.</p><p>Through practical exercises, develop confidence in breaking large problems into manageable steps, writing and testing code, and reasoning about the solutions you create. The curriculum introduces core computing concepts while offering a pathway to investigate topics such as data structures, algorithmic efficiency, software engineering and introductory artificial intelligence as appropriate to the learning group.</p><p>Computer Science is as much about asking good questions as writing code. Project-based learning and discussion help you develop analytical skills, creativity and the ability to explain technical decisions. Whether you are new to programming or considering more advanced study, gain a stronger foundation for exploring technology at university and beyond.</p>',
+    'description' => '<p>The Computer Science programme aims to help students understand how software turns ideas into working systems. Students explore programming, computational thinking and logical problem-solving, developing a foundation for understanding the technologies that shape everyday life.</p><p>Practical exercises introduce the process of breaking a problem into smaller steps, designing a solution and writing and testing code. Students consider how programs are structured and why the choice of an algorithm can influence how effectively a task is completed.</p><p>Our approach combines technical practice with clear reasoning. Depending on the learning group, topics may include data structures, algorithmic efficiency, software engineering and introductory artificial intelligence. Project work and discussion encourage students to explain their decisions and reflect on ways to improve a solution.</p><p>Throughout the programme, the emphasis is on persistence, creativity and an organised approach to unfamiliar challenges. Students strengthen their analytical skills while developing the confidence to investigate computing in greater depth, whether as a personal interest or a possible direction for future study.</p>',
     'includes' => array (
     ),
     'excludes' => array (
@@ -1259,7 +1259,7 @@ $all_programs = array (
     'id' => 'uk-academic-creative-writing',
     'category_slug' => 'adult-academic',
     'name' => 'Creative Writing',
-    'tagline' => 'Academic Insights summer course',
+    'tagline' => '',
     'image' => '/images/uk-academic-creative-writing.webp',
     'ages' => array (
       'min' => 13,
@@ -1274,7 +1274,7 @@ $all_programs = array (
     ),
     'highlights' => array (
     ),
-    'description' => 'Develop storytelling skills and a writing voice through fiction, poetry, and other creative forms.',
+    'description' => '<p>The Creative Writing programme aims to help students develop their storytelling skills and begin to recognise their own writing voice. Students explore fiction, poetry and other creative forms, considering how language can communicate an idea, create an atmosphere or shape a reader\'s response.</p><p>The programme connects creative exploration with attention to the choices a writer makes. Students consider the relationship between what they want to express and the form they choose, developing greater awareness of how words and structure work together.</p><p>Our approach encourages experimentation alongside reflection. Students are invited to try different possibilities, recognise the qualities they value in their work and consider how an initial idea might be developed into a more deliberate piece of writing.</p><p>Throughout the programme, the emphasis is on imagination, clarity and a willingness to refine. Students build confidence in expressing a perspective of their own while developing a stronger foundation for continued creative practice.</p>',
     'includes' => array (
     ),
     'excludes' => array (
@@ -1288,7 +1288,7 @@ $all_programs = array (
     'id' => 'uk-academic-criminology',
     'category_slug' => 'adult-academic',
     'name' => 'Criminology',
-    'tagline' => 'Academic Insights summer course',
+    'tagline' => '',
     'image' => '/images/uk-academic-criminology.webp',
     'ages' => array (
       'min' => 16,
@@ -1303,7 +1303,7 @@ $all_programs = array (
     ),
     'highlights' => array (
     ),
-    'description' => 'Explore criminal behaviour, justice systems, and social issues through discussion and analysis.',
+    'description' => '<p>The Criminology programme aims to introduce students to the study of criminal behaviour and the systems through which societies respond to crime. Students explore the relationship between individual actions, social conditions and the operation of justice systems.</p><p>Discussion and analysis provide ways to examine different explanations and perspectives. Students consider how questions about crime can involve both an understanding of behaviour and an awareness of the wider social issues surrounding it.</p><p>Our approach encourages careful reasoning rather than quick conclusions. Students are invited to distinguish evidence from assumption, consider how a viewpoint is supported and recognise that explanations of crime and justice may involve competing interpretations.</p><p>Throughout the programme, the focus is on developing analytical awareness and clear communication. Students strengthen their ability to examine complex social questions thoughtfully, providing an introductory foundation for further exploration of criminology, justice and related areas of study.</p>',
     'includes' => array (
     ),
     'excludes' => array (
@@ -1317,7 +1317,7 @@ $all_programs = array (
     'id' => 'uk-academic-economics',
     'category_slug' => 'adult-academic',
     'name' => 'Economics',
-    'tagline' => 'Academic Insights summer course',
+    'tagline' => '',
     'image' => '/images/uk-academic-economics.webp',
     'ages' => array (
       'min' => 13,
@@ -1336,7 +1336,7 @@ $all_programs = array (
       2 => 'Build confidence interpreting data, graphs and economic evidence',
       3 => 'Develop critical arguments through seminars and practical research',
     ),
-    'description' => '<p>Why do prices rise, what shapes international trade, and how do governments respond to economic challenges? Our Economics summer course brings these questions to life, connecting economic theory with decisions made by businesses, policymakers and individuals. Explore supply and demand, market structures, inflation, growth and inequality in the context of a connected global economy.</p><p>Learn to look beyond headlines by examining data, interpreting graphs and questioning the assumptions behind different economic arguments. Seminars, collaborative research and case-study discussions introduce the ways economists evaluate incentives, trade-offs and public policy, while London\'s position in global finance offers a compelling context for understanding markets and investment decisions.</p><p>As you develop your own evidence-based viewpoint, you will practise making clear arguments, analysing unfamiliar situations and communicating complex ideas confidently. This course provides a stimulating foundation for students interested in economics, finance, politics, business or international relations.</p>',
+    'description' => '<p>The Economics programme aims to help students understand how individuals, businesses and governments make choices. Students explore the relationship between economic ideas and the questions they raise in everyday life, from changing prices and international trade to growth and inequality.</p><p>The programme introduces supply and demand, market structures, inflation and economic policy. Seminars, research and case-study discussions encourage students to examine incentives and trade-offs, while interpreting data and graphs helps connect theory with evidence. London\'s role in global finance provides a wider context for considering markets and investment decisions.</p><p>Our approach develops reasoned judgement. Students are encouraged to question assumptions, compare explanations and consider how a policy can affect different groups, rather than treating an economic argument as a single fixed answer.</p><p>Throughout the programme, students practise developing an evidence-based viewpoint and communicating it clearly. The emphasis is on analytical thinking, careful interpretation and understanding connections, building foundations for further study in economics, finance, politics or business.</p>',
     'includes' => array (
     ),
     'excludes' => array (
@@ -1350,7 +1350,7 @@ $all_programs = array (
     'id' => 'uk-academic-engineering',
     'category_slug' => 'adult-academic',
     'name' => 'Engineering',
-    'tagline' => 'Academic Insights summer course',
+    'tagline' => '',
     'image' => '/images/uk-academic-engineering.webp',
     'ages' => array (
       'min' => 13,
@@ -1369,7 +1369,7 @@ $all_programs = array (
       2 => 'Apply engineering reasoning to practical challenges and projects',
       3 => 'Develop teamwork, creativity and systematic problem-solving',
     ),
-    'description' => '<p>Discover the creativity behind engineering and see how scientific ideas become practical solutions. Our Engineering summer course introduces the principles that help engineers design, build, test and improve the structures, machines and technologies around us. Study the connections between mathematics, mechanics, materials and the real-world challenges that inspire innovation.</p><p>Through analytical exercises and hands-on project work, explore the process of identifying a problem, developing a design and testing whether it performs as intended. Depending on the learning group, topics may include structural design, electronics, robotics, fluid mechanics, control systems and the growing role of computing and machine learning in engineering.</p><p>With opportunities for discussion, independent research and feedback, you will strengthen your ability to think systematically, work creatively and communicate technical decisions. Whether your interests lie in civil, mechanical, electrical or emerging engineering fields, this experience offers a valuable introduction to university-style engineering study.</p>',
+    'description' => '<p>The Engineering programme aims to introduce students to the process of turning scientific ideas into practical solutions. Students explore how mathematics, mechanics and materials help engineers understand a challenge and develop designs that respond to it.</p><p>Analytical exercises and practical project work introduce the stages of identifying a problem, developing a design and testing its performance. Depending on the learning group, topics may include structures, electronics, robotics, fluid mechanics, control systems and the use of computing or machine learning in engineering.</p><p>Our approach connects creative ideas with systematic evaluation. Students are encouraged to consider why a design might work, recognise the limits of an initial proposal and use evidence to guide improvements. Discussion, independent research and feedback support this process.</p><p>Throughout the programme, the focus is on problem-solving, clear technical communication and a willingness to refine. Students develop a foundation for further exploration of civil, mechanical, electrical and emerging engineering fields while becoming more confident in explaining the decisions behind a practical solution.</p>',
     'includes' => array (
     ),
     'excludes' => array (
@@ -1383,7 +1383,7 @@ $all_programs = array (
     'id' => 'uk-academic-english-literature',
     'category_slug' => 'adult-academic',
     'name' => 'English Literature',
-    'tagline' => 'Academic Insights summer course',
+    'tagline' => '',
     'image' => '/images/uk-academic-english-literature.webp',
     'ages' => array (
       'min' => 16,
@@ -1398,7 +1398,7 @@ $all_programs = array (
     ),
     'highlights' => array (
     ),
-    'description' => 'Analyse classic and modern literary works while strengthening interpretation and critical discussion.',
+    'description' => '<p>The English Literature programme aims to help students engage more closely with classic and modern literary works. Students explore how texts create meaning and how interpretation can develop through careful reading, reflection and critical discussion.</p><p>The programme places literary study alongside the process of forming an argument. Students consider how details within a text support a reading and how different interpretations can reveal aspects of the same work.</p><p>Our approach encourages attention to language and openness to other perspectives. Students are invited to move beyond an immediate reaction, examine the choices that shape a piece of writing and explain how those choices influence their understanding.</p><p>Throughout the programme, the focus is on thoughtful interpretation and clear expression. Students develop confidence in discussing literature, supporting their views with textual evidence and responding constructively to ideas that differ from their own, building a foundation for further literary study.</p>',
     'includes' => array (
     ),
     'excludes' => array (
@@ -1412,7 +1412,7 @@ $all_programs = array (
     'id' => 'uk-academic-history',
     'category_slug' => 'adult-academic',
     'name' => 'History',
-    'tagline' => 'Academic Insights summer course',
+    'tagline' => '',
     'image' => '/images/uk-academic-history.webp',
     'ages' => array (
       'min' => 16,
@@ -1427,7 +1427,7 @@ $all_programs = array (
     ),
     'highlights' => array (
     ),
-    'description' => 'Study influential historical events, people, and movements through research and critical analysis.',
+    'description' => '<p>The History programme aims to help students understand how influential events, people and movements have shaped the past. Students explore historical questions through research and critical analysis, considering how accounts of the past are developed and interpreted.</p><p>The programme connects the study of events with the evidence used to explain them. Students consider relationships between actions and consequences, the contexts in which people made decisions and the different perspectives through which a historical development can be understood.</p><p>Our approach encourages curiosity alongside careful judgement. Students are invited to question an account, consider its supporting evidence and recognise that understanding the past involves interpretation as well as knowledge of what happened.</p><p>Throughout the programme, the emphasis is on building reasoned explanations and communicating them clearly. Students strengthen their ability to connect ideas, evaluate arguments and approach unfamiliar historical questions with an organised and reflective method.</p>',
     'includes' => array (
     ),
     'excludes' => array (
@@ -1441,7 +1441,7 @@ $all_programs = array (
     'id' => 'uk-academic-international-relations',
     'category_slug' => 'adult-academic',
     'name' => 'International Relations',
-    'tagline' => 'Academic Insights summer course',
+    'tagline' => '',
     'image' => '/images/uk-academic-international-relations.webp',
     'ages' => array (
       'min' => 13,
@@ -1456,7 +1456,7 @@ $all_programs = array (
     ),
     'highlights' => array (
     ),
-    'description' => 'Examine global politics, diplomacy, international law, and conflict resolution.',
+    'description' => '<p>The International Relations programme aims to introduce students to the ideas and relationships that shape global affairs. Students explore international politics, diplomacy, international law and conflict resolution, considering how decisions extend beyond national boundaries.</p><p>The programme connects these areas through the challenges of cooperation and disagreement. Students examine how different priorities can influence relationships and how diplomatic and legal approaches contribute to attempts to resolve shared problems.</p><p>Our approach encourages students to consider more than one perspective. They are invited to question assumptions, distinguish an argument from the evidence supporting it and recognise the complexity involved in decisions affecting different societies.</p><p>Throughout the programme, the focus is on critical analysis, clear explanation and thoughtful engagement with world issues. Students develop a foundation for further study while strengthening their ability to discuss international questions with greater awareness and respect for differing viewpoints.</p>',
     'includes' => array (
     ),
     'excludes' => array (
@@ -1470,7 +1470,7 @@ $all_programs = array (
     'id' => 'uk-academic-law',
     'category_slug' => 'adult-academic',
     'name' => 'Law',
-    'tagline' => 'Academic Insights summer course',
+    'tagline' => '',
     'image' => '/images/uk-academic-law.webp',
     'ages' => array (
       'min' => 13,
@@ -1485,7 +1485,7 @@ $all_programs = array (
     ),
     'highlights' => array (
     ),
-    'description' => 'Discover legal systems and judicial principles while developing structured legal reasoning.',
+    'description' => '<p>The Law programme aims to introduce students to legal systems and the principles that guide judicial decisions. Students explore how legal reasoning differs from an immediate personal opinion and why a structured argument matters when considering questions of justice.</p><p>The programme connects an understanding of legal principles with the process of applying them. Students consider how rules, interpretation and reasoning contribute to a legal position, developing greater awareness of the relationship between a principle and a particular question.</p><p>Our approach encourages precision, consistency and careful explanation. Students are invited to identify assumptions, examine the basis of an argument and consider how different interpretations can lead to different conclusions.</p><p>Throughout the programme, the focus is on developing a clear and disciplined way of thinking. Students build an introductory foundation for legal study while strengthening the analytical and communication skills needed to engage thoughtfully with complex questions.</p>',
     'includes' => array (
     ),
     'excludes' => array (
@@ -1499,7 +1499,7 @@ $all_programs = array (
     'id' => 'uk-academic-mathematics',
     'category_slug' => 'adult-academic',
     'name' => 'Mathematics',
-    'tagline' => 'Academic Insights summer course',
+    'tagline' => '',
     'image' => '/images/uk-academic-mathematics.webp',
     'ages' => array (
       'min' => 15,
@@ -1514,7 +1514,7 @@ $all_programs = array (
     ),
     'highlights' => array (
     ),
-    'description' => 'Strengthen mathematical reasoning through algebra, calculus, statistics, and problem-solving.',
+    'description' => '<p>The Mathematics programme aims to strengthen students\' reasoning through the study of algebra, calculus, statistics and problem-solving. Students explore how mathematical ideas connect and how a clear method can make an unfamiliar question more manageable.</p><p>The programme places understanding alongside technique. Students consider why a method works, what its results mean and how different mathematical approaches can be used to describe a relationship or investigate a problem.</p><p>Our approach encourages persistence and precision. Students are invited to break a challenge into smaller steps, check the assumptions they use and recognise that revisiting an unsuccessful approach can be an important part of making progress.</p><p>Throughout the programme, the emphasis is on explaining reasoning clearly and developing confidence with mathematical ideas. Students build a foundation for further study while strengthening the habits of careful analysis, logical organisation and thoughtful problem-solving.</p>',
     'includes' => array (
     ),
     'excludes' => array (
@@ -1528,7 +1528,7 @@ $all_programs = array (
     'id' => 'uk-academic-medicine',
     'category_slug' => 'adult-academic',
     'name' => 'Medicine',
-    'tagline' => 'Academic Insights summer course',
+    'tagline' => '',
     'image' => '/images/uk-academic-medicine.webp',
     'ages' => array (
       'min' => 13,
@@ -1547,7 +1547,7 @@ $all_programs = array (
       2 => 'Investigate contemporary medical research and approaches to treatment',
       3 => 'Develop clinical reasoning, ethical awareness and research skills',
     ),
-    'description' => '<p>Explore the science of the human body and the challenges that make modern medicine such a vital field. Our Medicine summer course introduces key ideas in anatomy, physiology and biomedical science, helping students understand how cells, organs and body systems work together to keep us healthy.</p><p>Go further by investigating what happens when disease disrupts those systems. Examine genetics, infections, the immune response and the methods used to identify and treat illness. Academic discussion and case-based activities bring clinical reasoning to life, while emerging research topics such as cancer biology, biomarkers and personalised medicine reveal how healthcare continues to evolve.</p><p>Medicine also asks important human questions. Consider patient care, ethical decisions and the responsibilities of healthcare professionals as you develop curiosity, evidence-based thinking and confident communication. Guided research and feedback offer an insightful foundation for students interested in medicine, medical science, healthcare or related university pathways.</p>',
+    'description' => '<p>The Medicine programme aims to introduce students to the science of the human body and the questions involved in maintaining health. Students explore anatomy, physiology and biomedical science, considering how cells, organs and body systems work together.</p><p>The programme develops this foundation through the study of disease, genetics, infection and the immune response. Case-based activities and academic discussion introduce clinical reasoning, while topics such as cancer biology, biomarkers and personalised medicine illustrate the changing directions of medical research.</p><p>Our approach connects scientific understanding with the human responsibilities of healthcare. Students consider patient care and ethical decisions alongside the evidence used to investigate illness, recognising that medical questions require careful judgement as well as technical knowledge.</p><p>Throughout the programme, guided research and feedback support curiosity, analytical thinking and clear communication. Students build an introductory foundation for exploring medicine, medical science and related pathways, while developing a more informed understanding of the questions that healthcare professionals and researchers face.</p>',
     'includes' => array (
     ),
     'excludes' => array (
@@ -1561,7 +1561,7 @@ $all_programs = array (
     'id' => 'uk-academic-natural-sciences',
     'category_slug' => 'adult-academic',
     'name' => 'Natural Sciences',
-    'tagline' => 'Academic Insights summer course',
+    'tagline' => '',
     'image' => '/images/uk-academic-natural-sciences.webp',
     'ages' => array (
       'min' => 13,
@@ -1576,7 +1576,7 @@ $all_programs = array (
     ),
     'highlights' => array (
     ),
-    'description' => 'Discover the links between biology, chemistry, and physics through interdisciplinary scientific study.',
+    'description' => '<p>The Natural Sciences programme aims to introduce students to the connections between biology, chemistry and physics. Rather than viewing these subjects in isolation, students explore how different scientific perspectives can contribute to an understanding of the same world.</p><p>The programme uses interdisciplinary study to connect ideas across the sciences. Students consider how the properties of matter, physical processes and living systems relate, developing a broader view of the questions scientific study can address.</p><p>Our approach encourages curiosity and flexible thinking. Students are invited to recognise common principles, consider how an explanation changes with the scale of a question and use scientific reasoning to make connections between familiar and unfamiliar concepts.</p><p>Throughout the programme, the emphasis is on understanding relationships and explaining them clearly. Students develop foundations for further scientific study while strengthening their ability to approach a question from more than one disciplinary perspective.</p>',
     'includes' => array (
     ),
     'excludes' => array (
@@ -1590,7 +1590,7 @@ $all_programs = array (
     'id' => 'uk-academic-philosophy-politics-and-economics',
     'category_slug' => 'adult-academic',
     'name' => 'Philosophy, Politics and Economics',
-    'tagline' => 'Academic Insights summer course',
+    'tagline' => '',
     'image' => '/images/uk-academic-philosophy-politics-and-economics.webp',
     'ages' => array (
       'min' => 16,
@@ -1605,7 +1605,7 @@ $all_programs = array (
     ),
     'highlights' => array (
     ),
-    'description' => 'Connect major ideas in philosophy, political thought, and economics through critical analysis.',
+    'description' => '<p>The Philosophy, Politics and Economics programme aims to help students explore the connections between ideas, institutions and decisions. Students consider how philosophical questions, political thought and economic reasoning can offer different perspectives on the same social challenge.</p><p>The programme brings these subjects together through critical analysis. Students examine how an argument is constructed, what assumptions it depends on and how a change in perspective can influence the conclusions people reach.</p><p>Our approach encourages intellectual curiosity and reasoned disagreement. Students are invited to distinguish a claim from its justification, compare viewpoints fairly and consider how values and practical consequences both contribute to a decision.</p><p>Throughout the programme, the focus is on developing clear thinking and a considered voice. Students strengthen their ability to connect concepts, explain their reasoning and engage thoughtfully with questions that do not always have a single straightforward answer.</p>',
     'includes' => array (
     ),
     'excludes' => array (
@@ -1619,7 +1619,7 @@ $all_programs = array (
     'id' => 'uk-academic-physics',
     'category_slug' => 'adult-academic',
     'name' => 'Physics',
-    'tagline' => 'Academic Insights summer course',
+    'tagline' => '',
     'image' => '/images/uk-academic-physics.webp',
     'ages' => array (
       'min' => 13,
@@ -1634,7 +1634,7 @@ $all_programs = array (
     ),
     'highlights' => array (
     ),
-    'description' => 'Investigate the laws of physics, from mechanics and forces to modern physical theory.',
+    'description' => '<p>The Physics programme aims to introduce students to the principles used to explain the physical world. From mechanics and forces to modern physical theory, students explore how scientific ideas describe relationships and help make sense of observed behaviour.</p><p>The programme connects the study of physical laws with the reasoning behind them. Students consider how a model represents a situation, how an explanation relates to evidence and why the assumptions used in a problem matter.</p><p>Our approach encourages clear thinking and a willingness to question. Students are invited to connect mathematical relationships with physical meaning, consider where an explanation applies and approach unfamiliar problems by identifying the principles involved.</p><p>Throughout the programme, the emphasis is on understanding rather than memorising isolated facts. Students develop a foundation for further study while strengthening their confidence in interpreting ideas, following a logical method and explaining the physical reasoning behind a conclusion.</p>',
     'includes' => array (
     ),
     'excludes' => array (
@@ -1648,7 +1648,7 @@ $all_programs = array (
     'id' => 'uk-academic-psychology',
     'category_slug' => 'adult-academic',
     'name' => 'Psychology',
-    'tagline' => 'Academic Insights summer course',
+    'tagline' => '',
     'image' => '/images/uk-academic-psychology.webp',
     'ages' => array (
       'min' => 13,
@@ -1663,7 +1663,7 @@ $all_programs = array (
     ),
     'highlights' => array (
     ),
-    'description' => 'Explore cognition, emotion, human behaviour, and methods used in psychological research.',
+    'description' => '<p>The Psychology programme aims to introduce students to the study of cognition, emotion and human behaviour. Students explore how psychological questions are investigated and how research can contribute to an understanding of the ways people think, feel and act.</p><p>The programme connects these themes with the methods used in psychological enquiry. Students consider how a question can be studied, what evidence might support an explanation and why the interpretation of findings requires care.</p><p>Our approach encourages curiosity without relying on quick assumptions about people. Students are invited to distinguish an everyday impression from a research-based explanation and consider how different perspectives can contribute to an understanding of behaviour.</p><p>Throughout the programme, the emphasis is on critical thinking, clear reasoning and respect for complexity. Students develop an introductory foundation for further psychological study while becoming more confident in examining claims and communicating a considered viewpoint.</p>',
     'includes' => array (
     ),
     'excludes' => array (
@@ -1677,7 +1677,7 @@ $all_programs = array (
     'id' => 'uk-academic-veterinary-studies',
     'category_slug' => 'adult-academic',
     'name' => 'Veterinary Studies',
-    'tagline' => 'Academic Insights summer course',
+    'tagline' => '',
     'image' => '/images/uk-academic-veterinary-studies.webp',
     'ages' => array (
       'min' => 15,
@@ -1692,7 +1692,7 @@ $all_programs = array (
     ),
     'highlights' => array (
     ),
-    'description' => 'Learn introductory principles of veterinary medicine, animal care, and animal welfare.',
+    'description' => '<p>The Veterinary Studies programme aims to introduce students to veterinary medicine, animal care and animal welfare. Students explore the relationship between understanding an animal\'s health and considering its needs, developing an introductory view of the responsibilities involved in veterinary work.</p><p>The programme connects basic veterinary principles with the wider context of caring for animals. Students consider how knowledge, observation and careful judgement contribute to decisions about health and wellbeing.</p><p>Our approach places thoughtful enquiry alongside respect for animal welfare. Students are encouraged to ask questions, recognise the limits of an initial impression and consider why a responsible approach to care depends on both scientific understanding and attention to the animal.</p><p>Throughout the programme, the focus is on building a foundation for further exploration. Students develop curiosity, clear communication and a more informed understanding of the field while considering their own interest in animal health and care.</p>',
     'includes' => array (
     ),
     'excludes' => array (
@@ -1726,7 +1726,7 @@ $all_programs = array (
       2 => 'Develop consistency, court positioning and decision-making under pressure.',
       3 => 'Build sportsmanship, resilience and friendships through an active camp experience.',
     ),
-    'description' => '<p>Our Tennis Academy gives players from beginner to advanced the chance to train in a structured programme built around their level. At the start of the week, players are assessed and grouped by ability so coaching can focus on the areas that will help them progress most.</p><p>Sessions combine the four key areas of player development: technical, tactical, physical and mental. Through drills and match practice, players work on stroke technique, footwork, shot selection, consistency, speed, agility and decision-making while building discipline, resilience, focus and confidence on and off the court.</p>',
+    'description' => '<p>The Tennis programme aims to provide players of all levels, from beginner to advanced, with the opportunity to train through a fully professional and detailed programme. At the start of each week, all students are assessed and placed into tennis class groups based on their ability.</p><p>Our professional tennis coaching team have achieved a high standard in the game themselves and, in addition to coaching a range of skills and techniques, they also mentor students on every aspect of the game, including agility, fitness and mental attitude.</p><p>Our methodology combines the four pillars of professional player development: Technical, Tactical, Physical and Mental. All teaching, drills and exercises incorporate these four pillars to form a single integrated system, based on the commonalities of top players today. We encourage every player, regardless of level or age, to improve and maximise their potential. To do so, players must demonstrate complete commitment and a willingness to push themselves to reach higher levels within a short timeframe. Most importantly, we support the development of essential performance behaviours such as discipline, resilience, handling adversity, responsibility, accountability, proper focus, and respect for other players and staff.</p><p>Throughout the week, the tennis summer camp programme emphasises coaching aimed at improving technique through better stance, increasing power in strokes, and enhancing shot selection, alongside boosting consistency. Players will also focus on speed, fitness, hand-eye coordination, agility, key strokes, tactical incorporation of strokes, self-analysis, mental perseverance and goal setting.</p>',
     'includes' => array (
       0 => 'Tennis technique and footwork development',
       1 => 'Ability-appropriate tactical coaching and match-play practice',
@@ -1768,7 +1768,7 @@ $all_programs = array (
       2 => 'Strength, teamwork and confidence through age- and ability-appropriate coaching.',
       3 => 'Discover the football traditions of Arsenal, Liverpool FC, Manchester City and Paris Saint-Germain.',
     ),
-    'description' => '<p>Experience football as more than a game. Our UK Soccer Academy &amp; Club Experience is designed for young players who want to develop their technique, challenge themselves in training and discover the world of elite European football.</p><p>Inspired by the discipline, teamwork and attacking creativity associated with clubs such as <strong>Arsenal</strong>, <strong>Liverpool FC</strong>, <strong>Manchester City</strong> and <strong>Paris Saint-Germain</strong>, the programme blends ball mastery, position-specific exercises, passing combinations and tactical awareness with matches that encourage players to put their new skills to work.</p><p>Players can look forward to an energetic, supportive setting where they build confidence, form international friendships and learn the value of commitment and fair play. References to clubs describe football inspirations and interests; official coaching partnerships, stadium visits, club-branded experiences and destinations are not confirmed and must not be advertised as included without separate verification.</p>',
+    'description' => '<p>The UK Soccer Academy &amp; Club Experience programme aims to help young players develop their technique, confidence and understanding of football. The programme brings together focused practice and game situations, encouraging players to approach improvement with commitment and enjoy the shared experience of training with others.</p><p>Sessions focus on first touch, passing, dribbling and finishing, alongside position-specific exercises and passing combinations. Age- and ability-appropriate coaching helps players connect individual skills with the movement and decisions involved in playing as a team.</p><p>Our approach combines technical development with tactical awareness, teamwork and resilience. Small-sided games and tactical challenges encourage players to read situations, make decisions under pressure and reflect on how their choices influence play. Football traditions associated with Arsenal, Liverpool FC, Manchester City and Paris Saint-Germain offer points of inspiration.</p><p>Throughout the programme, the emphasis is on purposeful practice, fair play and a positive response to feedback. Players work on consistency and match confidence while developing respect for teammates, opponents and coaches, with opportunities to form friendships through a shared interest in football.</p>',
     'includes' => array (
       0 => 'Structured football skill-development sessions',
       1 => 'Technical, tactical and team-based exercises',

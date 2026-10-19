@@ -3,6 +3,8 @@
 function gocamp_load_memories() {
     $camp_memories = [];
     $legacy = require __DIR__ . '/../data/camp_memories.php';
+    // The admin writer assigns $camp_memories; older files return their data.
+    if (!is_array($legacy)) $legacy = $camp_memories;
     if (!is_array($legacy)) {
         return ['title' => 'Go Campers Memories', 'show_facebook' => true, 'items' => []];
     }

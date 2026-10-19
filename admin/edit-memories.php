@@ -31,17 +31,15 @@ function memory_editor_card($index, $item) {
     $item = is_array($item) ? $item : [];
     $image = is_string($item['image'] ?? null) ? $item['image'] : '';
     $filename = gocamp_memory_image($image);
-    $preview = $filename === false ? '/admin/placeholder-image.png' : '/images/' . $filename;
     if ($filename !== false) $image = '/images/' . $filename;
     ?>
     <div class="card mb-3" data-memory-row>
         <div class="card-body">
             <div class="row g-3">
                 <div class="col-md-4">
-                    <img src="<?= memory_escape($preview) ?>" alt="Memory photo preview" class="media-preview-image img-fluid rounded mb-2" style="height:140px;object-fit:contain">
-                    <div class="input-group">
-                        <input type="text" readonly required class="form-control" id="memory-image-<?= $index ?>" name="memories[<?= $index ?>][image]" value="<?= memory_escape($image) ?>" aria-label="Memory image">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-toggle="media-modal" data-bs-target-input="memory-image-<?= $index ?>">Choose / upload</button>
+                    <div class="border rounded p-3">
+                        <button type="button" class="btn btn-outline-primary w-100 mb-2" data-bs-toggle="media-modal" data-bs-target-input="memory-image-<?= $index ?>">Choose / upload photo</button>
+                        <input type="text" readonly required class="form-control form-control-sm" id="memory-image-<?= $index ?>" name="memories[<?= $index ?>][image]" value="<?= memory_escape($image) ?>" placeholder="No photo selected" aria-label="Memory image">
                     </div>
                 </div>
                 <div class="col-md-8">
