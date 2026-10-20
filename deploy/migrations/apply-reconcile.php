@@ -86,6 +86,13 @@ try {
         'uk-academic-engineering', 'uk-academic-architecture', 'uk-academic-medicine',
         'uk-academic-business-management', 'uk-academic-computer-science',
         'uk-academic-artificial-intelligence', 'uk-academic-economics',
+        'germany-lindenberg-teenagers', 'germany-bad-schussenried-teenagers',
+        'germany-berlin-teenager', 'germany-cologne-teenagers',
+        'germany-duesseldorf-teenagers', 'germany-munich-teenagers',
+        'austria-vienna-teenagers', 'germany-lindenberg-juniors',
+        'germany-bad-schussenried-juniors', 'germany-reimlingen-juniors',
+        'germany-berlin-mitte-adults', 'germany-constance-adults',
+        'germany-berlin-mitte-executives', 'germany-constance-executives',
     ];
     foreach ($managedIds as $id) {
         $record = $source['all_programs'][$id] ?? null;
@@ -120,7 +127,17 @@ try {
     }
     unset($record);
     // Reconcile destination information only where this project explicitly manages it.
-    foreach (['germany', 'uk'] as $slug) {
+    if (!isset($source['destinations']['austria'], $source['programs']['german-language-courses'])) {
+        fail_migration('Missing reviewed Austria destination or German language category');
+    }
+    // Seed the new destination/category once; existing admin edits remain authoritative.
+    if (!isset($live['destinations']['austria'])) {
+        $live['destinations']['austria'] = $source['destinations']['austria'];
+    }
+    if (!isset($live['programs']['german-language-courses'])) {
+        $live['programs']['german-language-courses'] = $source['programs']['german-language-courses'];
+    }
+    foreach (['germany', 'uk', 'austria'] as $slug) {
         if (!isset($source['destinations'][$slug], $live['destinations'][$slug])) {
             fail_migration("Missing managed destination $slug");
         }

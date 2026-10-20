@@ -76,7 +76,7 @@ $destinations = array (
     'banner' => '/images/germany_banner.webp',
     'tagline' => 'German Language Learning & Cultural Immersion',
     'intro_image' => '/images/germany_1.webp',
-    'intro_text' => '<p class="lead text-muted mb-4">Learn German through everyday use and immersive study, with flexible options for children, teenagers and adults in selected locations across Germany and Austria.</p>',
+    'intro_text' => '<p class="lead text-muted mb-4">Learn German through everyday use and immersive study, with flexible options for children, teenagers and adults in selected locations across Germany.</p>',
     'highlights' => 
     array (
       0 => 
@@ -104,9 +104,21 @@ $destinations = array (
     array (
       0 => '/images/599389_484906048191135_693827616_n_f7da433507459ea3.webp',
     ),
-    'program_ids' => 
-    array (
+    'program_ids' => array (
       0 => 'germany-german-language-course',
+      1 => 'germany-lindenberg-teenagers',
+      2 => 'germany-bad-schussenried-teenagers',
+      3 => 'germany-berlin-teenager',
+      4 => 'germany-cologne-teenagers',
+      5 => 'germany-duesseldorf-teenagers',
+      6 => 'germany-munich-teenagers',
+      7 => 'germany-lindenberg-juniors',
+      8 => 'germany-bad-schussenried-juniors',
+      9 => 'germany-reimlingen-juniors',
+      10 => 'germany-berlin-mitte-adults',
+      11 => 'germany-constance-adults',
+      12 => 'germany-berlin-mitte-executives',
+      13 => 'germany-constance-executives',
     ),
     'stats' => 
     array (
@@ -329,6 +341,31 @@ $destinations = array (
     ),
     'faq' => 
     array (
+    ),
+  ),
+  'austria' => array (
+    'name' => 'Austria',
+    'slug' => 'austria',
+    'status' => 'active',
+    'banner' => '/images/humboldt-vienna.webp',
+    'tagline' => 'German Language Learning & Summer Discovery in Vienna',
+    'intro_image' => '/images/humboldt-vienna.webp',
+    'intro_text' => '<p>Develop German language skills through a residential summer experience in Vienna. Intensive lessons, shared activities and supervised excursions connect classroom learning with the culture and everyday life of Austria’s capital.</p>',
+    'highlights' =>
+    array (
+    ),
+    'stats' =>
+    array (
+    ),
+    'gallery' =>
+    array (
+    ),
+    'faq' =>
+    array (
+    ),
+    'program_ids' =>
+    array (
+      0 => 'austria-vienna-teenagers',
     ),
   ),
 );

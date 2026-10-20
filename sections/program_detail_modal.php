@@ -19,6 +19,9 @@ $name         = $program['name'] ?? 'Program Details';
 $tagline      = $program['tagline'] ?? '';
 $image        = !empty($program['image']) ? $program['image'] : '/images/placeholder.webp';
 $ages         = isset($program['ages']) && !empty($program['ages']) ? $program['ages'] : null;
+$ageLabel = !empty($ages['min'])
+    ? (int)$ages['min'] . (!empty($ages['max']) ? '-' . (int)$ages['max'] : '+')
+    : '';
 $duration     = isset($program['duration']) && $program['duration'] > 0 ? $program['duration'] : null;
 $level        = isset($program['level']) && !empty($program['level']) ? $program['level'] : null;
 $price        = isset($program['price']) && !empty($program['price']) ? $program['price'] : null;
@@ -65,8 +68,8 @@ $gallery      = isset($program['gallery']) && !empty($program['gallery']) ? $pro
                     <div class="tab-pane fade show active" id="overview-<?= htmlspecialchars($programId) ?>" role="tabpanel" aria-labelledby="overview-tab-<?= htmlspecialchars($programId) ?>">
                         <?php if ($hasDetails): ?>
                         <div class="row g-3 mb-4 p-3 rounded-lg bg-light">
-                            <?php if ($ages && !empty($ages['min']) && !empty($ages['max'])): ?>
-                                <div class="col-6 col-md-3 text-center"><i class="bi bi-people-fill text-brand-primary fs-2 mb-2"></i><div class="fw-bold text-dark">Ages <?= (int) $ages['min'] ?>-<?= (int) $ages['max'] ?></div><small class="text-muted">Age Range</small></div>
+                            <?php if ($ageLabel !== ''): ?>
+                                <div class="col-6 col-md-3 text-center"><i class="bi bi-people-fill text-brand-primary fs-2 mb-2"></i><div class="fw-bold text-dark">Ages <?= $ageLabel ?></div><small class="text-muted">Age Range</small></div>
                             <?php endif; ?>
                             <?php if ($duration): ?>
                                 <div class="col-6 col-md-3 text-center"><i class="bi bi-calendar-week-fill text-brand-secondary fs-2 mb-2"></i><div class="fw-bold text-dark"><?= $duration ?> Weeks</div><small class="text-muted">Duration</small></div>

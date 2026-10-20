@@ -1790,4 +1790,668 @@ $all_programs = array (
       6 => '/images/soccer_3.webp',
     ),
   ),
+  'germany-lindenberg-teenagers' => array (
+    'order' => 2,
+    'id' => 'germany-lindenberg-teenagers',
+    'category_slug' => 'german-language-courses',
+    'name' => 'Lindenberg German for Teenagers',
+    'tagline' => 'Build German confidence through year-round study and residential life in the Alpine foothills.',
+    'image' => '/images/humboldt-lindenberg.webp',
+    'ages' =>
+    array (
+      'min' => 13,
+      'max' => 17,
+    ),
+    'duration' => NULL,
+    'level' => 'A1–C2',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' =>
+    array (
+      0 => 'German',
+      1 => 'Year-round',
+    ),
+    'highlights' =>
+    array (
+      0 => 'Ages 13–17 · year-round',
+      1 => '30 lessons per week · 45 minutes each',
+      2 => 'Residential accommodation and full board',
+      3 => 'Activities and excursions; optional winter sports',
+    ),
+    'description' => '<p>The Lindenberg German programme aims to help students aged 13 to 17 develop their language skills through year-round residential study. Set in the foothills of the Alps, the school combines a focused learning environment with opportunities to explore the surrounding region.</p><p>Students take 30 German lessons per week, with each lesson lasting 45 minutes. Teaching is supported by placement into an appropriate learning group, allowing students to work at a level that reflects their existing knowledge and next learning goals.</p><p>Our approach connects classroom progress with everyday communication. Living and learning on the same campus creates opportunities to use German with international peers, strengthening confidence, independence and a willingness to participate beyond formal lessons.</p><p>Throughout the week, daily activities and excursions complement language study. Residential accommodation and full board are included, while summer host-family stays are an alternative for this age group. Optional winter skiing and snowboarding lessons offer another way to enjoy the Alpine setting.</p>',
+    'includes' =>
+    array (
+      0 => 'German lessons and course materials',
+      1 => 'Course certificate',
+      2 => 'Residential accommodation and full board',
+      3 => '24-hour supervision',
+      4 => 'Daily activities and scheduled excursions',
+    ),
+    'excludes' =>
+    array (
+    ),
+    'status' => 'active',
+    'schedule' =>
+    array (
+    ),
+    'gallery' =>
+    array (
+    ),
+  ),
+  'germany-bad-schussenried-teenagers' => array (
+    'order' => 3,
+    'id' => 'germany-bad-schussenried-teenagers',
+    'category_slug' => 'german-language-courses',
+    'name' => 'Bad Schussenried German for Teenagers',
+    'tagline' => 'Combine intensive German study with sport and residential summer life in southern Germany.',
+    'image' => '/images/humboldt-bad-schussenried.webp',
+    'ages' =>
+    array (
+      'min' => 13,
+      'max' => 17,
+    ),
+    'duration' => NULL,
+    'level' => 'A1–C1',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' =>
+    array (
+      0 => 'German',
+      1 => 'Summer',
+    ),
+    'highlights' =>
+    array (
+      0 => 'Ages 13–17 · summer',
+      1 => '30 German lessons per week',
+      2 => 'On-campus accommodation and full board',
+      3 => 'Sports facilities, daily activities and excursions',
+    ),
+    'description' => '<p>The Bad Schussenried German programme aims to help teenagers aged 13 to 17 develop their German through an active residential summer experience. Classrooms, accommodation and leisure facilities share one campus, creating a convenient setting for focused learning and daily participation.</p><p>Students attend 30 German lessons each week, with learning organised around their language level. Regular classroom study gives students time to strengthen their understanding and develop the confidence to contribute, ask questions and communicate with greater clarity.</p><p>Our approach brings language learning together with the social experience of camp. Roommates are selected with attention to age, language level and different native languages, encouraging students to use German when sharing their everyday experiences.</p><p>Throughout the programme, daily activities and excursions provide opportunities to continue learning outside the classroom. Indoor and outdoor sports facilities add variety to the week, while residential accommodation, full board and supervision support a structured summer stay.</p>',
+    'includes' =>
+    array (
+      0 => 'German lessons and course materials',
+      1 => 'Course certificate',
+      2 => 'Residential accommodation and full board',
+      3 => '24-hour supervision',
+      4 => 'Daily activities and scheduled excursions',
+    ),
+    'excludes' =>
+    array (
+    ),
+    'status' => 'active',
+    'schedule' =>
+    array (
+    ),
+    'gallery' =>
+    array (
+    ),
+  ),
+  'germany-berlin-teenager' => array (
+    'order' => 4,
+    'id' => 'germany-berlin-teenager',
+    'category_slug' => 'german-language-courses',
+    'name' => 'Berlin German Summer for Teenagers',
+    'tagline' => 'Develop German through intensive lessons and supervised discovery of the capital.',
+    'image' => '/images/humboldt-berlin-teenager.webp',
+    'ages' =>
+    array (
+      'min' => 14,
+      'max' => 17,
+    ),
+    'duration' => NULL,
+    'level' => 'A1–B2',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' =>
+    array (
+      0 => 'German',
+      1 => 'Summer',
+    ),
+    'highlights' =>
+    array (
+      0 => 'Ages 14–17 · summer · A1–B2',
+      1 => '30 German lessons per week',
+      2 => 'Two-, three- or five-week course options',
+      3 => 'Residential package with activities and excursions',
+    ),
+    'description' => '<p>The Berlin German Summer programme aims to help students aged 14 to 17 strengthen their language skills while discovering Germany\'s capital. A central residential setting connects intensive study with opportunities to explore the city\'s history, culture and everyday life.</p><p>Students attend 30 lessons per week from Monday to Friday, with content adapted to teenage learners. Classes cover levels A1 to B2 and encourage active participation through varied learning activities and regular opportunities to speak German.</p><p>Our approach combines classroom learning with shared daily experiences. Students live and study in the same youth hostel near Berlin Central Station, allowing language practice to continue through meals, group activities and conversations with international peers.</p><p>Throughout the week, supervised activities and excursions introduce different aspects of Berlin and its surroundings. Accommodation, full board and supervision are included. The programme offers two-, three- or five-week stays according to the selected course period, giving students a clear balance of study and discovery.</p>',
+    'includes' =>
+    array (
+      0 => 'German lessons and course materials',
+      1 => 'Course certificate',
+      2 => 'Residential accommodation and full board',
+      3 => '24-hour supervision',
+      4 => 'Daily activities and scheduled excursions',
+    ),
+    'excludes' =>
+    array (
+    ),
+    'status' => 'active',
+    'schedule' =>
+    array (
+    ),
+    'gallery' =>
+    array (
+    ),
+  ),
+  'germany-cologne-teenagers' => array (
+    'order' => 5,
+    'id' => 'germany-cologne-teenagers',
+    'category_slug' => 'german-language-courses',
+    'name' => 'Cologne German Summer for Teenagers',
+    'tagline' => 'Learn German in a residential summer programme beside the Rhine.',
+    'image' => '/images/humboldt-cologne.webp',
+    'ages' =>
+    array (
+      'min' => 14,
+      'max' => 18,
+    ),
+    'duration' => NULL,
+    'level' => 'A1–B2',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' =>
+    array (
+      0 => 'German',
+      1 => 'Summer',
+    ),
+    'highlights' =>
+    array (
+      0 => 'Ages 14–18 · summer · A1–B2',
+      1 => '30 lessons per week; two- or four-week stays',
+      2 => 'Twin rooms with en-suite bathrooms',
+      3 => 'Full board, supervision, activities and excursions',
+    ),
+    'description' => '<p>The Cologne German Summer programme aims to help students aged 14 to 18 develop their German while experiencing a lively city on the Rhine. The programme combines intensive language study with residential life and opportunities to discover Cologne\'s culture and surroundings.</p><p>Students attend 30 lessons per week from Monday to Friday, with classes available from A1 to B2. Teaching is adapted to teenage learners and includes varied activities with an emphasis on speaking, encouraging students to take an active role in their progress.</p><p>Our approach connects learning with everyday communication. Lessons and accommodation are based at the Cologne City Hostel in Deutz, where twin rooms with private bathrooms provide a convenient setting for sharing daily life with international students.</p><p>Throughout the programme, daily leisure activities and organised excursions extend the learning experience. Full board and supervision are included, and two- or four-week stays are available. Time exploring Cologne and nearby destinations gives students further opportunities to use German beyond the classroom.</p>',
+    'includes' =>
+    array (
+      0 => 'German lessons and course materials',
+      1 => 'Course certificate',
+      2 => 'Residential accommodation and full board',
+      3 => '24-hour supervision',
+      4 => 'Daily activities and scheduled excursions',
+    ),
+    'excludes' =>
+    array (
+    ),
+    'status' => 'active',
+    'schedule' =>
+    array (
+    ),
+    'gallery' =>
+    array (
+    ),
+  ),
+  'germany-duesseldorf-teenagers' => array (
+    'order' => 6,
+    'id' => 'germany-duesseldorf-teenagers',
+    'category_slug' => 'german-language-courses',
+    'name' => 'Düsseldorf German Summer for Teenagers',
+    'tagline' => 'Strengthen German through intensive study and summer experiences along the Rhine.',
+    'image' => '/images/humboldt-dusseldorf.webp',
+    'ages' =>
+    array (
+      'min' => 14,
+      'max' => 18,
+    ),
+    'duration' => NULL,
+    'level' => 'A1–B2',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' =>
+    array (
+      0 => 'German',
+      1 => 'Summer',
+    ),
+    'highlights' =>
+    array (
+      0 => 'Ages 14–18 · summer · A1–B2',
+      1 => '30 lessons per week; two- or four-week stays',
+      2 => 'Riverside residence with en-suite twin rooms',
+      3 => 'Full board, activities and supervised excursions',
+    ),
+    'description' => '<p>The Düsseldorf German Summer programme aims to help students aged 14 to 18 build language confidence through study and cultural discovery. Based beside the Rhine, the programme connects a residential learning environment with opportunities to explore the city and its surroundings.</p><p>Students take 30 lessons per week from Monday to Friday. Classes span A1 to B2 and use varied learning activities with regular speaking practice, encouraging both beginners and learners with previous knowledge to participate at an appropriate level.</p><p>Our approach connects language development with the practical experience of living with others. Classrooms and accommodation are in the Düsseldorf City Hostel, with modern twin rooms and private bathrooms keeping study and daily routines conveniently together.</p><p>Throughout the week, activities and excursions provide opportunities to communicate beyond lessons. The riverfront and nearby city sights offer a setting for exploration, while two- or four-week residential packages include full board and supervision. Shared experiences help students build independence, cooperation and international friendships.</p>',
+    'includes' =>
+    array (
+      0 => 'German lessons and course materials',
+      1 => 'Course certificate',
+      2 => 'Residential accommodation and full board',
+      3 => '24-hour supervision',
+      4 => 'Daily activities and scheduled excursions',
+    ),
+    'excludes' =>
+    array (
+    ),
+    'status' => 'active',
+    'schedule' =>
+    array (
+    ),
+    'gallery' =>
+    array (
+    ),
+  ),
+  'germany-munich-teenagers' => array (
+    'order' => 7,
+    'id' => 'germany-munich-teenagers',
+    'category_slug' => 'german-language-courses',
+    'name' => 'Munich German Summer for Teenagers',
+    'tagline' => 'Balance German language development with residential summer life in Bavaria.',
+    'image' => '/images/humboldt-munich.webp',
+    'ages' =>
+    array (
+      'min' => 15,
+      'max' => 18,
+    ),
+    'duration' => NULL,
+    'level' => 'A1–B2',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' =>
+    array (
+      0 => 'German',
+      1 => 'Summer',
+    ),
+    'highlights' =>
+    array (
+      0 => 'Ages 15–18 · summer · A1–B2',
+      1 => '30 lessons per week',
+      2 => 'Two-, three- or five-week course options',
+      3 => 'Residential package; shared bathroom facilities',
+    ),
+    'description' => '<p>The Munich German Summer programme aims to help students aged 15 to 18 develop their language skills while discovering the Bavarian capital. The programme combines intensive lessons with a residential campus setting close to the city, offering a balance of focused study and cultural exploration.</p><p>Students attend 30 German lessons per week, with classes covering levels A1 to B2. Teaching is adapted to teenage learners and encourages participation through varied activities and opportunities to practise speaking.</p><p>Our approach brings learning into the daily experience of camp. Students live and study at the Don Bosco youth hostel, where shared residential life and group activities provide further reasons to communicate in German and cooperate with international peers.</p><p>Throughout the programme, leisure activities and supervised excursions add variety to the week. Accommodation and full board are included, with shared bathroom facilities at the residence. Two-, three- or five-week stays are available according to the course period, allowing students to explore Munich while maintaining a purposeful study routine.</p>',
+    'includes' =>
+    array (
+      0 => 'German lessons and course materials',
+      1 => 'Course certificate',
+      2 => 'Residential accommodation and full board',
+      3 => '24-hour supervision',
+      4 => 'Daily activities and scheduled excursions',
+    ),
+    'excludes' =>
+    array (
+    ),
+    'status' => 'active',
+    'schedule' =>
+    array (
+    ),
+    'gallery' =>
+    array (
+    ),
+  ),
+  'austria-vienna-teenagers' => array (
+    'order' => 8,
+    'id' => 'austria-vienna-teenagers',
+    'category_slug' => 'german-language-courses',
+    'name' => 'Vienna German Summer for Teenagers',
+    'tagline' => 'Study German while exploring Vienna’s culture and the outdoor spaces of the Danube.',
+    'image' => '/images/humboldt-vienna.webp',
+    'ages' =>
+    array (
+      'min' => 14,
+      'max' => 18,
+    ),
+    'duration' => NULL,
+    'level' => 'A1–B2',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' =>
+    array (
+      0 => 'German',
+      1 => 'Summer',
+    ),
+    'highlights' =>
+    array (
+      0 => 'Ages 14–18 · summer · Vienna, Austria',
+      1 => '30 lessons per week · A1–B2',
+      2 => 'Two- or four-week residential stays',
+      3 => 'Full board, activities and supervised excursions',
+    ),
+    'description' => '<p>The Vienna German Summer programme aims to help students aged 14 to 18 develop their language skills in Austria\'s capital. The programme combines structured lessons with residential life and opportunities to experience the city\'s cultural attractions and green spaces.</p><p>Students take 30 German lessons each week from Monday to Friday. Classes cover A1 to B2 and use age-appropriate learning activities with an emphasis on speaking, encouraging students to participate and develop greater confidence in communication.</p><p>Our approach connects language study with everyday experience. Students live and learn at the Vienna-Brigittenau youth guest house, with twin rooms and private bathrooms. Its location near the Danube and Danube Island offers a balance between city exploration and outdoor recreation.</p><p>Throughout the programme, daily activities and organised excursions give students further opportunities to use German and connect with their peers. Two- or four-week stays include accommodation, full board and supervision, supporting a summer experience that brings learning, independence and discovery together.</p>',
+    'includes' =>
+    array (
+      0 => 'German lessons and course materials',
+      1 => 'Course certificate',
+      2 => 'Residential accommodation and full board',
+      3 => '24-hour supervision',
+      4 => 'Daily activities and scheduled excursions',
+    ),
+    'excludes' =>
+    array (
+    ),
+    'status' => 'active',
+    'schedule' =>
+    array (
+    ),
+    'gallery' =>
+    array (
+    ),
+  ),
+  'germany-lindenberg-juniors' => array (
+    'order' => 9,
+    'id' => 'germany-lindenberg-juniors',
+    'category_slug' => 'german-language-courses',
+    'name' => 'Lindenberg German for Juniors',
+    'tagline' => 'Discover German through age-appropriate study and year-round residential activities.',
+    'image' => '/images/humboldt-lindenberg.webp',
+    'ages' =>
+    array (
+      'min' => 10,
+      'max' => 12,
+    ),
+    'duration' => NULL,
+    'level' => 'A1–C2',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' =>
+    array (
+      0 => 'German',
+      1 => 'Year-round',
+    ),
+    'highlights' =>
+    array (
+      0 => 'New junior age range: 10–12',
+      1 => 'Year-round · 25 lessons per week',
+      2 => 'On-campus accommodation and full board',
+      3 => 'Supervised activities and excursions',
+    ),
+    'description' => '<p>The Lindenberg Junior German programme aims to help children aged 10 to 12 build confidence in German within a year-round residential setting. The campus in the Alpine foothills brings classrooms, accommodation and leisure facilities together, giving younger learners a structured place to study and participate.</p><p>Children attend 25 German lessons per week, with each lesson lasting 45 minutes. Learning is organised according to language level, allowing students to develop their understanding and communication at a pace suited to their starting point.</p><p>Our approach connects language learning with supportive daily routines and interaction with international peers. Residential life gives children opportunities to practise German, contribute to shared activities and gradually become more comfortable expressing themselves.</p><p>Throughout the programme, daily activities and excursions complement classroom study. On-campus accommodation, full board and supervision are included, helping children enjoy a balanced experience of learning and discovery while developing independence, friendships and a positive attitude towards trying something new.</p>',
+    'includes' =>
+    array (
+      0 => 'German lessons and course materials',
+      1 => 'Course certificate',
+      2 => 'Residential accommodation and full board',
+      3 => '24-hour supervision',
+      4 => 'Daily activities and scheduled excursions',
+    ),
+    'excludes' =>
+    array (
+    ),
+    'status' => 'active',
+    'schedule' =>
+    array (
+    ),
+    'gallery' =>
+    array (
+    ),
+  ),
+  'germany-bad-schussenried-juniors' => array (
+    'order' => 10,
+    'id' => 'germany-bad-schussenried-juniors',
+    'category_slug' => 'german-language-courses',
+    'name' => 'Bad Schussenried German for Juniors',
+    'tagline' => 'Build German confidence through junior lessons, residential routines and active summer days.',
+    'image' => '/images/humboldt-bad-schussenried.webp',
+    'ages' =>
+    array (
+      'min' => 10,
+      'max' => 12,
+    ),
+    'duration' => NULL,
+    'level' => 'A1–C1',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' =>
+    array (
+      0 => 'German',
+      1 => 'Summer',
+    ),
+    'highlights' =>
+    array (
+      0 => 'New junior age range: 10–12',
+      1 => 'Summer · 25 German lessons per week',
+      2 => 'Residential accommodation and full board',
+      3 => 'Activities, sports facilities and excursions',
+    ),
+    'description' => '<p>The Bad Schussenried Junior German programme aims to help children aged 10 to 12 develop their language skills through a residential summer experience. Set within a campus combining classrooms, accommodation and extensive leisure facilities, the programme supports learning alongside play and discovery.</p><p>Children take 25 German lessons each week, with study organised around their language level. Age-appropriate learning gives students opportunities to participate, practise communication and become more comfortable using German with other learners.</p><p>Our approach brings classroom progress together with everyday experience. Shared residential life encourages children to communicate, listen to one another and develop independence, with roommates selected according to age, level and different native languages.</p><p>Throughout the week, activities and excursions complement the language course. Indoor and outdoor sports facilities offer different ways to take part, while accommodation, full board and supervision support the daily routine. The focus is on helping children build confidence, enjoy learning and form friendships through an active summer stay.</p>',
+    'includes' =>
+    array (
+      0 => 'German lessons and course materials',
+      1 => 'Course certificate',
+      2 => 'Residential accommodation and full board',
+      3 => '24-hour supervision',
+      4 => 'Daily activities and scheduled excursions',
+    ),
+    'excludes' =>
+    array (
+    ),
+    'status' => 'active',
+    'schedule' =>
+    array (
+    ),
+    'gallery' =>
+    array (
+    ),
+  ),
+  'germany-reimlingen-juniors' => array (
+    'order' => 11,
+    'id' => 'germany-reimlingen-juniors',
+    'category_slug' => 'german-language-courses',
+    'name' => 'Reimlingen German Summer for Children',
+    'tagline' => 'Learn German through child-focused lessons and outdoor discovery in rural Bavaria.',
+    'image' => '/images/humboldt-reimlingen.webp',
+    'ages' =>
+    array (
+      'min' => 8,
+      'max' => 12,
+    ),
+    'duration' => NULL,
+    'level' => 'A1–B1',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' =>
+    array (
+      0 => 'German',
+      1 => 'Summer',
+    ),
+    'highlights' =>
+    array (
+      0 => 'New age range: 8–12 · summer',
+      1 => '25 lessons per week · A1–B1',
+      2 => 'Two- or four-week residential stays',
+      3 => 'Horse riding available at an additional fee',
+    ),
+    'description' => '<p>The Reimlingen German Summer programme aims to help children aged 8 to 12 develop their language skills in a welcoming rural setting. Based at Tagungshaus Reimlingen near Nördlingen, the programme brings learning and residential life together within parkland surroundings.</p><p>Children attend 25 lessons each week from Monday to Friday. Classes cover A1 to B1 and are adapted to younger learners, using varied activities and regular speaking opportunities to encourage participation and build confidence.</p><p>Our approach connects classroom learning with shared experiences. Children practise communicating with international peers, develop independence through daily routines and learn the value of cooperation. Accommodation, full board and supervision support their time away from home.</p><p>Throughout the programme, daily activities and excursions provide opportunities to explore and use German beyond lessons. Sports and outdoor play add variety, while optional horse-riding lessons can be booked for an additional fee. Two- or four-week stays offer a balance of language development, friendship and discovery.</p>',
+    'includes' =>
+    array (
+      0 => 'German lessons and course materials',
+      1 => 'Course certificate',
+      2 => 'Residential accommodation and full board',
+      3 => '24-hour supervision',
+      4 => 'Daily activities and scheduled excursions',
+    ),
+    'excludes' =>
+    array (
+    ),
+    'status' => 'active',
+    'schedule' =>
+    array (
+    ),
+    'gallery' =>
+    array (
+    ),
+  ),
+  'germany-berlin-mitte-adults' => array (
+    'order' => 12,
+    'id' => 'germany-berlin-mitte-adults',
+    'category_slug' => 'german-language-courses',
+    'name' => 'Berlin-Mitte German for Adults',
+    'tagline' => 'Develop German for study, work or everyday life in central Berlin.',
+    'image' => '/images/humboldt-berlin-mitte-adults.webp',
+    'ages' =>
+    array (
+      'min' => 18,
+      'max' => NULL,
+    ),
+    'duration' => NULL,
+    'level' => 'A1–C2',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' =>
+    array (
+      0 => 'German',
+      1 => 'Year-round',
+    ),
+    'highlights' =>
+    array (
+      0 => 'Ages 18+ · year-round · A1–C2',
+      1 => 'Intensive course: 30 lessons per week',
+      2 => 'Residential and host-family options',
+      3 => 'TestDaF and telc examination centre',
+    ),
+    'description' => '<p>The Berlin-Mitte German programme aims to help adults aged 18 and over develop their language skills through year-round study in Germany\'s capital. The central location combines a focused learning environment with opportunities to experience Berlin\'s cultural and everyday life.</p><p>The intensive course offers 30 lessons per week, with levels from A1 to C2. Short- and long-term study options allow learners to work towards their own goals, while small classes support participation and regular communication.</p><p>Our approach connects structured learning with practical immersion. Students can continue using German through meals, activities and conversations with international peers. Residential accommodation and host-family options offer different ways to shape the experience according to individual preferences.</p><p>Throughout the programme, organised activities and opportunities to explore Berlin extend learning beyond the classroom. The institute is also a TestDaF and telc examination centre. Residential packages with full board are available, supporting a study experience that combines language development with greater independence and cultural understanding.</p>',
+    'includes' =>
+    array (
+      0 => 'German lessons and course materials',
+      1 => 'Course certificate',
+      2 => 'Residential packages available with accommodation and full board',
+    ),
+    'excludes' =>
+    array (
+    ),
+    'status' => 'active',
+    'schedule' =>
+    array (
+    ),
+    'gallery' =>
+    array (
+    ),
+  ),
+  'germany-constance-adults' => array (
+    'order' => 13,
+    'id' => 'germany-constance-adults',
+    'category_slug' => 'german-language-courses',
+    'name' => 'Constance German for Adults',
+    'tagline' => 'Combine intensive German learning with life beside Lake Constance.',
+    'image' => '/images/humboldt-constance-adults.webp',
+    'ages' =>
+    array (
+      'min' => 18,
+      'max' => NULL,
+    ),
+    'duration' => NULL,
+    'level' => 'A1–C1',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' =>
+    array (
+      0 => 'German',
+      1 => 'Year-round',
+    ),
+    'highlights' =>
+    array (
+      0 => 'Ages 18+ · year-round · A1–C1',
+      1 => 'Intensive course: 30 lessons per week',
+      2 => 'On-campus single and twin rooms',
+      3 => 'TestDaF and telc examination centre',
+    ),
+    'description' => '<p>The Constance German programme aims to help adults aged 18 and over strengthen their German through year-round study by Lake Constance. The university town provides a setting where language learning can be connected with cultural discovery and everyday communication.</p><p>The intensive course offers 30 lessons per week, with the location\'s published course overview covering A1 to C1. Small classes encourage participation, while short- and long-term study options allow learners to pursue different language goals.</p><p>Our approach combines classroom study with opportunities to use German throughout the day. Residential accommodation is in the same building as the classrooms, with single and twin rooms featuring private bathrooms. Shared meals and interaction with other learners extend language practice beyond formal lessons.</p><p>Throughout the programme, after-class activities and the lakeside setting provide a wider context for learning. Residential packages with full board are available, and the institute is a TestDaF and telc examination centre. Students can build language confidence while developing a more independent experience of living and studying in Germany.</p>',
+    'includes' =>
+    array (
+      0 => 'German lessons and course materials',
+      1 => 'Course certificate',
+      2 => 'Residential packages available with accommodation and full board',
+    ),
+    'excludes' =>
+    array (
+    ),
+    'status' => 'active',
+    'schedule' =>
+    array (
+    ),
+    'gallery' =>
+    array (
+    ),
+  ),
+  'germany-berlin-mitte-executives' => array (
+    'order' => 14,
+    'id' => 'germany-berlin-mitte-executives',
+    'category_slug' => 'german-language-courses',
+    'name' => 'Berlin-Mitte German for Executives',
+    'tagline' => 'Develop job-related German through individual tuition shaped around professional goals.',
+    'image' => '/images/humboldt-berlin-mitte-executives.webp',
+    'ages' =>
+    array (
+      'min' => 27,
+      'max' => NULL,
+    ),
+    'duration' => NULL,
+    'level' => 'A1–C2',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' =>
+    array (
+      0 => 'German',
+      1 => 'Year-round',
+    ),
+    'highlights' =>
+    array (
+      0 => 'Ages 27+ · year-round · A1–C2',
+      1 => 'One-to-one tuition: 30 or 40 lessons per week',
+      2 => 'Content tailored to professional language needs',
+      3 => 'Residential or tuition-only course options',
+    ),
+    'description' => '<p>The Berlin-Mitte German for Executives programme aims to help professionals aged 27 and over develop German for their working lives. Available year-round, the programme offers focused individual tuition within a central Berlin setting.</p><p>Students choose one-to-one intensive courses with 30 or 40 lessons per week, each lasting 45 minutes. Content is tailored to the participant\'s needs, allowing learning to concentrate on the language skills and communication priorities most relevant to their professional goals.</p><p>Our approach connects intensive study with practical immersion. Individual teaching provides a focused setting for questions and refinement, while conversations and shared daily experiences create opportunities to continue using German outside lessons.</p><p>Throughout the programme, participants can combine language development with an experience of Berlin\'s cultural life. Residential packages include accommodation, full board, activities and excursions, while tuition-only options include weekday lunch. The emphasis is on purposeful study, clear communication and making effective use of the time available.</p>',
+    'includes' =>
+    array (
+      0 => 'German lessons and course materials',
+      1 => 'Course certificate',
+      2 => 'Residential packages available with accommodation and full board',
+    ),
+    'excludes' =>
+    array (
+    ),
+    'status' => 'active',
+    'schedule' =>
+    array (
+    ),
+    'gallery' =>
+    array (
+    ),
+  ),
+  'germany-constance-executives' => array (
+    'order' => 15,
+    'id' => 'germany-constance-executives',
+    'category_slug' => 'german-language-courses',
+    'name' => 'Constance German for Executives',
+    'tagline' => 'Focus on professional German through personalised tuition beside Lake Constance.',
+    'image' => '/images/humboldt-constance-executives.webp',
+    'ages' =>
+    array (
+      'min' => 27,
+      'max' => NULL,
+    ),
+    'duration' => NULL,
+    'level' => 'A1–C2',
+    'price' => NULL,
+    'color' => 'primary',
+    'badges' =>
+    array (
+      0 => 'German',
+      1 => 'Year-round',
+    ),
+    'highlights' =>
+    array (
+      0 => 'Ages 27+ · year-round · A1–C2',
+      1 => 'One-to-one tuition: 30 or 40 lessons per week',
+      2 => 'Teaching tailored to professional goals',
+      3 => 'Residential or tuition-only course options',
+    ),
+    'description' => '<p>The Constance German for Executives programme aims to help professionals aged 27 and over strengthen the German they need for work. Available year-round, the course combines individual teaching with a lakeside setting suited to focused study and time away from everyday routines.</p><p>Participants choose 30 or 40 one-to-one lessons per week, with each lesson lasting 45 minutes. Teaching is tailored to individual needs, allowing students to concentrate on their professional communication priorities and develop the areas that matter most to their goals.</p><p>Our approach connects personalised tuition with opportunities for everyday language use. Shared meals, conversations and residential life can extend practice beyond the classroom, helping participants build confidence in communicating with greater clarity and independence.</p><p>Throughout the programme, students can balance intensive study with the cultural and recreational opportunities around Lake Constance. Residential packages include accommodation, full board, activities and excursions, while tuition-only options include weekday lunch. The focus remains on purposeful progress through a programme shaped around the individual.</p>',
+    'includes' =>
+    array (
+      0 => 'German lessons and course materials',
+      1 => 'Course certificate',
+      2 => 'Residential packages available with accommodation and full board',
+    ),
+    'excludes' =>
+    array (
+    ),
+    'status' => 'active',
+    'schedule' =>
+    array (
+    ),
+    'gallery' =>
+    array (
+    ),
+  ),
 );

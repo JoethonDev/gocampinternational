@@ -237,4 +237,18 @@ $programs = array (
       2 => '/images/imported-5acb0b681a0332.webp',
     ),
   ),
+  'german-language-courses' => array (
+    'status' => 'active',
+    'name' => 'German Language Programmes',
+    'slug' => 'german-language-courses',
+    'banner' => '/images/humboldt-lindenberg.webp',
+    'intro_image' => '/images/humboldt-berlin-mitte-adults.webp',
+    'intro' => '<p>The German Language programmes aim to help children, teenagers and adults develop confidence in German through structured study and everyday use. Courses in Germany and Vienna, Austria, offer different settings and learning formats, allowing students to choose an experience suited to their age and goals.</p><p>Junior and teenage programmes combine age-appropriate lessons with residential life, activities and excursions. Adult intensive courses provide focused language development, while one-to-one executive courses are tailored to professional communication needs.</p><p>Our approach connects classroom progress with practical immersion. Students are encouraged to participate, communicate with international peers and use German in situations beyond formal lessons, developing greater independence alongside their language skills.</p><p>Throughout the chosen programme, the emphasis is on purposeful learning and participation. Summer and year-round options, different lesson formats and clearly defined age groups help students and families compare the opportunities available at each location.</p>',
+    'sections' =>
+    array (
+    ),
+    'gallery' =>
+    array (
+    ),
+  ),
 );
