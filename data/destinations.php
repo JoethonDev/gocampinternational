@@ -349,6 +349,8 @@ $destinations = array (
       6 => 'uk-academic-economics',
       7 => 'tennis-academy',
       8 => 'uk-soccer-club-experience',
+      9 => 'uk-young-leader-oxford',
+      10 => 'uk-mini-mba',
     ),
     'section_visibility' => 
     array (
