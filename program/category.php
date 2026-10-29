@@ -200,7 +200,6 @@ require_once __DIR__ . '/../includes/header.php';
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-0">
                     <li class="breadcrumb-item"><a href="/">HOME</a></li>
-                    <li class="breadcrumb-item"><a href="/programs">ALL PROGRAMS</a></li>
                     <li class="breadcrumb-item active" aria-current="page"><?= strtoupper(htmlspecialchars($programData['name'])) ?></li>
                 </ol>
             </nav>
