@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""One-shot reviewed UK catalog migration for InfinityFree development only.
+"""Reviewed catalog migration/reconciliation for isolated development hosts.
 
 prepare: securely download runtime PHP catalogs, merge only reviewed records,
          and create an encrypted rollback archive for GitHub Actions artifacts.
 apply:   verify downloaded live content is unchanged, upload staged catalogs,
-         roll back on any error, then store a harmless completion marker.
+         roll back on any error, then store a completion marker for one-shot scopes.
 Do not copy credentials, backup contents, or runtime data into logs.
 """
 from __future__ import annotations
@@ -223,7 +223,7 @@ def apply() -> None:
                   file=sys.stderr)
             raise
     print(f"Applied and verified {len(changed)} reviewed catalog changes on {FTPS_TARGET}. "
-          "One-time migration marker written; production remains untouched.")
+          "Production remains untouched.")
 
 
 def main() -> None:
