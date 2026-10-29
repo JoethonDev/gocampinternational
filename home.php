@@ -159,9 +159,6 @@ require_once __DIR__ . '/includes/header.php';
                 <?php endif; ?>
             </div>
             
-            <div class="text-center mt-5 pt-3">
-                <a href="/programs" class="btn btn-primary btn-lg fw-bold px-5 py-3">View All Programs</a>
-            </div>
         </div>
     </section>
     <?php endif; ?>

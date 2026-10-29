@@ -10,6 +10,9 @@ RedirectMatch 404 ^/.*\.jsonl$
 # Hide public Gallery and Memories routes, including direct PHP access.
 # Keep gallery.php and its content available in the repository for reactivation.
 RedirectMatch 404 ^/(gallery(\.php)?|memories)/?$
+# Hide the All Programs listing without disabling category pages or deleting
+# program/index.php (available for a future re-enable).
+RedirectMatch 404 ^/(programs/?|program/index(\.php)?/?)$
 # Block direct execution of scripts inside public upload/image dirs
 RedirectMatch 403 ^/(uploads|images)/.*\.(php|phtml|phar|cgi|pl)$
 

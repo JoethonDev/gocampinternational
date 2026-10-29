@@ -33,8 +33,6 @@ require_once __DIR__ . '/../data/destinations.php';
                         Programs
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="programsDropdown">
-                        <li><a class="dropdown-item" href="/programs">All Programs</a></li>
-                        <li><hr class="dropdown-divider"></li>
                         <?php if (isset($programs) && is_array($programs)) : ?>
                             <?php foreach ($programs as $program) : ?>
                                 <?php if (isset($program['status']) && $program['status'] === 'active') : ?>

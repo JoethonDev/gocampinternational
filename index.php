@@ -72,10 +72,11 @@ if ($path === 'faq') {
     include $page;
     exit;
 }
-if ($path === 'programs') {
-    $page = __DIR__ . '/program/index.php';
-    if (!file_exists($page)) { http_response_code(500); echo 'Server error: missing page.'; exit; }
-    include $page;
+// Disable only the all-programs listing. Keep its source file for re-enable,
+// and leave program/category and /programs/{category} routes working.
+if (in_array($path, ['programs', 'program/index', 'program/index.php'], true)) {
+    http_response_code(404);
+    include __DIR__ . '/404.php';
     exit;
 }
 // The public gallery routes are disabled; preserve gallery.php for a future re-enable.
