@@ -54,6 +54,10 @@ if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] === true) {
         include __DIR__ . '/programs.php';
         exit;
     }
+    if ($path === 'admin/bulk-action') {
+        include __DIR__ . '/bulk-action.php';
+        exit;
+    }
     if ($path === 'admin/media-library') {
         include __DIR__ . '/media-library.php';
         exit;
