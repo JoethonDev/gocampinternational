@@ -153,6 +153,13 @@ try {
     foreach (['status', 'tagline', 'intro_text', 'highlights'] as $field) {
         $live['destinations']['germany'][$field] = $germany[$field];
     }
+    // Explicit destination cover replacements: content editors keep control of
+    // every other destination field. Re-run safely after each development deploy.
+    foreach (['uk', 'italy', 'france'] as $slug) {
+        if (isset($source['destinations'][$slug], $live['destinations'][$slug])) {
+            $live['destinations'][$slug]['banner'] = $source['destinations'][$slug]['banner'];
+        }
+    }
     // Apply category prose while preserving live section images, titles and added sections.
     foreach ($source['programs'] as $slug => $category) {
         if (!isset($live['programs'][$slug]) || !is_array($live['programs'][$slug])) continue;
