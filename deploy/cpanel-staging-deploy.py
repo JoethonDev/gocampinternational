@@ -8,7 +8,7 @@ Reuses the tested InfinityFree allowlist and preservation behavior.
 from __future__ import annotations
 
 import argparse
-from ftplib import FTP_TLS, error_perm
+from ftplib import FTP, FTP_TLS, error_perm
 import importlib.util
 import os
 from pathlib import Path
@@ -39,6 +39,13 @@ def staging_config() -> tuple[str, str, str]:
     return host, username, password
 
 
+def staging_ftp_mode() -> str:
+    mode = os.environ.get("CPANEL_STAGING_FTP_MODE", "tls").strip().lower()
+    if mode not in ("tls", "plaintext"):
+        raise RuntimeError("CPANEL_STAGING_FTP_MODE must be 'tls' or 'plaintext'")
+    return mode
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--dry-run", action="store_true",
@@ -48,16 +55,25 @@ def main() -> int:
     rules = load_deployment_rules()
     uploads = rules.build_uploads()
     print(f"Prepared {len(uploads)} allowlisted GoCamp files for cPanel staging; no deletions.")
-    context = ssl.create_default_context()
-    context.minimum_version = ssl.TLSVersion.TLSv1_2
-    with FTP_TLS(context=context, timeout=45) as ftp:
+    mode = staging_ftp_mode()
+    if mode == "plaintext":
+        print("WARNING: staging FTP credentials and file contents travel unencrypted.", file=sys.stderr)
+        client = FTP(timeout=45)
+    else:
+        context = ssl.create_default_context()
+        context.minimum_version = ssl.TLSVersion.TLSv1_2
+        client = FTP_TLS(context=context, timeout=45)
+    with client as ftp:
         ftp.connect(host, 21)
         ftp.login(username, password)
-        ftp.prot_p()
+        if mode == "tls":
+            ftp.prot_p()
         ftp.set_pasv(True)
-        # '/' is the staging subdomain document root for the dedicated jailed account.
-        # Do not use a cPanel/primary FTP login here: it may point at production.
+        # '/' must be the staging document root of the dedicated, jailed account.
         ftp.cwd("/")
+        # Fail before any upload if the passive data channel is unreachable.
+        rules.remote_entry_names(ftp)
+        print("FTP passive directory-listing check passed.")
         uploaded, preserved = rules.deploy(ftp, uploads, "/", args.dry_run)
     print(f"Staging {'dry-run' if args.dry_run else 'deployment'} complete: "
           f"uploaded {uploaded}, preserved {preserved} existing files.")
@@ -68,5 +84,5 @@ if __name__ == "__main__":
     try:
         sys.exit(main())
     except (OSError, ValueError, RuntimeError, error_perm) as exc:
-        print("cPanel staging FTPS FAILED: " + str(exc).splitlines()[0], file=sys.stderr)
+        print("cPanel staging FTP FAILED: " + str(exc).splitlines()[0], file=sys.stderr)
         sys.exit(1)
