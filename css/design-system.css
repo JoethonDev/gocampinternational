@@ -458,3 +458,43 @@ textarea { resize: vertical; }
     font-size: clamp(1.4rem, 5.1vw, 1.9rem) !important;
   }
 }
+
+/* Destination and program-category banners: readable, modest side-aligned titles,
+   with photographs free from extra copy or action buttons. */
+.destination-hero .destination-hero-caption {
+  min-height: clamp(440px, 72svh, 760px);
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  z-index: 2;
+  pointer-events: none;
+}
+.destination-hero .destination-hero-caption h1,
+.page-content .hero-section .category-hero-caption h1 {
+  color: #fff;
+  font-size: clamp(1.65rem, 3vw, 3.25rem) !important;
+  line-height: 1.2;
+  font-weight: 700;
+  text-align: left;
+  max-width: 18ch;
+  margin: 0;
+  text-shadow: 0 2px 12px rgba(0,0,0,.9);
+}
+.page-content .hero-section:has(.category-hero-caption) {
+  justify-content: flex-start;
+}
+.page-content .hero-section .category-hero-caption {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: inherit;
+  z-index: 2;
+  pointer-events: none;
+}
+@media (max-width: 767.98px) {
+  .destination-hero .destination-hero-caption { min-height: 65svh; }
+  .destination-hero .destination-hero-caption h1,
+  .page-content .hero-section .category-hero-caption h1 {
+    font-size: clamp(1.5rem, 5vw, 2.25rem) !important;
+  }
+}
