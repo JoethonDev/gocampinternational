@@ -9,7 +9,9 @@ $banner = !empty($destinationData['banner']) ? $destinationData['banner'] : '/im
 $name = !empty($destinationData['name']) ? $destinationData['name'] : 'Destination';
 ?>
 <section class="destination-hero position-relative overflow-hidden" style="min-height: 90vh;" aria-label="<?= htmlspecialchars($name, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?> banner">
-    <h1 class="visually-hidden"><?= htmlspecialchars($name, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></h1>
+    <div class="container position-relative destination-hero-caption">
+        <h1><?= htmlspecialchars($name, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></h1>
+    </div>
     <div class="hero-background position-absolute top-0 start-0 w-100 h-100"
          style="background-image: url('<?= htmlspecialchars($banner, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>');
                 background-size: cover;
