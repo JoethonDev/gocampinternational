@@ -63,17 +63,8 @@ if (strlen($shortIntro) > 120) {
                     <i class="bi bi-collection fs-1 text-primary opacity-25"></i>
                 </div>
                 */ ?>
-                <div class="d-grid gap-2">
-                    <a href="/program/category.php?category=<?= htmlspecialchars($categorySlug) ?>" class="btn btn-primary btn-lg fw-bold">
-                        <i class="bi bi-arrow-right-circle-fill me-2"></i> Explore Programs
-                    </a>
-                    <!-- Badge, Get Info button, and related CTA removed as per requirements -->
-                    <?php /*
-                        <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#ctaModal" data-source="<?= htmlspecialchars($name) ?> Category Card">
-                            <i class="bi bi-calendar-check me-2"></i> Get Information
-                        </button>
-                    */ ?>
-                </div>
+                <a href="/program/category.php?category=<?= htmlspecialchars($categorySlug) ?>"
+                   class="stretched-link" aria-label="Browse <?= htmlspecialchars($name, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>"></a>
             </div>
         </div>
     </div>
