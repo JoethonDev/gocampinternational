@@ -43,6 +43,33 @@ class CPanelStagingTests(unittest.TestCase):
             with self.assertRaisesRegex(RuntimeError, "Invalid staging FTP host"):
                 cpanel.staging_config()
 
+    def test_staging_ftp_mode_defaults_to_tls_and_plaintext_requires_opt_in(self):
+        with patch.dict(os.environ, {}, clear=True):
+            self.assertEqual(cpanel.staging_ftp_mode(), "tls")
+            os.environ["CPANEL_STAGING_FTP_MODE"] = "plaintext"
+            self.assertEqual(cpanel.staging_ftp_mode(), "plaintext")
+            os.environ["CPANEL_STAGING_FTP_MODE"] = "invalid"
+            with self.assertRaisesRegex(RuntimeError, "FTP_MODE"):
+                cpanel.staging_ftp_mode()
+
+    def test_reconciliation_uses_plain_ftp_only_for_staging(self):
+        with patch.dict(os.environ, {
+            "GOCAMP_FTPS_TARGET": "cpanel-staging",
+            "GOCAMP_CATALOG_MIGRATION": "reconcile",
+            "CPANEL_STAGING_FTP_MODE": "plaintext",
+            "CPANEL_STAGING_FTP_HOST": "ftp.example.net",
+            "CPANEL_STAGING_FTP_USERNAME": "staging@example.net",
+            "CPANEL_STAGING_FTP_PASSWORD": "example-test-password",
+        }, clear=True):
+            merge = load_script("apply-uk-content-migration.py", "cpanel_plaintext_reconcile")
+            with patch.object(merge, "FTP") as plain, patch.object(merge, "FTP_TLS") as tls:
+                client = merge.connect()
+                plain.assert_called_once_with(timeout=50)
+                tls.assert_not_called()
+                client.login.assert_called_once_with("staging@example.net", "example-test-password")
+                client.set_pasv.assert_called_once_with(True)
+                client.prot_p.assert_not_called()
+
     def test_reuses_safe_upload_allowlist(self):
         rules = cpanel.load_deployment_rules()
         uploads = rules.build_uploads()
