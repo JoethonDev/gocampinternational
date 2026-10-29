@@ -81,13 +81,8 @@ foreach ($programsByCategory as &$catData) {
 unset($catData);
 ?>
 <div class="page-content">
-    <!-- Hero Section -->
-    <section class="py-5 text-center bg-light">
-        <div class="container">
-            <h1 class="display-4 fw-bold">All Our Programs</h1>
-            <p class="lead text-muted">Find the perfect adventure from our complete list of international camps, organized by category.</p>
-        </div>
-    </section>
+    <!-- Accessible heading; remove the former text-only hero strip. -->
+    <h1 class="visually-hidden">All Our Programs</h1>
 
     <!-- Category Filter Navigation -->
     <section class="py-3 bg-white border-bottom sticky-top" style="top: 70px; z-index: 1000;">

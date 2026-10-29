@@ -419,3 +419,42 @@ textarea { resize: vertical; }
 .camp-gallery-photo figcaption { font-weight: 600; }
 @media (max-width: 991.98px) { .camp-country-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 575.98px) { .camp-country-grid { grid-template-columns: minmax(0, 1fr); } }
+
+/* Home image-carousel captions: centered low on the photo with compact,
+   responsive typography. Overrides legacy hero/layout declarations. */
+#home-hero-slider .carousel-item .hero-section {
+  min-height: clamp(420px, 65svh, 680px) !important;
+  align-items: stretch;
+}
+#home-hero-slider .carousel-item .home-hero-caption {
+  min-height: clamp(420px, 65svh, 680px) !important;
+  justify-content: flex-end !important;
+  padding-bottom: clamp(1.75rem, 5svh, 3.75rem);
+  padding-inline: 1.25rem;
+}
+#home-hero-slider .home-hero-caption h1,
+#home-hero-slider .home-hero-caption h2 {
+  font-size: clamp(1.55rem, 3vw, 2.65rem) !important;
+  line-height: 1.16;
+  letter-spacing: -0.02em;
+  max-width: 760px;
+  margin-bottom: 0.6rem !important;
+}
+#home-hero-slider .home-hero-caption .lead {
+  font-size: clamp(0.9rem, 1.15vw, 1.08rem) !important;
+  line-height: 1.5;
+  max-width: 650px;
+}
+@media (max-width: 767.98px) {
+  #home-hero-slider .carousel-item .hero-section,
+  #home-hero-slider .carousel-item .home-hero-caption {
+    min-height: 60svh !important;
+  }
+  #home-hero-slider .carousel-item .home-hero-caption {
+    padding-bottom: clamp(4rem, 9svh, 5.25rem);
+  }
+  #home-hero-slider .home-hero-caption h1,
+  #home-hero-slider .home-hero-caption h2 {
+    font-size: clamp(1.4rem, 5.1vw, 1.9rem) !important;
+  }
+}

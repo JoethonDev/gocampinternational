@@ -93,6 +93,16 @@ try {
         $html = fetch_catalog_page($base, $route);
         catalog_check(!str_contains($html, 'href="/gallery"'),
             "$route: public gallery link must be hidden");
+        if ($route === '/') {
+            catalog_check(str_contains($html, 'home-hero-caption'),
+                'Homepage hero caption layout missing');
+            catalog_check(!str_contains($html, 'Explore Destinations'),
+                'Homepage hero CTA must be removed');
+        }
+        if ($route === '/contact') {
+            catalog_check(!str_contains($html, '<h1 class="display-4 fw-bold">CONTACT US</h1>'),
+                'Contact banner title must not be visible');
+        }
     }
     foreach (['/gallery', '/gallery.php', '/memories'] as $route) {
         fetch_catalog_page($base, $route, 404);
@@ -125,7 +135,16 @@ try {
     }
 
     $allHtml = fetch_catalog_page($base, '/programs');
+    catalog_check(!str_contains($allHtml, 'Find the perfect adventure from our complete list'),
+        '/programs: obsolete visible banner text must be removed');
     expect_catalog_modals($allHtml, '/programs', array_keys($visible));
+    foreach (['uk-mini-mba', 'uk-young-leader-oxford'] as $id) {
+        catalog_check(isset($visible[$id]), "$id: expected active Young Leader program");
+        catalog_check(in_array($id, $destinations['uk']['program_ids'] ?? [], true),
+            "$id: must belong to UK destination");
+        catalog_check(str_contains($allHtml, 'id="programModal-' . $id . '"'),
+            "$id: details modal missing from all-programs listing");
+    }
     foreach ($destinations as $key => $destination) {
         $slug = catalog_slug((string)($destination['slug'] ?? $key));
         $route = '/destinations/' . $slug;
@@ -146,6 +165,8 @@ try {
             }
         }
         expect_catalog_modals($html, $route, $expected);
+        catalog_check(!str_contains($html, 'Explore Programs'),
+            "$route: destination hero CTA must be removed");
         if ($status !== 'coming-soon') {
             $showIntro = gocamp_entity_section_visible($destination, 'destination', 'intro');
             catalog_check(str_contains($html, 'id="destination-intro"') === $showIntro,
@@ -170,6 +191,16 @@ try {
             }
         }
         expect_catalog_modals($html, $route, $expected);
+        catalog_check(!str_contains($html, 'Program Category</p>'),
+            "$route: category hero text must be removed");
+        catalog_check(!str_contains($html, 'Explore Programs'),
+            "$route: category hero CTA must be removed");
+        if ($key === 'young-leader-program') {
+            foreach (['uk-mini-mba', 'uk-young-leader-oxford'] as $id) {
+                catalog_check(in_array($id, $expected, true),
+                    "$route: missing $id");
+            }
+        }
     }
 
     echo "Catalog HTTP smoke tests passed: " . count($visible) .

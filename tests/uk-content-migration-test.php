@@ -78,7 +78,9 @@ try {
     tested($mergedDestinations['uk']['tagline'] === 'Custom live UK tagline', 'Admin UK tagline overwritten');
     tested($mergedDestinations['switzerland']['intro_text'] === 'Custom live Swiss content', 'Admin Swiss intro overwritten');
     tested(in_array('tennis-academy', $mergedDestinations['switzerland']['program_ids'], true), 'Swiss tennis not linked');
-    tested(count($mergedDestinations['uk']['program_ids']) === 9, 'UK should have nine reviewed programs');
+    tested(count($mergedDestinations['uk']['program_ids']) === 11, 'UK should have eleven reviewed programs');
+    tested(isset($mergedPrograms['uk-young-leader-oxford'], $mergedPrograms['uk-mini-mba']),
+        'New UK Young Leader programs not seeded');
 
     // Replaying the exact patch must be a semantic no-op.
     foreach (['all_programs','programs','destinations'] as $var) {
