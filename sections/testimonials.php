@@ -27,7 +27,6 @@ if (!$campMemories) return;
                 </div>
                     <button type="button" class="btn btn-outline-primary camp-memories-arrow" data-memories-direction="1" aria-label="Next memories" aria-controls="camp-memories-track" hidden>&rarr;</button>
                 </div>
-                <div class="text-center mt-4"><a href="/gallery" class="btn btn-outline-primary">View gallery by country</a></div>
             </div>
             <?php if (!empty($memoriesConfig['show_facebook'])): ?>
             <div class="col-lg-4">
