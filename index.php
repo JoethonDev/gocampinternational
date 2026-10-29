@@ -78,8 +78,10 @@ if ($path === 'programs') {
     include $page;
     exit;
 }
-if ($path === 'gallery' || $path === 'memories') {
-    include __DIR__ . '/gallery.php';
+// The public gallery routes are disabled; preserve gallery.php for a future re-enable.
+if ($path === 'gallery' || $path === 'memories' || $path === 'gallery.php') {
+    http_response_code(404);
+    include __DIR__ . '/404.php';
     exit;
 }
 if ($path === 'landing') {
