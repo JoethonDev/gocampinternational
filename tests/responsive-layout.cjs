@@ -10,7 +10,7 @@ const widths = [320, 390, 768, 820, 1024, 1180, 1440];
 // Fetch public destinations and categories from the same PHP catalogs used by the app.
 const catalog = JSON.parse(execFileSync('php', [path.join(__dirname, 'public-catalog-routes.php')], { encoding: 'utf8' }));
 const routes = [...new Set([
-  '/', '/about', '/contact', '/faq', '/programs', '/landing', '/admin',
+  '/', '/about', '/contact', '/faq', '/landing', '/admin',
   ...catalog.destinations, ...catalog.categories
 ])];
 const screenshotRoute = catalog.screenshotDestination || catalog.destinations[0] || '/';
