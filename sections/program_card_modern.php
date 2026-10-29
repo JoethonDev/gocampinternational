@@ -183,8 +183,7 @@ $colors = $colorClasses[$color] ?? $colorClasses['primary'];
                     </button>
                 </div>
                 */ ?>
-                <!-- The card itself opens details; no visible details button. -->
-                <a class="stretched-link" href="#programModal-<?= htmlspecialchars($programId) ?>" data-bs-toggle="modal" data-bs-target="#programModal-<?= htmlspecialchars($programId) ?>" aria-label="View details for <?= htmlspecialchars($name, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>"></a>
+                <!-- Detail modals remain in the codebase, but program cards are intentionally not clickable. -->
             </div>
         </div>
     </div>
