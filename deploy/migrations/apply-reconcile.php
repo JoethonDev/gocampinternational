@@ -83,6 +83,7 @@ try {
     // Explicitly Git-managed records only. Unlisted admin-created records remain untouched.
     $managedIds = [
         'germany-german-language-course', 'tennis-academy', 'uk-soccer-club-experience',
+        'uk-young-leader-oxford', 'uk-mini-mba',
         'uk-academic-engineering', 'uk-academic-architecture', 'uk-academic-medicine',
         'uk-academic-business-management', 'uk-academic-computer-science',
         'uk-academic-artificial-intelligence', 'uk-academic-economics',
