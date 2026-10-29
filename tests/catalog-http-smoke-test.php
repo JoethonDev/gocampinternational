@@ -98,7 +98,11 @@ try {
                 'Homepage hero caption layout missing');
             catalog_check(!str_contains($html, 'Explore Destinations'),
                 'Homepage hero CTA must be removed');
+            catalog_check(!str_contains($html, 'href="/programs"'),
+                'Homepage All Programs link must be absent');
         }
+        catalog_check(!str_contains($html, '>All Programs</a>'),
+            "$route: All Programs menu link must be absent");
         if ($route === '/contact') {
             catalog_check(!str_contains($html, '<h1 class="display-4 fw-bold">CONTACT US</h1>'),
                 'Contact banner title must not be visible');
@@ -134,16 +138,15 @@ try {
         }
     }
 
-    $allHtml = fetch_catalog_page($base, '/programs');
-    catalog_check(!str_contains($allHtml, 'Find the perfect adventure from our complete list'),
-        '/programs: obsolete visible banner text must be removed');
-    expect_catalog_modals($allHtml, '/programs', array_keys($visible));
+    // The aggregate listing is deliberately disabled. Its PHP source and
+    // underlying records remain intact; category pages still render them.
+    foreach (['/programs', '/programs/', '/program/index', '/program/index.php'] as $hiddenRoute) {
+        fetch_catalog_page($base, $hiddenRoute, 404);
+    }
     foreach (['uk-mini-mba', 'uk-young-leader-oxford'] as $id) {
         catalog_check(isset($visible[$id]), "$id: expected active Young Leader program");
         catalog_check(in_array($id, $destinations['uk']['program_ids'] ?? [], true),
             "$id: must belong to UK destination");
-        catalog_check(str_contains($allHtml, 'id="programModal-' . $id . '"'),
-            "$id: details modal missing from all-programs listing");
     }
     foreach ($destinations as $key => $destination) {
         $slug = catalog_slug((string)($destination['slug'] ?? $key));
@@ -191,6 +194,8 @@ try {
             }
         }
         expect_catalog_modals($html, $route, $expected);
+        catalog_check(!str_contains($html, 'href="/programs"'),
+            "$route: category breadcrumb must not link to hidden All Programs page");
         catalog_check(!str_contains($html, 'Program Category</p>'),
             "$route: category hero text must be removed");
         catalog_check(!str_contains($html, 'Explore Programs'),
