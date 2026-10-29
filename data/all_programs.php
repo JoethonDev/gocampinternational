@@ -845,6 +845,85 @@ $all_programs = array (
       8 => '/images/sailing_9.webp',
     ),
   ),
+  'uk-young-leader-oxford' =>
+  array (
+    'order' => 1,
+    'id' => 'uk-young-leader-oxford',
+    'category_slug' => 'young-leader-program',
+    'name' => 'Young Leader Program',
+    'tagline' => 'Young Leaders London in the Heart of Oxford',
+    'image' => '/images/young_1.webp',
+    'ages' =>
+    array (
+      'min' => 14,
+      'max' => 18,
+    ),
+    'duration' => 0,
+    'price' => '',
+    'level' => 'Upper Intermediate to Advanced English',
+    'color' => 'primary',
+    'badges' =>
+    array (
+    ),
+    'highlights' =>
+    array (
+      0 => 'Public speaking and presentation English',
+      1 => 'Time management tasks and scenarios',
+      2 => 'Negotiation, debate and leadership practice',
+      3 => 'Global English for future learning',
+    ),
+    'description' => '<p>Young Leaders London in the heart of Oxford is designed for students aged 14 to 18 with an Upper Intermediate to Advanced level of English. The programme is suited to young people interested in world issues, strengthening their English and developing critical thinking, debating and leadership skills that support future academic study and careers.</p><p>The syllabus combines theory lessons, interactive lectures, project research and real-life case studies for a stimulating and varied learning experience.</p><p>Students build confidence in public speaking and presentations, tackle time management scenarios, and practise negotiation, debating and leadership through practical lessons. They also develop a better understanding of global English and its application to future learning.</p>',
+    'includes' =>
+    array (
+    ),
+    'excludes' =>
+    array (
+    ),
+    'status' => 'active',
+    'gallery' =>
+    array (
+    ),
+  ),
+  'uk-mini-mba' =>
+  array (
+    'order' => 2,
+    'id' => 'uk-mini-mba',
+    'category_slug' => 'young-leader-program',
+    'name' => 'MINI MBA',
+    'tagline' => 'Introduction to management and business for ages 15–17',
+    'image' => '/images/young_3_new.webp',
+    'ages' =>
+    array (
+      'min' => 15,
+      'max' => 17,
+    ),
+    'duration' => 0,
+    'price' => '',
+    'level' => 'Introductory',
+    'color' => 'secondary',
+    'badges' =>
+    array (
+    ),
+    'highlights' =>
+    array (
+      0 => 'Management and business case studies',
+      1 => 'Introduction to financial statements and accounting',
+      2 => 'Entrepreneurship and opportunity identification',
+      3 => 'Organisations, leadership and marketing',
+      4 => 'Business at Work visits on the three-week course',
+    ),
+    'description' => '<p>The MINI MBA introduces students aged 15 to 17 to business and management through lectures, discussions, projects and case studies.</p><p><strong>Introduction to Management:</strong> Develop the vocabulary, knowledge and confidence to analyse business reports, debate business issues, research company case studies and present projects.</p><p><strong>Accounting:</strong> Gain an introduction to basic accounting and financial-statement analysis.</p><p><strong>Entrepreneurship:</strong> Explore entrepreneurial thinking, the concept of entrepreneurship and recognising opportunities.</p><p><strong>Organisations:</strong> Consider how organisations have developed and how that history shapes leadership and management in business.</p><p><strong>Marketing:</strong> Use lectures, discussions and short case studies to examine marketing issues and tools in the 21st century.</p><p><strong>Business at Work:</strong> On the three-week course only, visits to operating businesses offer insight into everyday production and management.</p>',
+    'includes' =>
+    array (
+    ),
+    'excludes' =>
+    array (
+    ),
+    'status' => 'active',
+    'gallery' =>
+    array (
+    ),
+  ),
   'usa-global-leadership' => 
   array (
     'order' => 1,
