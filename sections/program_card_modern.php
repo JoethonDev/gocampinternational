@@ -183,7 +183,8 @@ $colors = $colorClasses[$color] ?? $colorClasses['primary'];
                     </button>
                 </div>
                 */ ?>
-                <button type="button" class="btn btn-outline-secondary w-100 mt-3" data-bs-toggle="modal" data-bs-target="#programModal-<?= htmlspecialchars($programId) ?>"><i class="bi bi-info-circle me-2"></i>View Program Details</button>
+                <!-- The card itself opens details; no visible details button. -->
+                <a class="stretched-link" href="#programModal-<?= htmlspecialchars($programId) ?>" data-bs-toggle="modal" data-bs-target="#programModal-<?= htmlspecialchars($programId) ?>" aria-label="View details for <?= htmlspecialchars($name, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>"></a>
             </div>
         </div>
     </div>

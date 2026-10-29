@@ -19,7 +19,6 @@
                         <li class="mb-2"><a href="/">Home</a></li>
                         <li class="mb-2"><a href="/about">About Us</a></li>
                         <li class="mb-2"><a href="/faq">F.A.Q</a></li>
-                        <li class="mb-2"><a href="/gallery">Gallery & Memories</a></li>
                         <li><a href="/contact">Contact Us</a></li>
                     </ul>
                 </div>

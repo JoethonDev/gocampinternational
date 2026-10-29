@@ -67,6 +67,8 @@ function expect_catalog_modals(string $html, string $route, array $expected): vo
             htmlspecialchars($id, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '"';
         catalog_check(str_contains($html, $target),
             "$route: missing program card link to modal for $id");
+        catalog_check(!str_contains($html, 'View Program Details'),
+            "$route: visible program details button must be absent");
     }
 }
 
@@ -88,7 +90,12 @@ try {
         'Expected a valid HTTP server URL.');
 
     foreach (['/', '/about', '/contact', '/faq', '/landing', '/admin'] as $route) {
-        fetch_catalog_page($base, $route);
+        $html = fetch_catalog_page($base, $route);
+        catalog_check(!str_contains($html, 'href="/gallery"'),
+            "$route: public gallery link must be hidden");
+    }
+    foreach (['/gallery', '/gallery.php', '/memories'] as $route) {
+        fetch_catalog_page($base, $route, 404);
     }
 
     // Catalog referential integrity + active-program expectations.

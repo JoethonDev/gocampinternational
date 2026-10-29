@@ -34,6 +34,8 @@ $card = (string)ob_get_clean();
 expect_description(!str_contains($card, 'Practical &amp; interactive medicine course.'), 'Program description stays out of the card');
 expect_description(str_contains($card, 'Short tagline'), 'Program card may show its separate tagline');
 expect_description(str_contains($card, 'data-bs-target="#programModal-test-medicine"'), 'Card links to detail modal');
+expect_description(str_contains($card, 'class="stretched-link"'), 'Program card remains keyboard accessible');
+expect_description(!str_contains($card, 'View Program Details'), 'Program details button is hidden');
 
 ob_start();
 include __DIR__ . '/../sections/program_detail_modal.php';

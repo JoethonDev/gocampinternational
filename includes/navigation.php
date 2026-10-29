@@ -62,9 +62,6 @@ require_once __DIR__ . '/../data/destinations.php';
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="/gallery">Gallery</a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link" href="/faq">FAQ</a>
                 </li>
                 <li class="nav-item">

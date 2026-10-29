@@ -7,6 +7,9 @@ ServerSignature Off
 </FilesMatch>
 RedirectMatch 404 ^/data/.*$
 RedirectMatch 404 ^/.*\.jsonl$
+# Hide public Gallery and Memories routes, including direct PHP access.
+# Keep gallery.php and its content available in the repository for reactivation.
+RedirectMatch 404 ^/(gallery(\.php)?|memories)/?$
 # Block direct execution of scripts inside public upload/image dirs
 RedirectMatch 403 ^/(uploads|images)/.*\.(php|phtml|phar|cgi|pl)$
 
