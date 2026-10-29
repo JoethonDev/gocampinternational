@@ -95,7 +95,8 @@ try {
     ];
     $legacy = ['uk-young-professional', 'uk-pre-university',
         'uk-english-foundation'];
-    $newPrograms = ['tennis-academy', 'uk-soccer-club-experience'];
+    $newPrograms = ['tennis-academy', 'uk-soccer-club-experience',
+        'uk-young-leader-oxford', 'uk-mini-mba'];
     $programSource = $source['all_programs'];
     $programLive = &$live['all_programs'];
 
