@@ -4,8 +4,14 @@
  */
 require_once __DIR__ . '/../../includes/section-visibility.php';
 $visibilityOptions = gocamp_visibility_options($visibilityEntity);
-$overrides = $visibilityRecord['section_visibility'] ?? [];
-$overrides = is_array($overrides) ? $overrides : [];
+$overrides = $visibilityRecord['visibility_overrides'] ?? null;
+if (!is_array($overrides)) {
+    $overrides = [];
+    foreach ($visibilityOptions as $legacyKey => $legacyDefinition) {
+        $legacyChoice = gocamp_visibility_override($visibilityRecord, $legacyKey, $visibilityEntity);
+        if ($legacyChoice !== null) $overrides[$legacyKey] = $legacyChoice;
+    }
+}
 ?>
 <div class="card border-0 shadow-sm mb-4">
   <div class="card-header bg-transparent border-0 pt-4 pb-2 px-4">
