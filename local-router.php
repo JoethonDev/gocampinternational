@@ -2,7 +2,7 @@
 // Router for PHP built-in server: serve existing files directly, else use app router.
 $path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
 // Match production route restrictions before serving existing PHP files directly.
-if (in_array($path, ['/gallery', '/gallery.php', '/memories'], true)) {
+if (in_array(rtrim($path, '/'), ['/gallery', '/gallery.php', '/memories', '/programs', '/program/index', '/program/index.php'], true)) {
     http_response_code(404);
     require __DIR__ . '/404.php';
     return true;
