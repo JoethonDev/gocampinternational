@@ -38,6 +38,13 @@ bulk_check(gocamp_visibility_override(['section_visibility' => $inherit], 'progr
     'Explicit hide overrides global');
 bulk_check(gocamp_effective_visibility(['section_visibility' => ['intro' => false]], 'destination', 'intro', true) === false,
     'Explicit hide wins over global default');
-bulk_check(gocamp_effective_visibility(['section_visibility' => ['hero' => true]], 'destination', 'hero', false) === true,
+bulk_check(gocamp_effective_visibility(['visibility_overrides' => ['hero' => true]], 'destination', 'hero', false) === true,
     'Explicit show wins over global default');
+bulk_check(gocamp_visibility_override(['section_visibility' => ['hero' => true]], 'hero', 'destination') === null,
+    'Legacy default values do not block global settings');
+bulk_check(gocamp_visibility_override(['section_visibility' => ['intro' => false]], 'intro', 'destination') === false,
+    'Legacy custom values remain explicitly hidden');
+bulk_check(gocamp_visibility_override(['visibility_overrides' => [] ,
+    'section_visibility' => ['intro' => false]], 'intro', 'destination') === null,
+    'New empty overrides allow clearing old flags');
 echo "Admin bulk and visibility inheritance tests passed\n";
