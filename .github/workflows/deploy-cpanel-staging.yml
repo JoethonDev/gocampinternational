@@ -1,0 +1,94 @@
+name: Deploy cPanel staging (FTPS)
+
+on:
+  push:
+    branches: [develop]
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Connect and validate the upload plan without changing remote files'
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cpanel-staging
+  cancel-in-progress: false
+
+jobs:
+  deploy-staging:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    environment: cpanel-staging
+    env:
+      CPANEL_STAGING_FTP_HOST: ${{ vars.CPANEL_STAGING_FTP_HOST }}
+      CPANEL_STAGING_FTP_USERNAME: ${{ secrets.CPANEL_STAGING_FTP_USERNAME }}
+      CPANEL_STAGING_FTP_PASSWORD: ${{ secrets.CPANEL_STAGING_FTP_PASSWORD }}
+      GOCAMP_FTPS_TARGET: cpanel-staging
+      GOCAMP_CATALOG_MIGRATION: reconcile
+
+    steps:
+      - name: Check out develop
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Validate file-preservation rules
+        run: |
+          python -m unittest discover -s tests -p 'test_infinityfree_deploy.py' -v
+          python -m unittest discover -s tests -p 'test_cpanel_staging_deploy.py' -v
+          python -m py_compile deploy/cpanel-staging-deploy.py deploy/apply-uk-content-migration.py
+
+      - name: Check deployment enable switch
+        id: gate
+        env:
+          ENABLED: ${{ vars.CPANEL_STAGING_DEPLOY_ENABLED }}
+        run: |
+          if [ "$ENABLED" = "true" ]; then
+            echo 'enabled=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'enabled=false' >> "$GITHUB_OUTPUT"
+            echo 'cPanel staging deployment not enabled; see docs/CPANEL_STAGING_DEPLOYMENT.md'
+          fi
+
+      - name: Check staging credentials
+        if: ${{ steps.gate.outputs.enabled == 'true' }}
+        run: |
+          if [ -z "$CPANEL_STAGING_FTP_HOST" ] || [ -z "$CPANEL_STAGING_FTP_USERNAME" ] || [ -z "$CPANEL_STAGING_FTP_PASSWORD" ]; then
+            echo 'Missing cPanel staging FTPS configuration. See docs/CPANEL_STAGING_DEPLOYMENT.md' >&2
+            exit 1
+          fi
+
+      - name: Deploy allowlisted application code and new seed files
+        if: ${{ steps.gate.outputs.enabled == 'true' }}
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.dry_run }}" = "true" ]; then
+            echo 'Manual dry-run: checking FTPS connection and deployment plan only.'
+            python deploy/cpanel-staging-deploy.py --dry-run
+          else
+            python deploy/cpanel-staging-deploy.py
+          fi
+
+      - name: Prepare safe catalog reconciliation and encrypted rollback
+        if: ${{ steps.gate.outputs.enabled == 'true' && (github.event_name == 'push' || inputs.dry_run == false) }}
+        run: |
+          python -m pip install 'cryptography>=45,<49'
+          python deploy/apply-uk-content-migration.py prepare
+
+      - name: Save encrypted catalog rollback backup
+        if: ${{ steps.gate.outputs.enabled == 'true' && (github.event_name == 'push' || inputs.dry_run == false) }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: cpanel-staging-catalog-backup-${{ github.run_id }}
+          path: ${{ runner.temp }}/gocamp-cpanel-reconcile/backup.enc
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Apply and verify reconciled catalogs
+        if: ${{ steps.gate.outputs.enabled == 'true' && (github.event_name == 'push' || inputs.dry_run == false) }}
+        run: python deploy/apply-uk-content-migration.py apply
