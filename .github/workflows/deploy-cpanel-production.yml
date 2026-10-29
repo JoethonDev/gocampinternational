@@ -1,0 +1,89 @@
+name: Deploy cPanel production (FTPS)
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Check production FTPS connectivity only; upload nothing'
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cpanel-production
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    name: Validate production deploy protections
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run offline safety tests
+        run: |
+          python -m unittest discover -s tests -p 'test_cpanel_production_deploy.py' -v
+          python -m py_compile deploy/cpanel-production-deploy.py
+
+  deploy:
+    name: Upload to cPanel production
+    if: ${{ github.event_name != 'pull_request' }}
+    needs: validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    environment: cpanel-production
+    env:
+      CPANEL_PRODUCTION_FTP_HOST: ${{ vars.CPANEL_PRODUCTION_FTP_HOST }}
+      CPANEL_PRODUCTION_FTP_USERNAME: ${{ secrets.CPANEL_PRODUCTION_FTP_USERNAME }}
+      CPANEL_PRODUCTION_FTP_PASSWORD: ${{ secrets.CPANEL_PRODUCTION_FTP_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Check production deployment enable switch
+        id: gate
+        env:
+          ENABLED: ${{ vars.CPANEL_PRODUCTION_DEPLOY_ENABLED }}
+        run: |
+          if [ "$ENABLED" = "true" ]; then
+            echo 'enabled=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'enabled=false' >> "$GITHUB_OUTPUT"
+            echo 'Production upload disabled. See docs/CPANEL_PRODUCTION_DEPLOYMENT.md'
+          fi
+
+      - name: Install encrypted backup dependency
+        if: ${{ steps.gate.outputs.enabled == 'true' }}
+        run: python -m pip install 'cryptography>=45,<49'
+
+      - name: Verify FTPS connectivity and staging-only credential separation
+        if: ${{ steps.gate.outputs.enabled == 'true' }}
+        run: python deploy/cpanel-production-deploy.py check
+
+      - name: Prepare production code backup and compare manifest
+        if: ${{ steps.gate.outputs.enabled == 'true' && (github.event_name == 'push' || inputs.dry_run == false) }}
+        run: python deploy/cpanel-production-deploy.py prepare
+
+      - name: Save encrypted production code backup BEFORE uploading
+        if: ${{ steps.gate.outputs.enabled == 'true' && (github.event_name == 'push' || inputs.dry_run == false) }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: cpanel-production-backup-${{ github.run_id }}
+          path: ${{ runner.temp }}/gocamp-cpanel-production/backup.enc
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Deploy protected production source with verification and rollback
+        if: ${{ steps.gate.outputs.enabled == 'true' && (github.event_name == 'push' || inputs.dry_run == false) }}
+        run: python deploy/cpanel-production-deploy.py apply
