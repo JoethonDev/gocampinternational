@@ -1,82 +1,19 @@
 <?php
 /**
- * File: /sections/destination-hero.php
- * Modern Destination Hero Section
+ * Image-only destination banner. Preserve the destination name in a
+ * screen-reader heading without painting any text over the photo.
  *
- * This component renders the main banner for a destination page.
- *
- * It expects a single PHP variable in its scope:
- * @var array $destinationData - An associative array containing all details for the current destination.
- *
- * The expected keys are:
- * - 'banner' (string) - Path to the background image.
- * - 'name' (string) - The name of the destination.
- * - 'tagline' (string) - The main tagline for the hero.
- * - 'highlights' (array) - An array of highlight arrays, each with 'icon' and 'text'.
+ * @var array $destinationData
  */
-
-require_once __DIR__ . '/../includes/section-visibility.php';
-
-// --- Variable Safety Checks (use !empty so empty strings fall back to defaults) ---
-$banner       = !empty($destinationData['banner']) ? $destinationData['banner'] : '/images/hero.webp';
-$name         = !empty($destinationData['name']) ? $destinationData['name'] : 'Destination';
-$tagline      = trim((string)($destinationData['tagline'] ?? ''));
-$highlights   = $destinationData['highlights'] ?? [];
-
+$banner = !empty($destinationData['banner']) ? $destinationData['banner'] : '/images/hero.webp';
+$name = !empty($destinationData['name']) ? $destinationData['name'] : 'Destination';
 ?>
-<section class="destination-hero position-relative overflow-hidden" style="min-height: 90vh;">
-
-    <!-- Background Media -->
+<section class="destination-hero position-relative overflow-hidden" style="min-height: 90vh;" aria-label="<?= htmlspecialchars($name, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?> banner">
+    <h1 class="visually-hidden"><?= htmlspecialchars($name, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></h1>
     <div class="hero-background position-absolute top-0 start-0 w-100 h-100"
-         style="background-image: url('<?= htmlspecialchars($banner) ?>');
+         style="background-image: url('<?= htmlspecialchars($banner, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>');
                 background-size: cover;
                 background-position: center;
                 background-attachment: fixed;">
     </div>
-
-    <!-- Hero Content -->
-    <div class="container position-relative h-100 d-flex align-items-center" style="min-height: 90vh;">
-        <div class="row w-100">
-            <div class="col-lg-8">
-                <!-- Main Heading -->
-                <h1 class="display-1 fw-bold text-white mb-4" style="text-shadow: 2px 4px 12px rgba(0,0,0,0.3);">
-                    <?= htmlspecialchars($name) ?>
-                </h1>
-
-                <!-- Tagline -->
-                <?php if ($tagline !== ''): ?>
-                <p class="lead text-white fs-3 mb-5" style="max-width: 600px; text-shadow: 1px 2px 6px rgba(0,0,0,0.2);">
-                    <?= htmlspecialchars($tagline) ?>
-                </p>
-                <?php endif; ?>
-
-                <!-- Highlights -->
-                <?php if (!empty($highlights) && gocamp_entity_section_visible($destinationData, 'destination', 'highlights')) : ?>
-                <div class="row g-3 mb-5">
-                    <?php foreach ($highlights as $highlight) : ?>
-                        <div class="col-sm-6">
-                            <div class="d-flex align-items-center bg-white bg-opacity-15 backdrop-blur rounded-lg p-3 shadow-lg">
-                                <div class="flex-shrink-0 bg-brand-accent rounded-circle p-3 me-3 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
-                                    <i class="bi bi-<?= htmlspecialchars($highlight['icon'] ?? 'check-circle-fill') ?> fs-4 text-dark"></i>
-                                </div>
-                                <div class="text-black">
-                                    <p class="mb-0 fw-bold"><?= htmlspecialchars($highlight['text']) ?></p>
-                                </div>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
-                <?php endif; ?>
-
-                <!-- CTA Button -->
-                <div class="d-flex flex-wrap gap-3">
-                    <a href="#programs" class="btn btn-warning btn-lg px-5 py-3 shadow-xl fw-bold text-uppercase">
-                        <i class="bi bi-arrow-down-circle me-2"></i>
-                        Explore Programs
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
 </section>
-
