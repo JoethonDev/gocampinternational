@@ -1,4 +1,4 @@
-name: Deploy cPanel staging (FTPS)
+name: Deploy cPanel staging (FTP)
 
 on:
   push:
@@ -26,6 +26,9 @@ jobs:
       CPANEL_STAGING_FTP_HOST: ${{ vars.CPANEL_STAGING_FTP_HOST }}
       CPANEL_STAGING_FTP_USERNAME: ${{ secrets.CPANEL_STAGING_FTP_USERNAME }}
       CPANEL_STAGING_FTP_PASSWORD: ${{ secrets.CPANEL_STAGING_FTP_PASSWORD }}
+      # Temporary provider workaround. Plain FTP sends passwords and content unencrypted.
+      # Restore tls after the hosting provider fixes AUTH TLS.
+      CPANEL_STAGING_FTP_MODE: plaintext
       GOCAMP_FTPS_TARGET: cpanel-staging
       GOCAMP_CATALOG_MIGRATION: reconcile
 
@@ -60,7 +63,7 @@ jobs:
         if: ${{ steps.gate.outputs.enabled == 'true' }}
         run: |
           if [ -z "$CPANEL_STAGING_FTP_HOST" ] || [ -z "$CPANEL_STAGING_FTP_USERNAME" ] || [ -z "$CPANEL_STAGING_FTP_PASSWORD" ]; then
-            echo 'Missing cPanel staging FTPS configuration. See docs/CPANEL_STAGING_DEPLOYMENT.md' >&2
+            echo 'Missing cPanel staging FTP configuration. See docs/CPANEL_STAGING_DEPLOYMENT.md' >&2
             exit 1
           fi
 
@@ -68,7 +71,7 @@ jobs:
         if: ${{ steps.gate.outputs.enabled == 'true' }}
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.dry_run }}" = "true" ]; then
-            echo 'Manual dry-run: checking FTPS connection and deployment plan only.'
+            echo 'Manual dry-run: checking FTP connection and passive data channel and deployment plan only.'
             python deploy/cpanel-staging-deploy.py --dry-run
           else
             python deploy/cpanel-staging-deploy.py

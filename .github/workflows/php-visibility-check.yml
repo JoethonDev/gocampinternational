@@ -35,6 +35,11 @@ jobs:
       - name: Check InfinityFree deployer preserves live data
         run: python3 -m unittest discover -s tests -p 'test_infinityfree_deploy.py' -v
 
+      - name: Test cPanel staging FTP modes and preservation
+        run: |
+          python3 -m unittest discover -s tests -p 'test_cpanel_staging_deploy.py' -v
+          python3 -m py_compile deploy/cpanel-staging-deploy.py deploy/apply-uk-content-migration.py
+
       - name: Test reviewed development catalog migration safety and idempotence
         run: php tests/uk-content-migration-test.php
       - name: Test reviewed academic editorial migration
