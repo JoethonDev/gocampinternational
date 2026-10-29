@@ -188,12 +188,8 @@ require_once __DIR__ . '/../includes/header.php';
 
     
     <?php if (gocamp_entity_section_visible($programData, "category", "hero")): ?>
-    <section class="hero-section">
-        <div class="hero-content">
-            <p class="hero-tagline text-uppercase">Program Category</p>
-            <h1><?= htmlspecialchars($programData['name']) ?></h1>
-            <a href="#category-programs" class="btn btn-warning hero-cta-btn">Explore Programs</a>
-        </div>
+    <section class="hero-section" aria-label="<?= htmlspecialchars($programData['name'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?> banner">
+        <h1 class="visually-hidden"><?= htmlspecialchars($programData['name']) ?></h1>
     </section>
     <?php endif; ?>
 
