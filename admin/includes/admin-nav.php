@@ -26,7 +26,7 @@
                     <a class="nav-link" href="/admin/media-library">Image Library</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/admin/site-visibility">Homepage Visibility</a>
+                    <a class="nav-link" href="/admin/site-visibility">Site Visibility</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/admin/memories">Memories</a>

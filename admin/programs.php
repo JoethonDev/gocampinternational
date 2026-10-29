@@ -101,13 +101,38 @@ body {
             </div>
         </div>
     </div>
+    <?php if (isset($_GET['bulk-updated'])): ?>
+    <div class="alert alert-success mx-4" role="status"><?= max(0, (int)$_GET['bulk-updated']) ?> program(s) updated.</div>
+    <?php endif; ?>
+    <div data-bulk-list data-bulk-form="bulkProgramForm">
+      <form id="bulkProgramForm" method="POST" action="/admin/bulk-action" class="d-flex flex-wrap align-items-center gap-2 px-4 py-3 border-bottom">
+        <input type="hidden" name="csrf" value="<?= htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8') ?>">
+        <input type="hidden" name="type" value="program">
+        <label class="form-check d-flex gap-2 align-items-center mb-0 me-2">
+          <input class="form-check-input bulk-select-visible" type="checkbox">
+          <span class="form-check-label small">Select shown</span>
+        </label>
+        <span class="bulk-selected-count small text-muted me-2" aria-live="polite">0 selected</span>
+        <label for="bulkProgramStatus" class="visually-hidden">Bulk program action</label>
+        <select class="form-select form-select-sm" id="bulkProgramStatus" name="status" style="width:auto;min-width:175px" required>
+          <option value="">Choose bulk action</option>
+          <option value="active">Activate</option>
+          <option value="inactive">Deactivate</option>
+          <option value="trash">Move to Trash</option>
+        </select>
+        <button type="submit" class="btn btn-primary btn-sm" disabled>Apply to selected</button>
+      </form>
     <div class="list-group list-group-flush" id="programsList">
         <?php foreach ($all_programs as $id => $prog): ?>
             <?php if ($prog['status'] !== 'trash'): ?>
                 <div class="list-group-item border-0 px-4 py-3 d-flex justify-content-between align-items-center program-item hover-bg-light transition-base"
                      data-cat="<?= htmlspecialchars($prog['category_slug']) ?>"
-                     data-pid="<?= htmlspecialchars($id) ?>">
+                     data-pid="<?= htmlspecialchars($id) ?>" data-bulk-row>
                     <div class="d-flex align-items-center">
+                        <label class="me-3 position-relative" style="z-index:3" aria-label="Select <?= htmlspecialchars($prog['name'], ENT_QUOTES, 'UTF-8') ?>">
+                          <input type="checkbox" class="form-check-input bulk-item-select" name="ids[]"
+                            form="bulkProgramForm" value="<?= htmlspecialchars($id, ENT_QUOTES, 'UTF-8') ?>">
+                        </label>
                         <div class="icon-box bg-light text-primary rounded-circle me-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 40px; height: 40px;">
                             <i class="bi bi-journal-text"></i>
                         </div>
@@ -138,6 +163,7 @@ body {
             </div>
             <p class="mb-0">No programs found matching your filters.</p>
         </div>
+    </div>
     </div>
 </div>
 <script>
@@ -248,6 +274,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+        document.querySelector('[data-bulk-form="bulkProgramForm"]')?.dispatchEvent(new Event('bulk:filtered'));
     }
 
     // Event Listeners
@@ -264,6 +291,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
+<script src="/admin/includes/bulk-select.js" defer></script>
 <style>
 /* Custom scrollbar for dropdowns if needed */
 .dropdown-menu::-webkit-scrollbar {

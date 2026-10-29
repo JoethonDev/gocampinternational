@@ -91,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $new_data['color'] = $_POST['color'] ?? 'primary';
             $new_data['description'] = $_POST['description'] ?? '';
             $new_data['status'] = $_POST['status'] ?? 'active';
-            $new_data['section_visibility'] = gocamp_read_visibility($_POST['section_visibility'] ?? [], 'program', $new_data['section_visibility'] ?? []);
+            $new_data['visibility_overrides'] = gocamp_read_visibility_overrides($_POST['section_visibility'] ?? [], 'program', $new_data['visibility_overrides'] ?? []);
             // Gallery - Reads from text input `gallery_path[]` populated by modal
             $new_data['gallery'] = array_values(array_filter($_POST['gallery_path'] ?? []));
 

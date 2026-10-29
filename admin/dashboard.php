@@ -21,6 +21,9 @@ require_once 'includes/admin-header.php';
 
 <div class="row gy-4">
 
+    <?php if (isset($_GET['bulk-updated'])): ?>
+    <div class="col-12"><div class="alert alert-success" role="status"><?= max(0, (int)$_GET['bulk-updated']) ?> item(s) updated.</div></div>
+    <?php endif; ?>
     <div class="col-lg-6 animate-fade-in delay-1">
         <div class="card h-100 border-0 shadow-sm">
             <div class="card-header bg-transparent border-bottom-0 pt-4 pb-2 px-4 d-flex justify-content-between align-items-center">
@@ -33,11 +36,34 @@ require_once 'includes/admin-header.php';
                 </a>
             </div>
             <div class="card-body p-0">
+                <div data-bulk-list data-bulk-form="bulkDestinationForm">
+          <form id="bulkDestinationForm" method="POST" action="/admin/bulk-action" class="border-bottom px-3 py-3 d-flex flex-wrap gap-2 align-items-center">
+            <input type="hidden" name="csrf" value="<?= htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8') ?>">
+            <input type="hidden" name="type" value="destination">
+            <label class="form-check d-flex gap-2 align-items-center mb-0 me-2">
+                <input type="checkbox" class="form-check-input bulk-select-visible">
+                <span class="form-check-label small">Select all</span>
+            </label>
+            <span class="bulk-selected-count small text-muted" aria-live="polite">0 selected</span>
+            <label class="visually-hidden" for="bulkDestinationFormStatus">Bulk action</label>
+            <select class="form-select form-select-sm" id="bulkDestinationFormStatus" name="status" required style="width:auto;max-width:200px;">
+                <option value="">Choose action</option>
+                <option value="active">Activate</option>
+                <option value="coming-soon">Coming Soon</option>
+                <option value="trash">Move to Trash</option>
+            </select>
+            <button type="submit" class="btn btn-primary btn-sm" disabled>Apply</button>
+          </form>
+
                 <div class="list-group list-group-flush">
                     <?php foreach ($destinations as $slug => $dest): ?>
                         <?php if ($dest['status'] !== 'trash'): ?>
-                            <div class="list-group-item border-0 px-4 py-3 d-flex justify-content-between align-items-center">
+                            <div data-bulk-row class="list-group-item border-0 px-4 py-3 d-flex justify-content-between align-items-center">
                                 <div class="d-flex align-items-center">
+                                    <label class="me-2 position-relative" style="z-index:3" aria-label="Select <?= htmlspecialchars($dest['name'], ENT_QUOTES, 'UTF-8') ?>">
+                                        <input class="form-check-input bulk-item-select" type="checkbox" name="ids[]"
+                                            form="bulkDestinationForm" value="<?= htmlspecialchars($slug, ENT_QUOTES, 'UTF-8') ?>">
+                                    </label>
                                     <div class="icon-box bg-light text-primary rounded-circle me-3 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
                                         <i class="bi bi-geo-alt"></i>
                                     </div>
@@ -57,6 +83,7 @@ require_once 'includes/admin-header.php';
                         <?php endif; ?>
                     <?php endforeach; ?>
                 </div>
+                </div>
             </div>
         </div>
     </div>
@@ -73,11 +100,34 @@ require_once 'includes/admin-header.php';
                 </a>
             </div>
             <div class="card-body p-0">
+                <div data-bulk-list data-bulk-form="bulkCategoryForm">
+          <form id="bulkCategoryForm" method="POST" action="/admin/bulk-action" class="border-bottom px-3 py-3 d-flex flex-wrap gap-2 align-items-center">
+            <input type="hidden" name="csrf" value="<?= htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8') ?>">
+            <input type="hidden" name="type" value="category">
+            <label class="form-check d-flex gap-2 align-items-center mb-0 me-2">
+                <input type="checkbox" class="form-check-input bulk-select-visible">
+                <span class="form-check-label small">Select all</span>
+            </label>
+            <span class="bulk-selected-count small text-muted" aria-live="polite">0 selected</span>
+            <label class="visually-hidden" for="bulkCategoryFormStatus">Bulk action</label>
+            <select class="form-select form-select-sm" id="bulkCategoryFormStatus" name="status" required style="width:auto;max-width:200px;">
+                <option value="">Choose action</option>
+                <option value="active">Activate</option>
+                <option value="inactive">Deactivate</option>
+                <option value="trash">Move to Trash</option>
+            </select>
+            <button type="submit" class="btn btn-primary btn-sm" disabled>Apply</button>
+          </form>
+
                 <div class="list-group list-group-flush">
                     <?php foreach ($programs as $slug => $prog): ?>
                         <?php if ($prog['status'] !== 'trash'): ?>
-                            <div class="list-group-item border-0 px-4 py-3 d-flex justify-content-between align-items-center">
+                            <div data-bulk-row class="list-group-item border-0 px-4 py-3 d-flex justify-content-between align-items-center">
                                 <div class="d-flex align-items-center">
+                                    <label class="me-2 position-relative" style="z-index:3" aria-label="Select <?= htmlspecialchars($prog['name'], ENT_QUOTES, 'UTF-8') ?>">
+                                        <input class="form-check-input bulk-item-select" type="checkbox" name="ids[]"
+                                            form="bulkCategoryForm" value="<?= htmlspecialchars($slug, ENT_QUOTES, 'UTF-8') ?>">
+                                    </label>
                                     <div class="icon-box bg-light text-success rounded-circle me-3 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
                                         <i class="bi bi-tags"></i>
                                     </div>
@@ -96,6 +146,7 @@ require_once 'includes/admin-header.php';
                             </div>
                         <?php endif; ?>
                     <?php endforeach; ?>
+                </div>
                 </div>
             </div>
         </div>
@@ -143,6 +194,7 @@ require_once 'includes/admin-header.php';
     </div>
     
 </div>
+<script src="/admin/includes/bulk-select.js" defer></script>
 <?php
 // 3. Include Footer
 require_once 'includes/admin-footer.php';

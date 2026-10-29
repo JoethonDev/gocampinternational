@@ -17,6 +17,8 @@ jobs:
         run: find . -type f -name '*.php' -not -path './vendor/*' -print0 | xargs -0 -n1 php -l
       - name: Test visibility behavior
         run: php tests/section-visibility-test.php
+      - name: Test authenticated bulk action logic and visibility inheritance
+        run: php tests/admin-bulk-visibility-test.php
       - name: Test description display
         run: php tests/description-display-test.php
       - name: Test media library renames

@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $new_data['name'] = $_POST['name'] ?? '';
             $new_data['slug'] = $slug;
             $new_data['status'] = $_POST['status'] ?? 'active';
-            $new_data['section_visibility'] = gocamp_read_visibility($_POST['section_visibility'] ?? [], 'destination', $new_data['section_visibility'] ?? []);
+            $new_data['visibility_overrides'] = gocamp_read_visibility_overrides($_POST['section_visibility'] ?? [], 'destination', $new_data['visibility_overrides'] ?? []);
             $new_data['tagline'] = $_POST['tagline'] ?? '';
             $new_data['intro_text'] = $_POST['intro_text'] ?? '';
             $new_data['intro_image'] = $_POST['intro_image'] ?? '';
