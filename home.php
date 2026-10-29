@@ -34,14 +34,13 @@ require_once __DIR__ . '/includes/header.php';
                 <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
                     <div class="hero-section d-flex align-items-center justify-content-center text-center" style="background-image: url('/images/<?= htmlspecialchars($banner['image']) ?>'); background-size: cover; background-position: center;">
                         <div class="hero-overlay"></div>
-                        <div class="container position-relative d-flex flex-column align-items-center justify-content-center" style="z-index:2; min-height:60vh;">
+                        <div class="container position-relative home-hero-caption d-flex flex-column align-items-center justify-content-end text-center" style="z-index:2;">
                             <?php if ($index === 0): ?>
                             <h1 class="display-3 fw-bold mb-3 text-white" style="text-shadow:0 2px 12px #000,0 0 2px #fff;"><?= htmlspecialchars($banner['title']) ?></h1>
                             <?php else: ?>
                             <h2 class="display-3 fw-bold mb-3 text-white" style="text-shadow:0 2px 12px #000,0 0 2px #fff;"><?= htmlspecialchars($banner['title']) ?></h2>
                             <?php endif; ?>
-                            <p class="lead mb-4 text-white" style="text-shadow:0 2px 8px #000,0 0 2px #fff;">International camps are a life-changing opportunity to learn, grow, and make global friends.</p>
-                            <a href="#destinations" class="btn btn-lg fw-bold px-5 py-3 text-uppercase">Explore Destinations</a>
+                            <p class="lead mb-0 text-white" style="text-shadow:0 2px 8px #000,0 0 2px #fff;">International camps are a life-changing opportunity to learn, grow, and make global friends.</p>
                         </div>
                     </div>
                 </div>
