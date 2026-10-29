@@ -9,7 +9,7 @@ Do not copy credentials, backup contents, or runtime data into logs.
 """
 from __future__ import annotations
 
-from ftplib import FTP_TLS, error_perm
+from ftplib import FTP, FTP_TLS, error_perm
 from io import BytesIO
 import hashlib
 import json
@@ -73,7 +73,7 @@ MIGRATOR = ROOT / "deploy" / "migrations" / PHP_MIGRATOR
 AAD = b"GoCamp development catalog 2026-10-17"
 
 
-def connect() -> FTP_TLS:
+def connect() -> FTP:
     if FTPS_TARGET == "cpanel-staging":
         user = os.environ.get("CPANEL_STAGING_FTP_USERNAME")
         password = os.environ.get("CPANEL_STAGING_FTP_PASSWORD")
@@ -88,12 +88,22 @@ def connect() -> FTP_TLS:
         if not user or not password or host != "ftpupload.net":
             raise RuntimeError("Missing InfinityFree development FTPS secrets or unexpected FTP host")
         port = int(os.environ.get("INFINITYFREE_FTP_PORT", "21"))
-    context = ssl.create_default_context()
-    context.minimum_version = ssl.TLSVersion.TLSv1_2
-    ftp = FTP_TLS(context=context, timeout=50)
+    # Only the cPanel staging target can opt into insecure plaintext FTP.
+    mode = (os.environ.get("CPANEL_STAGING_FTP_MODE", "tls").strip().lower()
+            if FTPS_TARGET == "cpanel-staging" else "tls")
+    if mode not in ("tls", "plaintext"):
+        raise RuntimeError("Unrecognised cPanel staging FTP mode")
+    if mode == "tls":
+        context = ssl.create_default_context()
+        context.minimum_version = ssl.TLSVersion.TLSv1_2
+        ftp = FTP_TLS(context=context, timeout=50)
+    else:
+        print("WARNING: staging catalog transfers use unencrypted FTP.", file=sys.stderr)
+        ftp = FTP(timeout=50)
     ftp.connect(host, port)
     ftp.login(user, password)
-    ftp.prot_p()
+    if mode == "tls":
+        ftp.prot_p()
     ftp.set_pasv(True)
     return ftp
 
