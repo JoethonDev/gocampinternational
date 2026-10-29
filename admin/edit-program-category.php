@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $new_data['name'] = $_POST['name'] ?? '';
             $new_data['slug'] = $slug;
             $new_data['status'] = $_POST['status'] ?? 'active';
-            $new_data['section_visibility'] = gocamp_read_visibility($_POST['section_visibility'] ?? [], 'category', $new_data['section_visibility'] ?? []);
+            $new_data['section_visibility'] = gocamp_read_visibility_overrides($_POST['section_visibility'] ?? [], 'category', $new_data['section_visibility'] ?? []);
             $new_data['color'] = $_POST['color'] ?? 'primary';
             $new_data['intro'] = $_POST['intro'] ?? '';
             $new_data['intro_image'] = $_POST['intro_image'] ?? '';
