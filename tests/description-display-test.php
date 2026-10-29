@@ -53,14 +53,16 @@ $public_destinations = [
         'slug' => 'example-destination',
         'status' => 'active',
         'banner' => '/images/placeholder.webp',
-        'tagline' => '',
+        'tagline' => 'Explore the world',
         'intro_text' => '<p>Travel &amp; learn together.</p>',
     ],
 ];
 ob_start();
 include __DIR__ . '/../sections/destination-cards.php';
 $destinations = (string)ob_get_clean();
-expect_description(str_contains($destinations, 'Travel &amp; learn together.'), 'Destination card shows the saved intro text');
+expect_description(str_contains($destinations, 'Example Destination'), 'Destination card shows the destination name');
+expect_description(!str_contains($destinations, 'Travel &amp; learn together.'), 'Destination card does not show the saved intro text');
+expect_description(!str_contains($destinations, 'Explore the world'), 'Destination card does not show the tagline');
 expect_description(str_contains($destinations, '/destinations/example-destination'), 'Destination card links to its detail page');
 
 echo "Description display tests passed\n";

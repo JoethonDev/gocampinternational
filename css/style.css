@@ -508,20 +508,10 @@ a:hover, a:focus {
   transition: transform var(--transition-base);
 }
 
-/* Destination descriptions stay legible above the card photographs. */
+/* Keep destination names legible against the photographs. */
 .program-card-home .destination-card-caption {
   background: linear-gradient(to top, rgba(0, 0, 0, 0.92), rgba(0, 0, 0, 0.76) 60%, transparent);
   padding-top: 2.5rem !important;
-}
-
-.program-card-home .destination-card-description {
-  font-size: clamp(0.8rem, 1vw, 0.95rem);
-  line-height: 1.4;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
 }
 
 .program-card-home:hover .card-title {

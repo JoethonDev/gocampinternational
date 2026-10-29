@@ -15,9 +15,6 @@ require_once __DIR__ . '/includes/header.php';
 <div class="container-fluid p-0">
     <div class="position-relative">
         <img src="/images/about_banner.webp" class="img-fluid w-100" style="height: 300px; object-fit: cover;" alt="Students sitting on grass" />
-        <div class="position-absolute top-50 start-50 translate-middle text-center">
-            <h1 class="display-3 fw-bold mb-0 text-white" style="text-shadow: 0 2px 12px #000, 0 0 2px #fff;">ABOUT US</h1>
-        </div>
     </div>
 </div>
 
