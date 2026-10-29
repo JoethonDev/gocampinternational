@@ -65,8 +65,8 @@ function expect_catalog_modals(string $html, string $route, array $expected): vo
     foreach ($expected as $id) {
         $target = 'data-bs-target="#programModal-' .
             htmlspecialchars($id, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '"';
-        catalog_check(str_contains($html, $target),
-            "$route: missing program card link to modal for $id");
+        catalog_check(!str_contains($html, $target),
+            "$route: program card must not launch details modal for $id");
         catalog_check(!str_contains($html, 'View Program Details'),
             "$route: visible program details button must be absent");
     }
