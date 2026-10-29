@@ -23,6 +23,11 @@ import tarfile
 
 FILES = ("all_programs.php", "programs.php", "destinations.php")
 MIGRATION_SCOPE = os.environ.get("GOCAMP_CATALOG_MIGRATION", "uk-catalog")
+FTPS_TARGET = os.environ.get("GOCAMP_FTPS_TARGET", "infinityfree")
+if FTPS_TARGET not in ("infinityfree", "cpanel-staging"):
+    raise RuntimeError("Unrecognised FTPS deployment target")
+if FTPS_TARGET == "cpanel-staging" and MIGRATION_SCOPE != "reconcile":
+    raise RuntimeError("cPanel staging supports only reviewed recurring reconciliation")
 SCOPES = {
     "uk-catalog": (
         "/htdocs/.gocamp-uk-catalog-migrated-20261017",
@@ -58,24 +63,35 @@ SCOPES = {
 if MIGRATION_SCOPE not in SCOPES:
     raise RuntimeError("Unrecognised reviewed migration scope")
 MARKER, MARKER_CONTENT, WORK_NAME, PHP_MIGRATOR = SCOPES[MIGRATION_SCOPE]
-DIRECTORY = "/htdocs/data"
+DIRECTORY = "/data" if FTPS_TARGET == "cpanel-staging" else "/htdocs/data"
 MAX_FILE = 5 * 1024 * 1024
-WORK = Path(os.environ.get("RUNNER_TEMP", "/tmp")) / WORK_NAME
+WORK = Path(os.environ.get("RUNNER_TEMP", "/tmp")) / (
+    "gocamp-cpanel-reconcile" if FTPS_TARGET == "cpanel-staging" else WORK_NAME
+)
 ROOT = Path(__file__).resolve().parents[1]
 MIGRATOR = ROOT / "deploy" / "migrations" / PHP_MIGRATOR
 AAD = b"GoCamp development catalog 2026-10-17"
 
 
 def connect() -> FTP_TLS:
-    user = os.environ.get("INFINITYFREE_FTP_USERNAME")
-    password = os.environ.get("INFINITYFREE_FTP_PASSWORD")
-    host = os.environ.get("INFINITYFREE_FTP_HOST", "ftpupload.net")
-    if not user or not password or host != "ftpupload.net":
-        raise RuntimeError("Missing InfinityFree development FTPS secrets or unexpected FTP host")
+    if FTPS_TARGET == "cpanel-staging":
+        user = os.environ.get("CPANEL_STAGING_FTP_USERNAME")
+        password = os.environ.get("CPANEL_STAGING_FTP_PASSWORD")
+        host = os.environ.get("CPANEL_STAGING_FTP_HOST", "").strip()
+        if not user or not password or not host or "/" in host or ":" in host or ".." in host:
+            raise RuntimeError("Missing or invalid cPanel staging FTPS credentials")
+        port = 21
+    else:
+        user = os.environ.get("INFINITYFREE_FTP_USERNAME")
+        password = os.environ.get("INFINITYFREE_FTP_PASSWORD")
+        host = os.environ.get("INFINITYFREE_FTP_HOST", "ftpupload.net")
+        if not user or not password or host != "ftpupload.net":
+            raise RuntimeError("Missing InfinityFree development FTPS secrets or unexpected FTP host")
+        port = int(os.environ.get("INFINITYFREE_FTP_PORT", "21"))
     context = ssl.create_default_context()
     context.minimum_version = ssl.TLSVersion.TLSv1_2
     ftp = FTP_TLS(context=context, timeout=50)
-    ftp.connect(host, int(os.environ.get("INFINITYFREE_FTP_PORT", "21")))
+    ftp.connect(host, port)
     ftp.login(user, password)
     ftp.prot_p()
     ftp.set_pasv(True)
@@ -155,7 +171,11 @@ def prepare() -> None:
                        capture_output=True, text=True)
     hashes = {name: hashlib.sha256(blob).hexdigest() for name, blob in originals.items()}
     (WORK / "manifest.json").write_text(json.dumps({"changed": changed, "hashes": hashes}), encoding="utf-8")
-    (WORK / "backup.enc").write_bytes(encrypt_backup(originals, os.environ["INFINITYFREE_FTP_PASSWORD"]))
+    (WORK / "backup.enc").write_bytes(encrypt_backup(
+        originals,
+        os.environ["CPANEL_STAGING_FTP_PASSWORD"] if FTPS_TARGET == "cpanel-staging"
+        else os.environ["INFINITYFREE_FTP_PASSWORD"],
+    ))
     print(f"Reviewed development catalog merge prepared: {len(changed)} data file(s) changed. "
           "An encrypted rollback artifact must be saved before applying. "
           "Other admin-edited content remains intact.")
@@ -202,7 +222,7 @@ def apply() -> None:
             print(f"Migration failed; restored {len(restored)} of {len(touched)} touched files.",
                   file=sys.stderr)
             raise
-    print(f"Applied and verified {len(changed)} reviewed catalog changes on InfinityFree development. "
+    print(f"Applied and verified {len(changed)} reviewed catalog changes on {FTPS_TARGET}. "
           "One-time migration marker written; production remains untouched.")
 
 
