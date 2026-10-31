@@ -3,7 +3,7 @@ import { useLocation } from "react-router";
 type Bootstrap = { Collapse?: {getOrCreateInstance:(el:Element)=>{hide:()=>void}}; Dropdown?:{getOrCreateInstance:(el:Element)=>{show:()=>void;hide:()=>void}}; Modal?:{getOrCreateInstance:(el:Element)=>{show:()=>void}} };
 const bootstrap=()=> (window as Window & {bootstrap?:Bootstrap}).bootstrap;
 export function SiteInteractions() {
-  const {pathname}=useLocation();
+  const {pathname,search}=useLocation();
   useEffect(()=>{
     const nav=document.querySelector<HTMLElement>(".navbar.fixed-top");
     const top=document.getElementById("backToTop");
@@ -22,20 +22,81 @@ export function SiteInteractions() {
     function onNavLink(e:Event){const a=(e.target as Element).closest("a");if(a&&!a.classList.contains("dropdown-toggle"))closeMobile();}
     document.addEventListener("click",onClickOutside);
     collapse?.addEventListener("click",onNavLink);
-    const dropdowns=Array.from(document.querySelectorAll<HTMLElement>(".navbar .nav-item.dropdown"));
+    const dropdowns=Array.from(nav?.querySelectorAll<HTMLElement>(".nav-item.dropdown")||[]);
+    const hideDropdown=(toggle:HTMLElement)=>{
+      const instance=bootstrap()?.Dropdown?.getOrCreateInstance(toggle);
+      if(instance)instance.hide();
+      else {
+        toggle.setAttribute("aria-expanded","false");
+        toggle.closest(".dropdown")?.querySelector(".dropdown-menu")?.classList.remove("show");
+      }
+    };
+    const hideOtherDropdowns=(current:HTMLElement)=>{
+      for(const item of dropdowns){
+        const toggle=item.querySelector<HTMLElement>(".dropdown-toggle");
+        if(toggle&&toggle!==current)hideDropdown(toggle);
+      }
+    };
+    const hideAllDropdowns=()=>{
+      for(const item of dropdowns){
+        const toggle=item.querySelector<HTMLElement>(".dropdown-toggle");
+        if(toggle)hideDropdown(toggle);
+      }
+    };
+    // Bootstrap's open event covers mouse clicks, touch and keyboard in addition
+    // to the explicit desktop hover handler. Never leave two menus open.
+    const onDropdownShow=(event:Event)=>{
+      const toggle=event.target instanceof HTMLElement?event.target.closest<HTMLElement>(".dropdown-toggle"):null;
+      if(toggle)hideOtherDropdowns(toggle);
+    };
+    const onDropdownFocus=(event:FocusEvent)=>{
+      const toggle=event.target instanceof HTMLElement?event.target.closest<HTMLElement>(".dropdown-toggle"):null;
+      if(toggle)hideOtherDropdowns(toggle);
+    };
+    nav?.addEventListener("show.bs.dropdown",onDropdownShow);
+    nav?.addEventListener("focusin",onDropdownFocus);
     const cleanups:Array<()=>void>=[];
     for(const item of dropdowns){
       const toggle=item.querySelector<HTMLElement>(".dropdown-toggle");
       let delay:ReturnType<typeof setTimeout>|undefined;
-      const open=()=>{if(window.innerWidth<1200||!toggle)return;if(delay)clearTimeout(delay);bootstrap()?.Dropdown?.getOrCreateInstance(toggle).show();};
-      const leave=()=>{if(window.innerWidth<1200||!toggle)return;delay=setTimeout(()=>bootstrap()?.Dropdown?.getOrCreateInstance(toggle).hide(),300);};
-      item.addEventListener("mouseenter",open);item.addEventListener("mouseleave",leave);
+      const open=()=>{
+        if(window.innerWidth<1200||!toggle)return;
+        if(delay)clearTimeout(delay);
+        hideOtherDropdowns(toggle);
+        bootstrap()?.Dropdown?.getOrCreateInstance(toggle).show();
+      };
+      const leave=()=>{
+        if(window.innerWidth<1200||!toggle)return;
+        delay=setTimeout(()=>hideDropdown(toggle),180);
+      };
+      item.addEventListener("mouseenter",open);
+      item.addEventListener("mouseleave",leave);
       cleanups.push(()=>{item.removeEventListener("mouseenter",open);item.removeEventListener("mouseleave",leave);if(delay)clearTimeout(delay);});
     }
-    const onResize=()=>{if(window.innerWidth>=1200)return;for(const item of dropdowns){const toggle=item.querySelector<HTMLElement>(".dropdown-toggle");if(toggle)bootstrap()?.Dropdown?.getOrCreateInstance(toggle).hide();}};
+    const onLinkSelect=(event:MouseEvent)=>{
+      const anchor=(event.target as Element).closest<HTMLAnchorElement>("a.dropdown-item");
+      if(anchor)hideAllDropdowns();
+    };
+    const onEscape=(event:KeyboardEvent)=>{if(event.key==="Escape")hideAllDropdowns();};
+    const onResize=()=>{if(window.innerWidth<1200)hideAllDropdowns();};
+    nav?.addEventListener("click",onLinkSelect);
+    nav?.addEventListener("keydown",onEscape);
     window.addEventListener("resize",onResize);
-    return ()=>{window.removeEventListener("scroll",onScroll);nav?.removeEventListener("click",preventHashJump);document.removeEventListener("click",onClickOutside);collapse?.removeEventListener("click",onNavLink);window.removeEventListener("resize",onResize);cleanups.forEach(fn=>fn());};
-  },[pathname]);
+    // Dismiss stale menus on route changes, including changes in category query.
+    hideAllDropdowns();
+    return ()=>{
+      window.removeEventListener("scroll",onScroll);
+      nav?.removeEventListener("click",preventHashJump);
+      nav?.removeEventListener("click",onLinkSelect);
+      nav?.removeEventListener("keydown",onEscape);
+      nav?.removeEventListener("show.bs.dropdown",onDropdownShow);
+      nav?.removeEventListener("focusin",onDropdownFocus);
+      document.removeEventListener("click",onClickOutside);
+      collapse?.removeEventListener("click",onNavLink);
+      window.removeEventListener("resize",onResize);
+      cleanups.forEach(fn=>fn());
+    };
+  },[pathname,search]);
   useEffect(()=>{
     function lightbox(e:MouseEvent) {
       const target=e.target as HTMLElement|null;
