@@ -1,11 +1,15 @@
 # GoCamp React Router migration
 Isolated React Router v7 + Cloudflare Vite plugin app. Authoritative source: PR #40 commit 80432a2a6fcb4b0de6f14710748e53781ddef58c.
 
+## Architecture
+See [`docs/cloudflare-migration/CODE_STRUCTURE.md`](../docs/cloudflare-migration/CODE_STRUCTURE.md) for the route → feature → data-layer layout, server/client boundary, shared components, CMS extension rules and Cloudflare runtime conventions.
+
 ## Local build
 ```bash
 cd cloudflare-app
 npm ci
 npm run cf-typegen
+npm run format:check
 npm run typecheck
 npm run build
 npx wrangler deploy --dry-run
