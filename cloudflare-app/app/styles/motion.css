@@ -1,0 +1,104 @@
+/* Shared interaction motion. Screenshots use reduced motion, so parity remains stable. */
+:root {
+  --gc-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.gc-route-progress {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 2050;
+  height: 3px;
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  opacity: 0;
+  background: linear-gradient(90deg, var(--brand-primary), var(--brand-secondary));
+  transition:
+    transform 0.25s var(--gc-ease),
+    opacity 0.2s ease;
+  pointer-events: none;
+}
+.gc-route-progress.is-active {
+  transform: scaleX(0.78);
+  opacity: 1;
+}
+.gc-route-view {
+  min-height: 1px;
+}
+@keyframes gc-route-enter {
+  from {
+    opacity: 0;
+    transform: translateY(7px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .gc-route-view {
+    animation: gc-route-enter 0.3s var(--gc-ease) both;
+  }
+  .btn {
+    transition:
+      transform 0.18s var(--gc-ease),
+      background-color 0.18s ease,
+      border-color 0.18s ease,
+      color 0.18s ease,
+      box-shadow 0.18s ease;
+  }
+  .btn:hover {
+    transform: translateY(-1px);
+  }
+  .navbar .nav-link,
+  .footer a,
+  .footer .social-icons img {
+    transition:
+      color 0.2s ease,
+      opacity 0.2s ease,
+      transform 0.2s var(--gc-ease);
+  }
+  .footer a:hover {
+    opacity: 0.86;
+  }
+  .footer .social-icons a:hover img {
+    transform: translateY(-2px);
+  }
+  .program-card-modern .card,
+  .category-card-modern .card,
+  .program-card-home,
+  .contact-card {
+    transition:
+      transform 0.28s var(--gc-ease),
+      box-shadow 0.28s var(--gc-ease);
+  }
+  .program-card-modern .card:hover,
+  .category-card-modern .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 18px 45px rgba(15, 23, 42, 0.14) !important;
+  }
+  .program-card-home:hover {
+    transform: translateY(-4px);
+  }
+  .program-card-home img {
+    transition: transform 0.5s var(--gc-ease);
+  }
+  .program-card-home:hover img {
+    transform: scale(1.035);
+  }
+  .camp-memory {
+    transition:
+      transform 0.24s var(--gc-ease),
+      box-shadow 0.24s var(--gc-ease);
+  }
+  .camp-memory:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 30px rgba(15, 23, 42, 0.14) !important;
+  }
+  .contact-action.btn:hover {
+    transform: translateY(-2px);
+  }
+  .accordion-button {
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease;
+  }
+}

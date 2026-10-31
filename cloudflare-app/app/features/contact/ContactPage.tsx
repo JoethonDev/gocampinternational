@@ -2,6 +2,7 @@ import { useFetcher } from "react-router";
 import { PageBanner } from "../../components/ui/PageBanner";
 import { Breadcrumbs } from "../../components/ui/Breadcrumbs";
 import { SITE } from "../../config/site";
+import "./contact.css";
 
 type ContactResult = { success?: boolean; error?: string; message?: string };
 

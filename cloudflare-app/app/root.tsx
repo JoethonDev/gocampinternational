@@ -19,6 +19,7 @@ import { LeadModal } from "./components/LeadModal";
 import { SiteInteractions } from "./components/SiteInteractions";
 import { NotFoundPage, ServiceErrorPage } from "./components/ui/ErrorPages";
 import "./app.css";
+import "./styles/motion.css";
 
 export async function loader({ request, context }: Route.LoaderArgs) {
   const environment = context.cloudflare.env.GOCAMP_ENV;
