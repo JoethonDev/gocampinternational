@@ -5,7 +5,7 @@ const fs=require("node:fs/promises"),path=require("node:path");
 const legacy=process.env.LEGACY_URL||"http://127.0.0.1:8765";
 const staging=process.env.STAGING_URL||"https://gocamp-migration-staging.elprincedoca.workers.dev";
 const viewports=[{name:"desktop",width:1440,height:900},{name:"tablet",width:820,height:1180},{name:"mobile",width:390,height:844}];
-const pages=[{name:"home",url:"/"},{name:"destination-italy",url:"/destinations/italy"},{name:"category-academic",url:"/program/category?category=adult-academic"}];
+const pages=[{name:"home",url:"/",memories:true},{name:"destination-italy",url:"/destinations/italy",memories:true},{name:"category-academic",url:"/program/category?category=adult-academic",memories:true},{name:"about",url:"/about",memories:false},{name:"faq",url:"/faq",memories:false},{name:"contact",url:"/contact",memories:false}];
 const output=path.resolve("artifacts/migration-parity");
 function assert(value,msg){if(!value)throw Error(msg);}
 async function metrics(page) {
@@ -26,7 +26,8 @@ async function metrics(page) {
       documentHeight:document.documentElement.scrollHeight,
       memorySectionCount:document.querySelectorAll(".camp-memories").length,
       memoryCardCount:document.querySelectorAll(".camp-memories .camp-memory").length,
-      bannerOverlay:hero?getComputedStyle(hero,"::before").backgroundImage:"none"
+      bannerOverlay:hero?getComputedStyle(hero,"::before").backgroundImage:"none",
+      staticBannerSrc:document.querySelector(".page-content .container-fluid img")?.getAttribute("src")||null
     };
   });
 }
@@ -53,8 +54,10 @@ async function metrics(page) {
             await tab.screenshot({path:path.join(output,route.name+"-"+viewport.name+"-"+kind+".png"),animations:"disabled",fullPage:true});
             assert(results.navDecoration==="none",kind+" "+route.name+" nav links are underlined: "+results.navDecoration);
             assert(!results.horizontalOverflow,kind+" "+route.name+" overflows horizontally");
-            assert(results.memorySectionCount===1,kind+" "+route.name+" lost the shared memories section");
-            assert(results.memoryCardCount>0,kind+" "+route.name+" has no memories cards");
+            if(route.memories){
+              assert(results.memorySectionCount===1,kind+" "+route.name+" lost the shared memories section");
+              assert(results.memoryCardCount>0,kind+" "+route.name+" has no memories cards");
+            }
             if(route.name==="category-academic")assert(results.bannerOverlay.includes("linear-gradient"),kind+" category banner lost the PR40 dark overlay");
             if(viewport.name==="desktop"&&route.name==="home"){
               for(const label of ["Programs","Destinations"]){
@@ -79,6 +82,9 @@ async function metrics(page) {
           const normalize=(v)=>String(v||"").replace(/https?:\/\/[^/]+/g,"");
           if(normalize(each.legacy.heroBackground)!==normalize(each.react.heroBackground)) {
             failed++;console.error("FAIL banner image mismatch",route.name,viewport.name,each.legacy.heroBackground,each.react.heroBackground);
+          }
+          if(each.legacy.staticBannerSrc!==each.react.staticBannerSrc){
+            failed++;console.error("FAIL static banner image mismatch",route.name,viewport.name,each.legacy.staticBannerSrc,each.react.staticBannerSrc);
           }
         }
         summary.push(each);
