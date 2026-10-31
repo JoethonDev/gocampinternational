@@ -351,6 +351,7 @@ $destinations = array (
       8 => 'uk-soccer-club-experience',
       9 => 'uk-young-leader-oxford',
       10 => 'uk-mini-mba',
+      11 => 'uk-creative-summer',
     ),
     'section_visibility' => 
     array (
@@ -446,6 +447,7 @@ $destinations = array (
     'program_ids' => 
     array (
       0 => 'austria-vienna-teenagers',
+      1 => 'austria-adventure-camp',
     ),
     'section_visibility' => 
     array (
