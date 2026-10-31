@@ -1,0 +1,73 @@
+{
+  "source": "PR39",
+  "source_commit": "a8be270c7a2cad016a747b0918658ee194281e4a",
+  "records": {
+    "austria-adventure-camp": {
+      "order": 99,
+      "id": "austria-adventure-camp",
+      "category_slug": "special-interests-camps",
+      "name": "Adventure Camp",
+      "tagline": "Choose your adventure with personalized camp experiences in Austria.",
+      "image": "",
+      "ages": {
+        "min": null,
+        "max": null
+      },
+      "duration": null,
+      "level": "",
+      "price": null,
+      "color": "secondary",
+      "badges": [
+        "Adventure",
+        "Austria"
+      ],
+      "highlights": [
+        "Choose a focus across sports, language, arts or adventure",
+        "Three-hour morning sessions in the selected program",
+        "Shared afternoon and evening camp activities",
+        "International friendships and cultural exchange"
+      ],
+      "description": "<p>Adventure Camp in Austria invites young people to choose a specialized experience that reflects their interests. Campers can focus on sports, languages, arts or adventure activities while joining a wider camp community.</p><p>Morning sessions dedicate three hours to immersive learning in each camper’s chosen program. In the afternoons and evenings, campers from different programs come together for a mix of general camp activities, with opportunities to collaborate, make friends and exchange cultures.</p><p>The experience combines time spent developing a personal interest with shared activities and new friendships. Specific location, dates, age range and duration will be confirmed before publication.</p>",
+      "includes": {},
+      "excludes": {},
+      "status": "inactive",
+      "schedule": {},
+      "gallery": {}
+    },
+    "uk-creative-summer": {
+      "order": 99,
+      "id": "uk-creative-summer",
+      "category_slug": "special-interests-camps",
+      "name": "Creative Summer",
+      "tagline": "A creative study holiday in the heart of Cambridge.",
+      "image": "",
+      "ages": {
+        "min": 12,
+        "max": 17
+      },
+      "duration": null,
+      "level": "",
+      "price": null,
+      "color": "primary",
+      "badges": [
+        "Creative",
+        "Cambridge"
+      ],
+      "highlights": [
+        "3D Design",
+        "Acting & Professional Performance",
+        "3D Modelling, Sculpting, Animation & Rigging",
+        "Branding & Advertising",
+        "Fashion Styling",
+        "Film Making",
+        "Game Design"
+      ],
+      "description": "<p>Creative Summer is a study holiday for young people aged 12 to 17 who want to explore art, design, performance and digital creativity in the center of Cambridge, UK. Students have access to creative facilities, including studios designed to function like professional workspaces.</p><p>Seven areas of exploration are offered within one Creative Summer program: 3D Design; Acting and Professional Performance; 3D Modelling, Sculpting, Animation and Rigging; Branding and Advertising; Fashion Styling; Film Making; and Game Design.</p><p>The program is designed for curious young creatives and for students ready to experiment with new interests, develop skills and work alongside like-minded peers. Duration, dates and fees have not yet been supplied and will be confirmed before publication.</p>",
+      "includes": {},
+      "excludes": {},
+      "status": "inactive",
+      "schedule": {},
+      "gallery": {}
+    }
+  }
+}
