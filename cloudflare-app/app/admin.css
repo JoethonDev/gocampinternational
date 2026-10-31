@@ -1,0 +1,13 @@
+.admin-workspace{--admin-curve:cubic-bezier(.2,.75,.25,1);max-width:1600px;background:linear-gradient(180deg,rgba(0,164,192,.035),transparent 320px)}
+.admin-workspace .admin-nav{position:sticky;top:75px;z-index:20;background:rgba(255,255,255,.94);backdrop-filter:blur(12px);padding:.75rem;border:1px solid #e8edf3;border-radius:14px;box-shadow:0 2px 12px rgba(15,23,42,.04)}
+.admin-workspace .admin-nav .btn{border-radius:9px;transition:background .17s var(--admin-curve),transform .17s var(--admin-curve),box-shadow .17s var(--admin-curve)}
+.admin-workspace .admin-nav .btn:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(15,23,42,.1)}
+.admin-workspace .card{border-radius:14px;transition:box-shadow .18s var(--admin-curve)}
+.admin-workspace .card:hover{box-shadow:0 8px 26px rgba(15,23,42,.075)!important}
+.admin-workspace .btn{transition:transform .16s var(--admin-curve),box-shadow .16s var(--admin-curve)}
+.admin-workspace .btn:not(:disabled):active{transform:scale(.98)}
+.admin-workspace .form-control:focus,.admin-workspace .form-select:focus{box-shadow:0 0 0 3px rgba(0,164,192,.13)}
+.admin-workspace .admin-main{animation:admin-page-enter .22s var(--admin-curve) both}
+@keyframes admin-page-enter{from{opacity:.65;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:767px){.admin-workspace .admin-nav{top:65px;flex-wrap:nowrap!important;overflow-x:auto;scrollbar-width:thin}.admin-workspace .admin-nav .btn{white-space:nowrap}}
+@media(prefers-reduced-motion:reduce){.admin-workspace .admin-main{animation:none}.admin-workspace .btn,.admin-workspace .card{transition:none!important}.admin-workspace .btn:hover{transform:none!important}}

@@ -1,5 +1,7 @@
-import { Form, Link } from "react-router";
+import { Form, Link, useLocation } from "react-router";
+import "../admin.css";
 export function AdminShell({username,csrf,children}:{username:string;csrf:string;children:React.ReactNode}) {
+  const location=useLocation();
   const nav=[["/admin","Dashboard"],["/admin/catalog/program","Programs"],["/admin/catalog/destination","Destinations"],["/admin/catalog/category","Categories"],["/admin/documents/site_settings","Visibility & Settings"],["/admin/documents/faq","FAQs"],["/admin/documents/camp_memories","Memories"],["/admin/inquiries","Inquiries"],["/admin/media","Media"]];
   return <div className="container-fluid px-3 px-md-4 py-4 admin-workspace" style={{minHeight:"85vh"}}>
     <header className="d-flex flex-wrap gap-2 align-items-center justify-content-between mb-3">
@@ -8,7 +10,7 @@ export function AdminShell({username,csrf,children}:{username:string;csrf:string
         <Form method="post" action="/admin/logout"><input type="hidden" name="csrf" value={csrf}/><button className="btn btn-sm btn-outline-secondary">Log out</button></Form>
       </div>
     </header>
-    <nav aria-label="Admin navigation" className="d-flex flex-wrap gap-2 mb-4">{nav.map(([href,label])=><Link key={href} className="btn btn-sm btn-outline-primary" to={href}>{label}</Link>)}</nav>
-    {children}
+    <nav aria-label="Admin navigation" className="d-flex flex-wrap gap-2 mb-4 admin-nav">{nav.map(([href,label])=><Link key={href} aria-current={location.pathname===href?"page":undefined} className={"btn btn-sm "+(location.pathname===href?"btn-primary":"btn-outline-primary")} to={href}>{label}</Link>)}</nav>
+    <main className="admin-main">{children}</main>
   </div>;
 }
