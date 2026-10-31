@@ -9,6 +9,15 @@
 
 > Use [HANDOFF.md](./HANDOFF.md) to resume implementation in another ChatGPT conversation. This file is the authoritative status; older incremental descriptions in other docs may reflect the initial bootstrap.
 
+
+## 2026-10-31 live implementation checkpoint — October 30 emails
+
+- **Source-of-truth preserved:** `data/legacy/all_programs.php` was restored unchanged to the immutable PR #40 snapshot. Two preapproved content records from the existing [PR #39](https://github.com/JoethonDev/gocampinternational/pull/39) are preserved separately in `data/migration-drafts/oct30-pr39.php`. They are not invented or activated.
+- **Cloudflare staging D1 verification (direct read):** 65 program records (the original 63 plus `austria-adventure-camp` and `uk-creative-summer`), 9 destinations, 8 categories. Both newly added records are **inactive**. PR #40 public data remains unchanged. Program-draft import provenance must be rechecked before any future reseed.
+- **Images:** two original Austria photographs were located as attachments to the October 30 email. Earlier approval was *not* to attach unapproved images to the inactive draft program, so neither is published as that program's banner or gallery. Original static media remain in `/images`; complete R2 media inventory is still pending.
+- **Operational limits:** public page comparison and HTTP smoke success do **not** prove all CMS features, authenticated write flows, every image, SEO, or business interactions. **Do not report 100% complete.** No production change or branch merge.
+- **Progress reporting:** provide in-chat checkpoints after each independently verified functional milestone, including direct testing link, GitHub commit, and any unresolved parity defect.
+
 ## 1. Phase status (evidence-based)
 
 | Phase | Implemented / verified | Still needed before phase acceptance | Gate |
@@ -38,7 +47,7 @@ Do not interpret code existing in the repository as a passing end-to-end test. I
 
 | Entity | Verified rows |
 | --- | ---: |
-| Programs | 63 |
+| Programs | 65 (63 immutable PR40 + 2 approved inactive PR39 drafts) |
 | Destinations | 9 |
 | Program categories | 8 |
 | Destination–program links | 37 |
