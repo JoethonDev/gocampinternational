@@ -12,6 +12,9 @@ export function SiteInteractions() {
     const current=pathname.replace(/\/+$/,"")||"/";
     const links=Array.from(document.querySelectorAll<HTMLAnchorElement>(".navbar .nav-link"));
     links.forEach(link=>{const href=(link.getAttribute("href")||"").replace(/\/+$/,"")||"/";link.classList.toggle("active",href!=="#"&&href===current);});
+    // Bootstrap owns click toggling; stop fallback "#" navigation when its JS is late.
+    const preventHashJump=(event:MouseEvent)=>{const anchor=(event.target as Element).closest<HTMLAnchorElement>("a.dropdown-toggle[href='#']");if(anchor)event.preventDefault();};
+    nav?.addEventListener("click",preventHashJump);
     const toggler=nav?.querySelector<HTMLElement>(".navbar-toggler");
     const collapse=nav?.querySelector<HTMLElement>(".navbar-collapse");
     function closeMobile(){ if(window.innerWidth>=1200||!collapse?.classList.contains("show"))return;const api=bootstrap()?.Collapse?.getOrCreateInstance(collapse);if(api)api.hide();else toggler?.click(); }
@@ -31,7 +34,7 @@ export function SiteInteractions() {
     }
     const onResize=()=>{if(window.innerWidth>=1200)return;for(const item of dropdowns){const toggle=item.querySelector<HTMLElement>(".dropdown-toggle");if(toggle)bootstrap()?.Dropdown?.getOrCreateInstance(toggle).hide();}};
     window.addEventListener("resize",onResize);
-    return ()=>{window.removeEventListener("scroll",onScroll);document.removeEventListener("click",onClickOutside);collapse?.removeEventListener("click",onNavLink);window.removeEventListener("resize",onResize);cleanups.forEach(fn=>fn());};
+    return ()=>{window.removeEventListener("scroll",onScroll);nav?.removeEventListener("click",preventHashJump);document.removeEventListener("click",onClickOutside);collapse?.removeEventListener("click",onNavLink);window.removeEventListener("resize",onResize);cleanups.forEach(fn=>fn());};
   },[pathname]);
   useEffect(()=>{
     function lightbox(e:MouseEvent) {

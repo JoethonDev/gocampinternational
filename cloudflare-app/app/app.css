@@ -21,3 +21,102 @@ html{scroll-behavior:smooth}body{margin:0}.visually-hidden-focusable:not(:focus)
 /* PR40 category template supplies parallax through an inline <style> block, not
    an inline element style: matching this avoids the legacy mobile override selector. */
 .page-content .hero-section:has(.category-hero-caption) { background-attachment: fixed; }
+
+/* Exact PR #40 category.php inline hero geometry, typography and hover surfaces.
+   Scoping prevents the category rules from changing the homepage slider. */
+.page-content .hero-section:has(.category-hero-caption) {
+  min-height: 500px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  background-attachment: fixed;
+  overflow: hidden;
+}
+.page-content .hero-section:has(.category-hero-caption) .category-hero-caption {
+  width: 100%; max-width: 900px; margin-inline: auto; padding: 2rem 1rem;
+  position: relative; z-index: 2;
+  animation: fadeInUp 1s ease-out;
+}
+.page-content .hero-section:has(.category-hero-caption) h1 {
+  font-size: clamp(2rem, 3.2vw, 3.2rem);
+  font-weight: 900;
+  color: #fff;
+  text-shadow: 0 2px 12px #000, 0 0 2px #fff;
+  margin-bottom: 0.5rem;
+}
+.page-content .intro-card {
+  background: linear-gradient(135deg,#f8f9fa 0%,#e9ecef 100%);
+  border-left: 6px solid var(--brand-primary);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+}
+.page-content .content-card {
+  box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+  transition: transform .3s ease, box-shadow .3s ease;
+}
+@media (hover:hover) and (prefers-reduced-motion:no-preference) {
+  .page-content .content-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 30px 80px rgba(0,0,0,0.15);
+  }
+  .page-content .content-image:hover, .page-content .intro-image:hover { transform: scale(1.03); }
+}
+.page-content .content-card h2 {
+  font-weight: 700; color: var(--brand-secondary);
+  position: relative; padding-bottom: 15px;
+}
+.page-content .content-card h2::after {
+  content:"";position:absolute;bottom:0;left:0;width:80px;height:4px;
+  background:var(--brand-primary);border-radius:2px;
+}
+/* React Router's <Link> must look identical to the original PHP <a> element.
+   Do not add browser/Bootstrap text underlines; retain PR40 gold hover bar. */
+.navbar.fixed-top .navbar-nav a.nav-link,
+.navbar.fixed-top .navbar-nav a.nav-link:link,
+.navbar.fixed-top .navbar-nav a.nav-link:visited,
+.navbar.fixed-top .navbar-nav a.nav-link:hover,
+.navbar.fixed-top .navbar-nav a.nav-link:focus-visible,
+.navbar.fixed-top .dropdown-menu a.dropdown-item,
+.page-content .breadcrumb a {
+  text-decoration: none !important;
+}
+.navbar.fixed-top .navbar-nav a.nav-link.dropdown-toggle::after {
+  /* Preserve Bootstrap's arrow as an arrow, not the underline pseudo-element
+     that PR40 applied to all .nav-link::after selectors. */
+  position: static;
+  display: inline-block;
+  width: 0;
+  height: 0;
+  margin-left: .255em;
+  border-top: .3em solid;
+  border-right: .3em solid transparent;
+  border-bottom: 0;
+  border-left: .3em solid transparent;
+  background: transparent !important;
+  vertical-align: .255em;
+  transform: none !important;
+  transition: border-color .15s ease;
+}
+/* Match the original nav gold hover treatment without confusing the arrow. */
+.navbar.fixed-top .navbar-nav a.nav-link:not(.dropdown-toggle)::after {
+  content:"";position:absolute;bottom:0;left:50%;height:2px;width:80%;
+  background:var(--brand-accent) !important;
+  transform:translateX(-50%) scaleX(0);transform-origin:center;
+  transition:transform .15s ease;
+}
+.navbar.fixed-top .navbar-nav a.nav-link:not(.dropdown-toggle):hover::after,
+.navbar.fixed-top .navbar-nav a.nav-link:not(.dropdown-toggle):focus-visible::after,
+.navbar.fixed-top .navbar-nav a.nav-link:not(.dropdown-toggle).active::after {
+  transform: translateX(-50%) scaleX(1);
+}
+@media (min-width:1200px) and (hover:hover) {
+  /* Hover works even if the Bootstrap bundle is late or unavailable. */
+  .navbar.fixed-top .nav-item.dropdown:hover > .dropdown-menu,
+  .navbar.fixed-top .nav-item.dropdown:focus-within > .dropdown-menu { display:block; }
+}
+@media (max-width:1199.98px) {
+  .page-content .hero-section:has(.category-hero-caption) { background-attachment: scroll; }
+  .navbar.fixed-top .navbar-nav a.nav-link:not(.dropdown-toggle)::after { display:none; }
+}
+@media (prefers-reduced-motion:reduce) {
+  .page-content .hero-section:has(.category-hero-caption) .category-hero-caption { animation:none; }
+}
