@@ -12,6 +12,34 @@ body.gc-admin-route {
 .footer-icef-logo {
   max-width: 100px;
 }
+/* These selectors intentionally outrank Bootstrap/legacy component defaults
+   that are loaded after app.css. The previous inline styles had the same effect. */
+.navbar.gc-site-navbar {
+  background-color: var(--brand-primary);
+}
+.container-fluid .page-banner-image {
+  height: 300px;
+  object-fit: cover;
+}
+.program-card-modern .program-card-shell {
+  border-radius: 20px;
+}
+.program-card-modern .card > .program-card-media {
+  height: 280px;
+}
+.category-card-modern .category-card-shell {
+  border-radius: 20px;
+}
+.contact-card.card {
+  background-color: var(--brand-primary);
+  color: #fff;
+}
+.contact-action.btn {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+.contact-action-icon.text-primary {
+  color: var(--brand-primary);
+}
 .media-selector-backdrop {
   position: fixed;
   inset: 0;
