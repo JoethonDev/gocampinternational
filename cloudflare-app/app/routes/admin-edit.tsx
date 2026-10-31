@@ -4,6 +4,7 @@ import { requireAdmin } from "../lib/admin.server";
 import { saveEntity,ensureKind } from "../lib/catalog-write.server";
 import { AdminShell } from "../components/AdminShell";
 import { listCatalog } from "../lib/catalog.server";
+import { Repeater } from "../components/Repeater";
 export function meta(){return [{title:"Edit GoCamp Content"},{name:"robots",content:"noindex,nofollow"}];}
 export async function loader({request,context,params}:Route.LoaderArgs){
   const db=context.cloudflare.env.DB,session=await requireAdmin(request,db),kind=ensureKind(params.kind||"");
@@ -38,13 +39,19 @@ export default function Edit({loaderData}:Route.ComponentProps){
         {(["min","max"] as const).map(k=><div className="col-md-6" key={k}><label className="form-label" htmlFor={"age-"+k}>Age {k}</label><input type="number" min="0" max="120" className="form-control" id={"age-"+k} name={"ages_"+k} defaultValue={String((item.ages as Record<string,unknown>|undefined)?.[k]??(k==="min"?0:99))}/></div>)}
         <div className="col-12"><label className="form-label" htmlFor="description">Description (HTML source preserved)</label><textarea className="form-control" rows={6} name="description" id="description" defaultValue={v(item,"description")}/></div>
         {(["highlights","includes","excludes","badges","gallery"] as const).map(k=><div className="col-md-6" key={k}><label className="form-label" htmlFor={k}>{k} (one per line)</label><textarea className="form-control" id={k} name={k} rows={4} defaultValue={lines(item[k])}/></div>)}
+        <Repeater name="schedule" title="Daily schedule" initial={Object.entries((item.schedule as Record<string,unknown>)||{}).map(([time,description])=>({time,description}))} fields={[{key:"time",label:"Time"},{key:"description",label:"Activity / description",kind:"long"}]}/>
       </>}
       {kind==="destination"&&<>{(["banner","tagline","intro_image"] as const).map(k=><div className="col-md-6" key={k}><label className="form-label" htmlFor={k}>{k}</label><input className="form-control" id={k} name={k} defaultValue={v(item,k)}/></div>)}
         <div className="col-12"><label className="form-label" htmlFor="intro_text">Introduction</label><textarea className="form-control" rows={5} id="intro_text" name="intro_text" defaultValue={v(item,"intro_text")}/></div>
         <div className="col-12"><label className="form-label" htmlFor="program_ids">Associated program IDs (one per line)</label><textarea className="form-control" id="program_ids" name="program_ids" rows={6} defaultValue={lines(item.program_ids)}/></div>
+        <Repeater name="highlights" title="Destination highlights" initial={Array.isArray(item.highlights)?item.highlights as Record<string,unknown>[]:[]} fields={[{key:"icon",label:"Icon"},{key:"text",label:"Highlight text"}]}/>
+        <Repeater name="stats" title="Destination statistics" initial={Array.isArray(item.stats)?item.stats as Record<string,unknown>[]:[]} fields={[{key:"number",label:"Number"},{key:"suffix",label:"Suffix"},{key:"label",label:"Label"},{key:"icon",label:"Icon"}]}/>
+        <Repeater name="faq" title="Destination FAQs" initial={Array.isArray(item.faq)?item.faq as Record<string,unknown>[]:[]} fields={[{key:"q",label:"Question"},{key:"a",label:"Answer",kind:"long"}]}/>
       </>}
       {kind==="category"&&<>{(["banner","intro_image","color"] as const).map(k=><div className="col-md-6" key={k}><label className="form-label" htmlFor={k}>{k}</label><input className="form-control" id={k} name={k} defaultValue={v(item,k)}/></div>)}
         <div className="col-12"><label className="form-label" htmlFor="intro">Introduction</label><textarea className="form-control" name="intro" id="intro" rows={5} defaultValue={v(item,"intro")}/></div>
+        <Repeater name="sections" title="Category content sections" initial={Array.isArray(item.sections)?item.sections as Record<string,unknown>[]:[]} fields={[{key:"title",label:"Section title"},{key:"image",label:"Image path"},{key:"content",label:"Content (HTML allowed)",kind:"long"},{key:"is_active",label:"Visible",kind:"flag"}]}/>
+        <div className="col-12"><label htmlFor="category_gallery" className="form-label">Category gallery images (one path per line)</label><textarea id="category_gallery" name="gallery" className="form-control" rows={3} defaultValue={lines(item.gallery)}/></div>
       </>}
       <div className="col-12"><label className="form-label" htmlFor="visibility_overrides">Visibility overrides (JSON object)</label><textarea className="form-control font-monospace" id="visibility_overrides" name="visibility_overrides" rows={5} defaultValue={overrides}/><p className="small text-muted mt-2">Empty = keep existing overrides. Global visibility is under Settings.</p></div>
       <div className="col-12"><button disabled={navigation.state!=="idle"} className="btn btn-primary px-4">{navigation.state!=="idle"?"Saving...":"Save changes"}</button></div>

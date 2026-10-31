@@ -21,6 +21,26 @@ function readFields(form:FormData,kind:Kind,previous:Record<string,unknown>) {
     if(value.length>max)throw new Response("Field exceeds maximum length",{status:400});
     data[field]=value;
   }
+
+  const jsonList=(field:string,allowed:Array<[string,number,"string"|"boolean"]>)=>{
+    const raw=form.get("json_"+field);
+    if(raw===null)return null;
+    if(typeof raw!=="string"||raw.length>120000)throw new Response("Structured field too large",{status:413});
+    let parsed:unknown;
+    try{parsed=JSON.parse(raw);}catch{throw new Response("Invalid structured field",{status:400});}
+    if(!Array.isArray(parsed)||parsed.length>150)throw new Response("Invalid list length",{status:400});
+    return parsed.map(entry=>{
+      if(!entry||typeof entry!=="object"||Array.isArray(entry))throw new Response("Invalid list item",{status:400});
+      const row=entry as Record<string,unknown>,cleaned:Record<string,unknown>={};
+      for(const [name,max,type] of allowed){
+        if(type==="boolean"){cleaned[name]=row[name]!==false;continue;}
+        const str=String(row[name]??"").trim();
+        if(str.length>max)throw new Response("Field too long",{status:400});
+        cleaned[name]=str;
+      }
+      return cleaned;
+    });
+  };
   if(kind==="program") {
     const order=toText(form.get("order"),12),duration=toText(form.get("duration"),12);
     const min=toText(form.get("ages_min"),3),max=toText(form.get("ages_max"),3);
@@ -34,14 +54,21 @@ function readFields(form:FormData,kind:Kind,previous:Record<string,unknown>) {
       if(raw.length>25000)throw new Response("Field too large",{status:400});
       data[field]=raw.split("\n").map(v=>v.trim()).filter(Boolean).slice(0,150);
     }
+    const schedule=jsonList("schedule",[["time",100,"string"],["description",3000,"string"]]);
+    if(schedule)data.schedule=Object.fromEntries(schedule.filter(x=>x.time).map(x=>[x.time,x.description]));
     data.id=String(previous.id||form.get("slug")||"");
   }
   if(kind==="destination") {
     const ids=toText(form.get("program_ids"),20000);
     data.program_ids=ids.split(/[\n,]+/).map(x=>x.trim()).filter(Boolean).slice(0,150);
+    const h=jsonList("highlights",[["icon",160,"string"],["text",3000,"string"]]);if(h)data.highlights=h;
+    const stats=jsonList("stats",[["number",100,"string"],["suffix",100,"string"],["label",300,"string"],["icon",160,"string"]]);if(stats)data.stats=stats;
+    const faq=jsonList("faq",[["q",3000,"string"],["a",20000,"string"]]);if(faq)data.faq=faq;
   }
   if(kind==="category") {
     data.section_visibility=previous.section_visibility||{};
+    const sections=jsonList("sections",[["title",500,"string"],["content",40000,"string"],["image",2048,"string"],["is_active",0,"boolean"]]);if(sections)data.sections=sections;
+    const gallery=toText(form.get("gallery"),20000);data.gallery=gallery.split("\n").map(s=>s.trim()).filter(Boolean).slice(0,150);
   }
   const overrides=toText(form.get("visibility_overrides"),25000);
   if(overrides) {
