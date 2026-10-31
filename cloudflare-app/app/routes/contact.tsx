@@ -3,7 +3,7 @@ import type {Route} from "./+types/contact";
 export function meta({}:Route.MetaArgs){return [{title:"Go Camp :: Contact Us"},{name:"description",content:"Get in touch with Go Camp. Contact us via phone, email, or our online form for any inquiries about our programs."}];}
 export default function Contact(){
  const fetcher=useFetcher<{success?:boolean;error?:string;message?:string}>();
- return <div className="page-content"><div className="container-fluid p-0"><div className="position-relative"><img src="/images/contact_banner.webp" className="img-fluid w-100" style={{height:300,objectFit:"cover"}} alt="Contact Us Banner"/><h1 className="visually-hidden">Contact Us</h1></div></div><div className="container py-5"><nav aria-label="breadcrumb"><ol className="breadcrumb"><li className="breadcrumb-item"><Link to="/">HOME</Link></li><li className="breadcrumb-item active" aria-current="page">CONTACT US</li></ol></nav><div className="text-center mb-5"><h2 className="section-title">Get in touch! We'd love to hear from you.</h2></div>
+ return <><div className="container-fluid p-0"><div className="position-relative"><img src="/images/contact_banner.webp" className="img-fluid w-100" style={{height:300,objectFit:"cover"}} alt="Contact Us Banner"/><h1 className="visually-hidden">Contact Us</h1></div></div><div className="container py-5"><nav aria-label="breadcrumb"><ol className="breadcrumb"><li className="breadcrumb-item"><Link to="/">HOME</Link></li><li className="breadcrumb-item active" aria-current="page">CONTACT US</li></ol></nav><div className="text-center mb-5"><h2 className="section-title">Get in touch! We'd love to hear from you.</h2></div>
   <div className="row g-4"><div className="col-lg-7"><div className="card border-0 shadow-sm"><div className="card-body p-4 p-md-5"><h3 className="card-title mb-4">Send Us a Message</h3>
    <fetcher.Form method="post" action="/api/submit-contact.php" id="contactForm">
     <div className="hp-field" aria-hidden="true"><label>Leave empty<input name="website" type="text" tabIndex={-1} autoComplete="off"/></label></div>
@@ -19,5 +19,5 @@ export default function Contact(){
     </div>
    </fetcher.Form>
   </div></div></div><div className="col-lg-5"><div className="card border-0 shadow-sm h-100" style={{backgroundColor:"var(--brand-primary)",color:"white"}}><div className="card-body p-4 p-md-5 d-flex flex-column justify-content-center align-items-center text-center"><div className="mb-4 position-relative"><img src="/images/profile.webp" alt="Zeinab El Sokkary" className="rounded-circle shadow-lg" style={{width:160,height:160,objectFit:"cover",border:"5px solid rgba(255,255,255,.2)"}}/></div><h3 className="fw-bold text-white mb-1">Zeinab El Sokkary</h3><p className="text-white-50 fs-5 mb-4 text-uppercase fw-semibold">Managing Director</p><div className="d-flex flex-column gap-3 w-100 px-md-3"><a href="tel:+201221719621" className="btn btn-outline-light border-0 py-3 px-4">+20 122 171 9621</a><a href="mailto:Zeinab@gocampinternational.net" className="btn btn-outline-light border-0 py-3 px-4">Zeinab@gocampinternational.net</a></div></div></div></div></div>
- </div></div>;
+ </div></>;
 }

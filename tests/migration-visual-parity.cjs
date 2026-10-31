@@ -5,7 +5,7 @@ const fs=require("node:fs/promises"),path=require("node:path");
 const legacy=process.env.LEGACY_URL||"http://127.0.0.1:8765";
 const staging=process.env.STAGING_URL||"https://gocamp-migration-staging.elprincedoca.workers.dev";
 const viewports=[{name:"desktop",width:1440,height:900},{name:"tablet",width:820,height:1180},{name:"mobile",width:390,height:844}];
-const pages=[{name:"home",url:"/",memories:true},{name:"destination-italy",url:"/destinations/italy",memories:true},{name:"category-academic",url:"/program/category?category=adult-academic",memories:true},{name:"about",url:"/about",memories:false},{name:"faq",url:"/faq",memories:false},{name:"contact",url:"/contact",memories:false}];
+const pages=[{name:"home",url:"/",memories:true},{name:"destination-italy",url:"/destinations/italy",memories:true},{name:"category-academic",url:"/program/category?category=adult-academic",memories:true},{name:"category-kids",url:"/program/category?category=kids-camps",memories:true},{name:"about",url:"/about",memories:false},{name:"faq",url:"/faq",memories:false},{name:"contact",url:"/contact",memories:false}];
 const output=path.resolve("artifacts/migration-parity");
 function assert(value,msg){if(!value)throw Error(msg);}
 async function metrics(page) {
@@ -58,7 +58,7 @@ async function metrics(page) {
               assert(results.memorySectionCount===1,kind+" "+route.name+" lost the shared memories section");
               assert(results.memoryCardCount>0,kind+" "+route.name+" has no memories cards");
             }
-            if(route.name==="category-academic")assert(results.bannerOverlay.includes("linear-gradient"),kind+" category banner lost the PR40 dark overlay");
+            if(route.name.startsWith("category-"))assert(results.bannerOverlay.includes("linear-gradient"),kind+" category banner lost the PR40 dark overlay");
             if(viewport.name==="desktop"&&route.name==="home"){
               for(const label of ["Programs","Destinations"]){
                 const navItem=tab.locator(".navbar .nav-item.dropdown").filter({has:tab.locator(".dropdown-toggle",{hasText:label})});
