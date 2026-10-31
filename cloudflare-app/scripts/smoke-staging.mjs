@@ -12,7 +12,7 @@ const tests = [
   { path: "/destinations/italy", status: 200, contains: "Italy" },
   { path: "/program/category?category=adult-academic", status: 200 },
   { path: "/program/category?category=kids-camps", status: 200, contains: "Kids Camps" },
-  { path: "/admin/login", status: 200, contains: "Admin Access" },
+  { path: "/admin/login", status: 200, contains: "Welcome back" },
   { path: "/admin", status: 302, location: "/admin/login" },
   { path: "/programs", status: 404 },
   { path: "/gallery", status: 404 },
@@ -76,3 +76,4 @@ if (failed) {
   console.error(failed + " staging smoke check(s) failed");
   process.exitCode = 1;
 } else console.log("Staging HTTP smoke checks passed:", tests.length);
+
