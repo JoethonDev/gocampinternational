@@ -13,7 +13,7 @@ test("legacy PHP routes have canonical aliases, without inventing program pages"
   assert.match(routes, /route\(":legacy","routes\/legacy-root\.ts"\)/);
   assert.match(routes, /route\("program\/:legacy","routes\/legacy-program\.ts"\)/);
   for (const alias of ["home","index","index.php","home.php","about_us","about_us.php","contact_us","contact_us.php","faq.php"]) {
-    assert.ok(legacy.includes(alias + ":"), "Missing alias: " + alias);
+    assert.ok(legacy.includes(alias + ":") || legacy.includes(JSON.stringify(alias) + ":"), "Missing alias: " + alias);
   }
   assert.match(legacy,/redirect\(canonical, 301\)/);
   assert.match(legacyProgram,/status: 404/);
