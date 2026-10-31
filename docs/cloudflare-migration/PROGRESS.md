@@ -1,41 +1,92 @@
-# Execution record — 2026-10-31
-Status: Phase 0 PARTIAL (route audit started); Phase 1 SCAFFOLD COMPLETE / STAGING DEPLOY PENDING; Phase 2 SCHEMA APPLIED IN STAGING / DATA IMPORT PENDING; Phases 3–6 NOT STARTED. This file must be updated from observed results, not assumptions.
+# GoCamp Cloudflare migration — verified progress snapshot
 
-## Verified
-- PR #40 read through GitHub connector: open/draft, unmerged; source head 80432a2a6fcb4b0de6f14710748e53781ddef58c; base develop e55bc17bcdc59e466e63b7993341b979bb69a0e9.
-- Created migration/cloudflare-react-workers-pr40 FROM that exact PR head (no merge).
-- Personal Cloudflare account identified and existing resources listed before mutations.
-- Created gocamp-staging-db D1 87e579d7-4f7a-4673-a317-d62551858b3c, gocamp-production-db D1 84f3beb7-ed00-49eb-a25b-913b301ad1da.
-- Created gocamp-staging-media and gocamp-production-media R2 buckets (Standard). Both environments isolated. No live data imported.
-- Created production bootstrap script via Cloudflare API and checked its deployment is active as an unrouted 503-only placeholder; no production website/API reachable. Metadata and routing read back from Cloudflare.
-- Read PR #40 normalized schema, Worker gateway and legacy catalog source conventions. Aiven/Tigris and old gateway intentionally not deployed for this full TS replacement.
+**Last reviewed:** 2026-10-31, after GitHub run [41213333085](https://github.com/JoethonDev/gocampinternational/actions/runs/41213333085).  
+**Migration branch:** [`migration/cloudflare-react-workers-pr40`](https://github.com/JoethonDev/gocampinternational/tree/migration/cloudflare-react-workers-pr40)  
+**Verified application checkpoint:** `0e750c979f77091b32c3945cc3bd6e069cafb927`. A documentation-only commit after this checkpoint does not represent new app features.  
+**Source of truth:** [PR #40](https://github.com/JoethonDev/gocampinternational/pull/40), head `80432a2a6fcb4b0de6f14710748e53781ddef58c`, open/unmerged at last inspection. This branch was created from that exact PR head; do not replace its imported snapshot with unrelated `main`/`develop` data.  
+**Public staging:** https://gocamp-migration-staging.elprincedoca.workers.dev/  
+**Release state:** Staging operational; **NOT production ready**, **NOT merged**, **NO DNS cutover**.
 
-## Verified in continued implementation (2026-10-31)
-- React Router v7 + TypeScript + Cloudflare Vite plugin scaffold built in cloudflare-app/, isolated from PHP. CI job https://github.com/JoethonDev/gocampinternational/actions/runs/41205671340 PASSED: npm ci, Wrangler typegen, TS typecheck, React SSR build, Wrangler --dry-run, PHP snapshot audit, seed unit tests and export, asset leakage guard.
-- Source audit verified 63 programs, 9 destinations, 8 categories, 11 FAQ records; memories catalog contains 3 top-level fields including items (28 items expected from PR #40, independent exact items count still to be asserted); 37 destination-program links with 0 missing link targets. italy-tennis and italy-sailing contain missing/empty category_slug; preserved.
-- Staging-only D1 migration 0001_catalog.sql applied through personal Cloudflare API (response success; 13 SQL statements). Read-back sqlite_master confirmed catalog_entities, destination_programs, site_documents, media_assets, inquiries, admin_sessions, import_sources. Production D1 untouched.
-- D1 model adjusted for lean migration: indexed stable summary fields plus full original content_json (lossless) rather than decomposing every dynamic gallery/stat/highlight. Script scripts/make-d1-seed.mjs generated idempotent SQL in CI, but **no data imported**.
+> Use [HANDOFF.md](./HANDOFF.md) to resume implementation in another ChatGPT conversation. This file is the authoritative status; older incremental descriptions in other docs may reflect the initial bootstrap.
 
-## Remaining / unverified
-- Phase 0 visual screenshots, comprehensive route matrix, actual source counts/checksums, image references.
-- Real React public/admin parity not ported; CI scaffold green but visual route coverage, D1 import, admin, media, forms and E2E not done.
-- No email delivery credentials configured.
-- Production Worker gocamp-migration-production exists as an isolated 503-only placeholder. API confirms it has only production D1/R2 and Images bindings; workers.dev subdomain and preview URLs are BOTH disabled and no custom route exists. No production application release, DNS/traffic switch, merge or cPanel change.
-- Free-tier usage load simulation and live CPU measurement not performed.
-- Staging bootstrap Worker deployed through connected Cloudflare API: gocamp-migration-staging, with workers.dev enabled and preview URLs disabled. Cloudflare deployments API confirmed 100% active version; Worker settings confirmed D1 DB, R2 MEDIA, IMAGES (free transformations), GOCAMP_ENV staging bindings. Health URL expected: https://gocamp-migration-staging.elprincedoca.workers.dev/health . Live external HTTP response could not be independently retrieved in this session; requires curl/browser verification. The Worker contains only GET /health and 503 for other requests; it is NOT the React application.
+## 1. Phase status (evidence-based)
 
-## Tracking discipline
-Complete phases only when their checkboxes in PHASES.md pass and executed evidence is added here with commit/version/URL. Do not mark full migration done based on resource provision.
+| Phase | Implemented / verified | Still needed before phase acceptance | Gate |
+| --- | --- | --- | --- |
+| P0: PR #40 baseline | Original PHP snapshot identified; 63 programs, 9 destinations, 8 categories, 28 memories, 11 FAQs confirmed; 7 representative public pages captured at 3 viewports | Complete inventory of every public/admin URL, JS action, image dependency and exception; field-by-field source comparison | **Partial** |
+| P1: React/Cloudflare foundation | React Router v7 + React 19 + TS + Vite + Cloudflare Worker deployed; isolated staging/prod D1/R2; GitHub CI, Cloudflare Builds, static assets and 15 live HTTP smoke checks | Account-wide Free quota measurement, static asset/CPU profiling, other original acceptance details | **Foundation operational; final gate open** |
+| P2: D1 migration | Staging D1 schema and idempotent source-seed tooling; catalog and documents imported; 6 tracked import sources; counts verified from remote D1 | Byte-/field-level content checks, visibility/ordering relationships, orphan image references, idempotent reimport and restore test | **Core catalog imported; validation pending** |
+| P3: Public React parity | Homepage, destinations, categories, About, FAQ, Contact, hidden listing policy, footer, banner, memories, nav JS and 7-page/3-viewport comparison pass | Audit **all** destinations and categories, individual program details/aliases, page interactions, SEO/canonical/redirect/sitemap, cross-browser/accessibility, real content/visibility parity | **Partial** |
+| P4: Admin parity | Login/logout/session/CSRF code, initial catalog CRUD and bulk statuses, settings/FAQ/memories JSON editors, inquiry listing/status, media UI | Authenticated E2E incl. persistence/authorization/race conditions; visual CMS editors; all PHP operations incl. delete/archive/restore, overrides, images, bulk per category/destination; security review | **Partial / not validated** |
+| P5: Media/forms/optimization | R2 binding and upload endpoints, D1 media table, image MIME checks, public media endpoint; contact/lead/newsletter handlers and D1 inquiry table | Full R2 import/legacy reference parity, upload replace/remove/rollback tests, image transform preset/budget, mail provider integration, spam and form E2E | **Partial** |
+| P6: Staging acceptance & release | Isolated staging deploy, GitHub checks and 15 HTTP smoke tests; 21 visual screenshot **pairs** pass for 7 page templates × 3 viewports | All routes, performance/Cloudflare Free budget, automated authenticated E2E, security, data restore, rollback, production release checklist | **Open; no production promotion** |
 
-## Continued implementation — 2026-10-31 (latest)
-- Connected personal Cloudflare Builds staging Worker to GitHub branch migration/cloudflare-react-workers-pr40, root /cloudflare-app; production Worker is NOT connected to this build.
-- Actual full React SSR/static asset deployment succeeded via Cloudflare Builds (first build 8921a960-f2c4-40ac-88af-e4f4b21343a8; subsequent branch builds also completed). Live HTTP routes require independent smoke verification.
-- Added initial admin auth/session/CSRF, catalog CRUD/bulk status, site document editing, inquiries, private R2 media ingestion and gated media delivery; features are **not yet full PHP visual parity**.
-- Applied a staging-only ADMIN_PASSWORD_SHA256 Worker secret; not stored in GitHub. Added deployment-time HTTP smoke script; status to be recorded after run.
-- Source content was imported into staging D1: 63 programs, 9 destinations, 8 categories, 37 associations, 28 memories, 11 FAQ and 6 source hash records; verified from Cloudflare D1 in this turn. Existing progress statement claiming 'no data imported' is superseded. Production D1 remains empty.
+Do not interpret code existing in the repository as a passing end-to-end test. In particular, neither admin writes nor media uploads have been exercised as a real authenticated user in this snapshot.
 
-## Browser-verified visual parity — 2026-10-31
-- PHP/React comparison https://github.com/JoethonDev/gocampinternational/actions/runs/41211402619: PASSED (18 screenshots: Home/Italy/Academic at 3 viewports). Desktop full-page heights identical (3709, 4144, 3846px); category banner gradient and memories slider restored.
-- Staging deployment of 4a243ea23d8a8842be5fab78909fea272f54913b passed Cloudflare Build, 13 live HTTP smoke routes and GitHub CI.
-- Fixed nav underline (btn-link replaced by legacy anchor), desktop hover open, active link/scroll/back-to-top/lightbox, original footer, text shadows, banner layout, missing home/category/destination memories.
-- Broader visual route coverage, cross-browser interaction and authenticated admin parity not yet completed.
+## 2. Latest verified GitHub and staging evidence
+
+- [Visual + interaction comparison run 41213333085](https://github.com/JoethonDev/gocampinternational/actions/runs/41213333085): **SUCCESS** on application commit `0e750c979...`, completed 2026-10-31 15:10 UTC (17:10 Cairo). Job log explicitly reports: `Confirmed staging deploy revision: 0e750c979...` and `Visual parity checks passed. Screenshot pairs: 21`.
+- Browser workflow: `.github/workflows/cloudflare-migration-visual-parity.yml`; comparator: `tests/migration-visual-parity.cjs`. Chromium 1440×900 desktop, 820×1180 tablet, 390×844 mobile. Covered **Home**, **Italy destination**, **Adult Academic category**, **Kids Camps category**, **About**, **FAQ** and **Contact**. Checks include navbar decoration/hover and mobile menu, banner paths/geometry and dark overlay, full-page geometry tolerance, responsive overflow, shared memories and photos. It compares **the exact live staging revision** before running. Screenshot artifact is retained for a limited time in the GitHub Actions run.
+- Latest connected **Cloudflare Builds** for same code checkpoint: `3b7c6761-15f3-48b1-acd6-27d82b24310a`, **SUCCESS**. It ran `wrangler deploy` and **all 15 live, read-only HTTP smoke checks passed** (see `cloudflare-app/scripts/smoke-staging.mjs`). These cover home, health, about, FAQ, contact, destination Italy, both academic and Kids Camps categories, admin login, unauthorized admin redirect, intentionally hidden listing pages, missing media 404 and static hero/banner assets.
+- [GitHub migration checks, recent success](https://github.com/JoethonDev/gocampinternational/actions/runs/41213204038) for `796c102...`: dependency/TypeScript/build/seed/Wrangler validations. The latest visual + Cloudflare deploy both succeeded for `0e750c979...`; don't claim a newer dedicated GitHub migration-check run for that exact SHA without verifying.
+- **Important limitation:** "Visual parity passed" means measured geometry and tested interactions across **seven sampled routes**, not pixel-identical screenshots, every route, every interaction or administrative acceptance.
+
+## 3. Staging D1 — read-only verification 2026-10-31
+
+| Entity | Verified rows |
+| --- | ---: |
+| Programs | 63 |
+| Destinations | 9 |
+| Program categories | 8 |
+| Destination–program links | 37 |
+| Camp memories | 28 |
+| Global FAQ | 11 |
+| Site settings document | 1 |
+| Import-source records | 6 |
+| Media metadata | 0 |
+| Inquiries | 0 |
+
+Remote staging D1 has `catalog_entities`, `destination_programs`, `site_documents`, `import_sources`, `admin_sessions`, `inquiries`, `media_assets`, `submission_limits`. The empty media/inquiry tables do **not** establish failure by themselves; those workflows are still untested. Source record counts match the PR #40 baseline; complete per-field equality has not been proven.
+
+**Known source anomalies:** `italy-tennis` and `italy-sailing` have incomplete/missing category association in the legacy catalog; preserve them and report rather than silently discard.
+
+## 4. Cloudflare environments and safety
+
+Account: personal Cloudflare (the connected account; account ID `da59dca47179969defd66c61b710bbdb`).
+
+| | Staging | Production (reserved only) |
+| --- | --- | --- |
+| Worker | `gocamp-migration-staging` | `gocamp-migration-production` |
+| D1 database | `gocamp-staging-db` (`87e579d7-4f7a-4673-a317-d62551858b3c`) | `gocamp-production-db` (`84f3beb7-ed00-49eb-a25b-913b301ad1da`) |
+| R2 bucket | `gocamp-staging-media` | `gocamp-production-media` |
+| Images binding | `IMAGES` | `IMAGES` |
+| Route | workers.dev staging URL enabled | workers.dev **disabled**; no live custom route |
+| Database state | catalog imported | **No app tables/import yet** (only internal `_cf_KV` was visible) |
+
+Staging bindings verified: `DB`, `MEDIA`, `IMAGES`, `GOCAMP_ENV`, `MIGRATION_SOURCE_SHA`, and secret-name `ADMIN_PASSWORD_SHA256` (value **not** documented). Staging previews were **enabled** when inspected; inspect/disable if previews are not needed. Production remains a 503-only placeholder with preview/subdomain disabled. No production DNS, cPanel, existing app, or merged PR changed.
+
+Cloudflare Builds is linked to the migration branch with root `/cloudflare-app`. Documentation-only pushes **may trigger an otherwise identical staging rebuild** due to monitored paths. Never bind staging to production DB/R2. Keep secrets out of files.
+
+## 5. Main functionality already in branch
+
+- **Public:** `cloudflare-app/app/routes.ts`; `app/routes/{home,destination,category,about,faq,contact}.tsx`, hidden-list/redirect aliases, public assets and SEO meta, D1 loaders, `components/{SiteShell,SiteInteractions,CampMemories,FaqAccordion,SafeRichText,ProgramCard}.tsx`.
+- **Original-design fixes:** preserve original PHP CSS and images; restored anchor navigation (no Bootstrap `btn-link` underline), hover dropdown, mobile tap/collapse, hero geometry/gradient/text position, footer text and 8px link spacing, banner image selection, back-to-top, scroll state, lightbox and memories slider/section. FAQ CMS rich text is parsed with a safe allowlist instead of executable HTML. `docs/cloudflare-migration/UI_PARITY.md` records details.
+- **Admin foundation:** `app/routes/admin-*.tsx`; `app/lib/{admin,catalog-write,media}.server.ts`. Initial opaque D1 sessions + CSRF/same-origin checks, catalog record create/edit/status/bulk changes, basic document JSON editing, inquiries and R2 uploads. **Not yet accepted against all legacy PHP workflows.**
+- **DB / migration:** `cloudflare-app/server/db/migrations/`, `cloudflare-app/scripts/make-d1-seed.mjs`, snapshot/seed tests, D1 repository. Old `worker/` (PR #40 PHP gateway) and `data/legacy/` remain reference material; do not deploy the old PHP gateway in place of the React Worker.
+
+## 6. Remaining work — ordered
+
+1. **P0 functional gap audit / full route parity.** Create a public/admin URL→React mapping from PHP templates and `.htaccess`; test actual **individual program detail pages**, alias/redirect/hidden routes and status inheritance; fix every missing route/interaction before accepting public parity. Cover every program/category/destination, not only seven samples.
+2. **P1 admin business/UI parity.** Replace temporary raw JSON workflows with original visual controls where appropriate; verify program/category/destination field editing, bulk selection scoped by category/destination, global visibility + per-item overrides, archive/trash/restore, media edits, FAQ and memories. Add Playwright authenticated tests with **dedicated staging test fixtures**, not production data. Verify sessions, logout, expiry, rate limit, CSRF, authorization, optimistic-write conflicts and errors.
+3. **P2 full media functionality and form verification.** Check legacy image mapping and missing references; R2 upload/replace/remove, media metadata and nonpublic access; pre-optimize assets via build CPU/Sharp, with limited Cloudflare Images Free presets. Test contact/lead/newsletter success/failure with idempotency/spam defenses. Confirm actual outbound email provider (no fake delivery success).
+4. **P3 SEO, usability, security and performance.** SSR metadata/canonicals/sitemap, links and redirects; multi-browser/device and keyboard tests; no secrets exposed. Benchmark static asset no-Worker delivery, dynamic CPU p50/p95, D1 reads/writes, R2 operations and Images unique transformations. Account limits are shared with other personal Workers. No paid upgrade.
+5. **P4 production readiness only after gates.** Run full PR #40 import checks (hashes/fields/visibility/order/images), verify backup + restore and rollback, confirm Free quota headroom, then create a release readiness checklist. **Do not merge, attach production DNS or deploy publicly without a separate explicit release instruction.**
+
+## 7. Operational conventions
+
+- Keep implementation **lean**: React Router + React + TypeScript + Vite/Cloudflare Workers, D1 SQLite, R2. No extra microservices, Aiven/Tigris runtime, Cron, FTP or paid services without need.
+- Source data/UI truth remains PR #40 at `80432a2...`. Avoid "improving" the design; **match** CSS, spacing, typography, images, hover and responsive behavior.
+- Before writing: fetch migration branch **HEAD** and check latest GitHub/Cloudflare state; concurrent commits were seen during the prior work. Use an expected-SHA lease on branch updates and rebase/re-read when the branch changes.
+- After each code change: `cd cloudflare-app && npm ci && npm run typecheck && npm run build && npm run smoke:staging` (smoke only after successful deploy), and inspect GitHub Actions. UI check: `.github/workflows/cloudflare-migration-visual-parity.yml`. The visual workflow waits for `/migration-commit.txt` to match the checked commit; don't disable this gate.
+- Use **read-only** checks for production resources. Staging mutations only for approved test cases, with isolated fixtures and recoverable state.
+- Update this file + HANDOFF.md after significant implementation progress, with exact SHA, run URLs and observed test results. Do not rewrite failure as success or equate compilation with functional parity.

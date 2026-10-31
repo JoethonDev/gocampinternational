@@ -1,28 +1,38 @@
-# Visual + interaction parity gate — source is PR #40
-The PHP templates, CSS and JS are the authoritative UI/UX reference. The migration must not redesign the site.
+# UI/UX parity — verified reference and remaining gates
 
-## 2026-10-31 findings and repairs
-- Navbar dropdown toggles: PR40 uses `a.nav-link.dropdown-toggle`. The first React port used `button.nav-link.btn.btn-link`, which caused unwanted underline due to `design-system.css .btn-link {text-decoration:underline}`. Replaced with original anchor semantics.
-- PR40 `js/main.js` opens dropdowns on mouse hover for desktop >=1200px and uses Bootstrap click toggles on mobile. React was missing the hover registration. Ported interaction in `SiteInteractions.tsx`, without loading legacy form AJAX handlers that would conflict with React Router forms.
-- PR40 `js/ux-enhancements.js` handles active nav, scroll shadow, back-to-top and optional lightbox. Ported targeted behavior in React effects, with cleanup on navigation and reduced-motion support.
-- PR40 `includes/styles.php` includes Font Awesome CSS. React now includes the same resource and font preconnect.
-- PR40 footer has LinkedIn, managing director contact icons and two-column copyright line. React restored the original markup.
-- PR40 homepage hero caption text-shadow, category card layout and category banner parallax aligned.
-- PR40 global CSS file sequence preserved: Bootstrap, icons, Font Awesome, style.css, programs-theme.css, ux-enhancements.css, design-system.css. Original image assets remain copied at build time.
+**Source of truth:** PHP/CSS/JavaScript at [PR #40](https://github.com/JoethonDev/gocampinternational/pull/40), commit `80432a2...`. Do not redesign.  
+**Last verified application checkpoint:** `0e750c979f77091b32c3945cc3bd6e069cafb927`.  
+**Latest PASS:** [GitHub browser run 41213333085](https://github.com/JoethonDev/gocampinternational/actions/runs/41213333085) (completed 2026-10-31 15:10 UTC). The log confirms exact staging revision and `Visual parity checks passed. Screenshot pairs: 21`.
 
-## Automated checks
-A GitHub Actions browser workflow now runs PHP original and live React staging at 1440x900, 820x1180 and 390x844, taking paired full-page screenshots for home, Italy destination and adult-academic category. It measures navbar height, hero height, background-image path, underline presence, horizontal overflow and desktop hover behavior. Screenshot artifacts are uploaded for manual inspection.
+## What passed
 
-The workflow is expected to find remaining drift and can fail before pixel perfection. A passing HTTP smoke alone is NOT visual acceptance. Document any genuine differences and fix the React implementation while keeping source design CSS unmodified. Keep other workflows separate.
+**Seven page samples** at three viewports (1440×900 desktop, 820×1180 tablet, 390×844 mobile):
 
-## Remaining
-- Inspect screenshot pairs, reconcile missing sections, card interaction, form/modal behavior and footer details across all routes.
-- Verify dropdown hover/click on real touch and keyboard devices, carousel auto advance and menu cleanup on client-side route navigation.
-- Ensure no artificial title underlines; original `nav-link::after` accent animation on hover should remain.
-- Add visual baselines for About, FAQ, Contact, all destination/status variants, and admin pages after the public baseline passes.
+| Page | Tested |
+| --- | --- |
+| Home | Yes |
+| Italy destination | Yes |
+| Adult Academic category | Yes |
+| Kids Camps category | Yes |
+| About | Yes |
+| FAQ | Yes |
+| Contact | Yes |
 
-## Verified browser evidence — 2026-10-31
-GitHub visual parity run https://github.com/JoethonDev/gocampinternational/actions/runs/41211402619 **PASSED**, covering original PHP and staged React with 18 screenshots (Home, Italy, Academic; desktop 1440, tablet 820, mobile 390).
-Inspected desktop full-page screenshots; document heights were identical: Home 3709px, Italy 4144px, Academic 3846px. Hero/navbar heights match. Browser checks found no nav underline or horizontal overflow and both dropdowns opened on hover.
-Regressions fixed: category hero dark overlay and responsive height, missing shared memories across all 3 route types, header anchor/hover semantics, footer details and scroll/lightbox interactions.
-The stricter follow-up run also checks the memories section/cards, overlay and full-page height. Pixel-level parity across all routes, admin styling, carousel advancement, cross-browser checks and Free quota load tests remain outstanding.
+Playwright/Chromium captures paired screenshots, checks navbar styles (no underlines), hover opening Programs/Destinations on desktop, mobile dropdown tap, banner background/overlay, hero and navbar dimensions, full-page height tolerance, absence of horizontal overflow, shared memories and card count. It waits until live `/migration-commit.txt` matches `GITHUB_SHA`, preventing false results from out-of-sync deployments. See `tests/migration-visual-parity.cjs` and `.github/workflows/cloudflare-migration-visual-parity.yml`. Screenshot artifact is stored in the Actions run with limited retention.
+
+## Specific regressions fixed
+
+- Replaced `button.btn-link` navbar toggles with original PHP-style links, removing accidental underlines.
+- Ported desktop hover and mobile menu dropdown/collapse, active nav, scroll shadows, back-to-top and image lightbox interactions using React effects with cleanup.
+- Restored original category banner side-aligned typography, responsive hero height, parallax/gradient contrast, image sizing, homepage text shadow and card dimensions.
+- Restored footer contact/social links, LinkedIn and exact mobile list spacing.
+- Ported shared **Go Campers Memories** slider, arrows and optional Facebook panel to home, category and destination templates.
+- Preserved rich FAQ body markup safely via restricted React element parsing, instead of printing HTML tags as literal text.
+- Aligned About/FAQ/Contact page wrappers and About paragraph/image CSS with original PHP.
+- Added static staging commit marker to synchronize browser checks with the deployed Worker.
+
+## Still NOT accepted
+
+Passing snapshots and geometry checks are not proof of pixel-by-pixel identity or **all** UI/JS functionality. Still needed: every destination/program/category, exact program detail route behavior, desktop/tablet/mobile and keyboard accessibility for remaining pages, carousel timing, interactions/forms/modals, visibility inheritance, admin UX, Safari/Firefox/device checks. Visually inspect screenshot artifacts and fix actual drift at source CSS/component level rather than arbitrary offsets. Avoid declaring all public pages finished until every route in PHASES.md is exercised.
+
+See [PROGRESS.md](./PROGRESS.md) for the wider functional, data and deployment status.
