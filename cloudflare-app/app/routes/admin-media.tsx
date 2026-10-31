@@ -35,7 +35,7 @@ export default function AdminMedia({loaderData}:Route.ComponentProps){
       <p className="small text-secondary mb-1">{Math.round(row.bytes/1024)} KB · {row.is_public?"Published":"Hidden"}</p>
       <Form method="post" className="d-flex gap-2 align-items-end flex-wrap"><input type="hidden" name="csrf" value={session.csrf}/><input type="hidden" name="id" value={row.id}/>
         <div className="flex-grow-1"><label className="form-label">Name</label><input name="display_name" defaultValue={row.display_name} className="form-control form-control-sm"/></div>
-        <button name="operation" value="rename" className="btn btn-sm btn-outline-primary">Rename</button><button name="operation" value={row.is_public?"hide":"show"} className="btn btn-sm btn-outline-secondary">{row.is_public?"Hide":"Publish"}</button>
+        <button name="operation" value="rename" className="btn btn-sm btn-outline-primary">Rename</button><button name="operation" value={row.is_public?"hide":"show"} className="btn btn-sm btn-outline-secondary">{row.is_public?"Hide":"Publish"}</button><button type="submit" name="operation" value="delete" className="btn btn-sm btn-outline-danger" onClick={e=>{if(!window.confirm("Delete this image permanently from R2? Referenced images cannot be deleted."))e.preventDefault();}}>Delete</button>
       </Form><div className="small mt-2 text-secondary">/media/{row.id}</div>
     </div></div></div>)}</div>{rows.length===0&&<p>No uploads yet.</p>}
   </AdminShell>;

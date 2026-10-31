@@ -39,6 +39,20 @@ export async function mutateMedia(request:Request,env:Env,form:FormData) {
   if(operation==="hide"||operation==="show") {
     const res=await env.DB.prepare("UPDATE media_assets SET is_public=? WHERE id=?").bind(operation==="show"?1:0,id).run();
     if(res.meta.changes!==1)throw new Response("Media not found",{status:404});
+  } else if(operation==="delete") {
+    const row=await env.DB.prepare("SELECT object_key FROM media_assets WHERE id=?").bind(id).first<{object_key:string}>();
+    if(!row)throw new Response("Media not found",{status:404});
+    const ref="/media/"+id;
+    const [catalogRefs,documentRefs]=await Promise.all([
+      env.DB.prepare("SELECT COUNT(*) AS count FROM catalog_entities WHERE instr(content_json,?)>0").bind(ref).first<{count:number}>(),
+      env.DB.prepare("SELECT COUNT(*) AS count FROM site_documents WHERE instr(content_json,?)>0").bind(ref).first<{count:number}>()
+    ]);
+    if((catalogRefs?.count||0)+(documentRefs?.count||0)>0)
+      throw new Response("This image is still referenced by page content. Replace those references before deletion.",{status:409});
+    const result=await env.DB.prepare("DELETE FROM media_assets WHERE id=?").bind(id).run();
+    if(result.meta.changes!==1)throw new Response("Media changed. Reload.",{status:409});
+    // R2 key is immutable and uniquely mapped to the deleted metadata entry.
+    await env.MEDIA.delete(row.object_key);
   } else if(operation==="rename") {
     const name=String(form.get("display_name")||"").trim().slice(0,180);
     if(!name)throw new Response("Name required",{status:400});
