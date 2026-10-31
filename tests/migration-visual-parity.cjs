@@ -7,6 +7,22 @@ const staging=process.env.STAGING_URL||"https://gocamp-migration-staging.elprinc
 const viewports=[{name:"desktop",width:1440,height:900},{name:"tablet",width:820,height:1180},{name:"mobile",width:390,height:844}];
 const pages=[{name:"home",url:"/",memories:true},{name:"destination-italy",url:"/destinations/italy",memories:true},{name:"category-academic",url:"/program/category?category=adult-academic",memories:true},{name:"category-kids",url:"/program/category?category=kids-camps",memories:true},{name:"about",url:"/about",memories:false},{name:"faq",url:"/faq",memories:false},{name:"contact",url:"/contact",memories:false}];
 const output=path.resolve("artifacts/migration-parity");
+async function requireMatchingStagingRevision(){
+  const expected=process.env.GITHUB_SHA;
+  if(!expected)return; // Optional local/manual run; CI always provides GITHUB_SHA.
+  const url=staging.replace(/\/$/,"")+"/migration-commit.txt";
+  const timeoutMs=180000,start=Date.now();
+  let observed="unavailable";
+  while(Date.now()-start<timeoutMs){
+    try {
+      const response=await fetch(url+"?r="+expected,{headers:{"Cache-Control":"no-cache"},signal:AbortSignal.timeout(10000)});
+      if(response.ok){observed=(await response.text()).trim();if(observed===expected){console.log("Confirmed staging deploy revision:",observed);return;}}
+    }catch(err){observed=String(err);}
+    await new Promise(resolve=>setTimeout(resolve,5000));
+  }
+  throw new Error("Staging revision did not match GitHub SHA; visual comparison aborted to avoid cross-commit false positives. Expected "+expected+" but saw "+observed);
+}
+
 function assert(value,msg){if(!value)throw Error(msg);}
 async function metrics(page) {
   return await page.evaluate(()=>{
@@ -33,6 +49,7 @@ async function metrics(page) {
 }
 (async()=>{
   await fs.mkdir(output,{recursive:true});
+  await requireMatchingStagingRevision();
   const browser=await chromium.launch({headless:true});
   const summary=[];
   let failed=0;

@@ -1,4 +1,5 @@
-import { cp, mkdir, readdir, stat } from "node:fs/promises";
+import { cp, mkdir, readdir, stat, writeFile } from "node:fs/promises";
+import { execFileSync } from "node:child_process";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),"..");
@@ -15,4 +16,7 @@ async function copySafe(dir,from,to,allowed){
 for(const [dir,allowed] of Object.entries(targets)) {
   const from=path.join(source,dir);try { if((await stat(from)).isDirectory()) await copySafe(dir,from,path.join(root,"public",dir),allowed); }catch(error){if(error.code!=="ENOENT") throw error;}
 }
-console.log("Prepared committed legacy public assets (no PHP copied).");
+// Identify the exact Git revision served by the static-asset deployment.
+const revision=execFileSync("git",["rev-parse","HEAD"],{cwd:source,encoding:"utf8"}).trim();
+await writeFile(path.join(root,"public","migration-commit.txt"),revision+"\n");
+console.log("Prepared committed legacy public assets (no PHP copied), revision",revision.slice(0,12));
