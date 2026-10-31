@@ -31,7 +31,7 @@ export default function AdminMedia({loaderData}:Route.ComponentProps){
       <button className="btn btn-primary" disabled={nav.state!=="idle"}>Upload to R2</button>
     </div></Form>
     <div className="row g-3">{rows.map(row=><div className="col-md-6 col-xl-4" key={row.id}><div className="card h-100 shadow-sm"><div className="card-body">
-      <img alt={row.display_name} className="w-100 rounded mb-3" style={{height:160,objectFit:"contain",background:"#f3f4f6"}} src={"/media/"+row.id}/>
+      <img alt={row.display_name} className="w-100 rounded mb-3" style={{height:160,objectFit:"contain",background:"#f3f4f6"}} src={row.is_public?"/media/"+row.id:"/admin/media/preview/"+row.id}/>
       <p className="small text-secondary mb-1">{Math.round(row.bytes/1024)} KB · {row.is_public?"Published":"Hidden"}</p>
       <Form method="post" className="d-flex gap-2 align-items-end flex-wrap"><input type="hidden" name="csrf" value={session.csrf}/><input type="hidden" name="id" value={row.id}/>
         <div className="flex-grow-1"><label className="form-label">Name</label><input name="display_name" defaultValue={row.display_name} className="form-control form-control-sm"/></div>

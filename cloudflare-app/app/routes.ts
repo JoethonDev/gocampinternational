@@ -10,6 +10,7 @@ export default [
   route("admin/documents/:key","routes/admin-documents.tsx"),
   route("admin/inquiries","routes/admin-inquiries.tsx"),
   route("admin/media","routes/admin-media.tsx"),
+  route("admin/media/preview/:id","routes/admin-media-preview.ts"),
   route("admin/trash","routes/admin-trash.tsx"),
   route("admin/:legacy","routes/admin-legacy.ts"),
   route("media/:id","routes/public-media.ts"),
