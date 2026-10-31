@@ -3,7 +3,7 @@
 **Resume date/reference:** 2026-10-31.  
 **Repo:** https://github.com/JoethonDev/gocampinternational  
 **Working branch:** `migration/cloudflare-react-workers-pr40` — no merges.  
-**Last verified app commit:** `0e750c979f77091b32c3945cc3bd6e069cafb927` (a documentation-only successor commit may now be HEAD).  
+**Last verified app commit:** `1de60f6b758cd6686ce48524f924ce17f3e21c25` (a docs-only successor may be branch HEAD).
 **Immutable legacy data and UI reference:** [PR #40](https://github.com/JoethonDev/gocampinternational/pull/40), commit `80432a2a6fcb4b0de6f14710748e53781ddef58c`.  
 **Current staging:** https://gocamp-migration-staging.elprincedoca.workers.dev/  
 **Detailed snapshot:** [PROGRESS.md](./PROGRESS.md). **Acceptance contract:** [PHASES.md](./PHASES.md). **UI/UX comparisons:** [UI_PARITY.md](./UI_PARITY.md).
@@ -13,15 +13,17 @@
 The full-stack React Router v7/TypeScript app builds and deploys to the user's **personal Cloudflare** staging Worker. Staging D1 has PR #40 data (63 programs, 9 destinations, 8 categories, 37 links, 28 memories, 11 FAQs, 6 source manifests); production D1 is not initialized with application tables. Staging is isolated from the public PHP site.
 
 **Last evidence:**
-- [Visual + interaction check 41213333085](https://github.com/JoethonDev/gocampinternational/actions/runs/41213333085) = **PASS**. 21 screenshot *pairs*: 7 sampled routes × desktop/tablet/mobile. Log confirms it tested exact deployed commit `0e750c979`. Checks include banner geometry, link underlines, hover/touch dropdowns, no overflow, shared memories and page height.
-- Cloudflare Build `3b7c6761-15f3-48b1-acd6-27d82b24310a` = **SUCCESS** for the same SHA, with **15/15 staging HTTP smoke tests** passed.
-- Source/production: PR #40 open/unmerged; no production cutover, DNS change, paid service or deploy to live domain.
+- [Browser parity 41219367418](https://github.com/JoethonDev/gocampinternational/actions/runs/41219367418): **PASS**, 24 screenshot pairs, 8 templates × three viewports, including landing, exact deployed commit `1de60f6`.
+- [Migration CI 41219367420](https://github.com/JoethonDev/gocampinternational/actions/runs/41219367420): **PASS**.
+- Cloudflare staging Build `10d10b2c-444d-4b1e-a0a7-172944042176`: **SUCCESS**, all **27** staging HTTP smoke checks passed.
+- [ROUTE_PARITY_MATRIX.md](./ROUTE_PARITY_MATRIX.md) maps public and legacy admin routes and pending E2E workflows.
+- No merge, production DNS/Worker/data release, or production cutover.
 
 **Do not conflate** seven passing pages with complete site parity. Admin code and R2/media endpoints exist but lack real authenticated E2E acceptance.
 
 ## What to do next (recommended start)
 
-**Start with the public functional parity gap**. Inspect `cloudflare-app/app/routes.ts`, PHP's `program/index.php`, `program/category.php`, `destination/index.php` and `.htaccess`. PR #40 has **no standalone individual program-detail routes**: cards and modal CTAs were deliberately disabled. Preserve non-clickable program cards; finish canonical PHP entrypoint/redirect coverage and the missing `/landing` marketing form, then test all destination/category slugs, status/visibility and interactions.
+**Start with [ROUTE_PARITY_MATRIX.md](./ROUTE_PARITY_MATRIX.md).** Public alias/hidden routes and the landing page are now ported, with an 8-page visual pass. Do **not** invent individual program-detail URLs; source PHP cards have their modal triggers disabled. Next audit every dynamic destination/category and exact content/status/visibility, then test *actual* form submissions and email notification policy. The landing success state currently confirms only D1 persistence, not outbound email.
 
 Then complete **admin parity** against `admin/*.php`: real React editors (not only JSON text areas), scoped bulk operations, visibility, archive/restore, media, FAQ, memories and inquiries. Add protected authenticated test fixtures and verify permissions, CSRF, revision conflicts and D1 persistence.
 
@@ -63,3 +65,7 @@ Do **not** implement invented `/program/:slug` detail pages. The original `index
 ## Landing page follow-up (2026-10-31)
 
 The branch now has initial React landing-page markup/CSS, correct form fields and D1 lead persistence, including explicit server-side age/gender/consent/interests validation. `/landing.php` redirects to `/landing`. It is **not yet accepted**: run browser/POST and admin inbox tests on staging, check visual parity, and add an email provider with accurate failure handling or obtain a documented decision that inbox-only delivery is sufficient. Never claim mail was delivered when only D1 has an inquiry. Read PROGRESS.md §9.
+
+## Last known verified checkpoint
+
+Application `1de60f6`: full [24-pair browser comparison](https://github.com/JoethonDev/gocampinternational/actions/runs/41219367418) PASS (including responsive landing) and [migration CI](https://github.com/JoethonDev/gocampinternational/actions/runs/41219367420) PASS, with 27/27 Cloudflare smoke checks. Preserve low-specificity `:where(.landing-page)` responsive CSS. Read [ROUTE_PARITY_MATRIX.md](./ROUTE_PARITY_MATRIX.md). Remaining admin/media/forms/security acceptance is **not done**.
