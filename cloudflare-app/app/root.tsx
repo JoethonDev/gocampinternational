@@ -93,10 +93,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
         {!isAdmin && (
           <SiteHeader categories={data?.categories || []} destinations={data?.destinations || []} />
         )}
-        <main id="main-content">
-          <div className="gc-route-view" key={location.key}>
-            {children}
-          </div>
+        <main id="main-content" key={location.key} className="gc-route-view">
+          {children}
         </main>
         {!isAdmin && (
           <>

@@ -1,40 +1,42 @@
 import { Form, useNavigation } from "react-router";
+import { AdminEmptyState } from "../../components/admin/AdminEmptyState";
+import { AdminFormSection } from "../../components/admin/AdminFormSection";
 import { AdminPageHeader } from "../../components/admin/AdminPageHeader";
+import { AdminPanel } from "../../components/admin/AdminPanel";
+import { AdminRowActions } from "../../components/admin/AdminRowActions";
+import { AdminToolbar, AdminToolbarField } from "../../components/admin/AdminToolbar";
 import { Pagination } from "../../components/ui/Pagination";
 import type { MediaAsset } from "../../lib/domain";
 import type { MediaLibraryData, MediaUsage, StaticMedia } from "./media.server";
 
 function MediaSearch({ query, folder }: { query: string; folder: string }) {
   return (
-    <Form method="get" className="row g-2 align-items-end mb-3" role="search">
-      <div className="col-md-6">
-        <label className="form-label" htmlFor="media-search">
-          Find image
-        </label>
-        <input
-          id="media-search"
-          className="form-control"
-          type="search"
-          name="q"
-          defaultValue={query}
-          placeholder="Search filenames"
-        />
-      </div>
-      <div className="col-md-3">
-        <label className="form-label" htmlFor="media-folder">
-          Folder
-        </label>
-        <select id="media-folder" className="form-select" name="folder" defaultValue={folder}>
-          <option value="all">All images</option>
-          <option value="images">/images</option>
-          <option value="uploads">/uploads</option>
-        </select>
-      </div>
-      <div className="col-md-3">
-        <button className="btn btn-primary w-100" type="submit">
-          Search
-        </button>
-      </div>
+    <Form method="get" role="search">
+      <AdminToolbar
+        actions={
+          <button className="btn btn-primary" type="submit">
+            Search
+          </button>
+        }
+      >
+        <AdminToolbarField label="Find image" htmlFor="media-search">
+          <input
+            id="media-search"
+            className="form-control"
+            type="search"
+            name="q"
+            defaultValue={query}
+            placeholder="Search filenames"
+          />
+        </AdminToolbarField>
+        <AdminToolbarField label="Folder" htmlFor="media-folder">
+          <select id="media-folder" className="form-select" name="folder" defaultValue={folder}>
+            <option value="all">All images</option>
+            <option value="images">/images</option>
+            <option value="uploads">/uploads</option>
+          </select>
+        </AdminToolbarField>
+      </AdminToolbar>
     </Form>
   );
 }
@@ -97,13 +99,16 @@ function StaticMediaCard({ item, usage }: { item: StaticMedia; usage: MediaUsage
 function MediaUploadForm({ csrf }: { csrf: string }) {
   const navigation = useNavigation();
   return (
-    <Form method="post" encType="multipart/form-data" className="card shadow-sm mb-4">
-      <div className="card-body d-flex flex-wrap align-items-end gap-3">
+    <Form method="post" encType="multipart/form-data" className="mb-4">
+      <AdminFormSection
+        title="Upload an image"
+        description="JPEG, PNG, WebP, AVIF or GIF up to 3 MB. New files are stored privately in R2."
+      >
         <input type="hidden" name="csrf" value={csrf} />
         <input type="hidden" name="operation" value="upload" />
-        <div>
+        <div className="col-md-8">
           <label htmlFor="mediaFile" className="form-label">
-            Upload image (up to 3 MB)
+            Image file
           </label>
           <input
             className="form-control"
@@ -114,10 +119,12 @@ function MediaUploadForm({ csrf }: { csrf: string }) {
             required
           />
         </div>
-        <button className="btn btn-primary" disabled={navigation.state !== "idle"}>
-          Upload to R2
-        </button>
-      </div>
+        <div className="col-md-4 d-flex align-items-end">
+          <button className="btn btn-primary w-100" disabled={navigation.state !== "idle"}>
+            <i className="bi bi-cloud-arrow-up me-1" /> Upload to R2
+          </button>
+        </div>
+      </AdminFormSection>
     </Form>
   );
 }
@@ -149,33 +156,35 @@ function R2MediaCard({ asset, csrf }: { asset: MediaAsset; csrf: string }) {
                 className="form-control form-control-sm"
               />
             </div>
-            <button name="operation" value="rename" className="btn btn-sm btn-outline-primary">
-              Rename
-            </button>
-            <button
-              name="operation"
-              value={asset.is_public ? "hide" : "show"}
-              className="btn btn-sm btn-outline-secondary"
-            >
-              {asset.is_public ? "Hide" : "Publish"}
-            </button>
-            <button
-              type="submit"
-              name="operation"
-              value="delete"
-              className="btn btn-sm btn-outline-danger"
-              onClick={(event) => {
-                if (
-                  !window.confirm(
-                    "Delete this image permanently from R2? Referenced images cannot be deleted."
-                  )
-                ) {
-                  event.preventDefault();
-                }
-              }}
-            >
-              Delete
-            </button>
+            <AdminRowActions>
+              <button name="operation" value="rename" className="btn btn-sm btn-outline-primary">
+                Rename
+              </button>
+              <button
+                name="operation"
+                value={asset.is_public ? "hide" : "show"}
+                className="btn btn-sm btn-outline-secondary"
+              >
+                {asset.is_public ? "Hide" : "Publish"}
+              </button>
+              <button
+                type="submit"
+                name="operation"
+                value="delete"
+                className="btn btn-sm btn-outline-danger"
+                onClick={(event) => {
+                  if (
+                    !window.confirm(
+                      "Delete this image permanently from R2? Referenced images cannot be deleted."
+                    )
+                  ) {
+                    event.preventDefault();
+                  }
+                }}
+              >
+                Delete
+              </button>
+            </AdminRowActions>
           </Form>
           <div className="small mt-2 text-secondary">/media/{asset.id}</div>
         </div>
@@ -223,19 +232,28 @@ export function MediaLibraryPage({
         </div>
       )}
       <MediaSearch query={data.q} folder={data.folder} />
-      {data.items.length === 0 ? (
-        <div className="alert alert-light border">No images match the current filters.</div>
-      ) : (
-        <div className="row g-3">
-          {data.items.map((item) => (
-            <StaticMediaCard
-              key={item.path}
-              item={item}
-              usage={data.usage[item.path] || { count: 0, refs: [] }}
-            />
-          ))}
-        </div>
-      )}
+      <AdminPanel
+        title="Committed site images"
+        description="Referenced by the public site and available to every editor."
+      >
+        {data.items.length === 0 ? (
+          <AdminEmptyState
+            icon="bi-images"
+            title="No images match the current filters"
+            description="Try a different filename or folder."
+          />
+        ) : (
+          <div className="row g-3">
+            {data.items.map((item) => (
+              <StaticMediaCard
+                key={item.path}
+                item={item}
+                usage={data.usage[item.path] || { count: 0, refs: [] }}
+              />
+            ))}
+          </div>
+        )}
+      </AdminPanel>
       <Pagination
         page={data.page}
         totalPages={data.totalPages}
@@ -252,23 +270,27 @@ export function MediaLibraryPage({
         Page {data.page} of {data.totalPages} · showing {data.items.length} of {data.total} images
       </p>
 
-      <hr className="my-5" />
-      <section id="uploads">
-        <div className="mb-3">
-          <h2 className="h4 mb-1">R2 uploads</h2>
-          <p className="text-secondary mb-0">
-            New images are stored privately in R2. Only published media is served by its immutable
-            ID.
-          </p>
-        </div>
-        <MediaUploadForm csrf={csrf} />
-        <div className="row g-3">
-          {data.rows.map((asset) => (
-            <R2MediaCard key={asset.id} asset={asset} csrf={csrf} />
-          ))}
-        </div>
-        {data.rows.length === 0 && <p className="text-secondary">No R2 uploads yet.</p>}
-      </section>
+      <div className="mt-5" id="uploads">
+        <AdminPanel
+          title="R2 uploads"
+          description="New images are stored privately in R2. Only published media is served by its immutable ID."
+        >
+          <MediaUploadForm csrf={csrf} />
+          {data.rows.length === 0 ? (
+            <AdminEmptyState
+              icon="bi-cloud-arrow-up"
+              title="No R2 uploads yet"
+              description="Upload an image above to start the media library."
+            />
+          ) : (
+            <div className="row g-3">
+              {data.rows.map((asset) => (
+                <R2MediaCard key={asset.id} asset={asset} csrf={csrf} />
+              ))}
+            </div>
+          )}
+        </AdminPanel>
+      </div>
     </>
   );
 }

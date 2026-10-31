@@ -37,6 +37,10 @@ export function MediaSelector({
     () => all.filter((path) => path.toLowerCase().includes(search.toLowerCase())).slice(0, 48),
     [all, search]
   );
+  const previewSrc =
+    !value || value.startsWith("/") || /^https?:\/\//i.test(value)
+      ? value
+      : `/images/${encodeURIComponent(value)}`;
 
   useEffect(() => {
     if (!open) return;
@@ -78,9 +82,9 @@ export function MediaSelector({
           Browse
         </button>
       </div>
-      {value && (
+      {previewSrc && (
         <img
-          src={value}
+          src={previewSrc}
           alt={`Preview: ${label}`}
           className="rounded border mt-2 media-selector-preview"
           loading="lazy"

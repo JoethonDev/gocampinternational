@@ -50,14 +50,14 @@ export function DashboardPage({
       <div className="admin-dashboard-grid">
         <div className="admin-dashboard-main">
           <CatalogHealth counts={data.counts} />
-          <RecentInquiries rows={data.inquiries} />
+          <RecentInquiries rows={data.inquiries} now={data.now} />
         </div>
         <div className="admin-dashboard-side">
           <QuickActions />
           <StagingStatus environment={data.environment} source={data.source} media={data.media} />
         </div>
       </div>
-      <RecentContent rows={data.recentContent} documents={data.documents} />
+      <RecentContent rows={data.recentContent} documents={data.documents} now={data.now} />
     </div>
   );
 }

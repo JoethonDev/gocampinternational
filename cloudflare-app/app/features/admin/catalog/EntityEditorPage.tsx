@@ -1,23 +1,15 @@
 import { Form, Link, useNavigation } from "react-router";
+import { AdminFormActions } from "../../../components/admin/AdminFormActions";
+import { AdminFormSection } from "../../../components/admin/AdminFormSection";
+import { StatusBadge } from "../../../components/admin/StatusBadge";
 import { VisibilityOverrides } from "../../../components/VisibilityOverrides";
+import { CATALOG_KIND_META, CATALOG_STATUS_OPTIONS } from "../../../config/catalog";
 import { asString, type CategoryRecord, type ProgramRecord } from "../../../lib/domain";
 import { CategoryFields } from "./CategoryFields";
 import { DestinationFields } from "./DestinationFields";
 import { ProgramFields } from "./ProgramFields";
 
 type Kind = "program" | "destination" | "category";
-
-const STATUS_OPTIONS: Record<Kind, string[]> = {
-  program: ["active", "inactive", "trash"],
-  destination: ["active", "inactive", "coming-soon", "trash"],
-  category: ["active", "inactive", "trash"]
-};
-
-const KIND_LABELS: Record<Kind, string> = {
-  program: "program",
-  destination: "destination",
-  category: "category"
-};
 
 export function EntityEditorPage({
   session,
@@ -43,24 +35,36 @@ export function EntityEditorPage({
   saved: boolean;
 }) {
   const navigation = useNavigation();
-  const label = KIND_LABELS[kind];
+  const meta = CATALOG_KIND_META[kind];
+  const currentStatus = asString(item.status) || "active";
+  const title = isNew ? `New ${meta.singular.toLowerCase()}` : String(item.name || slug);
+
   return (
-    <>
-      <div className="d-flex align-items-center gap-3 mb-4">
-        <Link to={`/admin/catalog/${kind}`}>← Back</Link>
-        <h1 className="h3 mb-0">
-          {isNew ? "Create" : "Edit"} {label}
-        </h1>
+    <div className="admin-editor">
+      <div className="admin-editor-header">
+        <div>
+          <Link to={`/admin/catalog/${kind}`} className="admin-back-link">
+            <i className="bi bi-arrow-left" /> Back to {meta.label.toLowerCase()}
+          </Link>
+          <h1 className="h3 mb-1">{title}</h1>
+          <p className="text-secondary small mb-0">
+            {isNew ? "Create a new record." : `Editing ${kind} · ${slug}`}
+          </p>
+        </div>
+        {!isNew && <StatusBadge status={currentStatus} />}
       </div>
       {saved && (
         <div className="alert alert-success" role="status">
           Saved successfully.
         </div>
       )}
-      <Form method="post" className="card shadow-sm">
-        <div className="card-body row g-3">
-          <input type="hidden" name="csrf" value={session.csrf} />
-          <input type="hidden" name="revision" value={revision} />
+      <Form method="post" className="admin-editor-form">
+        <input type="hidden" name="csrf" value={session.csrf} />
+        <input type="hidden" name="revision" value={revision} />
+        <AdminFormSection
+          title="Identity"
+          description="The stable record ID, display name and publication state."
+        >
           <div className="col-md-6">
             <label className="form-label" htmlFor="entitySlug">
               ID / Slug
@@ -97,49 +101,50 @@ export function EntityEditorPage({
               className="form-select"
               id="entityStatus"
               name="status"
-              defaultValue={asString(item.status) || "active"}
+              defaultValue={currentStatus}
             >
-              {STATUS_OPTIONS[kind].map((status) => (
+              {CATALOG_STATUS_OPTIONS[kind].map((status) => (
                 <option value={status} key={status}>
                   {status}
                 </option>
               ))}
             </select>
           </div>
-          {kind === "program" && (
-            <ProgramFields item={item} categories={categories} uploadedMedia={uploadedMedia} />
-          )}
-          {kind === "destination" && (
-            <DestinationFields item={item} programs={programs} uploadedMedia={uploadedMedia} />
-          )}
-          {kind === "category" && <CategoryFields item={item} uploadedMedia={uploadedMedia} />}
-          <VisibilityOverrides
-            kind={kind}
-            initial={(item.visibility_overrides as Record<string, unknown> | undefined) || {}}
-          />
-          <div className="col-12 d-flex flex-wrap gap-2">
-            <button disabled={navigation.state !== "idle"} className="btn btn-primary px-4">
-              {navigation.state !== "idle" ? "Saving..." : "Save changes"}
+        </AdminFormSection>
+        {kind === "program" && (
+          <ProgramFields item={item} categories={categories} uploadedMedia={uploadedMedia} />
+        )}
+        {kind === "destination" && (
+          <DestinationFields item={item} programs={programs} uploadedMedia={uploadedMedia} />
+        )}
+        {kind === "category" && <CategoryFields item={item} uploadedMedia={uploadedMedia} />}
+        <VisibilityOverrides
+          kind={kind}
+          initial={(item.visibility_overrides as Record<string, unknown> | undefined) || {}}
+        />
+        <AdminFormActions>
+          <button disabled={navigation.state !== "idle"} className="btn btn-primary px-4">
+            {navigation.state !== "idle" ? "Saving..." : "Save changes"}
+          </button>
+          {!isNew && (
+            <button
+              disabled={navigation.state !== "idle"}
+              className="btn btn-outline-secondary"
+              name="intent"
+              value="duplicate"
+              formNoValidate
+              onClick={(event) => {
+                if (!window.confirm("Create an active copy of this record?")) {
+                  event.preventDefault();
+                }
+              }}
+            >
+              Duplicate as active copy
             </button>
-            {!isNew && (
-              <button
-                disabled={navigation.state !== "idle"}
-                className="btn btn-outline-secondary"
-                name="intent"
-                value="duplicate"
-                formNoValidate
-                onClick={(event) => {
-                  if (!window.confirm("Create an active copy of this record?")) {
-                    event.preventDefault();
-                  }
-                }}
-              >
-                Duplicate as active copy
-              </button>
-            )}
-          </div>
-        </div>
+          )}
+          <span className="small text-secondary ms-auto">Revision {revision}</span>
+        </AdminFormActions>
       </Form>
-    </>
+    </div>
   );
 }

@@ -1,11 +1,37 @@
 import { Link } from "react-router";
-import { AdminEmptyState } from "../../../components/admin/AdminEmptyState";
 import { AdminPanel } from "../../../components/admin/AdminPanel";
+import { AdminTable, type AdminTableColumn } from "../../../components/admin/AdminTable";
 import { StatusBadge } from "../../../components/admin/StatusBadge";
 import type { InquiryRecord } from "../../../lib/domain";
 import { relativeTime } from "./utils";
 
-export function RecentInquiries({ rows }: { rows: InquiryRecord[] }) {
+export function RecentInquiries({ rows, now }: { rows: InquiryRecord[]; now: number }) {
+  const columns: AdminTableColumn<InquiryRecord>[] = [
+    {
+      key: "contact",
+      label: "Contact",
+      render: (row) => (
+        <>
+          <strong>{row.name || "Newsletter subscriber"}</strong>
+          <div className="small text-secondary">{row.email}</div>
+        </>
+      )
+    },
+    {
+      key: "kind",
+      label: "Type",
+      render: (row) => <span className="text-capitalize">{row.kind}</span>
+    },
+    { key: "status", label: "Status", render: (row) => <StatusBadge status={row.status} /> },
+    {
+      key: "created",
+      label: "Received",
+      render: (row) => (
+        <span className="small text-secondary">{relativeTime(row.created_at, now)}</span>
+      )
+    }
+  ];
+
   return (
     <AdminPanel
       title="Recent inquiries"
@@ -16,41 +42,15 @@ export function RecentInquiries({ rows }: { rows: InquiryRecord[] }) {
         </Link>
       }
     >
-      {rows.length === 0 ? (
-        <AdminEmptyState
-          icon="bi-inbox"
-          title="No inquiries yet"
-          description="New contact and landing-page submissions will appear here."
-        />
-      ) : (
-        <div className="table-responsive">
-          <table className="table admin-table align-middle mb-0">
-            <thead>
-              <tr>
-                <th>Contact</th>
-                <th>Type</th>
-                <th>Status</th>
-                <th>Received</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((row) => (
-                <tr key={row.id}>
-                  <td>
-                    <strong>{row.name || "Newsletter subscriber"}</strong>
-                    <div className="small text-secondary">{row.email}</div>
-                  </td>
-                  <td className="text-capitalize">{row.kind}</td>
-                  <td>
-                    <StatusBadge status={row.status} />
-                  </td>
-                  <td className="small text-secondary">{relativeTime(row.created_at)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+      <AdminTable
+        columns={columns}
+        rows={rows}
+        rowKey={(row) => row.id}
+        density="compact"
+        ariaLabel="Recent inquiries"
+        emptyTitle="No inquiries yet"
+        emptyDescription="New contact and landing-page submissions will appear here."
+      />
     </AdminPanel>
   );
 }

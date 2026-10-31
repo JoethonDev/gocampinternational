@@ -27,4 +27,5 @@ export type DashboardData = {
   media: DashboardMedia;
   environment: string;
   source: string;
+  now: number;
 };

@@ -1,8 +1,14 @@
-import { Form, Link, redirect, useNavigation } from "react-router";
+import { Form, redirect, useNavigation } from "react-router";
+import { useMemo, useState } from "react";
 import type { Route } from "./+types/admin-trash";
 import { requireAdmin, verifyAdminPost } from "../lib/admin.server";
 import { AdminShell } from "../components/admin/AdminShell";
 import { AdminPageHeader } from "../components/admin/AdminPageHeader";
+import { AdminRowActions } from "../components/admin/AdminRowActions";
+import { AdminTable, type AdminTableColumn } from "../components/admin/AdminTable";
+import { AdminToolbar, AdminToolbarField } from "../components/admin/AdminToolbar";
+import { StatusBadge } from "../components/admin/StatusBadge";
+import { CATALOG_KIND_META } from "../config/catalog";
 
 type TrashRow = {
   kind: "program" | "destination" | "category";
@@ -11,8 +17,6 @@ type TrashRow = {
   content_json: string;
   revision: number;
 };
-
-const KINDS = ["program", "destination", "category"] as const;
 
 export function meta() {
   return [{ title: "GoCamp CMS Trash" }, { name: "robots", content: "noindex,nofollow" }];
@@ -41,7 +45,7 @@ export async function action({ request, context }: Route.ActionArgs) {
   const slug = String(form.get("slug") || "");
   const operation = String(form.get("operation") || "");
   if (
-    !KINDS.includes(kind as (typeof KINDS)[number]) ||
+    !["program", "destination", "category"].includes(kind) ||
     !/^[a-z0-9][a-z0-9_-]{0,159}$/.test(slug)
   ) {
     throw new Response("Invalid trash item", { status: 400 });
@@ -103,80 +107,125 @@ export async function action({ request, context }: Route.ActionArgs) {
 export default function Trash({ loaderData }: Route.ComponentProps) {
   const { session, rows, saved } = loaderData;
   const navigation = useNavigation();
+  const [search, setSearch] = useState("");
+  const visible = useMemo(
+    () =>
+      rows.filter((row) =>
+        `${row.name} ${row.slug} ${row.kind}`.toLowerCase().includes(search.toLowerCase())
+      ),
+    [rows, search]
+  );
+
+  const columns: AdminTableColumn<TrashRow>[] = [
+    {
+      key: "kind",
+      label: "Type",
+      render: (row) => {
+        const meta = CATALOG_KIND_META[row.kind];
+        return (
+          <span className="admin-table-primary">
+            <span className={`admin-table-icon admin-table-icon-${meta.accent}`}>
+              <i className={`bi ${meta.icon}`} />
+            </span>
+            <span className="text-capitalize">{row.kind}</span>
+          </span>
+        );
+      }
+    },
+    {
+      key: "name",
+      label: "Name",
+      render: (row) => (
+        <>
+          <strong>{row.name}</strong>
+          <div className="small text-secondary">
+            <code>{row.slug}</code>
+          </div>
+        </>
+      )
+    },
+    { key: "status", label: "Status", render: (row) => <StatusBadge status="trash" /> },
+    {
+      key: "actions",
+      label: "Actions",
+      className: "text-end",
+      render: (row) => (
+        <Form method="post" className="d-flex justify-content-end">
+          <input type="hidden" name="csrf" value={session.csrf} />
+          <input type="hidden" name="kind" value={row.kind} />
+          <input type="hidden" name="slug" value={row.slug} />
+          <input type="hidden" name="revision" value={row.revision} />
+          <AdminRowActions>
+            <button
+              disabled={navigation.state !== "idle"}
+              className="btn btn-sm btn-outline-success"
+              name="operation"
+              value="restore-inactive"
+            >
+              Restore draft
+            </button>
+            <button
+              disabled={navigation.state !== "idle"}
+              className="btn btn-sm btn-success"
+              name="operation"
+              value="restore-active"
+            >
+              Restore live
+            </button>
+            <button
+              disabled={navigation.state !== "idle"}
+              className="btn btn-sm btn-outline-danger"
+              name="operation"
+              value="delete"
+              onClick={(event) => {
+                if (!window.confirm("Permanently delete this item? This cannot be undone.")) {
+                  event.preventDefault();
+                }
+              }}
+            >
+              Delete forever
+            </button>
+          </AdminRowActions>
+        </Form>
+      )
+    }
+  ];
+
   return (
     <AdminShell username={session.username} csrf={session.csrf}>
       <AdminPageHeader
         title="Trash"
-        description="Trashed content is hidden from public pages. Restore as inactive to review before publishing, or explicitly restore active."
-        aside={<Link to="/admin">Back to dashboard</Link>}
+        description="Trashed content is hidden from public pages. Restore as inactive before publishing."
+        aside={<span className="admin-badge-soft">{rows.length} items</span>}
       />
       {saved && (
         <div className="alert alert-success" role="status">
           Trash updated.
         </div>
       )}
-      <div className="row g-3">
-        {KINDS.map((kind) => {
-          const items = rows.filter((item) => item.kind === kind);
-          return (
-            <section key={kind} className="col-lg-4">
-              <div className="card border-0 shadow-sm h-100">
-                <div className="card-body">
-                  <h2 className="h5 text-capitalize">{kind}s</h2>
-                  {items.map((item) => (
-                    <div className="border rounded-3 p-3 my-2" key={item.slug}>
-                      <strong>{item.name}</strong>
-                      <div className="small text-secondary mb-3">{item.slug}</div>
-                      <Form method="post" className="d-flex flex-wrap gap-2">
-                        <input type="hidden" name="csrf" value={session.csrf} />
-                        <input type="hidden" name="kind" value={kind} />
-                        <input type="hidden" name="slug" value={item.slug} />
-                        <input type="hidden" name="revision" value={item.revision} />
-                        <button
-                          disabled={navigation.state !== "idle"}
-                          className="btn btn-sm btn-outline-success"
-                          name="operation"
-                          value="restore-inactive"
-                        >
-                          Restore draft
-                        </button>
-                        <button
-                          disabled={navigation.state !== "idle"}
-                          className="btn btn-sm btn-success"
-                          name="operation"
-                          value="restore-active"
-                        >
-                          Restore live
-                        </button>
-                        <button
-                          disabled={navigation.state !== "idle"}
-                          className="btn btn-sm btn-outline-danger"
-                          name="operation"
-                          value="delete"
-                          onClick={(event) => {
-                            if (
-                              !window.confirm(
-                                "Permanently delete this item? This cannot be undone."
-                              )
-                            ) {
-                              event.preventDefault();
-                            }
-                          }}
-                        >
-                          Delete forever
-                        </button>
-                      </Form>
-                    </div>
-                  ))}
-                  {items.length === 0 && (
-                    <p className="text-secondary small">No trashed {kind}s.</p>
-                  )}
-                </div>
-              </div>
-            </section>
-          );
-        })}
-      </div>
+      <AdminToolbar>
+        <AdminToolbarField label="Search" htmlFor="trash-search">
+          <input
+            id="trash-search"
+            className="form-control"
+            placeholder="Name, ID or type"
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+          />
+        </AdminToolbarField>
+      </AdminToolbar>
+      <AdminTable
+        columns={columns}
+        rows={visible}
+        rowKey={(row) => `${row.kind}-${row.slug}`}
+        ariaLabel="Trashed content"
+        emptyTitle={rows.length ? "No matching trash items" : "Trash is empty"}
+        emptyDescription={
+          rows.length
+            ? "Try a different search term."
+            : "Deleted catalog records will appear here for recovery."
+        }
+      />
     </AdminShell>
   );
 }

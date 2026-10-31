@@ -6,10 +6,12 @@ import { KIND_ICON, relativeTime } from "./utils";
 
 export function RecentContent({
   rows,
-  documents
+  documents,
+  now
 }: {
   rows: DashboardContentRow[];
   documents: DashboardDocumentRow[];
+  now: number;
 }) {
   return (
     <AdminPanel
@@ -29,7 +31,7 @@ export function RecentContent({
             <span className="flex-grow-1">
               <strong>{row.name}</strong>
               <span className="d-block small text-secondary text-capitalize">
-                {row.kind} · {row.slug} · {relativeTime(row.updated_at)}
+                {row.kind} · {row.slug} · {relativeTime(row.updated_at, now)}
               </span>
             </span>
             <StatusBadge status={row.status} />
@@ -47,7 +49,7 @@ export function RecentContent({
             <span className="flex-grow-1">
               <strong className="text-capitalize">{document.key.replaceAll("_", " ")}</strong>
               <span className="d-block small text-secondary">
-                Document · {relativeTime(document.updated_at)}
+                Document · {relativeTime(document.updated_at, now)}
               </span>
             </span>
             <i className="bi bi-chevron-right text-secondary" />

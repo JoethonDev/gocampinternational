@@ -1,22 +1,15 @@
 import { Form, Link, useNavigation } from "react-router";
 import { useMemo, useState } from "react";
 import { AdminPageHeader } from "../../../components/admin/AdminPageHeader";
+import { AdminPanel } from "../../../components/admin/AdminPanel";
+import { AdminRowActions } from "../../../components/admin/AdminRowActions";
+import { AdminTable, type AdminTableColumn } from "../../../components/admin/AdminTable";
+import { AdminToolbar, AdminToolbarField } from "../../../components/admin/AdminToolbar";
 import { StatusBadge } from "../../../components/admin/StatusBadge";
+import { CATALOG_KIND_META, CATALOG_STATUS_OPTIONS } from "../../../config/catalog";
 import type { CategoryRecord, CatalogRecord, DestinationRecord } from "../../../lib/domain";
 
 type Kind = "program" | "destination" | "category";
-
-const TITLES: Record<Kind, string> = {
-  program: "Programs",
-  destination: "Destinations",
-  category: "Program Categories"
-};
-
-function statusOptions(kind: Kind) {
-  return kind === "destination"
-    ? ["active", "inactive", "coming-soon", "trash"]
-    : ["active", "inactive", "trash"];
-}
 
 export function CatalogListPage({
   kind,
@@ -34,12 +27,13 @@ export function CatalogListPage({
   csrf: string;
 }) {
   const navigation = useNavigation();
+  const meta = CATALOG_KIND_META[kind];
+  const statuses = CATALOG_STATUS_OPTIONS[kind];
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
   const [destinationFilter, setDestinationFilter] = useState("");
   const [selected, setSelected] = useState<string[]>([]);
-  const options = statusOptions(kind);
 
   const visible = useMemo(
     () =>
@@ -69,13 +63,77 @@ export function CatalogListPage({
       checked ? [...new Set([...previous, slug])] : previous.filter((value) => value !== slug)
     );
 
+  const selectVisible = (checked: boolean) =>
+    setSelected((previous) =>
+      checked
+        ? [...new Set([...previous, ...visible.map((item) => item.slug)])]
+        : previous.filter((id) => !visible.some((item) => item.slug === id))
+    );
+
+  const columns: AdminTableColumn<CatalogRecord>[] = [
+    {
+      key: "select",
+      label: "",
+      className: "admin-select-cell",
+      render: (item) => (
+        <input
+          type="checkbox"
+          className="form-check-input"
+          name="ids"
+          value={item.slug}
+          checked={selected.includes(item.slug)}
+          onChange={(event) => select(item.slug, event.target.checked)}
+          aria-label={`Select ${item.name}`}
+        />
+      )
+    },
+    {
+      key: "name",
+      label: "Name",
+      render: (item) => (
+        <div className="admin-table-primary">
+          <span className={`admin-table-icon admin-table-icon-${meta.accent}`}>
+            <i className={`bi ${meta.icon}`} />
+          </span>
+          <span>
+            <strong>{item.name}</strong>
+            {kind === "program" && item.category_slug && (
+              <span className="d-block small text-secondary">
+                {categories.find((category) => category.slug === item.category_slug)?.name ||
+                  item.category_slug}
+              </span>
+            )}
+          </span>
+        </div>
+      )
+    },
+    { key: "slug", label: "ID", render: (item) => <code>{item.slug}</code> },
+    { key: "status", label: "Status", render: (item) => <StatusBadge status={item.status} /> },
+    {
+      key: "edit",
+      label: "",
+      className: "text-end",
+      render: (item) => (
+        <AdminRowActions>
+          <Link
+            to={`/admin/catalog/${kind}/${item.slug}`}
+            className="btn btn-sm btn-outline-primary"
+          >
+            Edit <i className="bi bi-arrow-right ms-1" />
+          </Link>
+        </AdminRowActions>
+      )
+    }
+  ];
+
   return (
     <>
       <AdminPageHeader
-        title={TITLES[kind]}
+        title={meta.label}
+        description={`Create, preview and publish ${meta.label.toLowerCase()} across the public site.`}
         aside={
           <Link className="btn btn-primary" to={`/admin/catalog/${kind}/new`}>
-            + Create
+            <i className="bi bi-plus-lg me-1" /> New {meta.singular.toLowerCase()}
           </Link>
         }
       />
@@ -84,11 +142,14 @@ export function CatalogListPage({
           {updated} item(s) updated.
         </div>
       )}
-      <div className="row g-2 mb-3 align-items-end">
-        <div className="col-md-4">
-          <label htmlFor="catalog-search" className="form-label small fw-semibold">
-            Search
-          </label>
+      <AdminToolbar
+        actions={
+          <span className="admin-badge-soft">
+            {visible.length} shown / {records.length} total
+          </span>
+        }
+      >
+        <AdminToolbarField label="Search" htmlFor="catalog-search">
           <input
             id="catalog-search"
             className="form-control"
@@ -99,32 +160,30 @@ export function CatalogListPage({
               setSelected([]);
             }}
           />
-        </div>
-        <div className="col-6 col-md-2">
-          <label className="form-label small fw-semibold">Status</label>
+        </AdminToolbarField>
+        <AdminToolbarField label="Status" htmlFor="catalog-status">
           <select
-            aria-label="Filter by status"
+            id="catalog-status"
+            className="form-select"
             value={statusFilter}
             onChange={(event) => {
               setStatusFilter(event.target.value);
               setSelected([]);
             }}
-            className="form-select"
           >
             <option value="">All statuses</option>
-            {options.map((value) => (
+            {statuses.map((value) => (
               <option value={value} key={value}>
                 {value}
               </option>
             ))}
           </select>
-        </div>
+        </AdminToolbarField>
         {kind === "program" && (
           <>
-            <div className="col-6 col-md-3">
-              <label className="form-label small fw-semibold">Category</label>
+            <AdminToolbarField label="Category" htmlFor="catalog-category">
               <select
-                aria-label="Filter by category"
+                id="catalog-category"
                 className="form-select"
                 value={categoryFilter}
                 onChange={(event) => {
@@ -139,11 +198,10 @@ export function CatalogListPage({
                   </option>
                 ))}
               </select>
-            </div>
-            <div className="col-12 col-md-3">
-              <label className="form-label small fw-semibold">Destination</label>
+            </AdminToolbarField>
+            <AdminToolbarField label="Destination" htmlFor="catalog-destination">
               <select
-                aria-label="Filter by destination"
+                id="catalog-destination"
                 className="form-select"
                 value={destinationFilter}
                 onChange={(event) => {
@@ -158,105 +216,66 @@ export function CatalogListPage({
                   </option>
                 ))}
               </select>
-            </div>
+            </AdminToolbarField>
           </>
         )}
-      </div>
-      <Form method="post" className="card shadow-sm">
+      </AdminToolbar>
+      <Form method="post">
         <input type="hidden" name="csrf" value={csrf} />
-        <div className="card-body">
-          <div className="d-flex flex-wrap gap-2 align-items-center mb-3">
-            <label htmlFor="bulk-status" className="form-label mb-0">
-              Bulk action
-            </label>
-            <select
-              id="bulk-status"
-              className="form-select bulk-status-select"
-              name="status"
-              required
-              defaultValue=""
-            >
-              <option value="" disabled>
-                Select status
-              </option>
-              {options.map((value) => (
-                <option key={value} value={value}>
-                  {value}
+        <AdminPanel
+          title={`${meta.label} catalog`}
+          description="Select records for a scoped bulk status change."
+          action={
+            <div className="d-flex flex-wrap align-items-center gap-2">
+              <select
+                aria-label="Bulk status"
+                className="form-select form-select-sm bulk-status-select"
+                name="status"
+                required
+                defaultValue=""
+              >
+                <option value="" disabled>
+                  Bulk action
                 </option>
-              ))}
-            </select>
-            <button
-              disabled={navigation.state !== "idle" || selected.length === 0}
-              className="btn btn-outline-primary"
-            >
-              Apply to {selected.length} selected
-            </button>
-            <span className="small text-secondary">
-              {visible.length} of {records.length} records
-            </span>
-          </div>
-          <div className="table-responsive">
-            <table className="table table-hover align-middle">
-              <thead>
-                <tr>
-                  <th scope="col">
-                    <input
-                      type="checkbox"
-                      className="form-check-input"
-                      aria-label="Select all visible"
-                      checked={
-                        visible.length > 0 && visible.every((item) => selected.includes(item.slug))
-                      }
-                      onChange={(event) =>
-                        setSelected((previous) =>
-                          event.target.checked
-                            ? [...new Set([...previous, ...visible.map((item) => item.slug)])]
-                            : previous.filter((id) => !visible.some((item) => item.slug === id))
-                        )
-                      }
-                    />
-                  </th>
-                  <th scope="col">Name</th>
-                  <th scope="col">ID</th>
-                  <th scope="col">Status</th>
-                  <th scope="col">Edit</th>
-                </tr>
-              </thead>
-              <tbody>
-                {visible.map((item) => (
-                  <tr key={item.slug}>
-                    <td>
-                      <input
-                        type="checkbox"
-                        name="ids"
-                        value={item.slug}
-                        checked={selected.includes(item.slug)}
-                        onChange={(event) => select(item.slug, event.target.checked)}
-                        aria-label={`Select ${item.name}`}
-                      />
-                    </td>
-                    <td>{item.name}</td>
-                    <td>
-                      <code>{item.slug}</code>
-                    </td>
-                    <td>
-                      <StatusBadge status={item.status} />
-                    </td>
-                    <td>
-                      <Link
-                        to={`/admin/catalog/${kind}/${item.slug}`}
-                        className="btn btn-sm btn-outline-primary"
-                      >
-                        Edit
-                      </Link>
-                    </td>
-                  </tr>
+                {statuses.map((value) => (
+                  <option key={value} value={value}>
+                    {value}
+                  </option>
                 ))}
-              </tbody>
-            </table>
-            {visible.length === 0 && <p className="p-3">No matching records.</p>}
+              </select>
+              <button
+                disabled={navigation.state !== "idle" || selected.length === 0}
+                className="btn btn-sm btn-outline-primary"
+              >
+                Apply ({selected.length})
+              </button>
+            </div>
+          }
+        >
+          <AdminTable
+            columns={columns}
+            rows={visible}
+            rowKey={(item) => item.slug}
+            ariaLabel={`${meta.label} catalog`}
+            emptyTitle={`No ${meta.label.toLowerCase()} found`}
+            emptyDescription="Try a different search or filter, or create a new record."
+            rowClassName={(item) => (item.status === "trash" ? "is-muted" : undefined)}
+          />
+          <div className="admin-table-footer">
+            <label className="form-check d-flex align-items-center gap-2 mb-0">
+              <input
+                type="checkbox"
+                className="form-check-input"
+                checked={
+                  visible.length > 0 && visible.every((item) => selected.includes(item.slug))
+                }
+                onChange={(event) => selectVisible(event.target.checked)}
+              />
+              <span className="small">Select all visible</span>
+            </label>
+            <span className="small text-secondary">{selected.length} selected</span>
           </div>
-        </div>
+        </AdminPanel>
       </Form>
     </>
   );

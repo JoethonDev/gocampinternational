@@ -47,6 +47,7 @@ export async function loadDashboard(db: D1Database, env: Env): Promise<Dashboard
     documents: documents.results,
     media: media || { count: 0, bytes: 0, published: 0 },
     environment: env.GOCAMP_ENV,
-    source: env.MIGRATION_SOURCE_SHA
+    source: env.MIGRATION_SOURCE_SHA,
+    now: Math.floor(Date.now() / 1000)
   };
 }

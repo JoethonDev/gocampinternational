@@ -8,7 +8,7 @@
 - **Server-only code is explicit.** Files ending in `.server.ts` may touch D1, R2, cookies or secrets. Never import them from client components.
 - **Domain types are shared.** `app/lib/domain.ts` holds catalog/document/media/inquiry types and small narrowing helpers. Avoid re-declaring `Record<string, unknown>` shapes in components.
 - **Configuration is not duplicated.** Site identity, contact details, public nav/footer links, hero slides and About copy live in `app/config/site.ts`; admin navigation lives in `app/config/admin.ts`.
-- **One concern per component.** Large pages are split into named sections. Shared primitives live in `app/components/ui/`; admin-only primitives live in `app/components/admin/`.
+- **One concern per component.** Large pages are split into named sections. Shared primitives live in `app/components/ui/`; admin-only primitives live in `app/components/admin/`. Feature CSS lives beside the feature (for example `features/admin/dashboard/dashboard.css`) rather than accumulating in one global stylesheet.
 - **Cloudflare-native.** Use bindings (`context.cloudflare.env.DB`, `MEDIA`) directly. No REST calls to Cloudflare services from the Worker. No request-scoped module state.
 
 ## 2. Folder map
@@ -17,7 +17,7 @@
 cloudflare-app/
 ├─ app/
 │  ├─ components/
-│  │  ├─ admin/          AdminShell, page header, status badge
+│  │  ├─ admin/          AdminShell, panels, metric cards, empty states, badges
 │  │  ├─ site/           public header, footer
 │  │  ├─ ui/             Breadcrumbs, PageBanner, Pagination, error pages
 │  │  └─ *.tsx           reusable public/admin controls (media, repeaters, cards)
@@ -30,8 +30,9 @@ cloudflare-app/
 │  │  ├─ contact/        ContactPage and form
 │  │  ├─ faq/            FaqPage
 │  │  ├─ landing/        marketing landing page
-│  │  └─ admin/          admin feature modules (catalog, documents, media)
+│  │  └─ admin/          admin feature modules (dashboard, catalog, documents, media)
 │  ├─ hooks/             useSiteNavigation, useLightbox, useAdminTheme
+│  ├─ styles/            global interaction motion (feature CSS stays with its feature)
 │  ├─ lib/
 │  │  ├─ domain.ts       shared types and narrowing helpers
 │  │  ├─ catalog.server.ts        typed catalog/document reads
