@@ -9,12 +9,14 @@ const tests=[
   {path:"/contact",status:200},
   {path:"/destinations/italy",status:200,contains:"Italy"},
   {path:"/program/category?category=adult-academic",status:200},
+  {path:"/program/category?category=kids-camps",status:200,contains:"Kids Camps"},
   {path:"/admin/login",status:200,contains:"GoCamp Administration"},
   {path:"/admin",status:302,location:"/admin/login"},
   {path:"/programs",status:404},
   {path:"/gallery",status:404},
   {path:"/media/00000000-0000-0000-0000-000000000000",status:404},
-  {path:"/images/hero.webp",status:200,method:"HEAD"}
+  {path:"/images/hero.webp",status:200,method:"HEAD"},
+  {path:"/images/bannnner.webp",status:200,method:"HEAD"}
 ];
 let failed=0;
 function sleep(ms){return new Promise(resolve=>setTimeout(resolve,ms));}
