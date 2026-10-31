@@ -9,6 +9,9 @@ Authenticated account: Elprincedoca@gmail.com's Account (id da59dca47179969defd6
 
 Both DBs are EMPTY (no tables/imported data); both buckets EMPTY on creation. Location EEUR, D1 replication disabled. Account Workers subdomain: elprincedoca.workers.dev. Resources were created via connected Cloudflare API. No Hyperdrive, KV, Queue, Cron, paid Images storage or zone changes. No traffic routed to production. These resources are separate from all existing projects.
 
+## Active isolated staging bootstrap
+Worker gocamp-migration-staging was created/deployed via Cloudflare API and the deployment is active at 100%, with workers.dev enabled (preview URLs disabled). Verified bindings: DB -> staging D1, MEDIA -> staging R2, IMAGES -> Cloudflare Images Free transformation service, GOCAMP_ENV=staging. Only /health is intended to return HTTP 200; other paths intentionally return 503, no production/domain traffic. Expected URL: https://gocamp-migration-staging.elprincedoca.workers.dev/health (external HTTP not yet confirmed). This bootstrap is not React Router. The repo copy is migration/cloudflare-bootstrap-worker.js and must be superseded by the actual compiled app during Phase 1.
+
 ## Intended deployment topology
 Single Cloudflare Worker app per environment with asset-first routing: React Router + Vite client assets and public/static HTML; dynamic SSR/API/admin only on Worker. Wrangler bindings DB (D1) and MEDIA (R2) are environment-specific. Keep secrets out of repository and out of browser bundles. The existing Worker gateway under worker/ from PR #40 is NOT the new app; it stays for migration/reference only until port complete.
 Staging name: gocamp-migration-staging. Production planned name: gocamp-migration-production (do not enable production traffic before Phase 6).

@@ -16,7 +16,7 @@ Date: 2026-10-31 | Status: foundation prepared, migration application NOT implem
 ## Documentation index
 - PHASES.md — every phase's setup, deliverables and binary acceptance criteria.
 - PARITY_AND_DATA.md — source record inventory, data mapping and UI/functional parity.
-- CLOUDflare_SETUP.md — personal account resources, bindings, deployment and security gates.
+- CLOUDFLARE_SETUP.md — personal account resources, bindings, deployment and security gates.
 - FREE_TIER_AND_IMAGES.md — quotas, CPU reduction, media transformation controls and budget gates.
 - PROGRESS.md — exact current state, evidence and remaining work.
 

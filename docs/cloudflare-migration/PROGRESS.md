@@ -1,5 +1,5 @@
 # Execution record — 2026-10-31
-Status: Phase 0 PARTIAL; Phase 1 INFRASTRUCTURE PARTIAL; Phases 2–6 NOT STARTED. This file must be updated from observed results, not assumptions.
+Status: Phase 0 PARTIAL; Phase 1 INFRASTRUCTURE PARTIAL (staging bootstrap deployed); Phases 2–6 NOT STARTED. This file must be updated from observed results, not assumptions.
 
 ## Verified
 - PR #40 read through GitHub connector: open/draft, unmerged; source head 80432a2a6fcb4b0de6f14710748e53781ddef58c; base develop e55bc17bcdc59e466e63b7993341b979bb69a0e9.
@@ -15,7 +15,7 @@ Status: Phase 0 PARTIAL; Phase 1 INFRASTRUCTURE PARTIAL; Phases 2–6 NOT STARTE
 - No email delivery credentials configured.
 - No production Worker/DNS/traffic switch, merge or cPanel change.
 - Free-tier usage load simulation and live CPU measurement not performed.
-- Staging Worker bootstrap state: verify independently in Cloudflare and update here before marking it created.
+- Staging bootstrap Worker deployed through connected Cloudflare API: gocamp-migration-staging, with workers.dev enabled and preview URLs disabled. Cloudflare deployments API confirmed 100% active version; Worker settings confirmed D1 DB, R2 MEDIA, IMAGES (free transformations), GOCAMP_ENV staging bindings. Health URL expected: https://gocamp-migration-staging.elprincedoca.workers.dev/health . Live external HTTP response could not be independently retrieved in this session; requires curl/browser verification. The Worker contains only GET /health and 503 for other requests; it is NOT the React application.
 
 ## Tracking discipline
 Complete phases only when their checkboxes in PHASES.md pass and executed evidence is added here with commit/version/URL. Do not mark full migration done based on resource provision.
