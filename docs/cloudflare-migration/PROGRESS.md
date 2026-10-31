@@ -108,3 +108,7 @@ The active PR #40 `landing.php` is now represented by React route `/landing` and
 **Important behavioral difference:** original PHP sends mail before saving. Staging currently **saves the lead to D1 but does not send an email**; successful UI copy only confirms persistence. Email provider choice, deliverability, dedupe/idempotency, and two-hour marketing wording need release review. This is *not* full landing-form acceptance. Test real authenticated inbox view and form POST validation with isolated fixtures.
 
 The landing GET and canonical redirect have been added to the read-only staging smoke suite (27 checks total). Verify new branch CI + Cloudflare staging build before calling it tested. Source claims about 2025 summer availability and response windows remain intentionally unchanged from PR #40 until content sign-off.
+
+### Landing server-side validation hardening
+
+The `/landing` action now calls the shared lead handler with a trusted `forceLanding=true` route flag. The server overrides the client-provided `source` string and always enforces age/gender/interest/consent requirements for this route; a modified hidden source field cannot bypass landing-specific validation. The generic lead API remains compatible with the original modal CTA. Verification of actual POST persistence/consent rejection requires an isolated staging fixture, not a mere source-contract test.

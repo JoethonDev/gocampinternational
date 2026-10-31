@@ -14,7 +14,7 @@ export const links: Route.LinksFunction = () => [
   {rel:"stylesheet",href:"https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap"}
 ];
 export function action({request,context}: Route.ActionArgs) {
-  return submitInquiry(request,context.cloudflare.env.DB,"lead");
+  return submitInquiry(request,context.cloudflare.env.DB,"lead",true);
 }
 
 const interests = [

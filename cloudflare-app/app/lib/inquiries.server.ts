@@ -2,7 +2,7 @@ type Kind="contact"|"lead"|"newsletter";
 type FormDataObject=Record<string,unknown>;
 const fail=(message:string,status=400)=>Response.json({success:false,error:message},{status,headers:{"cache-control":"no-store"}});
 const clean=(v:unknown,max:number)=>typeof v==="string"?v.replace(/[\r\n]/g,"").replace(/%0[ad]/gi,"").trim().slice(0,max+1):"";
-export async function submitInquiry(request:Request,db:D1Database,kind:Kind):Promise<Response>{
+export async function submitInquiry(request:Request,db:D1Database,kind:Kind,forceLanding=false):Promise<Response>{
   if(request.method!=="POST")return fail("Method not allowed",405);
   const origin=request.headers.get("origin");
   if(origin&&origin!==new URL(request.url).origin)return fail("Invalid request origin",403);
@@ -15,10 +15,13 @@ export async function submitInquiry(request:Request,db:D1Database,kind:Kind):Pro
     else if(type.includes("application/x-www-form-urlencoded")||type.includes("multipart/form-data")){
       const form=await request.formData();
       raw=Object.fromEntries(form.entries());
-      if(kind==="lead" && form.get("source")==="Landing Page")raw["interests[]"]=form.getAll("interests[]");
+      if(kind==="lead" && (forceLanding || form.get("source")==="Landing Page"))raw["interests[]"]=form.getAll("interests[]");
     }
     else return fail("Unsupported format",415);
   }catch{return fail("Invalid request");}
+  // Route identity is authoritative; do not let clients bypass mandatory consent
+  // by changing the hidden source field or sending an API-style payload to /landing.
+  if(forceLanding)raw.source="Landing Page";
   if(raw.website)return Response.json({success:true,message:"Request received"},{headers:{"cache-control":"no-store"}});
   const name=clean(raw.name,100),email=clean(raw.email,254),phone=clean(raw.phone,30);
   const validEmail=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
