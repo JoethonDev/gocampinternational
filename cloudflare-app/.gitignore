@@ -9,4 +9,4 @@ public/images/
 public/css/
 public/js/
 public/uploads/
-worker-configuration.generated.d.ts
+worker-configuration.d.ts

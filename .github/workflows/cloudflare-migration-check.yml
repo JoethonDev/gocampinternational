@@ -49,28 +49,3 @@ jobs:
             cloudflare-app/build/imports/seed-pr40.sql
           if-no-files-found: error
           retention-days: 3
-  publish-staging-seed:
-    needs: build
-    if: github.event_name == 'push' && github.ref == 'refs/heads/migration/cloudflare-react-workers-pr40'
-    runs-on: ubuntu-latest
-    timeout-minutes: 4
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/checkout@v4
-      - name: Generate deterministic seed from exact PR40 content
-        run: |
-          cd cloudflare-app
-          php scripts/export-pr40.php --output build/imports/legacy-pr40.json
-          node scripts/make-d1-seed.mjs build/imports/legacy-pr40.json build/imports/seed-pr40.sql
-          mkdir -p migration/seeds
-          cp build/imports/seed-pr40.sql migration/seeds/seed-pr40.sql
-      - name: Pin source-equivalent SQL on the migration branch
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add cloudflare-app/migration/seeds/seed-pr40.sql
-          if ! git diff --cached --quiet; then
-            git commit -m "chore(migration): pin PR40 staging seed [skip ci]"
-            git push origin "HEAD:refs/heads/migration/cloudflare-react-workers-pr40"
-          fi
