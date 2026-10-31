@@ -31,4 +31,4 @@ Revert the Worker-first image routing and return to the existing bundled static 
 - Staging remains noindex, production R2 binding never touched.
 - Cloudflare build/typecheck pass and staging image requests serve R2 when present, static fallback when absent.
 
-**Current status:** staging import flow implemented in source. Upload of image bytes requires invoking the authenticated staging admin action; do not claim bytes are migrated until the action completes and remote R2 is verified.
+**Current status:** staging import flow implemented and formatted in source. GitHub CI and Cloudflare deployment must be checked, and the authenticated staging import must still be run. Upload of image bytes requires invoking the authenticated staging admin action; do not claim bytes are migrated until the action completes and remote R2 is verified.
