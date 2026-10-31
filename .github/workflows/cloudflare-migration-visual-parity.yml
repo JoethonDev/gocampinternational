@@ -1,0 +1,39 @@
+name: GoCamp React vs PHP visual parity
+on:
+  push:
+    branches: [migration/cloudflare-react-workers-pr40]
+    paths: ["cloudflare-app/app/**", "cloudflare-app/tests/**", "tests/migration-visual-parity.cjs", ".github/workflows/cloudflare-migration-visual-parity.yml"]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  parity:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.4"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install isolated Playwright for screenshot validation
+        run: |
+          npm install --no-save --package-lock=false playwright@1.56.0
+          npx playwright install --with-deps chromium
+      - name: Start PR40 PHP original and compare against Cloudflare staging
+        run: |
+          php -S 127.0.0.1:8765 local-router.php >/tmp/gocamp-original-php.log 2>&1 &
+          PHP_PID=$!
+          trap 'kill "$PHP_PID" 2>/dev/null || true' EXIT
+          sleep 3
+          node tests/migration-visual-parity.cjs
+      - name: Upload both sites screenshots and comparison metrics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gocamp-react-php-visual-parity
+          path: artifacts/migration-parity
+          if-no-files-found: warn
+          retention-days: 3
