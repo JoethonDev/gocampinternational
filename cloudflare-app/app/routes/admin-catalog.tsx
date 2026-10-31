@@ -28,7 +28,7 @@ export default function Catalog({loaderData}:Route.ComponentProps) {
     if(search&&!((item.name+" "+item.slug+" "+String(item.category_slug||"")).toLowerCase().includes(search.toLowerCase())))return false;
     if(statusFilter&&item.status!==statusFilter)return false;
     if(kind==="program"&&categoryFilter&&item.category_slug!==categoryFilter)return false;
-    if(kind==="program"&&destinationFilter&&!allDestinations.some(d=>d.slug===destinationFilter&&Array.isArray(d.program_ids)&&d.program_ids.includes(item.id||item.slug)))return false;
+    if(kind==="program"&&destinationFilter&&!allDestinations.some(d=>d.slug===destinationFilter&&Array.isArray(d.program_ids)&&(d.program_ids as unknown[]).includes(String(item.id||item.slug))))return false;
     return true;
   }),[records,kind,search,statusFilter,categoryFilter,destinationFilter,allDestinations]);
   const select=(slug:string,checked:boolean)=>setSelected(prev=>checked?[...new Set([...prev,slug])]:prev.filter(x=>x!==slug));
