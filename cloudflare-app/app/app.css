@@ -13,3 +13,11 @@ html{scroll-behavior:smooth}body{margin:0}.visually-hidden-focusable:not(:focus)
   background: linear-gradient(0deg,rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.2) 100%);
   z-index: 1; pointer-events: none;
 }
+
+/* PR40 phone cards use 225px photos; avoid brittle exact inline style substring selectors. */
+@media (max-width: 767.98px) {
+  .program-card-modern .card > .program-card-media { height: 225px !important; }
+}
+/* PR40 category template supplies parallax through an inline <style> block, not
+   an inline element style: matching this avoids the legacy mobile override selector. */
+.page-content .hero-section:has(.category-hero-caption) { background-attachment: fixed; }
