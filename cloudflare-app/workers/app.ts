@@ -30,8 +30,14 @@ async function serveLegacyImage(request: Request, env: Env): Promise<Response> {
   const pathname = new URL(request.url).pathname;
   const key = pathname.slice(1);
   // Never resolve an arbitrary object key; this route is only for committed public images.
-  if (!/^images\/[a-zA-Z0-9_().%+-][a-zA-Z0-9_().%+\/-]*\.(webp|png|jpe?g|avif|gif|svg|ico)$/i.test(key) ||
-      key.includes("..") || key.includes("%2f") || key.includes("%5c")) {
+  if (
+    !/^images\/[a-zA-Z0-9_().%+-][a-zA-Z0-9_().%+\/-]*\.(webp|png|jpe?g|avif|gif|svg|ico)$/i.test(
+      key
+    ) ||
+    key.includes("..") ||
+    key.includes("%2f") ||
+    key.includes("%5c")
+  ) {
     return new Response("Not found", { status: 404 });
   }
   const obj = request.method === "HEAD" ? await env.MEDIA.head(key) : await env.MEDIA.get(key);
@@ -56,7 +62,10 @@ export default {
     const started = performance.now();
     try {
       const pathname = new URL(request.url).pathname;
-      if ((request.method === "GET" || request.method === "HEAD") && pathname.startsWith("/images/")) {
+      if (
+        (request.method === "GET" || request.method === "HEAD") &&
+        pathname.startsWith("/images/")
+      ) {
         return applyResponseHeaders(await serveLegacyImage(request, env), env);
       }
       const response = await handle(request, { cloudflare: { env, ctx } });

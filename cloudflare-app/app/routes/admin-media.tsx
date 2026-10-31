@@ -44,7 +44,13 @@ export default function AdminMedia({ loaderData }: Route.ComponentProps) {
   const { session, data, uploaded, updated, staging } = loaderData;
   return (
     <AdminShell username={session.username} csrf={session.csrf}>
-      <MediaLibraryPage data={data} csrf={session.csrf} uploaded={uploaded} updated={updated} staging={staging} />
+      <MediaLibraryPage
+        data={data}
+        csrf={session.csrf}
+        uploaded={uploaded}
+        updated={updated}
+        staging={staging}
+      />
     </AdminShell>
   );
 }
