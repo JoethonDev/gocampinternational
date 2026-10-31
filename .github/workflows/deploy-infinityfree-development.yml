@@ -1,14 +1,8 @@
 name: Deploy InfinityFree development (FTPS)
 
+# Disabled during the Aiven/Tigris migration: no FTP or automatic deploys.
 on:
-  push:
-    branches: [develop]
   workflow_dispatch:
-    inputs:
-      dry_run:
-        description: 'Verify connection and deployment plan without uploading files'
-        type: boolean
-        default: true
 
 permissions:
   contents: read
@@ -19,6 +13,7 @@ concurrency:
 
 jobs:
   deploy-development:
+    if: ${{ false }} # Legacy FTPS deliberately disabled.
     runs-on: ubuntu-latest
     timeout-minutes: 35
     environment: infinityfree-development

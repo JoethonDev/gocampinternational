@@ -25,8 +25,8 @@ require __DIR__ . '/includes/header.php';
                     <div class="camp-country-grid">
                         <?php foreach ($photos as $photo): ?>
                         <figure class="card border-0 shadow-sm mb-0 camp-gallery-photo">
-                            <a href="/images/<?= htmlspecialchars($photo['image'], ENT_QUOTES, 'UTF-8') ?>" data-toggle="lightbox" aria-label="View photo: <?= htmlspecialchars($photo['caption'], ENT_QUOTES, 'UTF-8') ?>">
-                                <img src="/images/<?= htmlspecialchars($photo['image'], ENT_QUOTES, 'UTF-8') ?>" alt="<?= htmlspecialchars($photo['caption'], ENT_QUOTES, 'UTF-8') ?>" loading="lazy" decoding="async" width="640" height="480">
+                            <a href="<?= htmlspecialchars(gocamp_memory_url($photo['image']), ENT_QUOTES, 'UTF-8') ?>" data-toggle="lightbox" aria-label="View photo: <?= htmlspecialchars($photo['caption'], ENT_QUOTES, 'UTF-8') ?>">
+                                <img src="<?= htmlspecialchars(gocamp_memory_url($photo['image']), ENT_QUOTES, 'UTF-8') ?>" alt="<?= htmlspecialchars($photo['caption'], ENT_QUOTES, 'UTF-8') ?>" loading="lazy" decoding="async" width="640" height="480">
                             </a>
                             <figcaption class="p-3 text-center"><?= htmlspecialchars($photo['caption'], ENT_QUOTES, 'UTF-8') ?></figcaption>
                         </figure>

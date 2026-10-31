@@ -74,7 +74,7 @@ require_once __DIR__ . '/includes/admin-header.php';
 <?php endif; ?>
 
 <div class="alert alert-info border-0">
-    Renaming preserves the image's extension and updates exact references throughout <code>data/*.php</code> and <code>data/*.json</code> (including nested files and rich-text content). If an image is hardcoded in application templates, renaming is blocked to avoid breaking that page. Images with the same target filename cannot be overwritten.
+    <?php if (gc_external()): ?>Renaming changes the image display name in PostgreSQL. The object key and all URLs stay unchanged, so existing references remain valid.<?php else: ?>Renaming updates local data references, and is blocked for hardcoded template references.<?php endif; ?>
 </div>
 
 <form method="GET" action="/admin/media-library" class="row g-2 mb-4" role="search">

@@ -1,14 +1,8 @@
 name: Deploy cPanel staging (FTP)
 
+# Disabled during the Aiven/Tigris migration: no FTP or automatic deploys.
 on:
-  push:
-    branches: [develop]
   workflow_dispatch:
-    inputs:
-      dry_run:
-        description: 'Connect and validate the upload plan without changing remote files'
-        type: boolean
-        default: true
 
 permissions:
   contents: read
@@ -19,6 +13,7 @@ concurrency:
 
 jobs:
   deploy-staging:
+    if: ${{ false }} # Legacy FTP deliberately disabled.
     runs-on: ubuntu-latest
     timeout-minutes: 35
     environment: cpanel-staging

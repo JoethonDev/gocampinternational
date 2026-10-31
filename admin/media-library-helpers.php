@@ -13,6 +13,7 @@ function gocamp_media_is_image(string $name): bool {
 }
 
 function gocamp_media_list(string $root): array {
+    if (function_exists('gc_external') && gc_external()) return gc_media_files();
     $files = [];
     foreach (gocamp_media_folders($root) as $directory => $folder) {
         if (!is_dir($folder)) {
@@ -73,6 +74,7 @@ function gocamp_media_data_files(string $root): array {
 
 /** Inventory usage across every editable PHP/JSON data file. */
 function gocamp_media_data_usage(string $root, string $publicPath): array {
+    if (function_exists('gc_external') && gc_external()) return ['external-database' => gc_media_reference_count_db($publicPath)];
     $usage = [];
     foreach (gocamp_media_data_files($root) as $path) {
         $content = @file_get_contents($path);
@@ -129,6 +131,7 @@ function gocamp_media_code_usage(string $root, string $publicPath): array {
  * image is moved; rolls back data and the image if any write fails.
  */
 function gocamp_media_rename(string $root, string $publicPath, string $newBase): array {
+    if (function_exists('gc_external') && gc_external()) return gc_media_label_rename($publicPath,$newBase);
     if (!preg_match('~^/(images|uploads)/([^/\\\\\x00]+)$~D', $publicPath, $parts)
         || !gocamp_media_is_image($parts[2])) {
         return ['success' => false, 'message' => 'Invalid image path.'];

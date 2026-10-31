@@ -75,7 +75,7 @@ try {
     }
     $id = 'uk-soccer-club-experience';
     $filename = 'all_programs.php';
-    $source = read_static_catalog($repository . '/data/' . $filename, 'all_programs');
+    $source = read_static_catalog((is_file($repository . '/data/legacy/' . $filename) ? $repository . '/data/legacy/' . $filename : $repository . '/data/' . $filename), 'all_programs');
     $live = read_static_catalog($liveDir . '/' . $filename, 'all_programs');
     if (!isset($live[$id]) || !is_array($live[$id])) {
         fail_migration('Live UK Soccer program does not exist');

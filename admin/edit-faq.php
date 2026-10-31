@@ -12,6 +12,7 @@ require_once 'helpers.php'; // Include our save functions
 
 // 2. Define file path
 $faq_file_path = __DIR__ . '/../data/faq.json';
+if (gc_external()) gc_catalog('faq'); // Capture optimistic revision before POST.
 $success_message = '';
 $error_message = '';
 
@@ -42,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // 4. Load the data (or re-load after saving)
-$faqData = json_decode(file_get_contents($faq_file_path), true);
+$faqData = gc_external() ? gc_catalog('faq') : json_decode(file_get_contents($faq_file_path), true);
 if ($faqData === null) $faqData = []; 
 
 // 5. Set Page Title and Include Header
