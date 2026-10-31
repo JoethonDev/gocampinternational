@@ -103,6 +103,22 @@ async function metrics(page) {
                 await tab.locator(".page-content").hover({position:{x:12,y:15}});
                 await tab.waitForTimeout(450);
               }
+              if(kind==="react"){
+                // Regression: click Programs (which retains keyboard focus), then
+                // move directly to Destinations without visiting page content.
+                // Previously CSS :focus-within kept Programs visible too.
+                const programs=tab.locator("#programsDropdown");
+                const destinations=tab.locator("#destinationsDropdown");
+                await programs.click();
+                assert(await tab.locator("#programsDropdown + .dropdown-menu").isVisible(),"React Programs menu did not open on click");
+                await destinations.hover();
+                await tab.waitForTimeout(250);
+                assert(await tab.locator("#destinationsDropdown + .dropdown-menu").isVisible(),"React Destinations did not open on hover transition");
+                assert(!(await tab.locator("#programsDropdown + .dropdown-menu").isVisible()),"React Programs remained open under Destinations");
+                await tab.keyboard.press("Escape");
+                await tab.waitForTimeout(220);
+                assert(!(await tab.locator("#destinationsDropdown + .dropdown-menu").isVisible()),"React dropdown remained visible after Escape");
+              }
             }
             if(viewport.name==="mobile" && route.name==="home"){
               await tab.locator(".navbar-toggler").click();
