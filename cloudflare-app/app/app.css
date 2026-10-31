@@ -25,7 +25,7 @@ html{scroll-behavior:smooth}body{margin:0}.visually-hidden-focusable:not(:focus)
 /* Exact PR #40 category.php inline hero geometry, typography and hover surfaces.
    Scoping prevents the category rules from changing the homepage slider. */
 .page-content .hero-section:has(.category-hero-caption) {
-  min-height: 500px;
+  /* Shared PR40 design-system.css owns the responsive hero min-height. */
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
