@@ -6,6 +6,7 @@ import { AdminShell } from "../components/AdminShell";
 import { listCatalog } from "../lib/catalog.server";
 import { Repeater } from "../components/Repeater";
 import { MediaSelector } from "../components/MediaSelector";
+import { VisibilityOverrides } from "../components/VisibilityOverrides";
 export function meta(){return [{title:"Edit GoCamp Content"},{name:"robots",content:"noindex,nofollow"}];}
 export async function loader({request,context,params}:Route.LoaderArgs){
   const db=context.cloudflare.env.DB,session=await requireAdmin(request,db),kind=ensureKind(params.kind||"");
@@ -28,7 +29,7 @@ const lines=(v:unknown)=>Array.isArray(v)?v.join("\n"):"";
 export default function Edit({loaderData}:Route.ComponentProps){
   const {session,kind,slug,isNew,item,revision,categories,uploadedMedia,saved}=loaderData;
   const navigation=useNavigation();
-  const overrides=item.visibility_overrides?JSON.stringify(item.visibility_overrides,null,2):"";
+
   return <AdminShell username={session.username} csrf={session.csrf}>
     <div className="d-flex align-items-center gap-3 mb-4"><Link to={"/admin/catalog/"+kind}>← Back</Link><h1 className="h3 mb-0">{isNew?"Create":"Edit"} {kind}</h1></div>
     {saved&&<div className="alert alert-success" role="status">Saved successfully.</div>}
@@ -56,7 +57,7 @@ export default function Edit({loaderData}:Route.ComponentProps){
         <Repeater name="sections" title="Category content sections" initial={Array.isArray(item.sections)?item.sections as Record<string,unknown>[]:[]} fields={[{key:"title",label:"Section title"},{key:"image",label:"Image path"},{key:"content",label:"Content (HTML allowed)",kind:"long"},{key:"is_active",label:"Visible",kind:"flag"}]}/>
         <div className="col-12"><label htmlFor="category_gallery" className="form-label">Category gallery images (one path per line)</label><textarea id="category_gallery" name="gallery" className="form-control" rows={3} defaultValue={lines(item.gallery)}/></div>
       </>}
-      <div className="col-12"><label className="form-label" htmlFor="visibility_overrides">Visibility overrides (JSON object)</label><textarea className="form-control font-monospace" id="visibility_overrides" name="visibility_overrides" rows={5} defaultValue={overrides}/><p className="small text-muted mt-2">Empty = keep existing overrides. Global visibility is under Settings.</p></div>
+      <VisibilityOverrides kind={kind} initial={(item.visibility_overrides as unknown as Record<string,unknown> | undefined)||{}}/>
       <div className="col-12"><button disabled={navigation.state!=="idle"} className="btn btn-primary px-4">{navigation.state!=="idle"?"Saving...":"Save changes"}</button></div>
     </div></Form>
   </AdminShell>;
