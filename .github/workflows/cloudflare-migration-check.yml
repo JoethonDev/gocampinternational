@@ -1,0 +1,36 @@
+name: Cloudflare migration checks
+on:
+  push:
+    branches: [migration/cloudflare-react-workers-pr40]
+    paths: ["cloudflare-app/**", "docs/cloudflare-migration/**", "migration/**", ".github/workflows/cloudflare-migration-check.yml"]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    defaults:
+      run:
+        working-directory: cloudflare-app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: cloudflare-app/package-lock.json
+      - run: npm ci
+      - name: Generate Cloudflare and React Router types
+        run: npm run cf-typegen
+      - name: Typecheck and compile
+        run: npm run typecheck && npm run build
+      - name: Verify Wrangler output without deployment
+        run: npx wrangler deploy --dry-run
+      - name: Check PR40 source snapshot with PHP
+        run: php scripts/export-pr40.php --check
+      - name: Inspect duplicate legacy paths and source leakage
+        run: |
+          test ! -e build/client/data/legacy
+          test ! -e build/client/admin/index.php
+          test ! -e build/client/.env

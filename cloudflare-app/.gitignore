@@ -1,0 +1,12 @@
+node_modules/
+.react-router/
+build/
+dist/
+.wrangler/
+.dev.vars*
+.env*
+public/images/
+public/css/
+public/js/
+public/uploads/
+worker-configuration.generated.d.ts
