@@ -3,7 +3,7 @@
 **Resume date/reference:** 2026-10-31.  
 **Repo:** https://github.com/JoethonDev/gocampinternational  
 **Working branch:** `migration/cloudflare-react-workers-pr40` — no merges.  
-**Last verified app commit:** `1de60f6b758cd6686ce48524f924ce17f3e21c25` (a docs-only successor may be branch HEAD).
+**Last verified app commit:** `9484732ad9f31787983a5364b0da5b9f9dde308c` (later docs-only commit may be HEAD).
 **Immutable legacy data and UI reference:** [PR #40](https://github.com/JoethonDev/gocampinternational/pull/40), commit `80432a2a6fcb4b0de6f14710748e53781ddef58c`.  
 **Current staging:** https://gocamp-migration-staging.elprincedoca.workers.dev/  
 **Detailed snapshot:** [PROGRESS.md](./PROGRESS.md). **Acceptance contract:** [PHASES.md](./PHASES.md). **UI/UX comparisons:** [UI_PARITY.md](./UI_PARITY.md).
@@ -73,3 +73,7 @@ Application `1de60f6`: full [24-pair browser comparison](https://github.com/Joet
 ## Latest 2026-10-31 content/CMS continuation
 
 See [CONTENT_AND_CMS_RECONCILIATION.md](./CONTENT_AND_CMS_RECONCILIATION.md): PR40 source is immutable, PR39's two approved drafts were reused as **inactive** D1 inserts (65 total programs), 331 original images inspected, and a visual CMS added (forms, media picker, rich text, bulk lists, trash, visibility, FAQ/memories, legacy URLs). Authenticated browser mutations, form email delivery, one missing original asset, and full release gates remain unverified; do **not** describe all phases as complete.
+
+## Verified 2026-10-31 application checkpoint
+
+App SHA `9484732ad9f31787983a5364b0da5b9f9dde308c`: [24/24 public visual pairs PASS](https://github.com/JoethonDev/gocampinternational/actions/runs/41222450875), [migration CI PASS](https://github.com/JoethonDev/gocampinternational/actions/runs/41222450867), Cloudflare Build `d14fad0c-521a-4b1f-80f6-3229931cae1b` with **27/27 staging HTTP smoke checks PASS**. Content overlays preserve **63 PR40 programs + 2 inactive PR39 drafts**. All new admin visual features and accurate remaining issues are inventoried in [CONTENT_AND_CMS_RECONCILIATION.md](./CONTENT_AND_CMS_RECONCILIATION.md). Browser-authenticated CMS mutation E2E, sender email setup, one original missing upload, exhaustive content and release verification are not complete. No merge or production cutover.

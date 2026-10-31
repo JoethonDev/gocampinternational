@@ -1,8 +1,8 @@
 # GoCamp Cloudflare migration — verified progress snapshot
 
-**Last reviewed:** 2026-10-31; [visual run 41219367418](https://github.com/JoethonDev/gocampinternational/actions/runs/41219367418), [migration checks 41219367420](https://github.com/JoethonDev/gocampinternational/actions/runs/41219367420).
+**Last reviewed:** 2026-10-31, after [visual run 41222450875](https://github.com/JoethonDev/gocampinternational/actions/runs/41222450875) and [migration CI run 41222450867](https://github.com/JoethonDev/gocampinternational/actions/runs/41222450867).
 **Migration branch:** [`migration/cloudflare-react-workers-pr40`](https://github.com/JoethonDev/gocampinternational/tree/migration/cloudflare-react-workers-pr40)  
-**Verified application checkpoint:** `1de60f6b758cd6686ce48524f924ce17f3e21c25` — 24 screenshot pairs (8 templates × 3 screens), 27/27 read-only staging HTTP checks, build+CI green. A following docs-only commit is not a new application release.
+**Verified application checkpoint:** `9484732ad9f31787983a5364b0da5b9f9dde308c` — Cloudflare deployment success, 27/27 staging HTTP checks, 24/24 screenshot comparisons. Subsequent handoff documentation updates contain no new application code.
 **Source of truth:** [PR #40](https://github.com/JoethonDev/gocampinternational/pull/40), head `80432a2a6fcb4b0de6f14710748e53781ddef58c`, open/unmerged at last inspection. This branch was created from that exact PR head; do not replace its imported snapshot with unrelated `main`/`develop` data.  
 **Public staging:** https://gocamp-migration-staging.elprincedoca.workers.dev/  
 **Release state:** Staging operational; **NOT production ready**, **NOT merged**, **NO DNS cutover**.
@@ -13,7 +13,7 @@
 
 | Phase | Implemented / verified | Still needed before phase acceptance | Gate |
 | --- | --- | --- | --- |
-| P0: PR #40 baseline | Original PHP snapshot identified; 63 programs, 9 destinations, 8 categories, 28 memories, 11 FAQs confirmed; 8 representative public pages captured at 3 viewports | Complete inventory of every public/admin URL, JS action, image dependency and exception; field-by-field source comparison | **Partial** |
+| P0: PR #40 baseline | Original PHP snapshot identified; 63 PR40 programs + 2 approved inactive PR39 drafts in staging D1; 9 destinations, 8 categories, 28 memories, 11 FAQs confirmed; 8 representative public pages captured at 3 viewports | Complete inventory of every public/admin URL, JS action, image dependency and exception; field-by-field source comparison | **Partial** |
 | P1: React/Cloudflare foundation | React Router v7 + React 19 + TS + Vite + Cloudflare Worker deployed; isolated staging/prod D1/R2; GitHub CI, Cloudflare Builds, static assets and 27 live HTTP smoke checks | Account-wide Free quota measurement, static asset/CPU profiling, other original acceptance details | **Foundation operational; final gate open** |
 | P2: D1 migration | Staging D1 schema and idempotent source-seed tooling; catalog and documents imported; 6 tracked import sources; counts verified from remote D1 | Byte-/field-level content checks, visibility/ordering relationships, orphan image references, idempotent reimport and restore test | **Core catalog imported; validation pending** |
 | P3: Public React parity | Homepage, destinations, categories, About, FAQ, Contact, hidden listing policy, footer, banner, memories, nav JS and 8-page/3-viewport comparison pass | Audit **all** destinations and categories, program card behavior (non-clickable by design), legacy aliases, page interactions, SEO/canonical/redirect/sitemap, cross-browser/accessibility, real content/visibility parity | **Partial** |
@@ -126,3 +126,10 @@ Read [ROUTE_PARITY_MATRIX.md](./ROUTE_PARITY_MATRIX.md) for the explicit PHP-rou
 ## Latest 2026-10-31 content/CMS continuation
 
 See [CONTENT_AND_CMS_RECONCILIATION.md](./CONTENT_AND_CMS_RECONCILIATION.md): PR40 source is immutable, PR39's two approved drafts were reused as **inactive** D1 inserts (65 total programs), 331 original images inspected, and a visual CMS added (forms, media picker, rich text, bulk lists, trash, visibility, FAQ/memories, legacy URLs). Authenticated browser mutations, form email delivery, one missing original asset, and full release gates remain unverified; do **not** describe all phases as complete.
+
+## 12. Verified latest application build — 2026-10-31
+
+- **App SHA `9484732ad9f31787983a5364b0da5b9f9dde308c`**: [GitHub migration CI 41222450867](https://github.com/JoethonDev/gocampinternational/actions/runs/41222450867) SUCCESS; Cloudflare Build `d14fad0c-521a-4b1f-80f6-3229931cae1b` SUCCESS with **27 of 27** read-only live staging HTTP checks passing.
+- [Browser visual run 41222450875](https://github.com/JoethonDev/gocampinternational/actions/runs/41222450875) **SUCCESS**. The job log confirms exact deployed revision `9484732ad9f31787983a5364b0da5b9f9dde308c`, and `Visual parity checks passed. Screenshot pairs: 24` (8 page templates × 3 viewports).
+- Visual CMS work added: filtered bulk catalog, visual FAQ/memories/global and per-record visibility, rich text, category/destination/program nested editors, media selection, R2 safe deletion, Trash, inquiry detail filters, legacy admin URLs. Two exact previously approved PR39 drafts were inserted into staging D1 as **inactive**; original PR40 63-record source remains unchanged.
+- See [CONTENT_AND_CMS_RECONCILIATION.md](./CONTENT_AND_CMS_RECONCILIATION.md) for content and image audit, direct admin links and outstanding acceptance. **Do not claim full 100% acceptance:** authenticated CMS mutation flows, form email notifications, missing original upload, whole-catalog parity, backup/restore and Cloudflare budget evidence have not been proven.
