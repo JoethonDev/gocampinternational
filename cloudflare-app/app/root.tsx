@@ -6,6 +6,7 @@ import {
   Scripts,
   ScrollRestoration,
   useLocation,
+  useNavigation,
   useRouteLoaderData
 } from "react-router";
 import type { Route } from "./+types/root";
@@ -68,7 +69,9 @@ export const links: Route.LinksFunction = () => [
 export function Layout({ children }: { children: React.ReactNode }) {
   const data = useRouteLoaderData("root") as
     { destinations: DestinationRecord[]; categories: CategoryRecord[] } | undefined;
-  const isAdmin = useLocation().pathname.startsWith("/admin");
+  const location = useLocation();
+  const navigation = useNavigation();
+  const isAdmin = location.pathname.startsWith("/admin");
   return (
     <html lang="en">
       <head>
@@ -79,13 +82,21 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body className={isAdmin ? "gc-admin-route" : undefined}>
+        <div
+          className={"gc-route-progress" + (navigation.state !== "idle" ? " is-active" : "")}
+          aria-hidden="true"
+        />
         <a className="visually-hidden-focusable" href="#main-content">
           Skip to main content
         </a>
         {!isAdmin && (
           <SiteHeader categories={data?.categories || []} destinations={data?.destinations || []} />
         )}
-        <main id="main-content">{children}</main>
+        <main id="main-content">
+          <div className="gc-route-view" key={location.key}>
+            {children}
+          </div>
+        </main>
         {!isAdmin && (
           <>
             <SiteFooter />

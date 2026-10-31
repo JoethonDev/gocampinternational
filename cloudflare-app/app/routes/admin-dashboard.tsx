@@ -1,8 +1,8 @@
-import { Link } from "react-router";
 import type { Route } from "./+types/admin-dashboard";
 import { requireAdmin } from "../lib/admin.server";
 import { AdminShell } from "../components/admin/AdminShell";
-import { AdminPageHeader } from "../components/admin/AdminPageHeader";
+import { DashboardPage } from "../features/admin/DashboardPage";
+import type { InquiryRecord } from "../lib/domain";
 
 export function meta() {
   return [{ title: "GoCamp Admin Dashboard" }, { name: "robots", content: "noindex,nofollow" }];
@@ -11,7 +11,7 @@ export function meta() {
 export async function loader({ request, context }: Route.LoaderArgs) {
   const db = context.cloudflare.env.DB;
   const session = await requireAdmin(request, db);
-  const [catalog, inquiries] = await Promise.all([
+  const [catalog, inquiries, inquiryRows, recentContent, documents, media] = await Promise.all([
     db
       .prepare(
         "SELECT kind,status,COUNT(*) AS count FROM catalog_entities GROUP BY kind,status ORDER BY kind,status"
@@ -21,58 +21,44 @@ export async function loader({ request, context }: Route.LoaderArgs) {
       .prepare(
         "SELECT kind,status,COUNT(*) AS count FROM inquiries GROUP BY kind,status ORDER BY kind,status"
       )
-      .all<{ kind: string; status: string; count: number }>()
+      .all<{ kind: string; status: string; count: number }>(),
+    db
+      .prepare(
+        "SELECT id,kind,name,email,phone,status,content_json,created_at FROM inquiries ORDER BY created_at DESC LIMIT 5"
+      )
+      .all<InquiryRecord>(),
+    db
+      .prepare(
+        "SELECT kind,slug,name,status,updated_at FROM catalog_entities ORDER BY updated_at DESC, name LIMIT 6"
+      )
+      .all<{ kind: string; slug: string; name: string; status: string; updated_at: number }>(),
+    db
+      .prepare("SELECT key,updated_at FROM site_documents ORDER BY key")
+      .all<{ key: string; updated_at: number }>(),
+    db
+      .prepare(
+        "SELECT COUNT(*) AS count, COALESCE(SUM(bytes),0) AS bytes, COALESCE(SUM(is_public),0) AS published FROM media_assets"
+      )
+      .first<{ count: number; bytes: number; published: number }>()
   ]);
-  return { session, counts: catalog.results, forms: inquiries.results };
+  return {
+    session,
+    counts: catalog.results,
+    inquiryCounts: inquiries.results,
+    inquiries: inquiryRows.results,
+    recentContent: recentContent.results,
+    documents: documents.results,
+    media: media || { count: 0, bytes: 0, published: 0 },
+    environment: context.cloudflare.env.GOCAMP_ENV,
+    source: context.cloudflare.env.MIGRATION_SOURCE_SHA
+  };
 }
 
-const KINDS = [
-  ["program", "Programs"],
-  ["destination", "Destinations"],
-  ["category", "Categories"]
-] as const;
-
 export default function Dashboard({ loaderData }: Route.ComponentProps) {
-  const { session, counts, forms } = loaderData;
+  const { session, ...data } = loaderData;
   return (
     <AdminShell username={session.username} csrf={session.csrf}>
-      <AdminPageHeader
-        title="Dashboard"
-        description="Overview of the staging content catalog and submitted inquiries."
-      />
-      <div className="row g-4">
-        {KINDS.map(([kind, label]) => (
-          <div className="col-md-4" key={kind}>
-            <div className="card h-100 shadow-sm">
-              <div className="card-body">
-                <h2 className="h5">{label}</h2>
-                <p className="text-secondary">
-                  {counts
-                    .filter((item) => item.kind === kind)
-                    .map((item) => `${item.status}: ${item.count}`)
-                    .join(" · ") || "No entries"}
-                </p>
-                <Link className="btn btn-primary btn-sm me-2" to={`/admin/catalog/${kind}`}>
-                  Manage
-                </Link>
-                <Link className="btn btn-outline-primary btn-sm" to={`/admin/catalog/${kind}/new`}>
-                  Create
-                </Link>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-      <div className="card shadow-sm mt-4">
-        <div className="card-body">
-          <h2 className="h5">Inquiries and leads</h2>
-          <p>
-            {forms.map((item) => `${item.kind} ${item.status}: ${item.count}`).join(" · ") ||
-              "No submissions yet"}
-          </p>
-          <Link to="/admin/inquiries">Manage inquiries</Link>
-        </div>
-      </div>
+      <DashboardPage session={session} {...data} />
     </AdminShell>
   );
 }
