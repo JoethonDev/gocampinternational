@@ -1,0 +1,123 @@
+import { verifyAdminPost } from "./admin.server";
+export type Kind="program"|"destination"|"category";
+const validId=(s:string)=>/^[a-z0-9][a-z0-9_-]{0,159}$/.test(s);
+const statuses:Record<Kind,string[]>={program:["active","inactive","trash"],destination:["active","inactive","coming-soon","trash"],category:["active","inactive","trash"]};
+const toText=(v:FormDataEntryValue|null,max:number)=>typeof v==="string"?v.trim().slice(0,max+1):"";
+export function ensureKind(raw:string):Kind {
+  if(raw!=="program"&&raw!=="destination"&&raw!=="category")throw new Response("Not Found",{status:404});
+  return raw;
+}
+function readFields(form:FormData,kind:Kind,previous:Record<string,unknown>) {
+  const name=toText(form.get("name"),160),status=toText(form.get("status"),40);
+  if(!name||name.length>160||!statuses[kind].includes(status))throw new Response("Invalid name or status",{status:400});
+  const data:{[key:string]:unknown}={...previous,name,status};
+  const fields:Record<Kind,Array<[string,number]>>={
+    program:[["category_slug",160],["image",2048],["tagline",1500],["price",120],["level",160],["color",60],["description",50000]],
+    destination:[["banner",2048],["tagline",1500],["intro_text",50000],["intro_image",2048]],
+    category:[["banner",2048],["intro",50000],["intro_image",2048],["color",60]]
+  };
+  for(const [field,max] of fields[kind]) {
+    const value=toText(form.get(field),max);
+    if(value.length>max)throw new Response("Field exceeds maximum length",{status:400});
+    data[field]=value;
+  }
+  if(kind==="program") {
+    const order=toText(form.get("order"),12),duration=toText(form.get("duration"),12);
+    const min=toText(form.get("ages_min"),3),max=toText(form.get("ages_max"),3);
+    if([order,duration,min,max].some(v=>v&&!/^\d+$/.test(v)))throw new Response("Invalid numeric field",{status:400});
+    if((Number(min)||0)>(Number(max)||99))throw new Response("Invalid ages",{status:400});
+    data.order=order===""?null:Number(order);
+    data.duration=Number(duration||0);
+    data.ages={min:min===""?0:Number(min),max:max===""?99:Number(max)};
+    for(const field of ["highlights","includes","excludes","badges","gallery"]) {
+      const raw=toText(form.get(field),25000);
+      if(raw.length>25000)throw new Response("Field too large",{status:400});
+      data[field]=raw.split("\n").map(v=>v.trim()).filter(Boolean).slice(0,150);
+    }
+    data.id=String(previous.id||form.get("slug")||"");
+  }
+  if(kind==="destination") {
+    const ids=toText(form.get("program_ids"),20000);
+    data.program_ids=ids.split(/[\n,]+/).map(x=>x.trim()).filter(Boolean).slice(0,150);
+  }
+  if(kind==="category") {
+    data.section_visibility=previous.section_visibility||{};
+  }
+  const overrides=toText(form.get("visibility_overrides"),25000);
+  if(overrides) {
+    let parsed:unknown;
+    try{parsed=JSON.parse(overrides);}catch{throw new Response("Invalid visibility JSON",{status:400});}
+    if(!parsed||typeof parsed!=="object"||Array.isArray(parsed))throw new Response("Visibility overrides must be an object",{status:400});
+    data.visibility_overrides=parsed;
+  }
+  return data;
+}
+export async function saveEntity(request:Request,db:D1Database,kind:Kind,form:FormData,originalSlug?:string) {
+  await verifyAdminPost(request,db,form);
+  const slug=toText(form.get("slug"),160).toLowerCase();
+  if(!validId(slug))throw new Response("Invalid ID / slug",{status:400});
+  const original=originalSlug||slug;
+  // Slugs remain stable during editing; migrating references during rename is a later acceptance gate.
+  if(originalSlug&&slug!==originalSlug)throw new Response("Changing the slug is not supported yet",{status:409});
+  const row=await db.prepare("SELECT content_json,revision FROM catalog_entities WHERE kind=? AND slug=?").bind(kind,original).first<{content_json:string;revision:number}>();
+  const previous=row?JSON.parse(row.content_json) as Record<string,unknown>:{};
+  const data=readFields(form,kind,previous);
+  if(kind==="destination")data.slug=slug;
+  if(kind==="category")data.slug=slug;
+  const revision=Number(form.get("revision")||0);
+  const category=kind==="program"?String(data.category_slug||""):null;
+  const order=kind==="program"?(Number(data.order)||0):0;
+  if(row) {
+    if(revision!==row.revision)throw new Response("This record was changed by another editor. Reload before saving.",{status:409});
+    const result=await db.prepare("UPDATE catalog_entities SET name=?,status=?,category_slug=?,sort_order=?,content_json=?,revision=revision+1,updated_at=unixepoch() WHERE kind=? AND slug=? AND revision=?")
+      .bind(data.name,data.status,category,order,JSON.stringify(data),kind,slug,revision).run();
+    if(result.meta.changes!==1)throw new Response("Edit conflict",{status:409});
+  } else {
+    const exists=await db.prepare("SELECT slug FROM catalog_entities WHERE kind=? AND slug=?").bind(kind,slug).first();
+    if(exists)throw new Response("Slug already exists",{status:409});
+    await db.prepare("INSERT INTO catalog_entities(kind,slug,name,status,category_slug,sort_order,content_json,revision) VALUES(?,?,?,?,?,?,?,0)")
+      .bind(kind,slug,data.name,data.status,category,order,JSON.stringify(data)).run();
+  }
+  if(kind==="destination") {
+    const ids=(data.program_ids as string[])||[];
+    const valid=ids.length ? await db.prepare("SELECT slug FROM catalog_entities WHERE kind='program' AND slug IN ("+ids.map(()=>"?").join(",")+")").bind(...ids).all<{slug:string}>():{results:[] as Array<{slug:string}>};
+    const allowed=new Set(valid.results.map(x=>x.slug));
+    if(allowed.size!==new Set(ids).size)throw new Response("Destination references an unknown program",{status:400});
+    const changes=[db.prepare("DELETE FROM destination_programs WHERE destination_slug=?").bind(slug),
+      ...ids.map((id,i)=>db.prepare("INSERT INTO destination_programs(destination_slug,program_slug,position) VALUES(?,?,?)").bind(slug,id,i))];
+    await db.batch(changes);
+  }
+  return slug;
+}
+export async function changeBulkStatus(request:Request,db:D1Database,kind:Kind,form:FormData) {
+  await verifyAdminPost(request,db,form);
+  const status=toText(form.get("status"),40);
+  if(!statuses[kind].includes(status))throw new Response("Invalid status",{status:400});
+  const ids=form.getAll("ids").map(x=>String(x)).filter(validId);
+  if(ids.length===0||ids.length>100)throw new Response("Select 1 to 100 records",{status:400});
+  const unique=[...new Set(ids)];
+  const rows=await db.prepare("SELECT slug,content_json,revision FROM catalog_entities WHERE kind=? AND slug IN ("+unique.map(()=>"?").join(",")+")").bind(kind,...unique).all<{slug:string;content_json:string;revision:number}>();
+  if(rows.results.length!==unique.length)throw new Response("One or more records are unavailable",{status:409});
+  const jobs=rows.results.map(row=>{
+    const data={...(JSON.parse(row.content_json) as Record<string,unknown>),status};
+    return db.prepare("UPDATE catalog_entities SET status=?,content_json=?,revision=revision+1,updated_at=unixepoch() WHERE kind=? AND slug=? AND revision=?")
+      .bind(status,JSON.stringify(data),kind,row.slug,row.revision);
+  });
+  const results=await db.batch(jobs);
+  if(results.some(v=>v.meta.changes!==1))throw new Response("Concurrent update detected",{status:409});
+  return results.length;
+}
+export async function saveDocument(request:Request,db:D1Database,key:"site_settings"|"camp_memories"|"faq",form:FormData) {
+  await verifyAdminPost(request,db,form);
+  const raw=toText(form.get("content"),250000);
+  if(raw.length>250000)throw new Response("Document too large",{status:413});
+  let value:unknown;
+  try{value=JSON.parse(raw);}catch{throw new Response("Invalid JSON",{status:400});}
+  if(key==="faq"&&(!Array.isArray(value)||value.length>500||value.some(x=>!x||typeof x.question!=="string"||typeof x.answer!=="string")))throw new Response("Invalid FAQ entries",{status:400});
+  if(key==="camp_memories"&&(!value||typeof value!=="object"||Array.isArray(value)||!Array.isArray((value as {items?:unknown}).items)))throw new Response("Invalid memories data",{status:400});
+  if(key==="site_settings"&&(!value||typeof value!=="object"||Array.isArray(value)))throw new Response("Invalid settings data",{status:400});
+  const rev=Number(form.get("revision")||0);
+  const result=await db.prepare("UPDATE site_documents SET content_json=?,revision=revision+1,updated_at=unixepoch() WHERE key=? AND revision=?")
+    .bind(JSON.stringify(value),key,rev).run();
+  if(result.meta.changes!==1)throw new Response("Document changed; reload to avoid overwriting",{status:409});
+}
