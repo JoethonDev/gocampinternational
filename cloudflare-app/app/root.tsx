@@ -30,7 +30,7 @@ export function Layout({children}:{children:React.ReactNode}) {
   const data=useRouteLoaderData("root") as {destinations:CatalogRecord[];categories:CatalogRecord[]} | undefined;
   const isAdmin=useLocation().pathname.startsWith("/admin");
   return <html lang="en"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="icon" href="/images/favi.png"/><Meta/><Links/></head>
-    <body><a className="visually-hidden-focusable" href="#main-content">Skip to main content</a>
+    <body className={isAdmin?"gc-admin-route":undefined}><a className="visually-hidden-focusable" href="#main-content">Skip to main content</a>
       {!isAdmin&&<SiteHeader categories={data?.categories || []} destinations={data?.destinations || []}/>}<main id="main-content">{children}</main>{!isAdmin&&<><SiteFooter/><LeadModal/><SiteInteractions/></>}
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer/>
       <ScrollRestoration/><Scripts/></body></html>;
