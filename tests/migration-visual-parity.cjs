@@ -174,21 +174,27 @@ async function metrics(page) {
         await adminTab.evaluate(()=>document.fonts.ready);
         const layout=await adminTab.evaluate(()=>{
           const login=document.querySelector(".gc-admin-login");
+          const card=document.querySelector(".gc-admin-login-card");
+          const brand=document.querySelector(".gc-admin-login-brand");
           const rect=login.getBoundingClientRect();
+          const brandStyle=brand?getComputedStyle(brand):null;
           return {
             bodyPaddingTop:parseFloat(getComputedStyle(document.body).paddingTop),
             top:rect.top,
             height:rect.height,
             viewHeight:window.innerHeight,
             docHeight:document.documentElement.scrollHeight,
-            gradient:getComputedStyle(login).backgroundImage
+            cardVisible:Boolean(card&&card.getBoundingClientRect().height>0),
+            brandVisible:Boolean(brandStyle&&brandStyle.display!=="none"),
+            brandGradient:brandStyle?.backgroundImage||""
           };
         });
         assert(layout.bodyPaddingTop===0,"Admin login inherits public navbar padding: "+layout.bodyPaddingTop);
         assert(Math.abs(layout.top)<=1,"Admin login background starts below viewport: "+layout.top);
         assert(layout.height>=layout.viewHeight-1,"Admin login background does not fill viewport");
         assert(layout.docHeight<=layout.viewHeight+2,"Admin login unexpectedly scrolls: "+layout.docHeight+" > "+layout.viewHeight);
-        assert(layout.gradient.includes("radial-gradient"),"Admin login gradient missing");
+        assert(layout.cardVisible,"Admin login form card missing");
+        assert(!layout.brandVisible||layout.brandGradient.includes("gradient"),"Admin login brand panel gradient missing");
         await adminTab.screenshot({path:path.join(output,"admin-login-"+viewport.name+"-react.png"),animations:"disabled",fullPage:true});
       }catch(err){
         failed++;

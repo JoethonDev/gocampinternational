@@ -17,7 +17,8 @@
 cloudflare-app/
 ├─ app/
 │  ├─ components/
-│  │  ├─ admin/          AdminShell, panels, metric cards, empty states, badges
+│  │  ├─ admin/          AdminShell, panels, tables, toolbars, form sections, actions,
+│  │  │                 metric cards, empty states, row actions, status badges
 │  │  ├─ site/           public header, footer
 │  │  ├─ ui/             Breadcrumbs, PageBanner, Pagination, error pages
 │  │  └─ *.tsx           reusable public/admin controls (media, repeaters, cards)
@@ -65,7 +66,26 @@ cloudflare-app/
 4. Reuse `Breadcrumbs`, `PageBanner`, `ProgramCard`, `FaqAccordion`, `CampMemories` rather than copying markup.
 5. Keep original PHP class names and content strings; the public theme is not being redesigned.
 
-## 5. Adding a CMS field
+## 5. Shared CMS UX primitives
+
+Do not duplicate these patterns in a route:
+
+| Need | Component |
+|---|---|
+| Page title, description and top-right action | `AdminPageHeader` |
+| Section card with header/description/action | `AdminPanel` |
+| Standard table, empty state and responsive wrapper | `AdminTable` |
+| Search/filter toolbar and labelled field | `AdminToolbar`, `AdminToolbarField` |
+| Form section and sticky save footer | `AdminFormSection`, `AdminFormActions` |
+| Consistent action group inside a table row | `AdminRowActions` |
+| Empty list/table message | `AdminEmptyState` |
+| Metric/KPI card | `MetricCard` |
+| Status pill | `StatusBadge` |
+| Pagination | `Pagination` in `components/ui` |
+
+Catalog, inquiries, trash and the dashboard recent table all use `AdminTable`; catalog, inquiries, media and trash all use `AdminToolbar`. Any new list screen should follow the same pattern. Feature-specific CSS belongs next to its feature (`dashboard/dashboard.css`, `contact/contact.css`), not in the global public stylesheet.
+
+## 6. Adding a CMS field
 
 1. Add the type to `app/lib/domain.ts` when it is not a simple string.
 2. Add parsing/validation in `catalog-fields.server.ts` (length limits, allowed types).
@@ -73,7 +93,7 @@ cloudflare-app/
 4. For repeatable data use `Repeater` or `StringList`; both submit a hidden `json_<field>` value, so arrays keep their type when empty.
 5. For images use `MediaSelector`. For rich text use `RichTextInput`; never render stored HTML directly.
 
-## 6. Cloudflare conventions
+## 7. Cloudflare conventions
 
 - `wrangler types` owns `Env`; never hand-write binding types.
 - Secrets (`ADMIN_PASSWORD_SHA256`, `ADMIN_USERNAME`) live in Cloudflare, not in source.
@@ -82,7 +102,7 @@ cloudflare-app/
 - Static assets are served by Workers Static Assets; uploaded media is served through the immutable `/media/:id` route with R2.
 - Do not introduce a global mutable request cache or module-level user state.
 
-## 7. Quality commands
+## 8. Quality commands
 
 ```bash
 cd cloudflare-app
