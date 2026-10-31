@@ -96,12 +96,9 @@ html{scroll-behavior:smooth}body{margin:0}.visually-hidden-focusable:not(:focus)
 .navbar.fixed-top .navbar-nav a.nav-link:not(.dropdown-toggle).active::after {
   transform: translateX(-50%) scaleX(1);
 }
-@media (min-width:1200px) and (hover:hover) {
-  /* Hover works even if the Bootstrap bundle is late or unavailable. */
-  /* Hover-only fallback: :focus-within kept previously focused menus open
-     after Bootstrap had hidden them when a sibling menu was activated. */
-  .navbar.fixed-top .nav-item.dropdown:hover > .dropdown-menu { display:block; }
-}
+/* Dropdown visibility is owned by Bootstrap's .show state; React's
+   SiteInteractions supplies desktop hover. CSS :hover/:focus-within display
+   overrides can keep a sibling menu visible after Bootstrap hides it. */
 @media (max-width:1199.98px) {
   .page-content .hero-section:has(.category-hero-caption) { background-attachment: scroll; }
   .navbar.fixed-top .navbar-nav a.nav-link:not(.dropdown-toggle)::after { display:none; }
