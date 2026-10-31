@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useFetcher } from "react-router";
 import sourceMedia from "../legacy-media.json";
 
 const STATIC_PATHS = (sourceMedia as Array<{ path: string }>).map((item) => item.path);
+type UploadResult = { success?: boolean; path?: string; error?: string };
 
 export function MediaSelector({
   id,
@@ -10,7 +12,8 @@ export function MediaSelector({
   initial,
   uploaded = [],
   externalValue,
-  onChange
+  onChange,
+  csrf
 }: {
   id: string;
   label: string;
@@ -19,12 +22,17 @@ export function MediaSelector({
   uploaded?: string[];
   externalValue?: string;
   onChange?: (value: string) => void;
+  csrf: string;
 }) {
   const [local, setLocal] = useState(initial);
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
+  const [extraUploads, setExtraUploads] = useState<string[]>([]);
+  const [uploadMessage, setUploadMessage] = useState("");
   const returnFocus = useRef<HTMLElement | null>(null);
   const searchInput = useRef<HTMLInputElement>(null);
+  const fileInput = useRef<HTMLInputElement>(null);
+  const uploader = useFetcher<UploadResult>();
   const value = externalValue ?? local;
 
   const setValue = (next: string) => {
@@ -32,7 +40,10 @@ export function MediaSelector({
     onChange?.(next);
   };
 
-  const all = useMemo(() => [...new Set([...uploaded, ...STATIC_PATHS])], [uploaded]);
+  const all = useMemo(
+    () => [...new Set([...extraUploads, ...uploaded, ...STATIC_PATHS])],
+    [extraUploads, uploaded]
+  );
   const choices = useMemo(
     () => all.filter((path) => path.toLowerCase().includes(search.toLowerCase())).slice(0, 48),
     [all, search]
@@ -58,6 +69,34 @@ export function MediaSelector({
       returnFocus.current?.focus();
     };
   }, [open]);
+
+  useEffect(() => {
+    if (!uploader.data?.success || !uploader.data.path) return;
+    const path = uploader.data.path;
+    setExtraUploads((current) => [path, ...current.filter((item) => item !== path)]);
+    setValue(path);
+    setSearch("");
+    setUploadMessage("Image uploaded and selected.");
+    if (fileInput.current) fileInput.current.value = "";
+  }, [uploader.data]);
+
+  const upload = () => {
+    const file = fileInput.current?.files?.[0];
+    if (!file) {
+      setUploadMessage("Choose an image file first.");
+      return;
+    }
+    setUploadMessage("");
+    const form = new FormData();
+    form.set("csrf", csrf);
+    form.set("operation", "upload");
+    form.set("file", file);
+    uploader.submit(form, {
+      method: "post",
+      action: "/admin/media/upload",
+      encType: "multipart/form-data"
+    });
+  };
 
   return (
     <div>
@@ -109,13 +148,37 @@ export function MediaSelector({
               />
             </div>
             <div className="card-body overflow-auto">
-              <p className="text-muted small">
-                Browse committed PR40 images or images uploaded to R2. Search before opening to
-                limit bandwidth.
-              </p>
+              <div className="media-selector-upload">
+                <div className="flex-grow-1">
+                  <label className="form-label small fw-semibold" htmlFor={`${id}-upload`}>
+                    Upload a new image
+                  </label>
+                  <input
+                    ref={fileInput}
+                    id={`${id}-upload`}
+                    className="form-control form-control-sm"
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp,image/avif,image/gif"
+                  />
+                </div>
+                <button
+                  type="button"
+                  className="btn btn-sm btn-primary"
+                  onClick={upload}
+                  disabled={uploader.state !== "idle"}
+                >
+                  {uploader.state !== "idle" ? "Uploading…" : "Upload"}
+                </button>
+              </div>
+              {uploadMessage && <p className="small text-secondary mb-2">{uploadMessage}</p>}
+              {uploader.data?.error && (
+                <p className="small text-danger mb-2" role="alert">
+                  {uploader.data.error}
+                </p>
+              )}
               <input
                 ref={searchInput}
-                className="form-control mb-3"
+                className="form-control form-control-sm mb-3"
                 aria-label="Search image paths"
                 placeholder="Search file names"
                 value={search}
@@ -160,14 +223,14 @@ export function MediaSelector({
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Upload a new image
+                Manage library
               </a>
               <button
                 type="button"
                 className="btn btn-sm btn-outline-secondary"
                 onClick={() => setOpen(false)}
               >
-                Cancel
+                Close
               </button>
             </div>
           </div>

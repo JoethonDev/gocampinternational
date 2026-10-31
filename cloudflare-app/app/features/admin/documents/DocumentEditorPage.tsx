@@ -133,6 +133,7 @@ export function DocumentEditorPage({
               document={memories}
               items={items}
               uploadedMedia={uploadedMedia}
+              csrf={csrf}
               onChangeDocument={(next) => update({ ...document, ...next })}
               onChangeItems={(next) => update({ ...document, items: next })}
             />

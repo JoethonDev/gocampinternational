@@ -14,6 +14,7 @@ function FieldInput({
   index,
   name,
   uploaded,
+  csrf,
   onChange
 }: {
   field: RepeaterField;
@@ -21,6 +22,7 @@ function FieldInput({
   index: number;
   name: string;
   uploaded: string[];
+  csrf: string;
   onChange: (value: unknown) => void;
 }) {
   const fieldId = `${name}-${index}-${field.key}`;
@@ -34,6 +36,7 @@ function FieldInput({
         initial={value}
         externalValue={value}
         uploaded={uploaded}
+        csrf={csrf}
         onChange={onChange}
       />
     );
@@ -91,13 +94,15 @@ export function Repeater({
   title,
   initial,
   fields,
-  uploaded = []
+  uploaded = [],
+  csrf
 }: {
   name: string;
   title: string;
   initial: Record<string, unknown>[];
   fields: RepeaterField[];
   uploaded?: string[];
+  csrf: string;
 }) {
   const [rows, setRows] = useState<Record<string, unknown>[]>(initial);
 
@@ -159,6 +164,7 @@ export function Repeater({
                     index={index}
                     name={name}
                     uploaded={uploaded}
+                    csrf={csrf}
                     onChange={(value) => edit(index, field.key, value)}
                   />
                 </div>

@@ -112,12 +112,24 @@ export function EntityEditorPage({
           </div>
         </AdminFormSection>
         {kind === "program" && (
-          <ProgramFields item={item} categories={categories} uploadedMedia={uploadedMedia} />
+          <ProgramFields
+            item={item}
+            categories={categories}
+            uploadedMedia={uploadedMedia}
+            csrf={session.csrf}
+          />
         )}
         {kind === "destination" && (
-          <DestinationFields item={item} programs={programs} uploadedMedia={uploadedMedia} />
+          <DestinationFields
+            item={item}
+            programs={programs}
+            uploadedMedia={uploadedMedia}
+            csrf={session.csrf}
+          />
         )}
-        {kind === "category" && <CategoryFields item={item} uploadedMedia={uploadedMedia} />}
+        {kind === "category" && (
+          <CategoryFields item={item} uploadedMedia={uploadedMedia} csrf={session.csrf} />
+        )}
         <VisibilityOverrides
           kind={kind}
           initial={(item.visibility_overrides as Record<string, unknown> | undefined) || {}}

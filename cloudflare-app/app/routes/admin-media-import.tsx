@@ -4,6 +4,9 @@ import type { Route } from "./+types/admin-media-import";
 import legacy from "../legacy-media.json";
 import { requireAdmin, verifyAdminPost } from "../lib/admin.server";
 import { AdminShell } from "../components/admin/AdminShell";
+import { AdminPageHeader } from "../components/admin/AdminPageHeader";
+import { AdminPanel } from "../components/admin/AdminPanel";
+import { AdminProgress } from "../components/admin/AdminProgress";
 
 const BATCH_SIZE = 8;
 type LegacyImage = { path: string; bytes: number; folder: string };
@@ -169,53 +172,43 @@ export default function AdminMediaImport({ loaderData }: Route.ComponentProps) {
 
   return (
     <AdminShell username={session.username} csrf={session.csrf}>
-      <div className="mb-4">
-        <Link to="/admin/media" className="btn btn-sm btn-outline-secondary mb-3">
-          Back to Media Library
-        </Link>
-        <h1 className="h2">Import legacy images to R2 — staging</h1>
-        <p className="text-secondary">
-          Copy {total} repository images ({(totalBytes / 1024 / 1024).toFixed(1)} MB) to the private
-          staging R2 bucket, preserving the exact /images/... paths. Existing files are checked by
-          SHA-256. Nothing is deleted or changed in production.
+      <AdminPageHeader
+        title="Import legacy images to R2"
+        description={`Copy ${total} repository images (${(totalBytes / 1024 / 1024).toFixed(1)} MB) to the private staging R2 bucket, preserving exact /images/... paths.`}
+        aside={
+          <Link to="/admin/media" className="btn btn-sm btn-outline-secondary">
+            <i className="bi bi-arrow-left me-1" /> Back to Media Library
+          </Link>
+        }
+      />
+      <AdminPanel
+        title="Staging import"
+        description="Existing objects are checked by SHA-256. Nothing is deleted or changed in production."
+      >
+        <button type="button" className="btn btn-primary" onClick={startImport} disabled={running}>
+          <i className="bi bi-cloud-arrow-up me-1" />
+          {running ? "Importing…" : finished ? "Verify again" : "Start / resume R2 import"}
+        </button>
+        <p className="mt-3 mb-2" role="status">
+          {processed} / {total} verified · {uploaded} uploaded · {existing} already present
         </p>
-      </div>
-      <div className="card shadow-sm">
-        <div className="card-body">
-          <button
-            type="button"
-            className="btn btn-primary"
-            onClick={startImport}
-            disabled={running}
-          >
-            {running ? "Importing…" : finished ? "Verify again" : "Start / resume R2 import"}
-          </button>
-          <p className="mt-3 mb-1" role="status">
-            {processed} / {total} verified · {uploaded} uploaded · {existing} already present
-          </p>
-          <progress
-            value={processed}
-            max={Math.max(total, 1)}
-            className="w-100"
-            aria-label="R2 migration progress"
-          />
-          {finished && (
-            <div className="alert alert-success mt-3">
-              All repository images are verified in staging R2. The static fallback remains enabled
-              until cutover.
-            </div>
-          )}
-          {failure && (
-            <div role="alert" className="alert alert-danger mt-3">
-              {failure} — safe to retry; verified objects are skipped.
-            </div>
-          )}
-          <p className="text-secondary small mt-3 mb-0">
-            Keep this page open while importing. The operation runs in small authenticated batches
-            to stay within Worker request limits.
-          </p>
-        </div>
-      </div>
+        <AdminProgress value={processed} max={Math.max(total, 1)} label="R2 migration progress" />
+        {finished && (
+          <div className="alert alert-success mt-3">
+            All repository images are verified in staging R2. The static fallback remains enabled
+            until cutover.
+          </div>
+        )}
+        {failure && (
+          <div role="alert" className="alert alert-danger mt-3">
+            {failure} — safe to retry; verified objects are skipped.
+          </div>
+        )}
+        <p className="text-secondary small mt-3 mb-0">
+          Keep this page open while importing. The operation runs in small authenticated batches to
+          stay within Worker request limits.
+        </p>
+      </AdminPanel>
     </AdminShell>
   );
 }

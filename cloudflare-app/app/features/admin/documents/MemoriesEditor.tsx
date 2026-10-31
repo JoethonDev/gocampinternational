@@ -6,12 +6,14 @@ export function MemoriesEditor({
   document,
   items,
   uploadedMedia,
+  csrf,
   onChangeDocument,
   onChangeItems
 }: {
   document: DocumentItem;
   items: DocumentItem[];
   uploadedMedia: string[];
+  csrf: string;
   onChangeDocument: (next: DocumentItem) => void;
   onChangeItems: (next: DocumentItem[]) => void;
 }) {
@@ -99,6 +101,7 @@ export function MemoriesEditor({
                 initial={asDocumentText(item.image)}
                 externalValue={asDocumentText(item.image)}
                 uploaded={uploadedMedia}
+                csrf={csrf}
                 onChange={(value) => patch(index, { image: value })}
               />
               {(["caption", "country"] as const).map((key) => (

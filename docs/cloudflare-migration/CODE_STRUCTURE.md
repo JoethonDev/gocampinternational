@@ -74,8 +74,8 @@ Do not duplicate these patterns in a route:
 |---|---|
 | Page title, description and top-right action | `AdminPageHeader` |
 | Section card with header/description/action | `AdminPanel` |
-| Standard table, empty state and responsive wrapper | `AdminTable` |
-| Search/filter toolbar and labelled field | `AdminToolbar`, `AdminToolbarField` |
+| Standard table, empty state and responsive wrapper | `AdminTable` (sticky header; stacked labelled cards below 768px) |
+| Search/filter toolbar and labelled field | `AdminToolbar`, `AdminToolbarField` (compact shared sizing) |
 | Form section and sticky save footer | `AdminFormSection`, `AdminFormActions` |
 | Consistent action group inside a table row | `AdminRowActions` |
 | Empty list/table message | `AdminEmptyState` |
@@ -83,7 +83,9 @@ Do not duplicate these patterns in a route:
 | Status pill | `StatusBadge` |
 | Pagination | `Pagination` in `components/ui` |
 
-Catalog, inquiries, trash and the dashboard recent table all use `AdminTable`; catalog, inquiries, media and trash all use `AdminToolbar`. Any new list screen should follow the same pattern. Feature-specific CSS belongs next to its feature (`dashboard/dashboard.css`, `contact/contact.css`), not in the global public stylesheet.
+Catalog, inquiries, trash and the dashboard recent table all use `AdminTable`; catalog, inquiries, media and trash all use `AdminToolbar`; catalog, inquiries and media use the same `Pagination` bar with summary text. Select-all controls live in the table toolbar above the table, not in a separate footer. Any new list screen should follow the same pattern. Feature-specific CSS belongs next to its feature (`dashboard/dashboard.css`, `contact/contact.css`), not in the global public stylesheet.
+
+`MediaSelector` is self-contained: it browses static/R2 assets, accepts an inline upload through `POST /admin/media/upload`, selects the new object immediately and refreshes the local picker grid without closing or navigating away. All callers pass the current admin CSRF token.
 
 ## 6. Adding a CMS field
 

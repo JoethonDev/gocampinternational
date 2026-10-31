@@ -275,6 +275,7 @@ export default function Inquiries({ loaderData }: Route.ComponentProps) {
         page={page}
         totalPages={totalPages}
         ariaLabel="Inquiry pages"
+        summary={`Page ${page} of ${totalPages} · ${total} inquiries`}
         href={(target) => `?page=${target}`}
       />
     </AdminShell>

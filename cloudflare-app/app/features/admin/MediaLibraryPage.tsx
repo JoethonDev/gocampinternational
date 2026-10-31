@@ -258,6 +258,7 @@ export function MediaLibraryPage({
         page={data.page}
         totalPages={data.totalPages}
         ariaLabel="Image library pages"
+        summary={`Showing ${data.items.length} of ${data.total} · page ${data.page} of ${data.totalPages}`}
         href={(page) => {
           const params = new URLSearchParams();
           if (data.q) params.set("q", data.q);
@@ -266,9 +267,6 @@ export function MediaLibraryPage({
           return `/admin/media?${params.toString()}`;
         }}
       />
-      <p className="text-center text-secondary small">
-        Page {data.page} of {data.totalPages} · showing {data.items.length} of {data.total} images
-      </p>
 
       <div className="mt-5" id="uploads">
         <AdminPanel

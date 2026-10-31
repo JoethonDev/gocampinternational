@@ -6,6 +6,7 @@ import { AdminRowActions } from "../../../components/admin/AdminRowActions";
 import { AdminTable, type AdminTableColumn } from "../../../components/admin/AdminTable";
 import { AdminToolbar, AdminToolbarField } from "../../../components/admin/AdminToolbar";
 import { StatusBadge } from "../../../components/admin/StatusBadge";
+import { Pagination } from "../../../components/ui/Pagination";
 import { CATALOG_KIND_META, CATALOG_STATUS_OPTIONS } from "../../../config/catalog";
 import type { CategoryRecord, CatalogRecord, DestinationRecord } from "../../../lib/domain";
 
@@ -34,6 +35,8 @@ export function CatalogListPage({
   const [categoryFilter, setCategoryFilter] = useState("");
   const [destinationFilter, setDestinationFilter] = useState("");
   const [selected, setSelected] = useState<string[]>([]);
+  const [page, setPage] = useState(1);
+  const pageSize = 15;
 
   const visible = useMemo(
     () =>
@@ -57,6 +60,10 @@ export function CatalogListPage({
       }),
     [records, search, statusFilter, kind, categoryFilter, destinationFilter, destinations]
   );
+
+  const totalPages = Math.max(1, Math.ceil(visible.length / pageSize));
+  const safePage = Math.min(page, totalPages);
+  const paged = visible.slice((safePage - 1) * pageSize, safePage * pageSize);
 
   const select = (slug: string, checked: boolean) =>
     setSelected((previous) =>
@@ -158,6 +165,7 @@ export function CatalogListPage({
             onChange={(event) => {
               setSearch(event.target.value);
               setSelected([]);
+              setPage(1);
             }}
           />
         </AdminToolbarField>
@@ -169,6 +177,7 @@ export function CatalogListPage({
             onChange={(event) => {
               setStatusFilter(event.target.value);
               setSelected([]);
+              setPage(1);
             }}
           >
             <option value="">All statuses</option>
@@ -189,6 +198,7 @@ export function CatalogListPage({
                 onChange={(event) => {
                   setCategoryFilter(event.target.value);
                   setSelected([]);
+                  setPage(1);
                 }}
               >
                 <option value="">All categories</option>
@@ -207,6 +217,7 @@ export function CatalogListPage({
                 onChange={(event) => {
                   setDestinationFilter(event.target.value);
                   setSelected([]);
+                  setPage(1);
                 }}
               >
                 <option value="">All destinations</option>
@@ -225,44 +236,9 @@ export function CatalogListPage({
         <AdminPanel
           title={`${meta.label} catalog`}
           description="Select records for a scoped bulk status change."
-          action={
-            <div className="d-flex flex-wrap align-items-center gap-2">
-              <select
-                aria-label="Bulk status"
-                className="form-select form-select-sm bulk-status-select"
-                name="status"
-                required
-                defaultValue=""
-              >
-                <option value="" disabled>
-                  Bulk action
-                </option>
-                {statuses.map((value) => (
-                  <option key={value} value={value}>
-                    {value}
-                  </option>
-                ))}
-              </select>
-              <button
-                disabled={navigation.state !== "idle" || selected.length === 0}
-                className="btn btn-sm btn-outline-primary"
-              >
-                Apply ({selected.length})
-              </button>
-            </div>
-          }
         >
-          <AdminTable
-            columns={columns}
-            rows={visible}
-            rowKey={(item) => item.slug}
-            ariaLabel={`${meta.label} catalog`}
-            emptyTitle={`No ${meta.label.toLowerCase()} found`}
-            emptyDescription="Try a different search or filter, or create a new record."
-            rowClassName={(item) => (item.status === "trash" ? "is-muted" : undefined)}
-          />
-          <div className="admin-table-footer">
-            <label className="form-check d-flex align-items-center gap-2 mb-0">
+          <div className="admin-bulk-bar">
+            <label className="form-check d-flex align-items-center gap-2 mb-0 me-2">
               <input
                 type="checkbox"
                 className="form-check-input"
@@ -271,8 +247,52 @@ export function CatalogListPage({
                 }
                 onChange={(event) => selectVisible(event.target.checked)}
               />
-              <span className="small">Select all visible</span>
+              <span className="small">Select all matching ({visible.length})</span>
             </label>
+            <label className="form-label small fw-semibold mb-0" htmlFor={`bulk-${kind}`}>
+              Bulk status
+            </label>
+            <select
+              id={`bulk-${kind}`}
+              className="form-select form-select-sm bulk-status-select"
+              name="status"
+              required
+              defaultValue=""
+            >
+              <option value="" disabled>
+                Choose status
+              </option>
+              {statuses.map((value) => (
+                <option key={value} value={value}>
+                  {value}
+                </option>
+              ))}
+            </select>
+            <button
+              disabled={navigation.state !== "idle" || selected.length === 0}
+              className="btn btn-sm btn-outline-primary"
+            >
+              Apply to {selected.length}
+            </button>
+            <span className="small text-secondary ms-auto">{visible.length} matching</span>
+          </div>
+          <AdminTable
+            columns={columns}
+            rows={paged}
+            rowKey={(item) => item.slug}
+            ariaLabel={`${meta.label} catalog`}
+            emptyTitle={`No ${meta.label.toLowerCase()} found`}
+            emptyDescription="Try a different search or filter, or create a new record."
+            rowClassName={(item) => (item.status === "trash" ? "is-muted" : undefined)}
+          />
+          <Pagination
+            page={safePage}
+            totalPages={totalPages}
+            onPageChange={setPage}
+            ariaLabel={`${meta.label} pages`}
+            summary={`Showing ${paged.length} of ${visible.length} · page ${safePage} of ${totalPages}`}
+          />
+          <div className="admin-table-footer">
             <span className="small text-secondary">{selected.length} selected</span>
           </div>
         </AdminPanel>

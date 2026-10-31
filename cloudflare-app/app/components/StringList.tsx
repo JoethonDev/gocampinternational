@@ -7,7 +7,8 @@ export function StringList({
   media = false,
   uploaded = [],
   placeholder = "",
-  addLabel = "Add item"
+  addLabel = "Add item",
+  csrf
 }: {
   name: string;
   title: string;
@@ -16,6 +17,7 @@ export function StringList({
   uploaded?: string[];
   placeholder?: string;
   addLabel?: string;
+  csrf: string;
 }) {
   const [rows, setRows] = useState<string[]>(initial.length ? initial : []);
   const edit = (index: number, value: string) =>
@@ -68,6 +70,7 @@ export function StringList({
               initial={row}
               externalValue={row}
               uploaded={uploaded}
+              csrf={csrf}
               onChange={(next) => edit(index, next)}
             />
           ) : (

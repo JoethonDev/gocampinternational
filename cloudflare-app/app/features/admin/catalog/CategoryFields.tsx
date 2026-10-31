@@ -7,10 +7,12 @@ import { asString, asStringArray } from "../../../lib/domain";
 
 export function CategoryFields({
   item,
-  uploadedMedia
+  uploadedMedia,
+  csrf
 }: {
   item: Record<string, unknown>;
   uploadedMedia: string[];
+  csrf: string;
 }) {
   return (
     <>
@@ -25,6 +27,7 @@ export function CategoryFields({
             label="banner"
             initial={asString(item.banner)}
             uploaded={uploadedMedia}
+            csrf={csrf}
           />
         </div>
         <div className="col-md-6">
@@ -34,6 +37,7 @@ export function CategoryFields({
             label="intro image"
             initial={asString(item.intro_image)}
             uploaded={uploadedMedia}
+            csrf={csrf}
           />
         </div>
         <div className="col-md-6">
@@ -64,6 +68,7 @@ export function CategoryFields({
             { key: "content", label: "Content", kind: "rich" },
             { key: "is_active", label: "Visible", kind: "flag" }
           ]}
+          csrf={csrf}
         />
       </AdminFormSection>
       <AdminFormSection title="Gallery" description="Images available to this category.">
@@ -74,6 +79,7 @@ export function CategoryFields({
           media
           uploaded={uploadedMedia}
           addLabel="Add image"
+          csrf={csrf}
         />
       </AdminFormSection>
     </>

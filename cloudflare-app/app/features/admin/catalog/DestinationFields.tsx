@@ -9,11 +9,13 @@ import { asString, asStringArray, type ProgramRecord } from "../../../lib/domain
 export function DestinationFields({
   item,
   programs,
-  uploadedMedia
+  uploadedMedia,
+  csrf
 }: {
   item: Record<string, unknown>;
   programs: ProgramRecord[];
   uploadedMedia: string[];
+  csrf: string;
 }) {
   return (
     <>
@@ -28,6 +30,7 @@ export function DestinationFields({
             label="banner"
             initial={asString(item.banner)}
             uploaded={uploadedMedia}
+            csrf={csrf}
           />
         </div>
         <div className="col-md-6">
@@ -37,6 +40,7 @@ export function DestinationFields({
             label="intro image"
             initial={asString(item.intro_image)}
             uploaded={uploadedMedia}
+            csrf={csrf}
           />
         </div>
         <div className="col-md-6">
@@ -95,6 +99,7 @@ export function DestinationFields({
             { key: "icon", label: "Icon" },
             { key: "text", label: "Highlight text" }
           ]}
+          csrf={csrf}
         />
         <Repeater
           name="stats"
@@ -106,6 +111,7 @@ export function DestinationFields({
             { key: "label", label: "Label" },
             { key: "icon", label: "Icon" }
           ]}
+          csrf={csrf}
         />
       </AdminFormSection>
       <AdminFormSection
@@ -120,6 +126,7 @@ export function DestinationFields({
             { key: "q", label: "Question" },
             { key: "a", label: "Answer", kind: "long" }
           ]}
+          csrf={csrf}
         />
         <StringList
           name="gallery"
@@ -128,6 +135,7 @@ export function DestinationFields({
           media
           uploaded={uploadedMedia}
           addLabel="Add image"
+          csrf={csrf}
         />
       </AdminFormSection>
     </>

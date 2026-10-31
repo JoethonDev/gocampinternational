@@ -17,11 +17,13 @@ const SIMPLE_FIELDS = [
 export function ProgramFields({
   item,
   categories,
-  uploadedMedia
+  uploadedMedia,
+  csrf
 }: {
   item: Record<string, unknown>;
   categories: CategoryRecord[];
   uploadedMedia: string[];
+  csrf: string;
 }) {
   return (
     <>
@@ -54,6 +56,7 @@ export function ProgramFields({
             label="card image"
             initial={asString(item.image)}
             uploaded={uploadedMedia}
+            csrf={csrf}
           />
         </div>
         {SIMPLE_FIELDS.map((field) => (
@@ -107,24 +110,28 @@ export function ProgramFields({
           title="Highlights"
           initial={asStringArray(item.highlights)}
           placeholder="Short highlight shown on the program card"
+          csrf={csrf}
         />
         <StringList
           name="includes"
           title="What is included"
           initial={asStringArray(item.includes)}
           addLabel="Add included item"
+          csrf={csrf}
         />
         <StringList
           name="excludes"
           title="What is not included"
           initial={asStringArray(item.excludes)}
           addLabel="Add excluded item"
+          csrf={csrf}
         />
         <StringList
           name="badges"
           title="Badges"
           initial={asStringArray(item.badges)}
           addLabel="Add badge"
+          csrf={csrf}
         />
         <StringList
           name="gallery"
@@ -133,6 +140,7 @@ export function ProgramFields({
           media
           uploaded={uploadedMedia}
           addLabel="Add image"
+          csrf={csrf}
         />
       </AdminFormSection>
       <AdminFormSection
@@ -149,6 +157,7 @@ export function ProgramFields({
             { key: "time", label: "Time" },
             { key: "description", label: "Activity / description", kind: "long" }
           ]}
+          csrf={csrf}
         />
       </AdminFormSection>
     </>

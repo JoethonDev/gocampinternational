@@ -11,6 +11,7 @@ export default [
   route("admin/inquiries", "routes/admin-inquiries.tsx"),
   route("admin/media", "routes/admin-media.tsx"),
   route("admin/media/import", "routes/admin-media-import.tsx"),
+  route("admin/media/upload", "routes/admin-media-upload.ts"),
   route("admin/media/preview/:id", "routes/admin-media-preview.ts"),
   route("admin/trash", "routes/admin-trash.tsx"),
   route("admin/:legacy", "routes/admin-legacy.ts"),

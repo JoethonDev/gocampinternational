@@ -44,7 +44,7 @@ export function AdminTable<T>({
             {rows.map((row) => (
               <tr className={rowClassName?.(row)} key={rowKey(row)}>
                 {columns.map((column) => (
-                  <td className={column.className} key={column.key}>
+                  <td className={column.className} data-label={column.label} key={column.key}>
                     {column.render(row)}
                   </td>
                 ))}
