@@ -4,6 +4,8 @@ import type {Route} from "./+types/admin-documents";
 import {requireAdmin} from "../lib/admin.server";
 import {saveDocument} from "../lib/catalog-write.server";
 import {AdminShell} from "../components/AdminShell";
+import {MediaSelector} from "../components/MediaSelector";
+import {RichTextInput} from "../components/RichTextInput";
 
 type Key="site_settings"|"faq"|"camp_memories";
 type Item=Record<string,unknown>;
@@ -29,7 +31,8 @@ export async function loader({request,context,params}:Route.LoaderArgs){
   const db=context.cloudflare.env.DB,session=await requireAdmin(request,db),key=parseKey(params.key||"");
   const row=await db.prepare("SELECT content_json,revision FROM site_documents WHERE key=?").bind(key).first<{content_json:string;revision:number}>();
   if(!row)throw new Response("Document not found",{status:404});
-  return {session,key,content:row.content_json,revision:row.revision,saved:new URL(request.url).searchParams.has("saved")};
+  const media=key==="camp_memories"?await db.prepare("SELECT id FROM media_assets WHERE is_public=1 ORDER BY created_at DESC LIMIT 300").all<{id:string}>():null;
+  return {session,key,content:row.content_json,uploadedMedia:(media?.results||[]).map(x=>"/media/"+x.id),revision:row.revision,saved:new URL(request.url).searchParams.has("saved")};
 }
 export async function action({request,context,params}:Route.ActionArgs) {
   const key=parseKey(params.key||"");
@@ -40,7 +43,7 @@ const text=(x:unknown)=>typeof x==="string"?x:"";
 const object=(x:unknown):Item=>x&&typeof x==="object"&&!Array.isArray(x)?x as Item:{};
 const array=(x:unknown):Item[]=>Array.isArray(x)?x as Item[]:[];
 export default function Documents({loaderData}:Route.ComponentProps){
-  const {session,key,content,revision,saved}=loaderData,nav=useNavigation();
+  const {session,key,content,revision,saved,uploadedMedia}=loaderData,nav=useNavigation();
   const [value,setValue]=useState<unknown>(()=>JSON.parse(content) as unknown);
   const [advanced,setAdvanced]=useState(false);
   const [raw,setRaw]=useState(()=>JSON.stringify(JSON.parse(content),null,2));
@@ -83,7 +86,7 @@ export default function Documents({loaderData}:Route.ComponentProps){
         key==="faq"?<><p className="text-secondary small">Questions appear in this order. Answers may contain the source HTML for formatting.</p>
           {entries.map((q,i)=><section className="border rounded-3 p-3 mb-3" key={i}><div className="d-flex justify-content-between align-items-center mb-3"><strong>Question {i+1}</strong><button type="button" className="btn btn-sm btn-outline-danger" onClick={()=>removeItem(i,entries,setEntries)}>Remove</button></div>
             {field("question-"+i,q.question,v=>editItem(i,{question:v},entries,setEntries))}
-            {field("answer-"+i,q.answer,v=>editItem(i,{answer:v},entries,setEntries),true)}
+            <RichTextInput label={"Answer "+(i+1)} initial={text(q.answer)} externalValue={text(q.answer)} onChange={v=>editItem(i,{answer:v},entries,setEntries)}/>
             <div className="d-flex gap-2"><button type="button" className="btn btn-sm btn-outline-secondary" disabled={i===0} onClick={()=>{const next=[...entries];[next[i-1],next[i]]=[next[i],next[i-1]];setEntries(next);}}>Move up</button>
               <button type="button" className="btn btn-sm btn-outline-secondary" disabled={i===entries.length-1} onClick={()=>{const next=[...entries];[next[i+1],next[i]]=[next[i],next[i+1]];setEntries(next);}}>Move down</button></div>
           </section>)}
@@ -94,7 +97,8 @@ export default function Documents({loaderData}:Route.ComponentProps){
           {items.map((m,i)=><section className="border rounded-3 p-3 mb-3" key={i}><div className="row g-3 align-items-start"><div className="col-md-3">
             {Boolean(m.image)&&<img src={String(m.image).startsWith("/")?String(m.image):"/images/"+String(m.image)} className="img-fluid rounded" alt={text(m.caption)} style={{maxHeight:180,objectFit:"cover"}} loading="lazy"/>}
           </div><div className="col-md-9"><div className="d-flex justify-content-between mb-2"><strong>Photo {i+1}</strong><button type="button" className="btn btn-sm btn-outline-danger" onClick={()=>removeItem(i,items,setItems)}>Remove</button></div>
-            {(["image","caption","country"] as const).map(k=>field(k+"-"+i,m[k],v=>editItem(i,{[k]:v},items,setItems)))}
+            <MediaSelector id={"memory-image-"+i} label="Image" initial={text(m.image)} externalValue={text(m.image)} uploaded={uploadedMedia} onChange={v=>editItem(i,{image:v},items,setItems)}/>
+            {(["caption","country"] as const).map(k=>field(k+"-"+i,m[k],v=>editItem(i,{[k]:v},items,setItems)))}
             {(["is_active","in_slider"] as const).map(k=><label className="form-check form-check-inline" key={k}><input type="checkbox" className="form-check-input" checked={m[k]!==false} onChange={e=>editItem(i,{[k]:e.target.checked},items,setItems)}/><span className="form-check-label">{k==="is_active"?"Active":"In slider"}</span></label>)}
             <div className="mt-2 d-flex gap-2"><button type="button" className="btn btn-sm btn-outline-secondary" disabled={i===0} onClick={()=>{const next=[...items];[next[i-1],next[i]]=[next[i],next[i-1]];setItems(next);}}>↑ Up</button><button type="button" className="btn btn-sm btn-outline-secondary" disabled={i===items.length-1} onClick={()=>{const next=[...items];[next[i+1],next[i]]=[next[i],next[i+1]];setItems(next);}}>↓ Down</button></div>
           </div></div></section>)}

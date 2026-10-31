@@ -1,7 +1,9 @@
 import { useMemo, useState } from "react";
 import sourceAssets from "../legacy-images.json";
-export function MediaSelector({id,label,name,initial,uploaded=[]}:{id:string;label:string;name:string;initial:string;uploaded:string[]}){
-  const [value,setValue]=useState(initial),[open,setOpen]=useState(false),[search,setSearch]=useState("");
+export function MediaSelector({id,label,name,initial,uploaded=[],externalValue,onChange}:{id:string;label:string;name?:string;initial:string;uploaded:string[];externalValue?:string;onChange?:(value:string)=>void}){
+  const [local,setLocal]=useState(initial),[open,setOpen]=useState(false),[search,setSearch]=useState("");
+  const value=externalValue??local;
+  const setValue=(next:string)=>{if(externalValue===undefined)setLocal(next);onChange?.(next);};
   const all=useMemo(()=>[...new Set([...uploaded,...sourceAssets])], [uploaded]);
   const choices=useMemo(()=>all.filter(path=>path.toLowerCase().includes(search.toLowerCase())).slice(0,48),[all,search]);
   return <div><label className="form-label" htmlFor={id}>{label.replaceAll("_"," ")}</label>
