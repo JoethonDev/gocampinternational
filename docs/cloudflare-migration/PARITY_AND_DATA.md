@@ -6,7 +6,10 @@ data/legacy/all_programs.php (63), data/legacy/destinations.php (9), data/legacy
 
 PR #40's data/{all_programs,destinations,programs,site_settings,camp_memories}.php are *adapter wrappers*, not content snapshots. Do not accidentally import empty wrappers. The PostgreSQL SQL and old Worker bridge express existing field semantics but must not become a second source of truth.
 
-## Mapping from PR #40 normalized model to SQLite
+## Current implemented D1 mapping (2026-10-31)
+Migration source: cloudflare-app/server/db/migrations/0001_catalog.sql. The former detailed normalized PostgreSQL model below is *reference material*, NOT the D1 schema in use. The implemented D1 design uses catalog_entities(kind, slug, name, status, category_slug, sort_order, content_json, revision), which retains every original PR #40 field in content_json while indexing public filtering fields. site_documents stores the complete original site_settings, camp_memories and FAQ JSON. destination_programs retains program ordering. media_assets holds immutable object metadata. import_sources stores SHA-256 provenance. inquiries and admin_sessions support future features. This removes unnecessary dynamic catalog_items tables.
+
+## Mapping from PR #40 normalized model to SQLite (superseded reference)
 program_categories(slug PK, name, status, banner, intro, intro_image, color, section_visibility JSON text, extra JSON text);
 programs(id PK, category_slug, name, status, display_order, image, age_min/max, duration, price, color, description, tagline, level, visibility_overrides JSON text, extra JSON text);
 destinations(slug PK, name, status, banner, tagline, intro_image, intro_text, section_visibility JSON text, visibility_overrides JSON text, extra JSON text);

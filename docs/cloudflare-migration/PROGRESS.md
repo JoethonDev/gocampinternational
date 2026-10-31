@@ -1,5 +1,5 @@
 # Execution record — 2026-10-31
-Status: Phase 0 PARTIAL; Phase 1 INFRASTRUCTURE PARTIAL (staging bootstrap deployed); Phases 2–6 NOT STARTED. This file must be updated from observed results, not assumptions.
+Status: Phase 0 PARTIAL (route audit started); Phase 1 SCAFFOLD COMPLETE / STAGING DEPLOY PENDING; Phase 2 SCHEMA APPLIED IN STAGING / DATA IMPORT PENDING; Phases 3–6 NOT STARTED. This file must be updated from observed results, not assumptions.
 
 ## Verified
 - PR #40 read through GitHub connector: open/draft, unmerged; source head 80432a2a6fcb4b0de6f14710748e53781ddef58c; base develop e55bc17bcdc59e466e63b7993341b979bb69a0e9.
@@ -10,9 +10,15 @@ Status: Phase 0 PARTIAL; Phase 1 INFRASTRUCTURE PARTIAL (staging bootstrap deplo
 - Created production bootstrap script via Cloudflare API and checked its deployment is active as an unrouted 503-only placeholder; no production website/API reachable. Metadata and routing read back from Cloudflare.
 - Read PR #40 normalized schema, Worker gateway and legacy catalog source conventions. Aiven/Tigris and old gateway intentionally not deployed for this full TS replacement.
 
+## Verified in continued implementation (2026-10-31)
+- React Router v7 + TypeScript + Cloudflare Vite plugin scaffold built in cloudflare-app/, isolated from PHP. CI job https://github.com/JoethonDev/gocampinternational/actions/runs/41205671340 PASSED: npm ci, Wrangler typegen, TS typecheck, React SSR build, Wrangler --dry-run, PHP snapshot audit, seed unit tests and export, asset leakage guard.
+- Source audit verified 63 programs, 9 destinations, 8 categories, 11 FAQ records; memories catalog contains 3 top-level fields including items (28 items expected from PR #40, independent exact items count still to be asserted); 37 destination-program links with 0 missing link targets. italy-tennis and italy-sailing contain missing/empty category_slug; preserved.
+- Staging-only D1 migration 0001_catalog.sql applied through personal Cloudflare API (response success; 13 SQL statements). Read-back sqlite_master confirmed catalog_entities, destination_programs, site_documents, media_assets, inquiries, admin_sessions, import_sources. Production D1 untouched.
+- D1 model adjusted for lean migration: indexed stable summary fields plus full original content_json (lossless) rather than decomposing every dynamic gallery/stat/highlight. Script scripts/make-d1-seed.mjs generated idempotent SQL in CI, but **no data imported**.
+
 ## Remaining / unverified
 - Phase 0 visual screenshots, comprehensive route matrix, actual source counts/checksums, image references.
-- React Router app not scaffolded; no React pages ported; CI, schema, import, admin, media, forms and E2E not done.
+- Real React public/admin parity not ported; CI scaffold green but visual route coverage, D1 import, admin, media, forms and E2E not done.
 - No email delivery credentials configured.
 - Production Worker gocamp-migration-production exists as an isolated 503-only placeholder. API confirms it has only production D1/R2 and Images bindings; workers.dev subdomain and preview URLs are BOTH disabled and no custom route exists. No production application release, DNS/traffic switch, merge or cPanel change.
 - Free-tier usage load simulation and live CPU measurement not performed.
