@@ -13,13 +13,13 @@ export function makeSeed(snapshot) {
   const stats = {program:0,destination:0,category:0,documents:0,links:0,unresolvedLinks:[]};
   for (const [source, kind] of [["all_programs","program"],["destinations","destination"],["programs","category"]]) {
     const records = snapshot.catalogs[source].data;
-    for (const [key, record] of Object.entries(records)) {
+    for (const [position, [key, record]] of Object.entries(records).entries()) {
       if (!record || typeof record !== "object" || Array.isArray(record)) throw Error("Malformed "+source+"/"+key);
       const slug = kind === "program" ? (record.id || key) : (record.slug || key);
       if (slug !== key) throw Error("Unexpected mismatched ID: "+key+"/"+slug);
       const order = Number(record.order ?? record.display_order);
       out.push("INSERT OR IGNORE INTO catalog_entities(kind,slug,name,status,category_slug,sort_order,content_json) VALUES ("+
-        [q(kind),q(slug),q(record.name||""),q(record.status||"inactive"),q(kind==="program"?(record.category_slug||null):null),Number.isFinite(order)?Math.trunc(order):0,q(JSON.stringify(record))].join(",")+");");
+        [q(kind),q(slug),q(record.name||""),q(record.status||"inactive"),q(kind==="program"?(record.category_slug||null):null),Number.isFinite(order)?Math.trunc(order):position,q(JSON.stringify(record))].join(",")+");");
       stats[kind]++;
     }
   }
