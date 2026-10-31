@@ -1,5 +1,20 @@
 # GoCamp: single-PR Aiven + Tigris migration review
 
+> **BLOCKER CONFIRMED 2026-10-31 — cPanel hosting limitation.** The hosting provider cannot enable `pdo_pgsql` under the current plan. The proposed `GOCAMP_DATA_SOURCE=postgres` PDO adapter in this PR **cannot run on cPanel as written**. **Do not merge, activate, or run the staging import under the assumption that cPanel can connect directly.** A database-over-HTTPS adapter must replace the PHP-side PDO access before launch. No Aiven/Tigris import has been performed.
+
+### Proposed zero-VPS HTTPS gateway (not implemented in this PR yet)
+
+- Keep Aiven PostgreSQL as relational source of truth and Tigris as private media storage. PHP communicates with a managed HTTPS gateway using its already-enabled `curl` extension.
+- First-choice free gateway candidate: Deno Deploy (managed serverless). Its current free plan includes 1 million HTTP requests/month and 20 GB outbound traffic; this is **not unlimited**, but the GoCamp catalog cache means public visitors do not have to invoke it for every page request.
+- Deno connects to Aiven with an ordinary PostgreSQL client using TLS and separate staging/production credentials; it exposes **fixed authenticated domain endpoints**, not arbitrary remote SQL. Never expose Aiven administrator credentials or an open SQL endpoint.
+- The gateway must enforce server-to-server request authentication, environment routing, strict content schemas, rate limits, request size limits, optimistic revisions and atomic transactions. PHP's existing Admin Dashboard actions still write to the selected environment immediately. Read-only public catalog cache remains on cPanel.
+- Tigris upload/download continues over HTTPS from PHP, using bucket-scoped credentials and cache. Media operations must preserve references on failure.
+- No Cron, FTP, VPS or automatic production deployment. A Deno account and deployment configuration are **not** yet created. Never store API credentials in source or PR text.
+- Aiven's native managed Data API is not a free workaround: it runs a separately billed Aiven Runtime application, and setup requires a JWT identity provider. Do not activate it under a $0 cost assumption.
+- Alternative (not yet verified): PDO ODBC **only if** the hosting provider already has the PostgreSQL ODBC driver installed and permits outbound Aiven TCP connections; the screenshot shows `pdo_odbc`, but that alone does not establish a usable PostgreSQL driver.
+- Existing migration job can continue to connect to Aiven from GitHub Actions, but PHP runtime reads and writes must not depend on `pdo_pgsql`.
+
+
 ## Decision
 
 - Aiven free PostgreSQL 18: **one service**, distinct `staging` and `production` databases. Database and user separation are logical; both share CPU/RAM/20-connection ceiling. Do not create a second service.
