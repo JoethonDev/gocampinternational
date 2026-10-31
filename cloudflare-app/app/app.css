@@ -108,3 +108,8 @@ html{scroll-behavior:smooth}body{margin:0}.visually-hidden-focusable:not(:focus)
 @media (prefers-reduced-motion:reduce) {
   .page-content .hero-section:has(.category-hero-caption) .category-hero-caption { animation:none; }
 }
+
+/* Facebook's third-party XFBML may initialize after hydration (or be blocked).
+   Preserve the same mobile panel footprint as the original PHP site rather than
+   collapsing the memories row and shifting the entire footer upward. */
+.camp-memories .fb-page { min-height: 300px; }
