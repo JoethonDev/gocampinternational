@@ -7,6 +7,7 @@ import { ProgramCard } from "../components/ProgramCard";
 import { FaqAccordion, type FaqItem } from "../components/FaqAccordion";
 import { loadDocument } from "../lib/catalog.server";
 import { CampMemories, type MemoriesDocument } from "../components/CampMemories";
+import { SafeRichText } from "../components/SafeRichText";
 export async function loader({params,context}:Route.LoaderArgs){
   const slug=params.slug||"";
   const memoriesPromise=loadDocument<MemoriesDocument>(context.cloudflare.env.DB,"camp_memories");
@@ -34,7 +35,7 @@ export default function Destination({loaderData}:Route.ComponentProps){
     </section>}
     {isVisible("destination","stats",d,settings)&&stats.length>0&&<section className="section-padding"><div className="container"><h2 className="section-title text-center">{d.name} By The Numbers</h2><div className="row g-4 justify-content-center">{stats.map((s,i)=><div key={i} className="col-sm-6 col-lg-3 text-center"><div className="fs-2 fw-bold">{String(s.number||"")}{String(s.suffix||"")}</div><p>{String(s.label||"")}</p></div>)}</div></div></section>}
     {isVisible("destination","intro",d,settings)&&Boolean(d.intro_text)&&<section className="section-padding bg-white" id="destination-intro"><div className="container"><div className="row align-items-center g-4">
-      <div className={d.intro_image?"col-lg-7":"col-12"}><h2 className="section-title">Discover {d.name}</h2><div className="lead">{String(d.intro_text).replace(/<[^>]*>/g," ")}</div></div>
+      <div className={d.intro_image?"col-lg-7":"col-12"}><h2 className="section-title">Discover {d.name}</h2><div className="lead"><SafeRichText html={String(d.intro_text)}/></div></div>
       {d.intro_image&&<div className="col-lg-5"><img className="img-fluid rounded-4 shadow-sm w-100" src={String(d.intro_image)} alt={d.name} loading="lazy"/></div>}
     </div></div></section>}
     {isVisible("destination","programs",d,settings)&&<section className="section-padding bg-light" id="programs"><div className="container"><div className="row g-4 justify-content-center">{related.map(p=><div className="col-lg-4 col-md-6" key={p.slug}><ProgramCard program={p} settings={settings}/></div>)}

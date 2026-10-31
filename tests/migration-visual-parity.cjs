@@ -27,7 +27,7 @@ async function metrics(page) {
       memorySectionCount:document.querySelectorAll(".camp-memories").length,
       memoryCardCount:document.querySelectorAll(".camp-memories .camp-memory").length,
       bannerOverlay:hero?getComputedStyle(hero,"::before").backgroundImage:"none",
-      staticBannerSrc:document.querySelector(".page-content .container-fluid img")?.getAttribute("src")||null
+      staticBannerSrc:document.querySelector("#main-content > .container-fluid.p-0 img, #main-content .page-content > .container-fluid.p-0 img")?.getAttribute("src")||null
     };
   });
 }
