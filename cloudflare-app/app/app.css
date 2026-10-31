@@ -6,3 +6,10 @@ html{scroll-behavior:smooth}body{margin:0}.visually-hidden-focusable:not(:focus)
 .navbar .nav-link.dropdown-toggle:hover, .navbar .nav-link.dropdown-toggle:focus { text-decoration: none; }
 /* The original PHP uses its Bootstrap carousel without added styling. */
 #backToTop { cursor: pointer; }
+
+/* PR40 program/category.php banner overlay; the inline PHP style was not in global CSS. */
+.page-content .hero-section:has(.category-hero-caption)::before {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(0deg,rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.2) 100%);
+  z-index: 1; pointer-events: none;
+}

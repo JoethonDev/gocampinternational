@@ -5,14 +5,17 @@ import { findCatalog, listCatalog } from "../lib/catalog.server";
 import { isVisible } from "../lib/visibility";
 import { ProgramCard } from "../components/ProgramCard";
 import { FaqAccordion, type FaqItem } from "../components/FaqAccordion";
+import { loadDocument } from "../lib/catalog.server";
+import { CampMemories, type MemoriesDocument } from "../components/CampMemories";
 export async function loader({params,context}:Route.LoaderArgs){
   const slug=params.slug||"";
+  const memoriesPromise=loadDocument<MemoriesDocument>(context.cloudflare.env.DB,"camp_memories");
   const destination=await findCatalog(context.cloudflare.env.DB,"destination",slug);
   if(!destination||destination.status==="trash")throw new Response("Not found",{status:404});
   const programs=destination.status==="coming-soon"?[]:await listCatalog(context.cloudflare.env.DB,"program");
   const ids=Array.isArray(destination.program_ids)?destination.program_ids:[];
   const byId=new Map(programs.map(x=>[x.id||x.slug,x]));
-  return {destination,hasProgramIds:ids.length>0,related:ids.map(id=>byId.get(id)).filter((x):x is CatalogRecord=>Boolean(x))};
+  return {destination,hasProgramIds:ids.length>0,related:ids.map(id=>byId.get(id)).filter((x):x is CatalogRecord=>Boolean(x)),memories:await memoriesPromise};
 }
 export function meta({data}:Route.MetaArgs){
   return [{title:"Go Camp :: "+(data?.destination.name||"Destination")},{name:"description",content:String(data?.destination.tagline||"Discover Your Adventure").slice(0,160)}];
@@ -37,5 +40,6 @@ export default function Destination({loaderData}:Route.ComponentProps){
     {isVisible("destination","programs",d,settings)&&<section className="section-padding bg-light" id="programs"><div className="container"><div className="row g-4 justify-content-center">{related.map(p=><div className="col-lg-4 col-md-6" key={p.slug}><ProgramCard program={p} settings={settings}/></div>)}
       {(!loaderData.hasProgramIds)&&<p className="text-center">No programs are currently available for this destination. Please check back soon!</p>}</div></div></section>}
     {isVisible("destination","faq",d,settings)&&faq.length>0&&<section className="section-padding"><div className="container"><FaqAccordion title={"Questions About "+d.name} items={faq} accordionId="destinationFaqAccordion"/></div></section>}
+    {isVisible("destination","testimonials",d,settings)&&<CampMemories data={loaderData.memories}/>}
   </div>;
 }
