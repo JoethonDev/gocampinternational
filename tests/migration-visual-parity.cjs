@@ -33,6 +33,7 @@ async function metrics(page) {
     const navStyles=navLink?getComputedStyle(navLink):null;
     return {
       navDecoration:navStyles?.textDecorationLine,
+      navDecorations:Array.from(document.querySelectorAll(".navbar .nav-link")).map(link=>getComputedStyle(link).textDecorationLine),
       navColor:navStyles?.color,
       navHeight:Math.round(navbar?.getBoundingClientRect().height||0),
       heroHeight:Math.round(hero?.getBoundingClientRect().height||0),
@@ -70,6 +71,7 @@ async function metrics(page) {
             each[kind]=results;
             await tab.screenshot({path:path.join(output,route.name+"-"+viewport.name+"-"+kind+".png"),animations:"disabled",fullPage:true});
             assert(results.navDecoration==="none",kind+" "+route.name+" nav links are underlined: "+results.navDecoration);
+            assert(results.navDecorations.every(decoration=>decoration==="none"),kind+" "+route.name+" contains underlined navigation links: "+results.navDecorations.join(","));
             assert(!results.horizontalOverflow,kind+" "+route.name+" overflows horizontally");
             if(route.memories){
               assert(results.memorySectionCount===1,kind+" "+route.name+" lost the shared memories section");
@@ -87,6 +89,13 @@ async function metrics(page) {
                 await tab.locator(".page-content").hover({position:{x:12,y:15}});
                 await tab.waitForTimeout(450);
               }
+            }
+            if(viewport.name==="mobile" && route.name==="home"){
+              await tab.locator(".navbar-toggler").click();
+              await tab.locator("#mainNavbar").waitFor({state:"visible"});
+              await tab.locator("#programsDropdown").click();
+              await tab.waitForTimeout(180);
+              assert(await tab.locator("#programsDropdown + .dropdown-menu").isVisible(),kind+" mobile Programs dropdown does not open on tap");
             }
           }catch(err){each[kind+"Error"]=String(err);failed++;console.error("FAIL",kind,route.name,viewport.name,String(err));}
           finally{await context.close();}
