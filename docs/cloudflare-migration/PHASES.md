@@ -12,7 +12,7 @@ Acceptance:
 - [ ] Visual reference screenshots are captured for all major page templates at 3 viewports.
 
 ## Phase 1 — Cloudflare Free foundation / TS app scaffold
-Setup: create isolated staging/prod D1 and R2 resources in personal Cloudflare account; create ONLY an isolated staging Worker for initial health; enable workers.dev for staging, no production routes. Scaffold React Router + React + Vite on the migration branch (keep old PHP source for comparison). Configure Cloudflare Vite plugin, TypeScript strict, ESLint, env types, wrangler D1/R2 bindings, client/server separation, lockfile; use GitHub Actions build/test with no merge and no production deploy. No paid services or new infrastructure.
+Setup: create isolated staging/prod D1 and R2 resources in personal Cloudflare account; create an isolated staging Worker for initial health and an inert production 503-only placeholder; enable workers.dev for staging, keep it disabled for production and create no production routes. Scaffold React Router + React + Vite on the migration branch (keep old PHP source for comparison). Configure Cloudflare Vite plugin, TypeScript strict, ESLint, env types, wrangler D1/R2 bindings, client/server separation, lockfile; use GitHub Actions build/test with no merge and no production deploy. No paid services or new infrastructure.
 Deliverables: Worker app, React shell, health and not-ready responses, D1/R2 bindings, local wrangler dev, CI typecheck/build/smoke and free-account budget baseline.
 Acceptance:
 - [ ] Local typecheck/lint/build succeed with locked dependencies.
@@ -62,7 +62,7 @@ Acceptance:
 - [ ] No per-request image encoding CPU in Workers; transformation presets consume bounded unique transformations, monthly tally remains under account free allowance.
 
 ## Phase 6 — staging validation, budget, rollback, production readiness
-Setup: deploy migration Worker only to staging workers.dev; run PHP-vs-React visual and route comparisons, Playwright E2E, D1 import/checksum diff, media QA, perf/CPU/load checks, security/auth and restore drill. Sample quotas under shared account usage. Preserve PR #40 branch and the old site. Configure isolated production bindings and production Worker only after gating; import a checked final snapshot but do not change DNS or merge unless a separate release instruction explicitly authorizes it.
+Setup: deploy migration Worker only to staging workers.dev; run PHP-vs-React visual and route comparisons, Playwright E2E, D1 import/checksum diff, media QA, perf/CPU/load checks, security/auth and restore drill. Sample quotas under shared account usage. Preserve PR #40 branch and the old site. Keep isolated production bindings and only activate the production app in the already-created placeholder after gating; import a checked final snapshot but do not change DNS or merge unless a separate release instruction explicitly authorizes it.
 Deliverables: parity report, performance/quota report, rollback runbook, manual promotion checklist, production release readiness statement.
 Acceptance:
 - [ ] All phase checklists pass and no unreviewed data loss/visibility changes remain.

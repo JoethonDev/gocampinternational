@@ -1,0 +1,26 @@
+{
+  "name": "gocamp-migration-production",
+  "main": "workers/app.ts",
+  "compatibility_date": "2026-10-31",
+  "workers_dev": false,
+  "vars": {
+    "GOCAMP_ENV": "production"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "gocamp-production-db",
+      "database_id": "84f3beb7-ed00-49eb-a25b-913b301ad1da",
+      "migrations_dir": "server/db/migrations"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "MEDIA",
+      "bucket_name": "gocamp-production-media"
+    }
+  ],
+  "images": {
+    "binding": "IMAGES"
+  }
+}

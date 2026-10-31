@@ -12,9 +12,12 @@ Both DBs are EMPTY (no tables/imported data); both buckets EMPTY on creation. Lo
 ## Active isolated staging bootstrap
 Worker gocamp-migration-staging was created/deployed via Cloudflare API and the deployment is active at 100%, with workers.dev enabled (preview URLs disabled). Verified bindings: DB -> staging D1, MEDIA -> staging R2, IMAGES -> Cloudflare Images Free transformation service, GOCAMP_ENV=staging. Only /health is intended to return HTTP 200; other paths intentionally return 503, no production/domain traffic. Expected URL: https://gocamp-migration-staging.elprincedoca.workers.dev/health (external HTTP not yet confirmed). This bootstrap is not React Router. The repo copy is migration/cloudflare-bootstrap-worker.js and must be superseded by the actual compiled app during Phase 1.
 
+## Reserved production placeholder
+Worker gocamp-migration-production was provisioned via Cloudflare API with only production DB/R2/IMAGES bindings, plus GOCAMP_ENV=production. It always returns HTTP 503, has no route and has workers.dev and preview URLs disabled. It is not a production migration release. Repository source: migration/cloudflare-production-bootstrap-worker.js.
+
 ## Intended deployment topology
 Single Cloudflare Worker app per environment with asset-first routing: React Router + Vite client assets and public/static HTML; dynamic SSR/API/admin only on Worker. Wrangler bindings DB (D1) and MEDIA (R2) are environment-specific. Keep secrets out of repository and out of browser bundles. The existing Worker gateway under worker/ from PR #40 is NOT the new app; it stays for migration/reference only until port complete.
-Staging name: gocamp-migration-staging. Production planned name: gocamp-migration-production (do not enable production traffic before Phase 6).
+Staging name: gocamp-migration-staging. Production name: gocamp-migration-production (placeholder deployed with workers.dev DISABLED and no custom route; no public traffic before Phase 6).
 
 ## Phase-specific operational setup
 P0: pin source commit, create branch and validate PR #40 fixtures.
@@ -23,10 +26,10 @@ P2: run D1 schema using wrangler d1 migrations apply DB --remote --env staging o
 P3: run wrangler dev local with local D1/R2; verify SSR, asset-first route behavior, seo/redirects and cache invalidation on admin edits.
 P4: configure an ADMIN_PASSWORD_HASH or one-way auth credential through Worker secret (do NOT copy PHP source credentials), SESSION_SIGNING_SECRET or opaque session secret, CSRF protection and session cleanup; isolate cookie names by environment. Use secure random source, no committed secrets.
 P5: configure MEDIA R2 object binding, maximum upload size, immutable keys, Content-Type and Content-Disposition validation; optional Images Free transformation binding with fixed presets, plus existing image fallback. Configure Turnstile on forms if needed; secrets only server-side. Email delivery integration pending provider verification and secrets.
-P6: use separate production environment binding and create/deploy prod Worker only once acceptance gates pass; migrate approved final snapshot, verify rollback and custom-domain/DNS requirements. Link Data Center authoritative DNS remains untouched until a separate cutover authorization. No merge now.
+P6: replace the already provisioned production placeholder with the verified production app only once acceptance gates pass; migrate approved final snapshot, verify rollback and custom-domain/DNS requirements. Link Data Center authoritative DNS remains untouched until a separate cutover authorization. No merge now.
 
 ## Config example
-See wrangler.migration.staging.example.jsonc in this directory; update paths at scaffold stage. Do not deploy old PHP gateway with this config. Production config must use production DB ID and bucket; fail CI when a staging job has production resource IDs.
+See wrangler.migration.staging.example.jsonc in this directory; update paths at scaffold stage. Do not deploy old PHP gateway with this config. Production config example uses production DB ID and bucket. Production Worker exists only as a 503-only, unrouted placeholder with no public subdomain; do not attach a route or publish the application before Phase 6. Fail CI when a staging job has production resource IDs.
 
 ## Deployment and safety controls
 - Never deploy PR #40's worker/ gateway as GoCamp React app.
