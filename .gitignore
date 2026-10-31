@@ -8,3 +8,5 @@ uploads/*
 data/inquiries/
 admin/migration-*.php
 .DS_Store
+
+.wrangler/

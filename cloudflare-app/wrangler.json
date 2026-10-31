@@ -2,13 +2,20 @@
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "gocamp-migration-staging",
   "main": "./workers/app.ts",
+  "upload_source_maps": true,
   "compatibility_date": "2026-10-31",
   "compatibility_flags": [
     "nodejs_compat"
   ],
   "observability": {
     "enabled": true,
-    "head_sampling_rate": 0.1
+    "logs": {
+      "head_sampling_rate": 1
+    },
+    "traces": {
+      "enabled": true,
+      "head_sampling_rate": 0.01
+    }
   },
   "vars": {
     "GOCAMP_ENV": "staging",

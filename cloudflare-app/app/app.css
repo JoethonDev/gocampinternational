@@ -4,31 +4,164 @@
    Scope the override to admin routes so public-page parity stays untouched. */
 body.gc-admin-route {
   padding-top: 0 !important;
+  /* The public mobile CTA bar reserves 72px of body space; admin has no CTA bar. */
+  padding-bottom: 0 !important;
+}
+
+/* Small structural classes shared by the React page components. */
+.footer-icef-logo {
+  max-width: 100px;
+}
+.media-selector-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1060;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(15, 23, 42, 0.65);
+}
+.media-selector-dialog {
+  max-width: 1000px;
+  max-height: 90vh;
+}
+.media-selector-preview {
+  max-width: 190px;
+  max-height: 112px;
+  object-fit: contain;
+}
+.media-selector-option-image {
+  height: 85px;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 6px;
+}
+.media-selector-filename {
+  font-size: 11px;
+}
+.memory-editor-preview {
+  max-height: 180px;
+  object-fit: cover;
+}
+.static-media-preview {
+  height: 165px;
+  object-fit: contain;
+  background: #eef0f2;
+}
+.r2-media-preview {
+  height: 160px;
+  object-fit: contain;
+  background: #f3f4f6;
+}
+.bulk-status-select {
+  max-width: 220px;
+}
+.inquiry-details {
+  min-width: 220px;
+}
+.inquiry-status-select {
+  max-width: 120px;
+}
+.program-card-shell {
+  border-radius: 20px;
+}
+.program-card-scrim {
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent 60%);
+}
+.lightbox-image {
+  max-height: 80vh;
+  object-fit: contain;
+  background: #000;
+}
+.gc-site-navbar {
+  background-color: var(--brand-primary);
+}
+.page-banner-image {
+  height: 300px;
+  object-fit: cover;
+}
+.contact-card {
+  background-color: var(--brand-primary);
+  color: #fff;
+}
+.contact-avatar {
+  width: 160px;
+  height: 160px;
+  object-fit: cover;
+  border: 5px solid rgba(255, 255, 255, 0.2);
+}
+.contact-action {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+.contact-action-icon {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  color: var(--brand-primary);
+}
+.category-card-shell {
+  border-radius: 20px;
+}
+.category-card-media {
+  height: 280px;
+}
+.category-card-scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent 60%);
 }
 
 /* Structural fallback while the original PR40 stylesheets remain authoritative. */
-html{scroll-behavior:smooth}body{margin:0}.visually-hidden-focusable:not(:focus){position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+html {
+  scroll-behavior: smooth;
+}
+body {
+  margin: 0;
+}
+.visually-hidden-focusable:not(:focus) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
 
 /* Fidelity: public links use the legacy CSS, never Bootstrap .btn-link overrides. */
-.navbar .nav-link.dropdown-toggle { text-decoration: none; font: inherit; }
-.navbar .nav-link.dropdown-toggle:hover, .navbar .nav-link.dropdown-toggle:focus { text-decoration: none; }
+.navbar .nav-link.dropdown-toggle {
+  text-decoration: none;
+  font: inherit;
+}
+.navbar .nav-link.dropdown-toggle:hover,
+.navbar .nav-link.dropdown-toggle:focus {
+  text-decoration: none;
+}
 /* The original PHP uses its Bootstrap carousel without added styling. */
-#backToTop { cursor: pointer; }
+#backToTop {
+  cursor: pointer;
+}
 
 /* PR40 program/category.php banner overlay; the inline PHP style was not in global CSS. */
 .page-content .hero-section:has(.category-hero-caption)::before {
-  content: ""; position: absolute; inset: 0;
-  background: linear-gradient(0deg,rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.2) 100%);
-  z-index: 1; pointer-events: none;
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.2) 100%);
+  z-index: 1;
+  pointer-events: none;
 }
 
 /* PR40 phone cards use 225px photos; avoid brittle exact inline style substring selectors. */
 @media (max-width: 767.98px) {
-  .program-card-modern .card > .program-card-media { height: 225px !important; }
+  .program-card-modern .card > .program-card-media {
+    height: 225px !important;
+  }
 }
 /* PR40 category template supplies parallax through an inline <style> block, not
    an inline element style: matching this avoids the legacy mobile override selector. */
-.page-content .hero-section:has(.category-hero-caption) { background-attachment: fixed; }
+.page-content .hero-section:has(.category-hero-caption) {
+  background-attachment: fixed;
+}
 
 /* Exact PR #40 category.php inline hero geometry, typography and hover surfaces.
    Scoping prevents the category rules from changing the homepage slider. */
@@ -41,28 +174,41 @@ html{scroll-behavior:smooth}body{margin:0}.visually-hidden-focusable:not(:focus)
   overflow: hidden;
 }
 .page-content .intro-card {
-  background: linear-gradient(135deg,#f8f9fa 0%,#e9ecef 100%);
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
   border-left: 6px solid var(--brand-primary);
-  box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
 }
 .page-content .content-card {
-  box-shadow: 0 20px 60px rgba(0,0,0,0.1);
-  transition: transform .3s ease, box-shadow .3s ease;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
-@media (hover:hover) and (prefers-reduced-motion:no-preference) {
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
   .page-content .content-card:hover {
     transform: translateY(-10px);
-    box-shadow: 0 30px 80px rgba(0,0,0,0.15);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.15);
   }
-  .page-content .content-image:hover, .page-content .intro-image:hover { transform: scale(1.03); }
+  .page-content .content-image:hover,
+  .page-content .intro-image:hover {
+    transform: scale(1.03);
+  }
 }
 .page-content .content-card h2 {
-  font-weight: 700; color: var(--brand-secondary);
-  position: relative; padding-bottom: 15px;
+  font-weight: 700;
+  color: var(--brand-secondary);
+  position: relative;
+  padding-bottom: 15px;
 }
 .page-content .content-card h2::after {
-  content:"";position:absolute;bottom:0;left:0;width:80px;height:4px;
-  background:var(--brand-primary);border-radius:2px;
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 80px;
+  height: 4px;
+  background: var(--brand-primary);
+  border-radius: 2px;
 }
 /* React Router's <Link> must look identical to the original PHP <a> element.
    Do not add browser/Bootstrap text underlines; retain PR40 gold hover bar. */
@@ -82,22 +228,28 @@ html{scroll-behavior:smooth}body{margin:0}.visually-hidden-focusable:not(:focus)
   display: inline-block;
   width: 0;
   height: 0;
-  margin-left: .255em;
-  border-top: .3em solid;
-  border-right: .3em solid transparent;
+  margin-left: 0.255em;
+  border-top: 0.3em solid;
+  border-right: 0.3em solid transparent;
   border-bottom: 0;
-  border-left: .3em solid transparent;
+  border-left: 0.3em solid transparent;
   background: transparent !important;
-  vertical-align: .255em;
+  vertical-align: 0.255em;
   transform: none !important;
-  transition: border-color .15s ease;
+  transition: border-color 0.15s ease;
 }
 /* Match the original nav gold hover treatment without confusing the arrow. */
 .navbar.fixed-top .navbar-nav a.nav-link:not(.dropdown-toggle)::after {
-  content:"";position:absolute;bottom:0;left:50%;height:2px;width:80%;
-  background:var(--brand-accent) !important;
-  transform:translateX(-50%) scaleX(0);transform-origin:center;
-  transition:transform .15s ease;
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  height: 2px;
+  width: 80%;
+  background: var(--brand-accent) !important;
+  transform: translateX(-50%) scaleX(0);
+  transform-origin: center;
+  transition: transform 0.15s ease;
 }
 .navbar.fixed-top .navbar-nav a.nav-link:not(.dropdown-toggle):hover::after,
 .navbar.fixed-top .navbar-nav a.nav-link:not(.dropdown-toggle):focus-visible::after,
@@ -107,15 +259,23 @@ html{scroll-behavior:smooth}body{margin:0}.visually-hidden-focusable:not(:focus)
 /* Dropdown visibility is owned by Bootstrap's .show state; React's
    SiteInteractions supplies desktop hover. CSS :hover/:focus-within display
    overrides can keep a sibling menu visible after Bootstrap hides it. */
-@media (max-width:1199.98px) {
-  .page-content .hero-section:has(.category-hero-caption) { background-attachment: scroll; }
-  .navbar.fixed-top .navbar-nav a.nav-link:not(.dropdown-toggle)::after { display:none; }
+@media (max-width: 1199.98px) {
+  .page-content .hero-section:has(.category-hero-caption) {
+    background-attachment: scroll;
+  }
+  .navbar.fixed-top .navbar-nav a.nav-link:not(.dropdown-toggle)::after {
+    display: none;
+  }
 }
-@media (prefers-reduced-motion:reduce) {
-  .page-content .hero-section:has(.category-hero-caption) .category-hero-caption { animation:none; }
+@media (prefers-reduced-motion: reduce) {
+  .page-content .hero-section:has(.category-hero-caption) .category-hero-caption {
+    animation: none;
+  }
 }
 
 /* Facebook's third-party XFBML may initialize after hydration (or be blocked).
    Preserve the same mobile panel footprint as the original PHP site rather than
    collapsing the memories row and shifting the entire footer upward. */
-.camp-memories .fb-page { min-height: 300px; }
+.camp-memories .fb-page {
+  min-height: 300px;
+}

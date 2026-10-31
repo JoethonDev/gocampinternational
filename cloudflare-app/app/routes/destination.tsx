@@ -1,46 +1,51 @@
-import { Link, useRouteLoaderData } from "react-router";
+import { useRouteLoaderData } from "react-router";
 import type { Route } from "./+types/destination";
-import type { CatalogRecord } from "../lib/catalog.server";
-import { findCatalog, listCatalog } from "../lib/catalog.server";
-import { isVisible } from "../lib/visibility";
-import { ProgramCard } from "../components/ProgramCard";
-import { FaqAccordion, type FaqItem } from "../components/FaqAccordion";
-import { loadDocument } from "../lib/catalog.server";
-import { CampMemories, type MemoriesDocument } from "../components/CampMemories";
-import { SafeRichText } from "../components/SafeRichText";
-export async function loader({params,context}:Route.LoaderArgs){
-  const slug=params.slug||"";
-  const memoriesPromise=loadDocument<MemoriesDocument>(context.cloudflare.env.DB,"camp_memories");
-  const destination=await findCatalog(context.cloudflare.env.DB,"destination",slug);
-  if(!destination||destination.status==="trash")throw new Response("Not found",{status:404});
-  const programs=destination.status==="coming-soon"?[]:await listCatalog(context.cloudflare.env.DB,"program");
-  const ids=Array.isArray(destination.program_ids)?destination.program_ids:[];
-  const byId=new Map(programs.map(x=>[x.id||x.slug,x]));
-  return {destination,hasProgramIds:ids.length>0,related:ids.map(id=>byId.get(id)).filter((x):x is CatalogRecord=>Boolean(x)),memories:await memoriesPromise};
+import { DestinationPage } from "../features/destination/DestinationPage";
+import { findDestination, listPrograms, loadDocument } from "../lib/catalog.server";
+import type { MemoriesDocument, ProgramRecord, SiteSettings } from "../lib/domain";
+import { originFrom, seoMeta } from "../lib/seo";
+
+export async function loader({ params, context }: Route.LoaderArgs) {
+  const db = context.cloudflare.env.DB;
+  const slug = params.slug || "";
+  const [destination, memories] = await Promise.all([
+    findDestination(db, slug),
+    loadDocument<MemoriesDocument>(db, "camp_memories")
+  ]);
+  if (!destination || destination.status === "trash") {
+    throw new Response("Not found", { status: 404 });
+  }
+  const programIds = destination.program_ids || [];
+  const programs = destination.status === "coming-soon" ? [] : await listPrograms(db);
+  const byId = new Map(programs.map((program) => [program.id || program.slug, program]));
+  const related = programIds
+    .map((id) => byId.get(id))
+    .filter((program): program is ProgramRecord => Boolean(program));
+  return { destination, related, hasProgramIds: programIds.length > 0, memories };
 }
-export function meta({data}:Route.MetaArgs){
-  return [{title:"Go Camp :: "+(data?.destination.name||"Destination")},{name:"description",content:String(data?.destination.tagline||"Discover Your Adventure").slice(0,160)}];
+
+export function meta({ data, matches, location }: Route.MetaArgs) {
+  const destination = data?.destination;
+  const name = destination?.name || "Destination";
+  const title =
+    destination?.status === "coming-soon" ? `Coming Soon: ${name}` : `Go Camp :: ${name}`;
+  return seoMeta({
+    origin: originFrom(matches),
+    path: location.pathname,
+    title,
+    description: String(destination?.tagline || "Discover Your Adventure").slice(0, 160)
+  });
 }
-export default function Destination({loaderData}:Route.ComponentProps){
-  const {destination:d,related}=loaderData;
-  const root=useRouteLoaderData("root") as {settings:Record<string,unknown>}|undefined, settings=root?.settings||{};
-  if(d.status==="coming-soon")return <div className="page-content"><div className="container text-center py-5 my-5"><h1 className="display-3 fw-bold text-brand-primary mb-4">Coming Soon</h1><h2 className="mb-3">{d.name} is not available yet.</h2><p className="lead text-muted mb-4">Please check back later for updates on this destination.</p><Link to="/" className="btn btn-primary btn-lg">Go to Homepage</Link></div></div>;
-  const stats=Array.isArray(d.stats)?d.stats as Record<string,unknown>[]:[];
-  const faq=Array.isArray(d.faq)?d.faq as FaqItem[]:[];
-  const banner=String(d.banner||"/images/hero.webp");
-  return <div className="page-content">
-    {isVisible("destination","hero",d,settings)&&<section className="destination-hero position-relative overflow-hidden" style={{minHeight:"90vh"}} aria-label={d.name+" banner"}>
-      <div className="container position-relative destination-hero-caption"><h1>{d.name}</h1></div>
-      <div className="hero-background position-absolute top-0 start-0 w-100 h-100" style={{backgroundImage:"url("+JSON.stringify(banner)+")",backgroundSize:"cover",backgroundPosition:"center",backgroundAttachment:"fixed"}}/>
-    </section>}
-    {isVisible("destination","stats",d,settings)&&stats.length>0&&<section className="section-padding"><div className="container"><h2 className="section-title text-center">{d.name} By The Numbers</h2><div className="row g-4 justify-content-center">{stats.map((s,i)=><div key={i} className="col-sm-6 col-lg-3 text-center"><div className="fs-2 fw-bold">{String(s.number||"")}{String(s.suffix||"")}</div><p>{String(s.label||"")}</p></div>)}</div></div></section>}
-    {isVisible("destination","intro",d,settings)&&Boolean(d.intro_text)&&<section className="section-padding bg-white" id="destination-intro"><div className="container"><div className="row align-items-center g-4">
-      <div className={d.intro_image?"col-lg-7":"col-12"}><h2 className="section-title">Discover {d.name}</h2><div className="lead"><SafeRichText html={String(d.intro_text)}/></div></div>
-      {d.intro_image&&<div className="col-lg-5"><img className="img-fluid rounded-4 shadow-sm w-100" src={String(d.intro_image)} alt={d.name} loading="lazy"/></div>}
-    </div></div></section>}
-    {isVisible("destination","programs",d,settings)&&<section className="section-padding bg-light" id="programs"><div className="container"><div className="row g-4 justify-content-center">{related.map(p=><div className="col-lg-4 col-md-6" key={p.slug}><ProgramCard program={p} settings={settings}/></div>)}
-      {(!loaderData.hasProgramIds)&&<p className="text-center">No programs are currently available for this destination. Please check back soon!</p>}</div></div></section>}
-    {isVisible("destination","faq",d,settings)&&faq.length>0&&<section className="section-padding"><div className="container"><FaqAccordion title={"Questions About "+d.name} items={faq} accordionId="destinationFaqAccordion"/></div></section>}
-    {isVisible("destination","testimonials",d,settings)&&<CampMemories data={loaderData.memories}/>}
-  </div>;
+
+export default function Destination({ loaderData }: Route.ComponentProps) {
+  const root = useRouteLoaderData("root") as { settings: SiteSettings } | undefined;
+  return (
+    <DestinationPage
+      destination={loaderData.destination}
+      programs={loaderData.related}
+      hasProgramIds={loaderData.hasProgramIds}
+      settings={root?.settings || {}}
+      memories={loaderData.memories}
+    />
+  );
 }

@@ -10,3 +10,6 @@ public/css/
 public/js/
 public/uploads/
 worker-configuration.d.ts
+
+*.tsbuildinfo
+public/

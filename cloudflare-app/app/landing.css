@@ -3,58 +3,325 @@
 /* Keep landing selectors intentionally lower-specificity than design-system.css: the
  * original inline PHP landing styles used plain .class selectors, and PR40 global
  * mobile/tablet overrides must continue to win for exact responsive parity. */
-body:has(.landing-page){padding-top:0!important;font-family:"Inter",sans-serif}
-.landing-page{font-family:"Inter",sans-serif;line-height:1.6;color:#1a1a2e}
-.landing-page h1,.landing-page h2,.landing-page h3{font-family:"Poppins",sans-serif;font-weight:700}
-:where(.landing-page) .hero-landing{position:relative;min-height:100vh;background:linear-gradient(135deg,#0d1b2a 0%,#1b263b 50%,#0d1b2a 100%);overflow:hidden;padding-top:100px}
-:where(.landing-page) .hero-headline{font-size:3.5rem;font-weight:800;line-height:1.2;margin-bottom:20px;color:#fff;text-shadow:2px 4px 8px rgba(0,0,0,.3)}
-:where(.landing-page) .hero-headline .highlight{background:linear-gradient(135deg,#F9BB08,#e0a800);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-:where(.landing-page) .hero-subheadline{font-size:1.4rem;color:rgba(255,255,255,.9);margin-bottom:30px;line-height:1.6}
-:where(.landing-page) .hero-usp-list{list-style:none;margin-bottom:30px;padding:0}
-:where(.landing-page) .hero-usp-list li{color:white;font-size:1.1rem;margin-bottom:15px;display:flex;align-items:center;gap:15px}
-:where(.landing-page) .hero-usp-list li i{color:#F9BB08;font-size:1.3rem;flex-shrink:0}
-:where(.landing-page) .hero-stats{background:rgba(255,255,255,.1);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.2);border-radius:15px;padding:25px;margin-top:40px}
-:where(.landing-page) .stat-item{text-align:center}
-:where(.landing-page) .stat-number{font-size:2.5rem;font-weight:800;color:#F9BB08;display:block;font-family:"Poppins",sans-serif}
-:where(.landing-page) .stat-label{font-size:.9rem;color:rgba(255,255,255,.8);text-transform:uppercase;letter-spacing:1px}
-:where(.landing-page) .form-container{position:relative;z-index:10}
-:where(.landing-page) .lead-form-card{background:#fff;border-radius:20px;padding:40px;box-shadow:0 20px 60px rgba(0,0,0,.25);position:sticky;top:120px}
-:where(.landing-page) .form-header{text-align:center;margin-bottom:30px}
-:where(.landing-page) .form-title{font-size:1.8rem;color:#00a4c0;margin-bottom:10px;font-weight:700}
-:where(.landing-page) .form-subtitle{color:#666;font-size:1rem}
-:where(.landing-page) .urgency-banner{background:linear-gradient(135deg,#F9BB08,#e0a800);color:#fff;padding:15px;border-radius:10px;margin-bottom:25px;text-align:center;font-weight:600}
-:where(.landing-page) .form-group{margin-bottom:25px}
-:where(.landing-page) .form-label{font-weight:600;color:#1a1a2e;margin-bottom:8px;display:block;font-size:.95rem}
-:where(.landing-page) .required{color:#dc3545}
-:where(.landing-page) .form-control,:where(.landing-page) .form-select{width:100%;padding:14px 18px;border:2px solid #e0e0e0;border-radius:10px;font-size:1rem;transition:all .3s ease}
-:where(.landing-page) .form-control:focus,:where(.landing-page) .form-select:focus{outline:none;border-color:#00a4c0;box-shadow:0 0 0 4px rgba(0,164,192,.1)}
-:where(.landing-page) .input-icon{position:relative}
-:where(.landing-page) .input-icon i{position:absolute;left:18px;top:50%;transform:translateY(-50%);color:#999;font-size:1.1rem}
-:where(.landing-page) .input-icon .form-control{padding-left:50px}
-:where(.landing-page) .interest-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:15px}
-:where(.landing-page) .interest-option{position:relative}
-:where(.landing-page) .interest-option input[type=checkbox]{position:absolute;opacity:0}
-:where(.landing-page) .interest-label{display:block;padding:15px;border:2px solid #e0e0e0;border-radius:10px;text-align:center;cursor:pointer;transition:all .3s ease;font-weight:600}
-:where(.landing-page) .interest-label i{display:block;font-size:1.5rem;margin-bottom:8px;color:#00a4c0}
-:where(.landing-page) .interest-option input:checked+.interest-label{background:linear-gradient(135deg,#00a4c0,#0088a3);color:#fff;border-color:#00a4c0;transform:translateY(-3px);box-shadow:0 10px 30px rgba(0,0,0,.15)}
-:where(.landing-page) .interest-option input:checked+.interest-label i{color:white}
-:where(.landing-page) .interest-option input:focus-visible+.interest-label{outline:3px solid #F9BB08;outline-offset:2px}
-:where(.landing-page) .btn-submit-landing{background:linear-gradient(135deg,#F9BB08,#e0a800);color:#fff;font-size:1.1rem;padding:18px 30px;border:0;border-radius:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px}
-:where(.landing-page) .btn-submit-landing:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(249,187,8,.4)}
-:where(.landing-page) .form-trust{text-align:center;margin-top:25px;padding-top:25px;border-top:1px solid #e0e0e0}
-:where(.landing-page) .trust-item{display:inline-flex;align-items:center;gap:8px;color:#666;font-size:.9rem;margin:0 15px}
-:where(.landing-page) .trust-item i{color:#28a745;font-size:1.1rem}
-:where(.landing-page) .why-section{padding:80px 0;background:#f8f9fa}
-:where(.landing-page) .section-header{text-align:center;margin-bottom:60px}
-:where(.landing-page) .section-title{font-size:2.5rem;color:#1a1a2e;margin-bottom:15px}
-:where(.landing-page) .section-subtitle{font-size:1.2rem;color:#666;max-width:600px;margin:0 auto}
-:where(.landing-page) .benefit-card{background:#fff;border-radius:15px;padding:35px;text-align:center;height:100%;transition:all .3s ease;border:2px solid transparent}
-:where(.landing-page) .benefit-card:hover{transform:translateY(-10px);box-shadow:0 10px 30px rgba(0,0,0,.15);border-color:#00a4c0}
-:where(.landing-page) .benefit-icon{width:80px;height:80px;margin:0 auto 25px;background:linear-gradient(135deg,#00a4c0,#0088a3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2rem;color:#fff}
-:where(.landing-page) .benefit-title{font-size:1.3rem;color:#1a1a2e;margin-bottom:15px}
-:where(.landing-page) .benefit-text{color:#666;line-height:1.8}
-:where(.landing-page) .guarantee-section{padding:60px 0;background:linear-gradient(135deg,#00a4c0,#0088a3);color:#fff;text-align:center}
-:where(.landing-page) .guarantee-badge{width:120px;height:120px;background:#F9BB08;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 30px;font-size:3rem;box-shadow:0 20px 60px rgba(0,0,0,.25)}
-:where(.landing-page) .guarantee-title{font-size:2rem;margin-bottom:15px;color:white}
-@media(max-width:991px){:where(.landing-page) .hero-headline{font-size:2.5rem}:where(.landing-page) .lead-form-card{position:static;margin-top:40px}}
-
+body:has(.landing-page) {
+  padding-top: 0 !important;
+  font-family: "Inter", sans-serif;
+}
+.landing-page {
+  font-family: "Inter", sans-serif;
+  line-height: 1.6;
+  color: #1a1a2e;
+}
+.landing-page h1,
+.landing-page h2,
+.landing-page h3 {
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+}
+:where(.landing-page) .hero-landing {
+  position: relative;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 50%, #0d1b2a 100%);
+  overflow: hidden;
+  padding-top: 100px;
+}
+:where(.landing-page) .hero-headline {
+  font-size: 3.5rem;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 20px;
+  color: #fff;
+  text-shadow: 2px 4px 8px rgba(0, 0, 0, 0.3);
+}
+:where(.landing-page) .hero-headline .highlight {
+  background: linear-gradient(135deg, #f9bb08, #e0a800);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+:where(.landing-page) .hero-subheadline {
+  font-size: 1.4rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+:where(.landing-page) .hero-usp-list {
+  list-style: none;
+  margin-bottom: 30px;
+  padding: 0;
+}
+:where(.landing-page) .hero-usp-list li {
+  color: white;
+  font-size: 1.1rem;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+:where(.landing-page) .hero-usp-list li i {
+  color: #f9bb08;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+:where(.landing-page) .hero-stats {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 15px;
+  padding: 25px;
+  margin-top: 40px;
+}
+:where(.landing-page) .stat-item {
+  text-align: center;
+}
+:where(.landing-page) .stat-number {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #f9bb08;
+  display: block;
+  font-family: "Poppins", sans-serif;
+}
+:where(.landing-page) .stat-label {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+:where(.landing-page) .form-container {
+  position: relative;
+  z-index: 10;
+}
+:where(.landing-page) .lead-form-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+  position: sticky;
+  top: 120px;
+}
+:where(.landing-page) .form-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+:where(.landing-page) .form-title {
+  font-size: 1.8rem;
+  color: #00a4c0;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+:where(.landing-page) .form-subtitle {
+  color: #666;
+  font-size: 1rem;
+}
+:where(.landing-page) .urgency-banner {
+  background: linear-gradient(135deg, #f9bb08, #e0a800);
+  color: #fff;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 25px;
+  text-align: center;
+  font-weight: 600;
+}
+:where(.landing-page) .form-group {
+  margin-bottom: 25px;
+}
+:where(.landing-page) .form-label {
+  font-weight: 600;
+  color: #1a1a2e;
+  margin-bottom: 8px;
+  display: block;
+  font-size: 0.95rem;
+}
+:where(.landing-page) .required {
+  color: #dc3545;
+}
+:where(.landing-page) .form-control,
+:where(.landing-page) .form-select {
+  width: 100%;
+  padding: 14px 18px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+:where(.landing-page) .form-control:focus,
+:where(.landing-page) .form-select:focus {
+  outline: none;
+  border-color: #00a4c0;
+  box-shadow: 0 0 0 4px rgba(0, 164, 192, 0.1);
+}
+:where(.landing-page) .input-icon {
+  position: relative;
+}
+:where(.landing-page) .input-icon i {
+  position: absolute;
+  left: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #999;
+  font-size: 1.1rem;
+}
+:where(.landing-page) .input-icon .form-control {
+  padding-left: 50px;
+}
+:where(.landing-page) .interest-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+}
+:where(.landing-page) .interest-option {
+  position: relative;
+}
+:where(.landing-page) .interest-option input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+}
+:where(.landing-page) .interest-label {
+  display: block;
+  padding: 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+}
+:where(.landing-page) .interest-label i {
+  display: block;
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+  color: #00a4c0;
+}
+:where(.landing-page) .interest-option input:checked + .interest-label {
+  background: linear-gradient(135deg, #00a4c0, #0088a3);
+  color: #fff;
+  border-color: #00a4c0;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+:where(.landing-page) .interest-option input:checked + .interest-label i {
+  color: white;
+}
+:where(.landing-page) .interest-option input:focus-visible + .interest-label {
+  outline: 3px solid #f9bb08;
+  outline-offset: 2px;
+}
+:where(.landing-page) .btn-submit-landing {
+  background: linear-gradient(135deg, #f9bb08, #e0a800);
+  color: #fff;
+  font-size: 1.1rem;
+  padding: 18px 30px;
+  border: 0;
+  border-radius: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+:where(.landing-page) .btn-submit-landing:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(249, 187, 8, 0.4);
+}
+:where(.landing-page) .form-trust {
+  text-align: center;
+  margin-top: 25px;
+  padding-top: 25px;
+  border-top: 1px solid #e0e0e0;
+}
+:where(.landing-page) .trust-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #666;
+  font-size: 0.9rem;
+  margin: 0 15px;
+}
+:where(.landing-page) .trust-item i {
+  color: #28a745;
+  font-size: 1.1rem;
+}
+:where(.landing-page) .why-section {
+  padding: 80px 0;
+  background: #f8f9fa;
+}
+:where(.landing-page) .section-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+:where(.landing-page) .section-title {
+  font-size: 2.5rem;
+  color: #1a1a2e;
+  margin-bottom: 15px;
+}
+:where(.landing-page) .section-subtitle {
+  font-size: 1.2rem;
+  color: #666;
+  max-width: 600px;
+  margin: 0 auto;
+}
+:where(.landing-page) .benefit-card {
+  background: #fff;
+  border-radius: 15px;
+  padding: 35px;
+  text-align: center;
+  height: 100%;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+:where(.landing-page) .benefit-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  border-color: #00a4c0;
+}
+:where(.landing-page) .benefit-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 25px;
+  background: linear-gradient(135deg, #00a4c0, #0088a3);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: #fff;
+}
+:where(.landing-page) .benefit-title {
+  font-size: 1.3rem;
+  color: #1a1a2e;
+  margin-bottom: 15px;
+}
+:where(.landing-page) .benefit-text {
+  color: #666;
+  line-height: 1.8;
+}
+:where(.landing-page) .guarantee-section {
+  padding: 60px 0;
+  background: linear-gradient(135deg, #00a4c0, #0088a3);
+  color: #fff;
+  text-align: center;
+}
+:where(.landing-page) .guarantee-badge {
+  width: 120px;
+  height: 120px;
+  background: #f9bb08;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 30px;
+  font-size: 3rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+}
+:where(.landing-page) .guarantee-title {
+  font-size: 2rem;
+  margin-bottom: 15px;
+  color: white;
+}
+@media (max-width: 991px) {
+  :where(.landing-page) .hero-headline {
+    font-size: 2.5rem;
+  }
+  :where(.landing-page) .lead-form-card {
+    position: static;
+    margin-top: 40px;
+  }
+}

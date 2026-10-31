@@ -1,35 +1,61 @@
 import { useRouteLoaderData } from "react-router";
 import type { Route } from "./+types/category";
-import { findCatalog, listCatalog, type CatalogRecord } from "../lib/catalog.server";
-import { ProgramCard } from "../components/ProgramCard";
-import { isVisible } from "../lib/visibility";
-import { loadDocument } from "../lib/catalog.server";
-import { CampMemories, type MemoriesDocument } from "../components/CampMemories";
-import { SafeRichText } from "../components/SafeRichText";
-export async function loader({request,context}:Route.LoaderArgs){
-  const slug=new URL(request.url).searchParams.get("category")||"";
-  const db=context.cloudflare.env.DB;
-  const memoriesPromise=loadDocument<MemoriesDocument>(db,"camp_memories");
-  const cat=await findCatalog(db,"category",slug);
-  if(!cat||cat.status!=="active")throw new Response("Not Found",{status:404});
-  const [programs,destinations]=await Promise.all([listCatalog(db,"program"),listCatalog(db,"destination",false)]);
-  const related=programs.filter(p=>p.category_slug===cat.slug).filter(p=>{
-    const linked=destinations.find(d=>Array.isArray(d.program_ids)&&d.program_ids.includes(p.id||p.slug));
-    return !linked||linked.status!=="trash";
-  }).sort((a,b)=>Number(a.order??Number.MAX_SAFE_INTEGER)-Number(b.order??Number.MAX_SAFE_INTEGER)||a.name.localeCompare(b.name));
-  return {category:cat,related,memories:await memoriesPromise};
+import { CategoryPage } from "../features/category/CategoryPage";
+import { findCategory, listDestinations, listPrograms, loadDocument } from "../lib/catalog.server";
+import type { MemoriesDocument, SiteSettings } from "../lib/domain";
+import { originFrom, seoMeta } from "../lib/seo";
+
+export async function loader({ request, context }: Route.LoaderArgs) {
+  const db = context.cloudflare.env.DB;
+  const slug = new URL(request.url).searchParams.get("category") || "";
+  const [category, memories] = await Promise.all([
+    findCategory(db, slug),
+    loadDocument<MemoriesDocument>(db, "camp_memories")
+  ]);
+  if (!category || category.status !== "active") {
+    throw new Response("Not Found", { status: 404 });
+  }
+  const [programs, destinations] = await Promise.all([
+    listPrograms(db),
+    listDestinations(db, false)
+  ]);
+  const related = programs
+    .filter((program) => program.category_slug === category.slug)
+    .filter((program) => {
+      const linked = destinations.find(
+        (destination) =>
+          Array.isArray(destination.program_ids) &&
+          destination.program_ids.includes(program.id || program.slug)
+      );
+      return !linked || linked.status !== "trash";
+    })
+    .sort(
+      (a, b) =>
+        Number(a.order ?? Number.MAX_SAFE_INTEGER) - Number(b.order ?? Number.MAX_SAFE_INTEGER) ||
+        a.name.localeCompare(b.name)
+    );
+  return { category, related, memories };
 }
-export function meta({data}:Route.MetaArgs){return [{title:"Go Camp :: "+(data?.category.name||"Programs")},{name:"description",content:String(data?.category.intro||"").replace(/<[^>]*>/g,"").slice(0,160)}];}
-export default function Category({loaderData}:Route.ComponentProps){
-  const {category:c,related}=loaderData;
-  const root=useRouteLoaderData("root") as {settings:Record<string,unknown>}|undefined, settings=root?.settings||{};
-  const sections=Array.isArray(c.sections)?c.sections as Array<Record<string,unknown>>:[];
-  return <div className="page-content">
-    {isVisible("category","hero",c,settings)&&<section className="hero-section" aria-label={c.name+" banner"} style={{backgroundImage:"url("+JSON.stringify(String(c.banner||"/images/hero.webp"))+")"}}><div className="container position-relative category-hero-caption"><h1>{c.name}</h1></div></section>}
-    <div className="bg-light border-bottom"><div className="container py-2"><nav aria-label="breadcrumb"><ol className="breadcrumb mb-0"><li className="breadcrumb-item"><a href="/">HOME</a></li><li className="breadcrumb-item active" aria-current="page">{c.name.toUpperCase()}</li></ol></nav></div></div>
-    {isVisible("category","intro",c,settings)&&Boolean(c.intro)&&<section className="intro-section"><div className="container"><div className="row align-items-center g-5"><div className="col-lg-6"><div className="intro-card"><h2 className="mb-4">Discover {c.name}</h2><div className="lead"><SafeRichText html={String(c.intro)}/></div></div></div>{c.intro_image&&<div className="col-lg-6"><img src={String(c.intro_image)} alt={c.name+" Introduction"} className="img-fluid intro-image" loading="lazy"/></div>}</div></div></section>}
-    {isVisible("category","sections",c,settings)&&sections.filter(s=>s.is_active!==false).map((section,i)=><section key={i} className="section-content" style={{backgroundColor:i%2?"#f8f9fa":"#fff"}}><div className="container"><div className="row align-items-center g-5"><div className={"col-lg-6"+(i%2?" order-lg-2":"")}><div className="content-card"><h2>{String(section.title||"")}</h2><div className="text-muted"><SafeRichText html={String(section.content||"")}/></div></div></div>{Boolean(section.image)&&<div className={"col-lg-6"+(i%2?" order-lg-1":"")}><img src={String(section.image)} alt={String(section.title||"")} className="img-fluid content-image" loading="lazy"/></div>}</div></div></section>)}
-    {isVisible("category","programs",c,settings)&&related.length>0&&<section className="section-content bg-light" id="category-programs"><div className="container"><div className="row g-4 justify-content-center">{related.map(p=><div className="col-lg-4 col-md-6 d-flex align-items-stretch" key={p.slug}><ProgramCard program={p} settings={settings}/></div>)}</div></div></section>}
-    {isVisible("category","testimonials",c,settings)&&<CampMemories data={loaderData.memories}/>}
-  </div>;
+
+export function meta({ data, matches, location }: Route.MetaArgs) {
+  return seoMeta({
+    origin: originFrom(matches),
+    path: location.pathname + location.search,
+    title: `Go Camp :: ${data?.category.name || "Programs"}`,
+    description: String(data?.category.intro || "")
+      .replace(/<[^>]*>/g, "")
+      .slice(0, 160)
+  });
+}
+
+export default function Category({ loaderData }: Route.ComponentProps) {
+  const root = useRouteLoaderData("root") as { settings: SiteSettings } | undefined;
+  return (
+    <CategoryPage
+      category={loaderData.category}
+      programs={loaderData.related}
+      settings={root?.settings || {}}
+      memories={loaderData.memories}
+    />
+  );
 }

@@ -1,4 +1,8 @@
 import type { Route } from "./+types/legacy-program";
+// UI route so deliberately hidden /program/* paths render the branded 404 page.
+export default function LegacyProgram() {
+  return null;
+}
 
 /**
  * PR #40 deliberately hides the all-programs listing at /program/index.

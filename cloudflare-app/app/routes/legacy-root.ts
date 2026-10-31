@@ -1,5 +1,9 @@
 import { redirect } from "react-router";
 import type { Route } from "./+types/legacy-root";
+// UI route (not a resource route) so unknown legacy URLs render the branded 404 page.
+export default function LegacyRoot() {
+  return null;
+}
 
 /**
  * Legacy entrypoint compatibility based on PR #40's index.php/.htaccess.
@@ -15,7 +19,7 @@ const aliases: Readonly<Record<string, string>> = {
   "about_us.php": "/about",
   contact_us: "/contact",
   "contact_us.php": "/contact",
-  "faq.php": "/faq",
+  "faq.php": "/faq"
 };
 
 export function loader({ params }: Route.LoaderArgs) {

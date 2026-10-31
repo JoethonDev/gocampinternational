@@ -1,35 +1,70 @@
-import { Link, useRouteLoaderData } from "react-router";
+import { useRouteLoaderData } from "react-router";
 import type { Route } from "./+types/home";
-import type { CatalogRecord } from "../lib/catalog.server";
-import { isVisible } from "../lib/visibility";
+import { HomePage } from "../features/home/HomePage";
 import { loadDocument } from "../lib/catalog.server";
-import { CampMemories, type MemoriesDocument } from "../components/CampMemories";
-export function meta({}:Route.MetaArgs) {return [{title:"Go Camp International | Unforgettable Summer Experiences"},{name:"description",content:"Discover life-changing international summer camps for teens. We offer language, arts, sports, and leadership programs in premier destinations."}];}
-export async function loader({context}:Route.LoaderArgs){
-  const memoriesPromise=loadDocument<MemoriesDocument>(context.cloudflare.env.DB,"camp_memories");
-  const rows=await context.cloudflare.env.DB.prepare("SELECT p.category_slug, (SELECT d.status FROM destination_programs dp JOIN catalog_entities d ON d.slug=dp.destination_slug AND d.kind='destination' WHERE dp.program_slug=p.slug ORDER BY d.sort_order LIMIT 1) AS destination_status FROM catalog_entities p WHERE p.kind='program' AND p.status='active'").all<{category_slug:string;destination_status:string|null}>();
-  return {eligible:[...new Set((rows.results||[]).filter(r=>r.destination_status===null||r.destination_status==="active").map(r=>r.category_slug))],memories:await memoriesPromise};
+import type {
+  CategoryRecord,
+  DestinationRecord,
+  MemoriesDocument,
+  SiteSettings
+} from "../lib/domain";
+import { originFrom, seoMeta } from "../lib/seo";
+
+export function meta({ matches }: Route.MetaArgs) {
+  return seoMeta({
+    origin: originFrom(matches),
+    path: "/",
+    title: "Go Camp International | Unforgettable Summer Experiences",
+    description:
+      "Discover life-changing international summer camps for teens. We offer language, arts, sports, and leadership programs in premier destinations."
+  });
 }
-const shortIntro = (value: unknown) => {
-  const plain=String(value||"Discover amazing programs in this category.").replace(/<[^>]+>/g,"");
-  return plain.length>120?plain.slice(0,120)+"...":plain;
-};
-const slides=[{image:"banner.webp",title:"Unforgettable Summers Start Here"},{image:"hero.webp",title:"Discover Your Passion Abroad"},{image:"about_img_3.webp",title:"Build Lifelong Friendships"}];
-export default function Home({loaderData}:Route.ComponentProps){
-  const d=useRouteLoaderData("root") as {destinations:CatalogRecord[];categories:CatalogRecord[];settings:Record<string,unknown>} | undefined;
-  const destinations=d?.destinations || [], categories=d?.categories||[],settings=d?.settings||{};
-  const eligible=new Set(loaderData.eligible);
-  const featured=categories.filter(c=>eligible.has(c.slug)).slice(0,3);
-  return <div className="page-content">
-    {isVisible("home","hero",settings,settings)&&<header id="home-hero-slider" className="carousel slide" data-bs-ride="carousel"><div className="carousel-inner">{slides.map((s,i)=><div className={"carousel-item"+(i===0?" active":"")} key={s.image}>
-      <div className="hero-section d-flex align-items-center justify-content-center text-center" style={{backgroundImage:"url('/images/"+s.image+"')",backgroundSize:"cover",backgroundPosition:"center"}}>
-      <div className="hero-overlay"/><div className="container position-relative home-hero-caption d-flex flex-column align-items-center justify-content-end text-center" style={{zIndex:2}}>
-      {i===0?<h1 className="display-3 fw-bold mb-3 text-white" style={{textShadow:"0 2px 12px #000,0 0 2px #fff"}}>{s.title}</h1>:<h2 className="display-3 fw-bold mb-3 text-white">{s.title}</h2>}
-      <p className="lead mb-0 text-white" style={{textShadow:"0 2px 8px #000,0 0 2px #fff"}}>International camps are a life-changing opportunity to learn, grow, and make global friends.</p></div></div>
-    </div>)}</div></header>}
-    {isVisible("home","intro",settings,settings)&&<section className="section-padding"><div className="container"><div className="row justify-content-center"><div className="col-lg-8 text-center"><h2 className="section-title">Go Camp International</h2><p className="lead">Summer Camp is more than just fun and games. It's an opportunity for your kids to develop critical skills, learn about the world, and build international connections that last a lifetime.</p></div></div></div></section>}
-    {isVisible("home","destinations",settings,settings)&&<section id="destinations" className="section-padding bg-light"><div className="container"><h2 className="section-title text-center mb-5">Our Destinations</h2><div className="row g-4 justify-content-center">{destinations.map(item=><div className="col-sm-6 col-lg-4" key={item.slug}><Link to={"/destinations/"+item.slug} className="card text-white border-0 shadow-sm program-card-home"><img src={String(item.banner||"/images/hero.webp")} className="card-img" alt={item.name} loading="lazy"/><div className="card-img-overlay d-flex align-items-end p-0"><div className="w-100 text-start p-3 destination-card-caption"><h5 className="card-title fw-bold m-0">{item.name}</h5></div></div></Link></div>)}{destinations.length===0&&<p className="text-center">Destinations will be listed here soon!</p>}</div></div></section>}
-    {isVisible("home","featured_categories",settings,settings)&&<section className="section-padding bg-light"><div className="container"><div className="text-center mb-5"><h2 className="section-title">Explore Our Program Categories</h2><p className="lead text-muted">Choose your adventure from our diverse range of international camp experiences.</p></div><div className="row g-4 justify-content-center">{featured.map(item=><div className="col-lg-4 col-md-6 d-flex align-items-stretch" key={item.slug}><div className="category-card-modern position-relative h-100"><div className="card border-0 shadow-lg h-100 overflow-hidden" style={{borderRadius:20}}><div className="position-relative overflow-hidden" style={{height:280}}><img src={String(item.banner||"/images/placeholder.webp")} alt={item.name} className="card-img-top h-100 w-100 object-fit-cover category-card-image" loading="lazy"/><div className="position-absolute bottom-0 start-0 w-100 h-100" style={{background:"linear-gradient(to top, rgba(0,0,0,.8), transparent 60%)"}}/><div className="position-absolute bottom-0 start-0 w-100 p-4"><h3 className="text-white fw-bold mb-2 fs-3">{item.name}</h3><div className="d-flex align-items-center text-white-50"><i className="bi bi-geo-alt-fill me-2"/><span className="fw-medium">Multiple Destinations</span></div></div></div><div className="card-body p-4 d-flex flex-column"><p className="card-text text-muted mb-4 flex-grow-1 lh-lg">{shortIntro(item.intro)}</p><div className="mt-auto"><Link to={"/program/category?category="+encodeURIComponent(item.slug)} className="stretched-link" aria-label={"Browse "+item.name}/></div></div></div></div></div>)}</div></div></section>}
-    {isVisible("home","testimonials",settings,settings)&&<CampMemories data={loaderData.memories}/>}
-  </div>;
+
+export async function loader({ context }: Route.LoaderArgs) {
+  const db = context.cloudflare.env.DB;
+  const [memories, rows] = await Promise.all([
+    loadDocument<MemoriesDocument>(db, "camp_memories"),
+    db
+      .prepare(
+        `
+      SELECT p.category_slug,
+        (SELECT d.status
+         FROM destination_programs dp
+         JOIN catalog_entities d ON d.slug = dp.destination_slug AND d.kind = 'destination'
+         WHERE dp.program_slug = p.slug
+         ORDER BY d.sort_order
+         LIMIT 1) AS destination_status
+      FROM catalog_entities p
+      WHERE p.kind = 'program' AND p.status = 'active'
+    `
+      )
+      .all<{ category_slug: string; destination_status: string | null }>()
+  ]);
+  const eligible = [
+    ...new Set(
+      (rows.results || [])
+        .filter((row) => row.destination_status === null || row.destination_status === "active")
+        .map((row) => row.category_slug)
+    )
+  ];
+  return { eligible, memories };
+}
+
+export default function Home({ loaderData }: Route.ComponentProps) {
+  const root = useRouteLoaderData("root") as
+    | {
+        destinations: DestinationRecord[];
+        categories: CategoryRecord[];
+        settings: SiteSettings;
+      }
+    | undefined;
+  return (
+    <HomePage
+      destinations={root?.destinations || []}
+      categories={root?.categories || []}
+      eligible={loaderData.eligible}
+      settings={root?.settings || {}}
+      memories={loaderData.memories}
+    />
+  );
 }

@@ -23,6 +23,8 @@ jobs:
       - run: npm ci
       - name: Generate Cloudflare and React Router types
         run: npm run cf-typegen
+      - name: Verify formatting
+        run: npm run format:check
       - name: Typecheck and compile
         run: npm run typecheck && npm run build
       - name: Verify Wrangler output without deployment

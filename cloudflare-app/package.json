@@ -26,6 +26,7 @@
     "@types/node": "24.10.1",
     "@types/react": "19.2.7",
     "@types/react-dom": "19.2.3",
+    "prettier": "3.9.6",
     "tailwindcss": "4.1.17",
     "typescript": "5.9.3",
     "vite": "^7.0.0",
@@ -42,7 +43,9 @@
     "check": "npm run typecheck && npm run build && wrangler deploy --dry-run",
     "deploy": "wrangler deploy",
     "cf-typegen": "wrangler types && react-router typegen",
-    "smoke:staging": "node scripts/smoke-staging.mjs"
+    "smoke:staging": "node scripts/smoke-staging.mjs",
+    "format": "prettier --write \"app/**/*.{ts,tsx,css}\" \"workers/**/*.ts\" \"scripts/**/*.mjs\"",
+    "format:check": "prettier --check \"app/**/*.{ts,tsx,css}\" \"workers/**/*.ts\" \"scripts/**/*.mjs\""
   },
   "type": "module"
 }

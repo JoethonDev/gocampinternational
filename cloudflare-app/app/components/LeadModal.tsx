@@ -1,14 +1,153 @@
 import { useFetcher } from "react-router";
-export function LeadModal(){
-  const fetcher=useFetcher<{success?:boolean;error?:string;message?:string}>();
-  return <><div className="modal fade" id="ctaModal" tabIndex={-1} aria-labelledby="ctaModalLabel" aria-hidden="true"><div className="modal-dialog modal-dialog-centered"><div className="modal-content"><div className="modal-header"><h5 className="modal-title fw-bold" id="ctaModalLabel">Ready for an Adventure?</h5><button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"/></div><div className="modal-body"><p className="text-muted mb-4">Leave your details below, and one of our camp experts will contact you shortly.</p>
-  <div className="status-message mb-3" role="status">{fetcher.data?.success?<div className="alert alert-success">{fetcher.data.message}</div>:fetcher.data?.error?<div className="alert alert-danger">{fetcher.data.error}</div>:null}</div>
-  <fetcher.Form method="post" action="/api/submit-lead.php" id="leadForm"><input type="hidden" name="source" value="Modal CTA"/><div className="hp-field" aria-hidden="true"><label>Leave empty<input type="text" name="website" tabIndex={-1} autoComplete="off"/></label></div>
-   <div className="mb-3"><label htmlFor="nameInput" className="form-label">Full Name</label><input className="form-control" name="name" id="nameInput" placeholder="e.g., Ahmed Hassan" required maxLength={100}/></div>
-   <div className="mb-3"><label htmlFor="emailInput" className="form-label">Email Address</label><input className="form-control" type="email" name="email" id="emailInput" placeholder="you@example.com" required maxLength={254}/></div>
-   <div className="mb-3"><label htmlFor="phoneInput" className="form-label">Phone Number</label><input className="form-control" name="phone" id="phoneInput" placeholder="+20 123 456 7890" required maxLength={30}/></div>
-   <div className="mb-3"><label htmlFor="interestSelect" className="form-label">I'm interested in...</label><select className="form-select" name="interest" id="interestSelect" required defaultValue=""><option value="" disabled>Choose a program type</option><option>Language & Activity Camps</option><option>Adult Academic Programs</option><option>Young Leader Programs</option><option>Soccer Camps</option><option>Special Interests Camps</option></select></div>
-   <div className="d-grid mt-4"><button disabled={fetcher.state!=="idle"} type="submit" className="btn btn-warning btn-lg fw-bold">{fetcher.state!=="idle"?"Sending...":"Book a Free Call"}</button></div>
-  </fetcher.Form></div></div></div></div>
-  <div id="mobileCtaBar" className="d-lg-none"><a href="tel:+201221719621" className="btn btn-outline-light flex-fill fw-bold">Call</a><button type="button" className="btn btn-warning flex-fill fw-bold" data-bs-toggle="modal" data-bs-target="#ctaModal">Book a Free Call</button></div></>;
+import { SITE } from "../config/site";
+
+const PROGRAM_TYPES = [
+  "Language & Activity Camps",
+  "Adult Academic Programs",
+  "Young Leader Programs",
+  "Soccer Camps",
+  "Special Interests Camps"
+] as const;
+
+type LeadResult = { success?: boolean; error?: string; message?: string };
+
+function LeadForm() {
+  const fetcher = useFetcher<LeadResult>();
+  return (
+    <>
+      <div className="status-message mb-3" role="status">
+        {fetcher.data?.success ? (
+          <div className="alert alert-success">{fetcher.data.message}</div>
+        ) : fetcher.data?.error ? (
+          <div className="alert alert-danger">{fetcher.data.error}</div>
+        ) : null}
+      </div>
+      <fetcher.Form method="post" action="/api/submit-lead.php" id="leadForm">
+        <input type="hidden" name="source" value="Modal CTA" />
+        <div className="hp-field" aria-hidden="true">
+          <label>
+            Leave empty
+            <input type="text" name="website" tabIndex={-1} autoComplete="off" />
+          </label>
+        </div>
+        <div className="mb-3">
+          <label htmlFor="nameInput" className="form-label">
+            Full Name
+          </label>
+          <input
+            className="form-control"
+            name="name"
+            id="nameInput"
+            placeholder="e.g., Ahmed Hassan"
+            required
+            maxLength={100}
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="emailInput" className="form-label">
+            Email Address
+          </label>
+          <input
+            className="form-control"
+            type="email"
+            name="email"
+            id="emailInput"
+            placeholder="you@example.com"
+            required
+            maxLength={254}
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="phoneInput" className="form-label">
+            Phone Number
+          </label>
+          <input
+            className="form-control"
+            name="phone"
+            id="phoneInput"
+            placeholder="+20 123 456 7890"
+            required
+            maxLength={30}
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="interestSelect" className="form-label">
+            I'm interested in...
+          </label>
+          <select
+            className="form-select"
+            name="interest"
+            id="interestSelect"
+            required
+            defaultValue=""
+          >
+            <option value="" disabled>
+              Choose a program type
+            </option>
+            {PROGRAM_TYPES.map((type) => (
+              <option key={type}>{type}</option>
+            ))}
+          </select>
+        </div>
+        <div className="d-grid mt-4">
+          <button
+            disabled={fetcher.state !== "idle"}
+            type="submit"
+            className="btn btn-warning btn-lg fw-bold"
+          >
+            {fetcher.state !== "idle" ? "Sending..." : "Book a Free Call"}
+          </button>
+        </div>
+      </fetcher.Form>
+    </>
+  );
+}
+
+export function LeadModal() {
+  return (
+    <>
+      <div
+        className="modal fade"
+        id="ctaModal"
+        tabIndex={-1}
+        aria-labelledby="ctaModalLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title fw-bold" id="ctaModalLabel">
+                Ready for an Adventure?
+              </h5>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              />
+            </div>
+            <div className="modal-body">
+              <p className="text-muted mb-4">
+                Leave your details below, and one of our camp experts will contact you shortly.
+              </p>
+              <LeadForm />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="mobileCtaBar" className="d-lg-none">
+        <a href={SITE.phoneHref} className="btn btn-outline-light flex-fill fw-bold">
+          Call
+        </a>
+        <button
+          type="button"
+          className="btn btn-warning flex-fill fw-bold"
+          data-bs-toggle="modal"
+          data-bs-target="#ctaModal"
+        >
+          Book a Free Call
+        </button>
+      </div>
+    </>
+  );
 }
