@@ -1,0 +1,42 @@
+name: Format Cloudflare R2 migration files
+on:
+  push:
+    branches: [migration/cloudflare-react-workers-pr40]
+    paths:
+      - cloudflare-app/app/features/admin/MediaLibraryPage.tsx
+      - cloudflare-app/app/routes/admin-media.tsx
+      - cloudflare-app/app/routes/admin-media-import.tsx
+      - cloudflare-app/workers/app.ts
+      - .github/workflows/cloudflare-media-prettier.yml
+permissions:
+  contents: write
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: cloudflare-app/package-lock.json
+      - run: npm ci
+        working-directory: cloudflare-app
+      - name: Format only R2 migration integration files
+        run: |
+          npx prettier --write app/features/admin/MediaLibraryPage.tsx app/routes/admin-media.tsx app/routes/admin-media-import.tsx workers/app.ts
+        working-directory: cloudflare-app
+      - name: Commit formatting, if needed, back to staging migration branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add cloudflare-app/app/features/admin/MediaLibraryPage.tsx cloudflare-app/app/routes/admin-media.tsx cloudflare-app/app/routes/admin-media-import.tsx cloudflare-app/workers/app.ts
+          if git diff --cached --quiet; then
+            echo "No formatting changes"
+          else
+            git commit -m "style(cloudflare): format staging R2 media integration"
+            git push origin HEAD:migration/cloudflare-react-workers-pr40
+          fi
