@@ -11,3 +11,8 @@
 @keyframes admin-page-enter{from{opacity:.65;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 @media(max-width:767px){.admin-workspace .admin-nav{top:65px;flex-wrap:nowrap!important;overflow-x:auto;scrollbar-width:thin}.admin-workspace .admin-nav .btn{white-space:nowrap}}
 @media(prefers-reduced-motion:reduce){.admin-workspace .admin-main{animation:none}.admin-workspace .btn,.admin-workspace .card{transition:none!important}.admin-workspace .btn:hover{transform:none!important}}
+
+/* Original PHP admin saved admin-theme; Bootstrap 5.3 local theme tokens scope dark mode to CMS only. */
+.admin-workspace{color:var(--bs-body-color)}
+.admin-workspace[data-bs-theme="dark"]{background:linear-gradient(180deg,#151d2a,#101820 340px);color:var(--bs-body-color)}
+.admin-workspace[data-bs-theme="dark"] .admin-nav{background:rgba(28,37,49,.96);border-color:#394554}
