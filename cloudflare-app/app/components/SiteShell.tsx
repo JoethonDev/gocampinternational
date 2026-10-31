@@ -20,7 +20,7 @@ export function SiteHeader({categories,destinations}:{categories:CatalogRecord[]
           <li className="nav-item"><Link className="nav-link" to="/faq">FAQ</Link></li>
           <li className="nav-item"><Link className="nav-link" to="/contact">Contact</Link></li>
         </ul>
-        <Link className="btn btn-warning ms-xl-3" to="/contact">Book Now</Link>
+        <button type="button" className="btn btn-warning ms-xl-3" data-bs-toggle="modal" data-bs-target="#ctaModal">Book Now</button>
       </div>
     </div>
   </nav>;

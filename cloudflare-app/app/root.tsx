@@ -3,6 +3,7 @@ import type { Route } from "./+types/root";
 import { listCatalog, loadDocument } from "./lib/catalog.server";
 import type { CatalogRecord } from "./lib/catalog.server";
 import { SiteHeader, SiteFooter } from "./components/SiteShell";
+import { LeadModal } from "./components/LeadModal";
 import "./app.css";
 export async function loader({context}:Route.LoaderArgs) {
   const db = context.cloudflare.env.DB;
@@ -25,7 +26,7 @@ export function Layout({children}:{children:React.ReactNode}) {
   const data=useRouteLoaderData("root") as {destinations:CatalogRecord[];categories:CatalogRecord[]} | undefined;
   return <html lang="en"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="icon" href="/images/favi.png"/><Meta/><Links/></head>
     <body><a className="visually-hidden-focusable" href="#main-content">Skip to main content</a>
-      <SiteHeader categories={data?.categories || []} destinations={data?.destinations || []}/><main id="main-content">{children}</main><SiteFooter/>
+      <SiteHeader categories={data?.categories || []} destinations={data?.destinations || []}/><main id="main-content">{children}</main><SiteFooter/><LeadModal/>
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer/>
       <ScrollRestoration/><Scripts/></body></html>;
 }
