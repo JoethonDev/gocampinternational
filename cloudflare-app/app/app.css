@@ -1,3 +1,11 @@
+/* The shared PHP public styles reserve body space for a fixed navbar. Admin
+   pages deliberately have no public navbar; inheriting that space shifted the
+   login gradient down and caused vertical overflow (100vh + navbar height).
+   Scope the override to admin routes so public-page parity stays untouched. */
+body.gc-admin-route {
+  padding-top: 0 !important;
+}
+
 /* Structural fallback while the original PR40 stylesheets remain authoritative. */
 html{scroll-behavior:smooth}body{margin:0}.visually-hidden-focusable:not(:focus){position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
 
