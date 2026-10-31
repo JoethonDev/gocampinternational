@@ -67,26 +67,29 @@ export async function saveEntity(request:Request,db:D1Database,kind:Kind,form:Fo
   const revision=Number(form.get("revision")||0);
   const category=kind==="program"?String(data.category_slug||""):null;
   const order=kind==="program"?(Number(data.order)||0):0;
+  const jobs:D1PreparedStatement[]=[];
+  if(kind==="destination") {
+    const ids=[...new Set((data.program_ids as string[])||[])];
+    data.program_ids=ids;
+    const valid=ids.length ? await db.prepare("SELECT slug FROM catalog_entities WHERE kind='program' AND slug IN ("+ids.map(()=>"?").join(",")+")").bind(...ids).all<{slug:string}>():{results:[] as Array<{slug:string}>};
+    if(valid.results.length!==ids.length)throw new Response("Destination references an unknown program",{status:400});
+  }
   if(row) {
     if(revision!==row.revision)throw new Response("This record was changed by another editor. Reload before saving.",{status:409});
-    const result=await db.prepare("UPDATE catalog_entities SET name=?,status=?,category_slug=?,sort_order=?,content_json=?,revision=revision+1,updated_at=unixepoch() WHERE kind=? AND slug=? AND revision=?")
-      .bind(data.name,data.status,category,order,JSON.stringify(data),kind,slug,revision).run();
-    if(result.meta.changes!==1)throw new Response("Edit conflict",{status:409});
+    jobs.push(db.prepare("UPDATE catalog_entities SET name=?,status=?,category_slug=?,sort_order=?,content_json=?,revision=revision+1,updated_at=unixepoch() WHERE kind=? AND slug=? AND revision=?")
+      .bind(data.name,data.status,category,order,JSON.stringify(data),kind,slug,revision));
   } else {
-    const exists=await db.prepare("SELECT slug FROM catalog_entities WHERE kind=? AND slug=?").bind(kind,slug).first();
-    if(exists)throw new Response("Slug already exists",{status:409});
-    await db.prepare("INSERT INTO catalog_entities(kind,slug,name,status,category_slug,sort_order,content_json,revision) VALUES(?,?,?,?,?,?,?,0)")
-      .bind(kind,slug,data.name,data.status,category,order,JSON.stringify(data)).run();
+    jobs.push(db.prepare("INSERT INTO catalog_entities(kind,slug,name,status,category_slug,sort_order,content_json,revision) VALUES(?,?,?,?,?,?,?,0)")
+      .bind(kind,slug,data.name,data.status,category,order,JSON.stringify(data)));
   }
   if(kind==="destination") {
     const ids=(data.program_ids as string[])||[];
-    const valid=ids.length ? await db.prepare("SELECT slug FROM catalog_entities WHERE kind='program' AND slug IN ("+ids.map(()=>"?").join(",")+")").bind(...ids).all<{slug:string}>():{results:[] as Array<{slug:string}>};
-    const allowed=new Set(valid.results.map(x=>x.slug));
-    if(allowed.size!==new Set(ids).size)throw new Response("Destination references an unknown program",{status:400});
-    const changes=[db.prepare("DELETE FROM destination_programs WHERE destination_slug=?").bind(slug),
-      ...ids.map((id,i)=>db.prepare("INSERT INTO destination_programs(destination_slug,program_slug,position) VALUES(?,?,?)").bind(slug,id,i))];
-    await db.batch(changes);
+    jobs.push(db.prepare("DELETE FROM destination_programs WHERE destination_slug=?").bind(slug));
+    jobs.push(...ids.map((id,i)=>db.prepare("INSERT INTO destination_programs(destination_slug,program_slug,position) VALUES(?,?,?)").bind(slug,id,i)));
   }
+  // D1 batch executes the entity write and every destination association in a single transaction.
+  const result=await db.batch(jobs);
+  if(result[0].meta.changes!==1)throw new Response("Concurrent update or duplicate ID",{status:409});
   return slug;
 }
 export async function changeBulkStatus(request:Request,db:D1Database,kind:Kind,form:FormData) {
