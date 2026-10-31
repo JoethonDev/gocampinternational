@@ -8,6 +8,28 @@
 require_once __DIR__ . '/../auth-check.php'; // Basic security
 
 header('Content-Type: application/json');
+if (gc_external()) {
+    $files=$_FILES['media_file'] ?? null;
+    $results=[];
+    if (!$files) { http_response_code(400); echo json_encode(['success'=>false,'message'=>'No file received']); exit; }
+    $names=is_array($files['name'])?$files['name']:[$files['name']];
+    foreach ($names as $i=>$name) {
+        $get=static fn($key)=>is_array($files[$key])?$files[$key][$i]:$files[$key];
+        try {
+            if ($get('error')!==UPLOAD_ERR_OK) throw new RuntimeException('Upload failed');
+            $mime=(new finfo(FILEINFO_MIME_TYPE))->file($get('tmp_name'));
+            $image=gc_media_upload($get('tmp_name'),$name,$mime);
+            $results[]=['success'=>true,'message'=>'Uploaded to Tigris','file'=>['name'=>$image['name'],'url'=>$image['url']]];
+        } catch (Throwable $e) {
+            error_log('Tigris media upload failed: '.$e->getMessage());
+            $results[]=['success'=>false,'message'=>'Unable to store image','name'=>$name];
+        }
+    }
+    $complete=count(array_filter($results,static fn($r)=>!$r['success']))===0;
+    http_response_code($complete?200:422);
+    echo json_encode(['success'=>$complete,'results'=>$results]);exit;
+}
+
 
 $response = ['success' => false, 'message' => 'An unknown error occurred.'];
 $upload_dir_path = __DIR__ . '/../../images';

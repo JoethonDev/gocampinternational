@@ -7,7 +7,7 @@ $error_message = '';
 if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
     try {
         if (!csrf_check($_POST['csrf'] ?? '')) throw new InvalidArgumentException('Invalid CSRF token. Reload and retry.');
-        if (!is_string($_POST['revision'] ?? null) || !hash_equals(hash_file('sha256', $settingsFile), $_POST['revision'])) {
+        if (!is_string($_POST['revision'] ?? null) || !hash_equals((gc_external() ? (string)gc_revision('camp_memories') : hash_file('sha256', $settingsFile)), $_POST['revision'])) {
             throw new InvalidArgumentException('Memories were changed in another editor. Reload before saving.');
         }
         $updated = gocamp_validate_memories($_POST);
@@ -31,7 +31,7 @@ function memory_editor_card($index, $item) {
     $item = is_array($item) ? $item : [];
     $image = is_string($item['image'] ?? null) ? $item['image'] : '';
     $filename = gocamp_memory_image($image);
-    if ($filename !== false) $image = '/images/' . $filename;
+    if ($filename !== false) $image = str_starts_with($filename,'/media.php?') ? $filename : '/images/' . $filename;
     ?>
     <div class="card mb-3" data-memory-row>
         <div class="card-body">
@@ -70,7 +70,7 @@ require __DIR__ . '/includes/admin-header.php';
 <?php if ($error_message): ?><div class="alert alert-danger" role="alert"><?= memory_escape($error_message) ?></div><?php endif; ?>
 <form method="post" action="/admin/memories" id="memories-editor">
     <input type="hidden" name="csrf" value="<?= memory_escape(csrf_token()) ?>">
-    <input type="hidden" name="revision" value="<?= memory_escape(is_string($_POST['revision'] ?? null) ? $_POST['revision'] : hash_file('sha256', $settingsFile)) ?>">
+    <input type="hidden" name="revision" value="<?= memory_escape(is_string($_POST['revision'] ?? null) ? $_POST['revision'] : (gc_external() ? (string)gc_revision('camp_memories') : hash_file('sha256', $settingsFile))) ?>">
     <label for="memories-title" class="form-label">Section heading</label>
     <input id="memories-title" class="form-control mb-3" name="title" value="<?= memory_escape($config['title']) ?>" maxlength="240" required>
     <label class="form-check mb-4"><input type="checkbox" class="form-check-input" name="show_facebook" value="1" <?= !empty($config['show_facebook']) ? 'checked' : '' ?>> Show Facebook panel alongside the slider</label>

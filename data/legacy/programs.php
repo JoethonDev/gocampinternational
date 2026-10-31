@@ -1,0 +1,270 @@
+<?php
+/** Merged from development hosting; preserves Git-only records. */
+
+$programs = array (
+  'language-and-activity-camps' => 
+  array (
+    'status' => 'inactive',
+    'name' => 'Language & Activity Camps',
+    'slug' => 'language-and-activity-camps',
+    'banner' => '/images/activity_banner_new.webp',
+    'intro' => '<p>The Language &amp; Activity Camps aim to help students aged 8 to 17 develop their language skills through a residential experience that combines study, sport and cultural discovery. Students have opportunities to practise communication while sharing daily life with other young people.</p><p>Language classes provide the foundation for learning, with afternoon activities organised according to age. Weekend excursions usually offer time to explore local culture and places of interest, bringing another dimension to the language experience.</p><p>Our approach connects classroom understanding with active participation. Students are encouraged to communicate, contribute to their group and develop confidence through the different situations they encounter throughout camp.</p><p>Depending on the destination, students can study English, French, German or Spanish. Additional activities such as tennis, horse riding and football may complement the programme, giving students further opportunities to develop their interests alongside their chosen language.</p>',
+    'intro_image' => '/images/langgg_1.webp',
+    'sections' => 
+    array (
+      0 => 
+      array (
+        'title' => 'A World of Activities',
+        'content' => '<p>Afternoon sport and group activities give students opportunities to use their language skills beyond the classroom. Activities are organised according to age, encouraging students to participate, communicate and share experiences with their peers.</p><p>Weekend excursions usually focus on local culture and places of interest. Tennis, horse riding and football are examples of additional options that may be offered, with professional coaching for the selected activity.</p>',
+        'image' => '/images/mmaa_1.webp',
+      ),
+      1 => 
+      array (
+        'title' => 'Choose Your Language Destination',
+        'content' => '<p>Students can choose a destination that supports their language goals and preferred setting. French courses are offered in France, Switzerland and Canada; English in the UK, Canada and the USA; German in Germany, Switzerland and Austria; and Spanish or English in Spain.</p><p>The choice of destination gives students a cultural context for their learning and opportunities to connect the language with everyday experiences.</p>',
+        'image' => '/images/new_iiii.webp',
+      ),
+      2 => 
+      array (
+        'title' => 'A World of Activities',
+        'content' => '<p>Afternoon activities combine movement, cooperation and opportunities to communicate with other students. Age-appropriate sport and shared experiences help extend learning beyond formal language lessons.</p><p>Weekend excursions usually introduce local culture and landmarks. Additional options may include tennis, horse riding or football, allowing students to explore an interest alongside their language study.</p>',
+        'image' => '/uploads/1_1761381038.webp',
+      ),
+      3 => 
+      array (
+        'title' => 'A World of Activities',
+        'content' => '<p>Sport and activities give students different ways to participate in camp life, with afternoon options organised according to age. Shared challenges encourage communication, confidence and a positive approach to working with others.</p><p>Weekend excursions usually provide opportunities for cultural discovery. Students may also be able to add professionally coached activities such as tennis, horse riding or football to their chosen programme.</p>',
+        'image' => '/uploads/1_1761381038.webp',
+      ),
+    ),
+    'gallery' => 
+    array (
+      0 => '/images/act_1.webp',
+      1 => '/images/act_2.webp',
+      2 => '/images/act_3.webp',
+      3 => '/images/act_4.webp',
+      4 => '/images/act_5.webp',
+      5 => '/images/act_6.webp',
+    ),
+  ),
+  'kids-camps' => 
+  array (
+    'status' => 'active',
+    'name' => 'Kids Camps',
+    'slug' => 'kids-camps',
+    'banner' => '/images/bannnner.webp',
+    'intro' => '<p>The Kids Camps aim to help children aged 7 to 13 develop confidence, express their individuality and enjoy learning within an international group. Well-trained staff provide sensitive guidance, with a staff-to-child ratio of one to five supporting the experience.</p><p>Morning language classes use themed lessons, storytelling and fairy tales to introduce vocabulary and grammar in an engaging way. Afternoon group activities and sports give children opportunities to participate, communicate and spend time with their peers.</p><p>Our approach combines task-based language learning with social development. Children are encouraged to listen, contribute and cooperate, gradually becoming more comfortable expressing themselves and taking part in group life.</p><p>Throughout the programme, the focus is on a positive learning experience. Children develop language foundations alongside friendships, independence and confidence, with opportunities to discover their interests and recognise the value of supporting others.</p>',
+    'intro_image' => '/images/kids_2.webp',
+    'sections' => 
+    array (
+      0 => 
+      array (
+        'title' => 'Learning Through Play',
+        'content' => '<p>Morning language classes introduce vocabulary and grammar through themed lessons, storytelling and fairy tales. These activities give children a familiar and imaginative setting in which to explore the language.</p><p>Afternoon sports and group activities complement the lessons, encouraging children to communicate, cooperate and enjoy participating with others.</p>',
+        'image' => '/images/kids_3.webp',
+      ),
+      1 => 
+      array (
+        'title' => 'Language Course Aims',
+        'content' => '<p>The language course aims to develop communication through task-based learning, giving children a purpose for using new words and ideas. Group work supports social skills and helps children become more confident in expressing themselves.</p><p>The emphasis is on creating a positive relationship with learning, encouraging curiosity, participation and a willingness to try.</p>',
+        'image' => '/images/kids_4.webp',
+      ),
+    ),
+    'gallery' => 
+    array (
+      0 => '/images/kids_one.webp',
+      1 => '/images/kids_two.webp',
+      2 => '/images/kids_three.webp',
+      3 => '/images/kids_four.webp',
+      4 => '/images/kids_five.webp',
+      5 => '/images/kids_six.webp',
+    ),
+  ),
+  'adult-academic' => 
+  array (
+    'status' => 'active',
+    'name' => 'Adult Academic Programs',
+    'slug' => 'adult-academic',
+    'banner' => '/images/cambridge_banner.webp',
+    'intro' => '<p>The Adult Academic programmes aim to help students explore their interests and prepare for the next stage of their education. Options range from English tuition and examination preparation to specialist subject study, allowing students to consider the type of learning that supports their goals.</p>
+<p>Lessons, lectures and seminars introduce ideas in greater depth, with opportunities to learn from tutors and industry professionals. Academic courses connect theoretical understanding with practical applications, encouraging students to question, investigate and explain.</p>
+<p>Our approach places independent thinking alongside subject knowledge. Students develop their ability to analyse a problem, consider evidence and communicate a reasoned viewpoint, while sharing perspectives with peers from different backgrounds.</p>
+<p>Throughout their chosen programme, students are encouraged to take an active role in learning. The focus is on building confidence, strengthening academic habits and developing a clearer understanding of the subjects and pathways they may wish to pursue.</p>',
+    'intro_image' => '/images/inner_england_.webp',
+    'sections' => 
+    array (
+      0 => 
+      array (
+        'title' => 'Core & Specialized Courses',
+        'content' => '<p>The Classic Course, for ages 9 to 17, combines English tuition with supervised excursions and on-site activities. Intensive English, for ages 14 to 17, provides additional classroom time for language development, while London Explorer, for ages 12 to 17, connects English study with discovering the city.</p>
+<p>The three-week First Certificate pre-exam preparation course supports students working towards the FCE examination. Young Cambridge Scholars offers subject-based study for academically gifted students, with lectures from University of Cambridge lecturers.</p>
+<p>Each option provides a different focus, helping students choose a learning experience that reflects their interests and stage of education.</p>',
+        'image' => '/images/inner_england_1.webp',
+        'is_active' => true,
+      ),
+    ),
+    'gallery' => 
+    array (
+    ),
+    'color' => 'primary',
+    'section_visibility' => 
+    array (
+      'hero' => true,
+      'intro' => false,
+      'sections' => false,
+      'programs' => true,
+      'gallery' => false,
+      'testimonials' => true,
+    ),
+  ),
+  'young-leader-program' => 
+  array (
+    'status' => 'active',
+    'name' => 'Young Leader Programs',
+    'slug' => 'young-leader-program',
+    'banner' => '/images/young_bbb.webp',
+    'intro' => '<p>The Young Leaders programmes aim to help students aged 14 to 18 develop confidence in English while exploring leadership and world issues. Students examine how ideas are communicated, how decisions are made and how people work together towards a goal.</p><p>Theory lessons, interactive lectures and real-life case studies provide opportunities to connect concepts with practical situations. Public speaking, debate and negotiation help students develop both their language skills and their ability to present a considered viewpoint.</p><p>Our approach combines critical thinking with responsibility and cooperation. Students are encouraged to listen to different perspectives, support their ideas with reasoning and recognise that leadership involves accountability as well as confidence.</p><p>Across the available options, the emphasis is on applying ideas through discussion and project work. Students can explore business and leadership themes while developing skills that support future study and participation in an international setting.</p>',
+    'intro_image' => '/images/young_1.webp',
+    'sections' => 
+    array (
+      0 => 
+      array (
+        'title' => 'London & Oxford Program',
+        'content' => '<p>The London & Oxford programme connects theory lessons and interactive lectures with real-life case studies. Students explore ideas while using English to discuss challenges, explain decisions and engage with different perspectives.</p><p>Public speaking, negotiation and leadership form a central focus, helping students develop confidence in communicating with purpose.</p>',
+        'image' => '/images/young_new.webp',
+      ),
+      1 => 
+      array (
+        'title' => 'MINI MBA (Ages 15-17)',
+        'content' => '<p>The Mini MBA introduces students aged 15 to 17 to Management, Accounting, Entrepreneurship and Marketing. Lectures, discussions and case studies explore how these areas contribute to the operation of a business.</p><p>The focus is on connecting concepts and considering decisions, giving students an introductory foundation for further interest in business and leadership.</p>',
+        'image' => '/images/young_3_new.webp',
+      ),
+      2 => 
+      array (
+        'title' => 'Leadership Program in Boston (Ages 14-18)',
+        'content' => '<p>The Boston programme introduces students aged 14 to 18 to general business and leadership through Business English, project work and guest lectures. Visits to well-known universities add a wider educational context to the experience.</p><p>Students are encouraged to communicate ideas clearly, contribute to shared work and consider how their interests might develop through future study.</p>',
+        'image' => '/images/young_5.webp',
+      ),
+    ),
+    'gallery' => 
+    array (
+    ),
+  ),
+  'soccer-camps' => 
+  array (
+    'status' => 'active',
+    'name' => 'Soccer Camps',
+    'slug' => 'soccer-camps',
+    'banner' => '/images/sss_m.webp',
+    'intro' => '<p>The Soccer programmes aim to help young players develop their football skills through focused practice and a deeper understanding of the game. Options in Spain and England give students opportunities to explore different football settings while pursuing their sporting interests.</p><p>Training introduces the relationship between individual technique and team performance. Depending on the chosen programme, players can focus on football, combine training with English or explore specialist areas such as goalkeeping.</p><p>Our approach encourages purposeful participation, teamwork and respect. Players are invited to listen carefully, apply feedback and consider how their decisions contribute to the group, developing confidence alongside their practical skills.</p><p>Throughout their selected programme, students work towards a more thoughtful approach to the game. The emphasis is on commitment, cooperation and enjoying the process of improvement through the specific training options available at each location.</p>',
+    'intro_image' => '/images/soccer_2.webp',
+    'sections' => 
+    array (
+      0 => 
+      array (
+        'title' => 'London: Chelsea FC Soccer School',
+        'content' => '<p>The Chelsea FC Soccer School in London offers intensive football training for ages 9 to 17, with 20 hours of training per week. An English and football option combines 12 hours of football with 15 hours of English study.</p><p>Specialised goalkeeping courses are also available, providing a focused option for players interested in developing the skills of that position.</p>',
+        'image' => '/images/chelsea.webp',
+      ),
+      1 => 
+      array (
+        'title' => 'Manchester: Soccer Academy',
+        'content' => '<p>The Manchester Soccer Academy is designed for students aged 16 to 21 who want to practise football alongside English study. The programme places language development and sporting participation within a city closely associated with football.</p><p>Manchester is also home to the National Football Museum, adding context to the broader football culture of the city.</p>',
+        'image' => '/images/soccer_1.webp',
+      ),
+      2 => 
+      array (
+        'title' => 'Madrid: Real Madrid Foundation Campus',
+        'content' => '<p>The Real Madrid Foundation Campus offers standard football training for boys and girls aged 9 to 17, with optional language courses. Students can select a balance that reflects their sporting and language interests.</p><p>A technification course is available for federated players with an established level of football, offering a separate option for those seeking a more specialised training focus.</p>',
+        'image' => '/images/soccer_3.webp',
+      ),
+    ),
+    'gallery' => 
+    array (
+      0 => '/images/gallery_1.webp',
+      1 => '/images/gallery_2.webp',
+      2 => '/images/gallery_4.webp',
+      3 => '/images/gallery_3.webp',
+      4 => '/images/gallery_5.webp',
+      5 => '/images/gallery_6.webp',
+    ),
+  ),
+  'special-interests-camps' => 
+  array (
+    'status' => 'trash',
+    'name' => 'Special Interests Camps',
+    'slug' => 'special-interests-camps',
+    'banner' => '/images/special_banner.webp',
+    'intro' => '<p>The Special Interest Camps aim to help students explore a creative passion, pursue an outdoor challenge or enjoy a learning experience with their family. The available programmes bring different interests into focus, giving students a chance to engage more deeply with something that matters to them.</p><p>Options include filmmaking, fashion and art, as well as parent and child learning holidays. Each format offers a different balance of participation and discovery, allowing students to consider the kind of experience they would like to develop.</p><p>Our approach encourages curiosity, creativity and a willingness to try. Students are invited to move beyond an initial interest, take part in the practical process and reflect on the skills they would like to strengthen.</p><p>Throughout their chosen programme, the focus is on learning through engagement. Whether developing a film, exploring design or sharing a family language holiday, students have opportunities to build confidence and discover new directions for their interests.</p>',
+    'intro_image' => '/images/adventure_1.webp',
+    'sections' => 
+    array (
+      0 => 
+      array (
+        'title' => 'Parent & Child Camp',
+        'content' => '<p>The Parent & Child Camp offers a family learning holiday for parents who prefer to travel with their children. Children study with their peers, while parents can develop their English at nearby adult centres.</p><p>This format allows each family member to pursue an appropriate learning experience within a shared trip, combining individual study with the reassurance of travelling together.</p>',
+        'image' => '/images/kids_1_1.webp',
+      ),
+      1 => 
+      array (
+        'title' => 'Film Making',
+        'content' => '<p>The two-week Film Making course introduces students to the process of producing a film, with teaching from a professional film production company. Students explore cameras, develop ideas and film their project.</p><p>Editing brings the separate elements into a finished piece that students can watch and share, connecting creative decisions with a complete production process.</p>',
+        'image' => '/images/film_1.webp',
+      ),
+      2 => 
+      array (
+        'title' => 'Fashion & Art Programs',
+        'content' => '<p>The Fashion & Art programmes offer intensive one-year courses alongside two-week summer and winter schools. Students can explore the format that reflects the depth and duration of study they are seeking.</p><p>Fashion study develops skills in draping, pattern cutting, sewing, illustration and styling. Art options include drawing, painting and sculpture, offering different ways to develop creative expression through practical work.</p>',
+        'image' => '/images/fashion.webp',
+      ),
+    ),
+    'gallery' => 
+    array (
+    ),
+  ),
+  'tennis' => 
+  array (
+    'status' => 'active',
+    'name' => 'Tennis',
+    'slug' => 'tennis',
+    'banner' => '/images/imported-5acb0b681a0332.webp',
+    'intro' => '<p>The Tennis programmes aim to help young players develop their technique, tactical awareness and confidence through purposeful time on court. Coaching and match practice provide opportunities to work on individual skills while enjoying the shared experience of learning through sport.</p><p>Players explore the relationship between movement, positioning and shot selection. Focused practice helps connect technical development with decisions during a rally, while matches offer opportunities to apply learning in changing situations.</p><p>Our approach brings together technical, tactical, physical and mental development. Players are encouraged to practise with commitment, respond constructively to feedback and develop the concentration, resilience and sportsmanship that support progress.</p><p>Throughout their chosen programme, the focus is on developing a more complete game. Tennis Academy opportunities vary by destination, with coaching formats, schedules, accommodation and additional activities confirmed for each location. Students can explore the available options to find the experience that matches their interests.</p>',
+    'intro_image' => '/images/imported-b4eecf3804ce9b.webp',
+    'sections' => 
+    array (
+      0 => 
+      array (
+        'title' => 'Build Your All-Round Game',
+        'content' => '<p>Players work on serves, groundstrokes, footwork and court positioning through purposeful practice. Technical development is connected with the choices players make, encouraging them to consider when and how to use different shots.</p><p>The emphasis is on building a more complete game through consistency, concentration and a clearer understanding of movement and tactics.</p>',
+        'image' => '/images/imported-9b759cf6c4187e.webp',
+      ),
+      1 => 
+      array (
+        'title' => 'Learn Through Match Play',
+        'content' => '<p>Friendly matches, structured challenges and performance feedback help players apply their learning beyond isolated drills. Match situations encourage decision-making, concentration and the ability to respond to a changing rally.</p><p>Players are encouraged to reflect on their performance and approach competition with resilience, respect and a positive attitude towards improvement.</p>',
+        'image' => '/images/imported-5acb0b681a0332.webp',
+      ),
+    ),
+    'gallery' => 
+    array (
+      0 => '/images/imported-9b759cf6c4187e.webp',
+      1 => '/images/imported-b4eecf3804ce9b.webp',
+      2 => '/images/imported-5acb0b681a0332.webp',
+    ),
+  ),
+  'german-language-courses' => 
+  array (
+    'status' => 'active',
+    'name' => 'German Language Programmes',
+    'slug' => 'german-language-courses',
+    'banner' => '/images/humboldt-lindenberg.webp',
+    'intro_image' => '/images/humboldt-berlin-mitte-adults.webp',
+    'intro' => '<p>The German Language programmes aim to help children, teenagers and adults develop confidence in German through structured study and everyday use. Courses in Germany and Vienna, Austria, offer different settings and learning formats, allowing students to choose an experience suited to their age and goals.</p><p>Junior and teenage programmes combine age-appropriate lessons with residential life, activities and excursions. Adult intensive courses provide focused language development, while one-to-one executive courses are tailored to professional communication needs.</p><p>Our approach connects classroom progress with practical immersion. Students are encouraged to participate, communicate with international peers and use German in situations beyond formal lessons, developing greater independence alongside their language skills.</p><p>Throughout the chosen programme, the emphasis is on purposeful learning and participation. Summer and year-round options, different lesson formats and clearly defined age groups help students and families compare the opportunities available at each location.</p>',
+    'sections' => 
+    array (
+    ),
+    'gallery' => 
+    array (
+    ),
+  ),
+);

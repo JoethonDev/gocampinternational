@@ -1,0 +1,11 @@
+# Template only: do not deploy without a staging Hyperdrive configuration.
+name = "gocamp-catalog-staging"
+main = "src/index.js"
+compatibility_date = "2026-10-31"
+compatibility_flags = ["nodejs_compat"]
+workers_dev = true
+[vars]
+GOCAMP_ENV = "staging"
+[[hyperdrive]]
+binding = "HYPERDRIVE"
+id = "REPLACE_WITH_STAGING_HYPERDRIVE_ID"

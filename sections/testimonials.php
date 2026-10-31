@@ -15,9 +15,9 @@ if (!$campMemories) return;
                 <div id="camp-memories-track" class="camp-memories-track" tabindex="0" role="region" aria-label="Camper photo memories">
                         <?php foreach ($campMemories as $memory): ?>
                         <figure class="camp-memory card border-0 shadow-sm mb-0">
-                            <a href="/images/<?= htmlspecialchars($memory['image'], ENT_QUOTES, 'UTF-8') ?>"
+                            <a href="<?= htmlspecialchars(gocamp_memory_url($memory['image']), ENT_QUOTES, 'UTF-8') ?>"
                                data-toggle="lightbox" aria-label="View photo: <?= htmlspecialchars($memory['caption'], ENT_QUOTES, 'UTF-8') ?>">
-                                <img src="/images/<?= htmlspecialchars($memory['image'], ENT_QUOTES, 'UTF-8') ?>"
+                                <img src="<?= htmlspecialchars(gocamp_memory_url($memory['image']), ENT_QUOTES, 'UTF-8') ?>"
                                      alt="<?= htmlspecialchars($memory['caption'], ENT_QUOTES, 'UTF-8') ?>"
                                      loading="lazy" decoding="async" width="640" height="480">
                             </a>

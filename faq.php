@@ -12,7 +12,11 @@ $pageDescription = 'Find answers to common questions about our summer camps, inc
 $faq_file = __DIR__ . '/data/faq.json';
 $faqs_from_json = [];
 $faq_load_error = false;
-if (!file_exists($faq_file)) {
+require_once __DIR__ . '/app/catalog.php';
+if (gc_external()) { $faqs_from_json = gc_catalog('faq'); }
+if (gc_external()) {
+    // Use external PostgreSQL FAQ, already loaded above.
+} elseif (!file_exists($faq_file)) {
     $faq_load_error = true;
 } else {
     $faq_content = file_get_contents($faq_file);

@@ -22,6 +22,10 @@ function gocamp_load_memories() {
 
 /** Only existing image-library files can be published by the editor. */
 function gocamp_memory_image($value) {
+    if (function_exists('gc_external') && gc_external() && is_string($value) && str_starts_with($value,'/media.php?key=')) {
+        $rows=gc_rows(gc_db(),'SELECT object_key FROM media_assets WHERE public_path=? AND is_public=true',[$value]);
+        return $rows ? $value : false;
+    }
     if (!is_string($value)) return false;
     $filename = preg_replace('~^/images/~', '', $value);
     if (!preg_match('/\A[a-zA-Z0-9][a-zA-Z0-9 _().-]*\.(?:webp|jpe?g|png|gif)\z/i', $filename)) return false;
@@ -62,4 +66,10 @@ function gocamp_group_memories($items) {
         return strnatcasecmp($a, $b);
     });
     return $groups;
+}
+
+/** Supports both legacy filenames and private Tigris media-gateway URLs. */
+function gocamp_memory_url($value): string {
+    if (is_string($value) && str_starts_with($value,'/media.php?key=')) return $value;
+    return '/images/' . rawurlencode((string)$value);
 }

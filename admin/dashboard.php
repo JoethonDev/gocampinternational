@@ -12,7 +12,7 @@ require_once 'auth-check.php';
 // 2. Load all site data
 require_once __DIR__ . '/../data/destinations.php';
 require_once __DIR__ . '/../data/programs.php';
-$faqData = json_decode(file_get_contents(__DIR__ . '/../data/faq.json'), true);
+$faqData = gc_external() ? gc_catalog('faq') : json_decode(file_get_contents(__DIR__ . '/../data/faq.json'), true);
 
 // 3. Set Page Title and Include Header
 $pageTitle = 'Dashboard';

@@ -83,7 +83,7 @@ try {
     $source = [];
     $live = [];
     foreach ($schema as $filename => $variable) {
-        $source[$variable] = read_static_catalog($repository . '/data/' . $filename, $variable);
+        $source[$variable] = read_static_catalog((is_file($repository . '/data/legacy/' . $filename) ? $repository . '/data/legacy/' . $filename : $repository . '/data/' . $filename), $variable);
         $live[$variable] = read_static_catalog($liveDir . '/' . $filename, $variable);
     }
 
