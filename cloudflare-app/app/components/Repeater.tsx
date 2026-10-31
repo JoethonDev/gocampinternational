@@ -1,6 +1,7 @@
 import { useState } from "react";
-export type RepeaterField={key:string;label:string;kind?:"text"|"long"|"flag"};
-export function Repeater({name,title,initial,fields}:{name:string;title:string;initial:Record<string,unknown>[];fields:RepeaterField[]}){
+import { MediaSelector } from "./MediaSelector";
+export type RepeaterField={key:string;label:string;kind?:"text"|"long"|"flag"|"media"};
+export function Repeater({name,title,initial,fields,uploaded=[]}:{name:string;title:string;initial:Record<string,unknown>[];fields:RepeaterField[];uploaded?:string[]}){
   const [rows,setRows]=useState<Record<string,unknown>[]>(initial);
   const edit=(idx:number,k:string,value:unknown)=>setRows(old=>old.map((v,i)=>i===idx?{...v,[k]:value}:v));
   return <section className="col-12 border rounded-3 p-3 mt-3" aria-label={title}>
@@ -10,7 +11,8 @@ export function Repeater({name,title,initial,fields}:{name:string;title:string;i
     {rows.map((row,i)=><div className="card border mb-2 shadow-sm" key={i}><div className="card-body p-3">
       <div className="d-flex align-items-center justify-content-between mb-2"><strong className="small text-secondary">{title} #{i+1}</strong><button type="button" className="btn btn-sm btn-outline-danger" onClick={()=>setRows(old=>old.filter((_,j)=>j!==i))}>Remove</button></div>
       <div className="row g-2">{fields.map(f=><div className={f.kind==="long"?"col-12":"col-sm-6"} key={f.key}>
-        {f.kind==="flag"?<label className="form-check mt-3"><input className="form-check-input" type="checkbox" checked={row[f.key]!==false} onChange={e=>edit(i,f.key,e.target.checked)}/><span className="form-check-label">{f.label}</span></label>:
+        {f.kind==="media"?<MediaSelector id={name+"-"+i+"-"+f.key} label={f.label} initial={String(row[f.key]??"")} externalValue={String(row[f.key]??"")} uploaded={uploaded} onChange={next=>edit(i,f.key,next)}/>:
+        f.kind==="flag"?<label className="form-check mt-3"><input className="form-check-input" type="checkbox" checked={row[f.key]!==false} onChange={e=>edit(i,f.key,e.target.checked)}/><span className="form-check-label">{f.label}</span></label>:
         <><label className="form-label small" htmlFor={name+"-"+i+"-"+f.key}>{f.label}</label>
         {f.kind==="long"?<textarea className="form-control" id={name+"-"+i+"-"+f.key} rows={3} value={String(row[f.key]??"")} onChange={e=>edit(i,f.key,e.target.value)}/>:
         <input className="form-control" id={name+"-"+i+"-"+f.key} value={String(row[f.key]??"")} onChange={e=>edit(i,f.key,e.target.value)}/>}</>}
