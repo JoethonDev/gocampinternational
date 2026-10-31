@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS destination_programs (
   program_slug TEXT NOT NULL,
   position INTEGER NOT NULL DEFAULT 0,
   PRIMARY KEY(destination_slug,program_slug),
-  FOREIGN KEY(destination_slug) REFERENCES catalog_entities(slug) DEFERRABLE INITIALLY DEFERRED
+  CHECK(length(destination_slug) > 0 AND length(program_slug) > 0)
 );
 -- A destination can be represented by the same slug as another type; application enforces kind.
 CREATE INDEX IF NOT EXISTS destination_program_lookup ON destination_programs(program_slug);
