@@ -41,7 +41,8 @@
     "typecheck": "react-router typegen && tsc -b",
     "check": "npm run typecheck && npm run build && wrangler deploy --dry-run",
     "deploy": "wrangler deploy",
-    "cf-typegen": "wrangler types && react-router typegen"
+    "cf-typegen": "wrangler types && react-router typegen",
+    "smoke:staging": "node scripts/smoke-staging.mjs"
   },
   "type": "module"
 }

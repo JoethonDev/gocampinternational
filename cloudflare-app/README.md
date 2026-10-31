@@ -23,3 +23,6 @@ npx wrangler d1 execute gocamp-staging-db --remote --file build/imports/seed-pr4
 No production import or deployment is automated. Browser preview is intentionally incomplete and noindex. Legacy public assets are copied from repository at build time; no PHP is packaged.
 
 D1 uses **indexed typed summary columns plus lossless JSON content per entity**, not a row for every highlight. This simplification preserves every PR40 dynamic field with lower migration risk and fewer queries. PR40 PostgreSQL schema is a reference, not a D1 migration.
+
+## Deployment verification
+Cloudflare Builds uses the migration branch as the **production branch of the staging Worker only**. Its deploy command runs `npx wrangler deploy && npm run smoke:staging`, without staging credentials or changes to production. This verifies public HTTP routes after deployment and should not be confused with full UI or admin end-to-end validation.

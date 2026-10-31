@@ -26,3 +26,10 @@ Status: Phase 0 PARTIAL (route audit started); Phase 1 SCAFFOLD COMPLETE / STAGI
 
 ## Tracking discipline
 Complete phases only when their checkboxes in PHASES.md pass and executed evidence is added here with commit/version/URL. Do not mark full migration done based on resource provision.
+
+## Continued implementation — 2026-10-31 (latest)
+- Connected personal Cloudflare Builds staging Worker to GitHub branch migration/cloudflare-react-workers-pr40, root /cloudflare-app; production Worker is NOT connected to this build.
+- Actual full React SSR/static asset deployment succeeded via Cloudflare Builds (first build 8921a960-f2c4-40ac-88af-e4f4b21343a8; subsequent branch builds also completed). Live HTTP routes require independent smoke verification.
+- Added initial admin auth/session/CSRF, catalog CRUD/bulk status, site document editing, inquiries, private R2 media ingestion and gated media delivery; features are **not yet full PHP visual parity**.
+- Applied a staging-only ADMIN_PASSWORD_SHA256 Worker secret; not stored in GitHub. Added deployment-time HTTP smoke script; status to be recorded after run.
+- Source content was imported into staging D1: 63 programs, 9 destinations, 8 categories, 37 associations, 28 memories, 11 FAQ and 6 source hash records; verified from Cloudflare D1 in this turn. Existing progress statement claiming 'no data imported' is superseded. Production D1 remains empty.
