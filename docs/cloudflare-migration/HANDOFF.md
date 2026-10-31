@@ -69,3 +69,7 @@ The branch now has initial React landing-page markup/CSS, correct form fields an
 ## Last known verified checkpoint
 
 Application `1de60f6`: full [24-pair browser comparison](https://github.com/JoethonDev/gocampinternational/actions/runs/41219367418) PASS (including responsive landing) and [migration CI](https://github.com/JoethonDev/gocampinternational/actions/runs/41219367420) PASS, with 27/27 Cloudflare smoke checks. Preserve low-specificity `:where(.landing-page)` responsive CSS. Read [ROUTE_PARITY_MATRIX.md](./ROUTE_PARITY_MATRIX.md). Remaining admin/media/forms/security acceptance is **not done**.
+
+## Latest 2026-10-31 content/CMS continuation
+
+See [CONTENT_AND_CMS_RECONCILIATION.md](./CONTENT_AND_CMS_RECONCILIATION.md): PR40 source is immutable, PR39's two approved drafts were reused as **inactive** D1 inserts (65 total programs), 331 original images inspected, and a visual CMS added (forms, media picker, rich text, bulk lists, trash, visibility, FAQ/memories, legacy URLs). Authenticated browser mutations, form email delivery, one missing original asset, and full release gates remain unverified; do **not** describe all phases as complete.

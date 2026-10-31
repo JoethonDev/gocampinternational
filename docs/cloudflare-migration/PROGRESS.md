@@ -122,3 +122,7 @@ The initial 8-template browser comparison [run 41218919612](https://github.com/J
 ## 10. Latest handoff and remaining execution gates — 2026-10-31
 
 Read [ROUTE_PARITY_MATRIX.md](./ROUTE_PARITY_MATRIX.md) for the explicit PHP-route and state-changing workflow matrix. Public sample visual+HTTP checks now pass at `1de60f6`; prior sections describing the landing route as unported/pending screenshot verification are **historical**. **Not yet accepted:** every destination/category slug and field-by-field/visibility equality; real forms POST persistence and email notification (landing stores in D1 only); authenticated admin create/edit/restore/trash/bulk/global visibility and rich repeater editors; complete media inventory and R2 lifecycle; security/SEO, backup/restore and Cloudflare Free CPU/egress budgets. Do not merge or cut over production.
+
+## Latest 2026-10-31 content/CMS continuation
+
+See [CONTENT_AND_CMS_RECONCILIATION.md](./CONTENT_AND_CMS_RECONCILIATION.md): PR40 source is immutable, PR39's two approved drafts were reused as **inactive** D1 inserts (65 total programs), 331 original images inspected, and a visual CMS added (forms, media picker, rich text, bulk lists, trash, visibility, FAQ/memories, legacy URLs). Authenticated browser mutations, form email delivery, one missing original asset, and full release gates remain unverified; do **not** describe all phases as complete.
