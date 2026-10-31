@@ -47,6 +47,9 @@ async function metrics(page) {
       fontFamily:getComputedStyle(document.body).fontFamily,
       horizontalOverflow:document.documentElement.scrollWidth>window.innerWidth+3,
       documentHeight:document.documentElement.scrollHeight,
+      // XFBML is an external iframe with nondeterministic load/height. Track
+      // it explicitly so first-party layout is still tested at 16px tolerance.
+      facebookEmbedHeight:Math.round(document.querySelector(".camp-memories .fb-page")?.getBoundingClientRect().height||0),
       memorySectionCount:document.querySelectorAll(".camp-memories").length,
       memoryCardCount:document.querySelectorAll(".camp-memories .camp-memory").length,
       bannerOverlay:hero?getComputedStyle(hero,"::before").backgroundImage:"none",
@@ -115,7 +118,17 @@ async function metrics(page) {
           const comparisonKeys=route.name==="landing"?["navHeight","landingHeroHeight","landingFormWidth"]:["navHeight","heroHeight","documentHeight","memoryCardCount"];
           for(const key of comparisonKeys){
             const tolerance=key==="documentHeight"?16:key==="memoryCardCount"?0:key==="landingHeroHeight"?32:key==="landingFormWidth"?12:6;
-            if(Math.abs(each.legacy[key]-each.react[key])>tolerance){failed++;console.error("FAIL",route.name,viewport.name,key,each.legacy[key],each.react[key]);}
+            // Below the desktop breakpoint the Facebook iframe is stacked in
+            // document flow; its remote SDK can expand on one origin and fail
+            // on the other. Compare the remaining first-party document height
+            // strictly, rather than weakening the tolerance for the whole page.
+            const normalizeFacebook=key==="documentHeight"&&route.memories&&viewport.width<992;
+            const legacyValue=normalizeFacebook?each.legacy.documentHeight-each.legacy.facebookEmbedHeight:each.legacy[key];
+            const reactValue=normalizeFacebook?each.react.documentHeight-each.react.facebookEmbedHeight:each.react[key];
+            if(Math.abs(legacyValue-reactValue)>tolerance){
+              failed++;console.error("FAIL",route.name,viewport.name,normalizeFacebook?"documentHeight excluding external Facebook embed":key,legacyValue,reactValue,
+                normalizeFacebook?"raw heights "+each.legacy.documentHeight+"/"+each.react.documentHeight+" fb "+each.legacy.facebookEmbedHeight+"/"+each.react.facebookEmbedHeight:"");
+            }
           }
           if(route.name==="landing" && JSON.stringify(each.legacy.landingFields)!==JSON.stringify(each.react.landingFields)){
             failed++;console.error("FAIL landing form field mapping",viewport.name,each.legacy.landingFields,each.react.landingFields);
