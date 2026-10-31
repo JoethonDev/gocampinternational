@@ -55,7 +55,11 @@ function gc_media_upload(string $tmpFile,string $originalName,string $mime): arr
         gc_s3_request('PUT',$key,$body,$mime);
         $size=getimagesize($tmpFile);$url=gc_media_url($key);
         try {
-            gc_exec(gc_db(),'INSERT INTO media_assets(object_key,public_path,original_name,content_type,bytes,sha256,width,height,is_public) VALUES (?,?,?,?,?,?,?,?,true)',
+            if(gc_worker()) gc_api('POST','media',[
+                'object_key'=>$key,'original_name'=>substr(basename($originalName),0,240),
+                'content_type'=>$mime,'bytes'=>strlen($body),'sha256'=>$sha,
+                'width'=>$size[0]??null,'height'=>$size[1]??null]);
+            else gc_exec(gc_db(),'INSERT INTO media_assets(object_key,public_path,original_name,content_type,bytes,sha256,width,height,is_public) VALUES (?,?,?,?,?,?,?,?,true)',
                 [$key,$url,substr(basename($originalName),0,240),$mime,strlen($body),$sha,$size[0]??null,$size[1]??null]);
         } catch (Throwable $e) {
             try {gc_s3_request('DELETE',$key);}catch(Throwable $ignore){}
@@ -66,7 +70,8 @@ function gc_media_upload(string $tmpFile,string $originalName,string $mime): arr
 }
 function gc_media_files(): array {
     $out=[];
-    foreach(gc_rows(gc_db(),'SELECT object_key,public_path,original_name,bytes,created_at FROM media_assets ORDER BY created_at DESC') as $row) {
+    $rows=gc_worker()?(gc_api('GET','media/list')['files']??[]):gc_rows(gc_db(),'SELECT object_key,public_path,original_name,bytes,created_at FROM media_assets ORDER BY created_at DESC');
+    foreach($rows as $row) {
         $out[]=['name'=>$row['original_name'],'path'=>$row['public_path'],'url'=>$row['public_path'],
             'folder'=>'images','size'=>(int)$row['bytes'],'modified'=>strtotime($row['created_at'])];
     }
@@ -75,6 +80,7 @@ function gc_media_files(): array {
 function gc_media_label_rename(string $publicPath,string $newBase): array {
     if (!preg_match('/\A[a-zA-Z0-9][a-zA-Z0-9_-]{0,99}\z/', $newBase))
         return ['success'=>false,'message'=>'Invalid image name.'];
+    if(gc_worker())return gc_api('PATCH','media/rename',['public_path'=>$publicPath,'new_base'=>$newBase]);
     $rows=gc_rows(gc_db(),'SELECT original_name FROM media_assets WHERE public_path=?',[$publicPath]);
     if (!$rows) return ['success'=>false,'message'=>'Image not found in storage.'];
     $ext=strtolower(pathinfo($rows[0]['original_name'],PATHINFO_EXTENSION));
@@ -83,6 +89,6 @@ function gc_media_label_rename(string $publicPath,string $newBase): array {
 }
 function gc_media_reference_count_db(string $path): int {
     static $catalogText=null;
-    if($catalogText===null){$catalogText='';foreach(['all_programs','programs','destinations','camp_memories','site_settings','faq'] as $kind)$catalogText.=gc_json(gc_read_database($kind));}
+    if($catalogText===null){$catalogText='';foreach(['all_programs','programs','destinations','camp_memories','site_settings','faq'] as $kind)$catalogText.=gc_json(gc_catalog($kind));}
     return substr_count($catalogText,$path);
 }

@@ -1,18 +1,6 @@
 # GoCamp: single-PR Aiven + Tigris migration review
 
-> **BLOCKER CONFIRMED 2026-10-31 — cPanel hosting limitation.** The hosting provider cannot enable `pdo_pgsql` under the current plan. The proposed `GOCAMP_DATA_SOURCE=postgres` PDO adapter in this PR **cannot run on cPanel as written**. **Do not merge, activate, or run the staging import under the assumption that cPanel can connect directly.** A database-over-HTTPS adapter must replace the PHP-side PDO access before launch. No Aiven/Tigris import has been performed.
-
-### Proposed zero-VPS HTTPS gateway (not implemented in this PR yet)
-
-- Keep Aiven PostgreSQL as relational source of truth and Tigris as private media storage. PHP communicates with a managed HTTPS gateway using its already-enabled `curl` extension.
-- First-choice free gateway candidate: Deno Deploy (managed serverless). Its current free plan includes 1 million HTTP requests/month and 20 GB outbound traffic; this is **not unlimited**, but the GoCamp catalog cache means public visitors do not have to invoke it for every page request.
-- Deno connects to Aiven with an ordinary PostgreSQL client using TLS and separate staging/production credentials; it exposes **fixed authenticated domain endpoints**, not arbitrary remote SQL. Never expose Aiven administrator credentials or an open SQL endpoint.
-- The gateway must enforce server-to-server request authentication, environment routing, strict content schemas, rate limits, request size limits, optimistic revisions and atomic transactions. PHP's existing Admin Dashboard actions still write to the selected environment immediately. Read-only public catalog cache remains on cPanel.
-- Tigris upload/download continues over HTTPS from PHP, using bucket-scoped credentials and cache. Media operations must preserve references on failure.
-- No Cron, FTP, VPS or automatic production deployment. A Deno account and deployment configuration are **not** yet created. Never store API credentials in source or PR text.
-- Aiven's native managed Data API is not a free workaround: it runs a separately billed Aiven Runtime application, and setup requires a JWT identity provider. Do not activate it under a $0 cost assumption.
-- Alternative (not yet verified): PDO ODBC **only if** the hosting provider already has the PostgreSQL ODBC driver installed and permits outbound Aiven TCP connections; the screenshot shows `pdo_odbc`, but that alone does not establish a usable PostgreSQL driver.
-- Existing migration job can continue to connect to Aiven from GitHub Actions, but PHP runtime reads and writes must not depend on `pdo_pgsql`.
+> **2026-10-31 UPDATE: direct database mode on cPanel is BLOCKED.** The hosting provider cannot install `pdo_pgsql`. The new Cloudflare Worker + Hyperdrive API adapter is in `worker/`, `app/catalog.php`, and `app/storage.php`. See **[`CLOUDFLARE_WORKER_GATEWAY.md`](CLOUDFLARE_WORKER_GATEWAY.md)** for the supported deployment path. **Do not activate the old direct-PDO setup on cPanel.** This remains draft and unmerged; no Cloudflare deployment or Aiven/Tigris import has been executed.
 
 
 ## Decision
@@ -20,7 +8,7 @@
 - Aiven free PostgreSQL 18: **one service**, distinct `staging` and `production` databases. Database and user separation are logical; both share CPU/RAM/20-connection ceiling. Do not create a second service.
 - Tigris: existing private `gocamp-staging` and `gocamp-prod` buckets. **Keep private**. Web requests stream approved objects via `media.php` and local cPanel cache; no public bucket or credit card required.
 - SQL columns for destinations, categories, programs, age ranges, statuses, costs, descriptions, settings; separate relational rows for repeatable program details/highlights, destination stats/FAQs, galleries, category sections and memories. JSONB only for variable visibility/options and unknown program-specific fields (such as disciplines).
-- Admin writes go **directly to the database selected by GOCAMP_ENV**. Uploads go **directly to the matching private bucket**; their references are committed only after successful upload. There is no local source-of-truth write in PostgreSQL mode.
+- Admin writes go **through the authenticated Cloudflare Worker into the database selected by GOCAMP_ENV**. Uploads go **directly to the matching private bucket**; their references are committed only after successful upload. There is no local source-of-truth write in PostgreSQL mode.
 - Public site reads a short-lived **file cache** of the normalized catalog. Admin reads are uncached and stale concurrent writes fail. Images cache locally by immutable object key.
 - **No Cron, no FTP/FTPS, no automatic deployment.** Existing FTP workflow jobs are explicitly disabled. New import workflow runs only when manually dispatched, with `IMPORT STAGING`, after secrets and environment approval. No migration or deployment is triggered by PR creation.
 - The previous GitHub content PR #39 is independent and must be reconciled before it is merged or promoted. This change does not merge it.
@@ -34,21 +22,17 @@ Baseline ZIP catalog: **63 programs, 9 destinations, 8 categories, 28 memories**
 ## Manual activation gates (not performed by this PR)
 
 1. Review PR, resolve open content changes and snapshot drift. Keep the remote databases/buckets unchanged until approval.
-2. In cPanel verify PHP version >= 8.1; extensions `pdo_pgsql`, `curl`, `fileinfo`, `gd`; outbound PostgreSQL TCP access to the Aiven-assigned port; Aiven TLS CA file available to PHP. Use a private directory outside the document root for credentials and caches. cPanel host outbound IP should be allowlisted on Aiven where possible.
+2. In cPanel verify PHP version >= 8.1; extensions `curl`, `fileinfo`, `gd`; outbound HTTPS to the Cloudflare Worker and Tigris. `pdo_pgsql` is NOT available here and is NOT required for Worker mode. Use a private directory outside the document root for credentials and caches. cPanel host outbound IP should be allowlisted on Aiven where possible.
 3. Create separate least-privilege Aiven users (`staging` / `production`), and separate Tigris bucket-scoped access keys (`gocamp-staging` / `gocamp-prod`). Never store the master `avnadmin` password or organization-wide Tigris key in source code.
 4. Configure **GitHub Environment** `gocamp-staging-import` with required reviewer and seven staging secrets: `AIVEN_DB_HOST`, `AIVEN_DB_PORT`, `AIVEN_DB_USER`, `AIVEN_DB_PASSWORD`, `AIVEN_CA_PEM_BASE64`, `TIGRIS_ACCESS_KEY`, `TIGRIS_SECRET_KEY` (seven total). The migration user can create schema; do not reuse it as the runtime application user. No production secrets in this environment. Review all action logs before sharing them.
-5. **GitHub Actions limitation:** `workflow_dispatch` is normally discoverable only when the workflow exists on the repository's default branch (`main`). This PR targets `develop`, so the manual import button may not yet appear in Actions. Do not merge into `main` solely to enable it; review and approve a safe manual-run path before importing. Once available on the default branch, manually run `GoCamp manual staging database and media import` with exact confirmation `IMPORT STAGING`. It creates the schema (if missing), imports committed static snapshots, then uploads committed `images/` and `uploads/` to the private staging bucket. It is designed for an **empty** staging catalog. Existing revisions block overwrites; incremental partial import requires review and recovery, not force-reset.
+5. After approval and merge, manually run `GoCamp manual staging database and media import` with exact confirmation `IMPORT STAGING`. It creates the schema (if missing), imports committed static snapshots, then uploads committed `images/` and `uploads/` to the private staging bucket. It is designed for an **empty** staging catalog. Existing revisions block overwrites; incremental partial import requires review and recovery, not force-reset.
 6. Configure **staging cPanel only**, e.g. env file outside `public_html` or real PHP environment variables (test `getenv()` on your cPanel PHP handler):
 
 ```dotenv
 GOCAMP_ENV=staging
-GOCAMP_DATA_SOURCE=postgres
-GOCAMP_DB_HOST=YOUR_AIVEN_HOST
-GOCAMP_DB_PORT=YOUR_AIVEN_PORT
-GOCAMP_DB_NAME=staging
-GOCAMP_DB_USER=STAGING_ONLY_USER
-GOCAMP_DB_PASSWORD=STAGING_PASSWORD
-GOCAMP_DB_CA_CERT=/home/ACCOUNT/private/aiven-ca.pem
+GOCAMP_DATA_SOURCE=worker
+GOCAMP_API_URL=https://gocamp-catalog-staging.<subdomain>.workers.dev
+GOCAMP_API_TOKEN=STAGING_ONLY_RANDOM_SECRET
 TIGRIS_ENDPOINT=https://t3.storage.dev
 TIGRIS_BUCKET=gocamp-staging
 TIGRIS_ACCESS_KEY=STAGING_ONLY_KEY
@@ -59,7 +43,7 @@ GOCAMP_CACHE_TTL=600
 ```
 
 7. Manually publish the approved PHP code through your chosen hosting control interface. **This PR does not install it**. Verify admin create/update/bulk action, FAQ, visibility, media upload, image replacement, media rename (metadata only; immutable URL), public navigation, memories and rollback. Review storage permissions and performance before enabling production.
-8. For production, use an independent authorized import/promotion plan based on a fresh, approved staging export—not this staging-only workflow. Do not turn on `GOCAMP_DATA_SOURCE=postgres` in production before its own data and images have been imported and validated. Keep both old catalog and media snapshots as rollback sources.
+8. For production, use an independent authorized import/promotion plan based on a fresh, approved staging export—not this staging-only workflow. Do not turn on `GOCAMP_DATA_SOURCE=worker` in production before its separate Worker/Hyperdrive, data and images have been imported and validated. Keep both old catalog and media snapshots as rollback sources.
 
 ## Semantics, compatibility, and safety
 
@@ -76,7 +60,7 @@ GOCAMP_CACHE_TTL=600
 
 - Aiven MCP currently lists the databases but the PostgreSQL Editor connector returned a `mode` validation error, so the schema is **not** verified on the remote database. No SQL was executed remotely.
 - Tigris MCP lists both private empty buckets; its detailed bucket settings call returned a response-validation error. No binary uploads were performed remotely.
-- PHP `pdo_pgsql` extension and outbound PostgreSQL port remain **unverified on cPanel**. Without both, DB mode fails closed instead of silently publishing stale legacy content.
+- PHP `pdo_pgsql` is confirmed unavailable from this cPanel package; the old direct-PDO mode must never be used on cPanel. HTTPS Worker mode requires testing against the actual Cloudflare deployment.
 - Legacy media in HTML rich text is remapped on read when a matching legacy path was imported. Manually hardcoded CSS and JS paths remain Git-managed.
 - No automatic GitHub PR is created for each Admin Dashboard content edit; the new PR is for application code and schema. If you later want approval per content change, add an explicit publish/review workflow rather than silently replacing immediate DB writes.
 - Import SQL/remote S3 integration requires staging execution and endpoint verification with real credentials. The existing PHP regression tests cover legacy mode, not external-provider connectivity.

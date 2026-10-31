@@ -1,10 +1,41 @@
 <?php
 /** External PostgreSQL catalog. Opt-in: GOCAMP_DATA_SOURCE=postgres; legacy is default. */
-function gc_external(): bool { return getenv('GOCAMP_DATA_SOURCE') === 'postgres'; }
+function gc_external(): bool { return in_array(getenv('GOCAMP_DATA_SOURCE'), ['postgres','worker'], true); }
+function gc_worker(): bool { return getenv('GOCAMP_DATA_SOURCE') === 'worker'; }
 function gc_env(string $name): string {
     $value = getenv($name);
     if (!is_string($value) || $value === '') throw new RuntimeException("Missing server setting: $name");
     return $value;
+}
+/** cPanel HTTPS adapter; no PostgreSQL driver required on shared hosting. */
+function gc_api(string $method, string $path, ?array $payload=null): array {
+    if (!gc_worker()) throw new RuntimeException('Worker API is disabled');
+    $environment=gc_env('GOCAMP_ENV');
+    if (!in_array($environment,['staging','production'],true)) throw new RuntimeException('Invalid environment');
+    $base=rtrim(gc_env('GOCAMP_API_URL'),'/');
+    $parts=parse_url($base);
+    if (($parts['scheme']??'')!=='https' || empty($parts['host']) || isset($parts['user']) || isset($parts['query']) || isset($parts['fragment']))
+        throw new RuntimeException('HTTPS API URL required');
+    if (!preg_match('~\A(?:catalog/[a-z_]+|revision/[a-z_]+|media(?:/[a-z_]+)?(?:\?key=[a-zA-Z0-9%_.\-/]+)?)\z~', $path))
+        throw new InvalidArgumentException('Invalid API endpoint');
+    if (!extension_loaded('curl')) throw new RuntimeException('PHP curl extension required');
+    $url=$base.'/v1/'.$path;
+    $body=$payload===null?null:gc_json($payload);
+    $headers=['Authorization: Bearer '.gc_env('GOCAMP_API_TOKEN'),'X-GoCamp-Environment: '.$environment,'Accept: application/json'];
+    if($body!==null)$headers[]='Content-Type: application/json';
+    $ch=curl_init($url);
+    curl_setopt_array($ch,[CURLOPT_CUSTOMREQUEST=>$method,CURLOPT_HTTPHEADER=>$headers,CURLOPT_RETURNTRANSFER=>true,
+        CURLOPT_CONNECTTIMEOUT=>4,CURLOPT_TIMEOUT=>20,CURLOPT_FOLLOWLOCATION=>false,
+        CURLOPT_SSL_VERIFYPEER=>true,CURLOPT_SSL_VERIFYHOST=>2]);
+    if($body!==null)curl_setopt($ch,CURLOPT_POSTFIELDS,$body);
+    $result=curl_exec($ch);$error=curl_error($ch);$status=(int)curl_getinfo($ch,CURLINFO_RESPONSE_CODE);curl_close($ch);
+    if($result===false || $status<200 || $status>=300) {
+        error_log('GoCamp API failed with HTTP '.$status.'; '.$error);
+        throw new RuntimeException($status===409?'Content changed in another editor; reload and retry':'Catalog gateway request failed (HTTP '.$status.')');
+    }
+    $decoded=json_decode($result,true,512,JSON_THROW_ON_ERROR);
+    if(!is_array($decoded))throw new RuntimeException('Invalid catalog gateway response');
+    return $decoded;
 }
 function gc_db(): PDO {
     static $pdo = null;
@@ -55,7 +86,7 @@ function gc_catalog(string $kind): array {
     }
     try {
         $data = gc_resolve_media_paths(gc_read_database($kind));
-        $GLOBALS['gc_read_revisions'][$kind] = gc_revision($kind);
+        if (!gc_worker()) $GLOBALS['gc_read_revisions'][$kind] = gc_revision($kind);
         $tmp = $path . '.' . bin2hex(random_bytes(4));
         if (file_put_contents($tmp, gc_json($data), LOCK_EX) !== false) { @chmod($tmp, 0600); @rename($tmp, $path); }
         return $data;
@@ -69,6 +100,7 @@ function gc_catalog(string $kind): array {
     }
 }
 function gc_revision(string $kind): int {
+    if (gc_worker()) return (int)(gc_api('GET','revision/'.$kind)['revision']??0);
     $rows = gc_rows(gc_db(), 'SELECT revision FROM catalog_revisions WHERE catalog = ?', [$kind]);
     return (int)($rows[0]['revision'] ?? 0);
 }
@@ -97,6 +129,12 @@ function gc_add_items(array &$entry, array $items): void {
     }
 }
 function gc_read_database(string $kind): array {
+    if (gc_worker()) {
+        $reply=gc_api('GET','catalog/'.$kind);
+        if (!is_array($reply['data']??null)) throw new RuntimeException('Invalid catalog payload');
+        $GLOBALS['gc_read_revisions'][$kind]=(int)($reply['revision']??0);
+        return $reply['data'];
+    }
     $db = gc_db();
     if ($kind === 'faq') return array_map(static fn($r)=>['question'=>$r['question'],'answer'=>$r['answer']],gc_rows($db,'SELECT question,answer FROM global_faqs ORDER BY position'));
     if ($kind === 'site_settings') {
@@ -139,6 +177,15 @@ function gc_read_database(string $kind): array {
 }
 /** Replace one collection atomically. Reject stale concurrent admin editors. */
 function gc_save_catalog(string $kind, array $values): bool {
+    if (gc_worker()) {
+        $revision=$GLOBALS['gc_read_revisions'][$kind]??null;
+        if (!is_int($revision)) throw new RuntimeException('Read the current catalog before saving edits');
+        $result=gc_api('PUT','catalog/'.$kind,['revision'=>$revision,'data'=>$values]);
+        $GLOBALS['gc_read_revisions'][$kind]=(int)$result['revision'];
+        gc_cache_clear($kind);
+        if(in_array($kind,['all_programs','destinations'],true))gc_cache_clear('destinations');
+        return true;
+    }
     $db=gc_db(); $db->beginTransaction();
     try {
         gc_exec($db, 'SELECT pg_advisory_xact_lock(hashtext(?))', ['gocamp:' . $kind]);
@@ -245,7 +292,8 @@ function gc_resolve_media_paths(array $data): array {
     static $mapping=null;
     if ($mapping===null) {
         $mapping=[];
-        foreach(gc_rows(gc_db(),'SELECT legacy_path,public_path FROM media_assets WHERE legacy_path IS NOT NULL') as $row) {
+        if(gc_worker()) $mapping=gc_api('GET','media/mappings')['mapping']??[];
+        else foreach(gc_rows(gc_db(),'SELECT legacy_path,public_path FROM media_assets WHERE legacy_path IS NOT NULL') as $row) {
             $mapping[$row['legacy_path']]=$row['public_path'];
         }
     }

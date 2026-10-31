@@ -1,0 +1,11 @@
+# Template only: do not deploy without independent production approval.
+name = "gocamp-catalog-production"
+main = "src/index.js"
+compatibility_date = "2026-10-31"
+compatibility_flags = ["nodejs_compat"]
+workers_dev = true
+[vars]
+GOCAMP_ENV = "production"
+[[hyperdrive]]
+binding = "HYPERDRIVE"
+id = "REPLACE_WITH_PRODUCTION_HYPERDRIVE_ID"

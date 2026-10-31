@@ -15,6 +15,11 @@ jobs:
           php-version: '8.4'
       - name: Lint PHP files
         run: find . -type f -name '*.php' -not -path './vendor/*' -print0 | xargs -0 -n1 php -l
+      - name: Verify Cloudflare Worker API protocol and environment isolation
+        run: |
+          node --check worker/src/core.js
+          node --check worker/src/index.js
+          node --test worker/tests/gateway.test.js
       - name: Verify external catalog adapter is opt-in
         run: php tests/external-catalog-adapter-test.php
       - name: Test visibility behavior

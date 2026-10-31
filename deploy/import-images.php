@@ -10,6 +10,7 @@ foreach(['images','uploads'] as $folder){
     foreach(new DirectoryIterator($path) as $file){
         if(!$file->isFile() || $file->isLink() || !preg_match('/\.(?:webp|png|jpe?g|gif)$/i',$file->getFilename()))continue;
         $legacy='/'.$folder.'/'.$file->getFilename();
+        if(gc_worker())throw new RuntimeException('Image import requires direct PostgreSQL mode in GitHub Actions');
         if(gc_rows(gc_db(),'SELECT 1 FROM media_assets WHERE legacy_path=?',[$legacy]))continue;
         $mime=(new finfo(FILEINFO_MIME_TYPE))->file($file->getPathname());
         if(!in_array($mime,['image/jpeg','image/png','image/gif','image/webp'],true))continue;
