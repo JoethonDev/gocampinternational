@@ -1,18 +1,211 @@
-.admin-workspace{--admin-curve:cubic-bezier(.2,.75,.25,1);max-width:1600px;background:linear-gradient(180deg,rgba(0,164,192,.035),transparent 320px)}
-.admin-workspace .admin-nav{position:sticky;top:75px;z-index:20;background:rgba(255,255,255,.94);backdrop-filter:blur(12px);padding:.75rem;border:1px solid #e8edf3;border-radius:14px;box-shadow:0 2px 12px rgba(15,23,42,.04)}
-.admin-workspace .admin-nav .btn{border-radius:9px;transition:background .17s var(--admin-curve),transform .17s var(--admin-curve),box-shadow .17s var(--admin-curve)}
-.admin-workspace .admin-nav .btn:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(15,23,42,.1)}
-.admin-workspace .card{border-radius:14px;transition:box-shadow .18s var(--admin-curve)}
-.admin-workspace .card:hover{box-shadow:0 8px 26px rgba(15,23,42,.075)!important}
-.admin-workspace .btn{transition:transform .16s var(--admin-curve),box-shadow .16s var(--admin-curve)}
-.admin-workspace .btn:not(:disabled):active{transform:scale(.98)}
-.admin-workspace .form-control:focus,.admin-workspace .form-select:focus{box-shadow:0 0 0 3px rgba(0,164,192,.13)}
-.admin-workspace .admin-main{animation:admin-page-enter .22s var(--admin-curve) both}
-@keyframes admin-page-enter{from{opacity:.65;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-@media(max-width:767px){.admin-workspace .admin-nav{top:65px;flex-wrap:nowrap!important;overflow-x:auto;scrollbar-width:thin}.admin-workspace .admin-nav .btn{white-space:nowrap}}
-@media(prefers-reduced-motion:reduce){.admin-workspace .admin-main{animation:none}.admin-workspace .btn,.admin-workspace .card{transition:none!important}.admin-workspace .btn:hover{transform:none!important}}
-
-/* Original PHP admin saved admin-theme; Bootstrap 5.3 local theme tokens scope dark mode to CMS only. */
-.admin-workspace{color:var(--bs-body-color)}
-.admin-workspace[data-bs-theme="dark"]{background:linear-gradient(180deg,#151d2a,#101820 340px);color:var(--bs-body-color)}
-.admin-workspace[data-bs-theme="dark"] .admin-nav{background:rgba(28,37,49,.96);border-color:#394554}
+/* Admin-only layout and palette. Keep public PR40 CSS untouched. */
+.admin-workspace {
+  --admin-curve: cubic-bezier(.2,.75,.25,1);
+  --admin-bg: #f4f6f9;
+  --admin-panel: #fff;
+  --admin-text: #212529;
+  --admin-muted: #6c757d;
+  --admin-border: #e2e6ec;
+  --admin-input: #fff;
+  --admin-input-border: #ced4da;
+  --admin-primary: #0d6efd;
+  --admin-primary-hover: #0b5ed7;
+  --admin-primary-text: #fff;
+  --admin-link: #0b5ed7;
+  --bs-body-bg: var(--admin-bg);
+  --bs-body-color: var(--admin-text);
+  --bs-border-color: var(--admin-border);
+  --bs-secondary-color: var(--admin-muted);
+  --bs-secondary-rgb: 108,117,125;
+  --bs-tertiary-bg: var(--admin-panel);
+  background: var(--admin-bg);
+  color: var(--admin-text);
+  min-height: 100vh;
+  min-height: 100dvh;
+  width: 100%;
+  max-width: none;
+  color-scheme: light;
+}
+.admin-workspace[data-bs-theme="dark"] {
+  /* Match the approved PR40 admin-modern dark palette. */
+  --admin-bg: #121212;
+  --admin-panel: #1e1e1e;
+  --admin-text: #f0f0f0;
+  --admin-muted: #b0b0b0;
+  --admin-border: #383838;
+  --admin-input: #2c2c2c;
+  --admin-input-border: #555;
+  --admin-primary: #5b8ec4;
+  --admin-primary-hover: #79a7d8;
+  --admin-primary-text: #0b1b2c;
+  --admin-link: #a9cefa;
+  --bs-body-bg: var(--admin-bg);
+  --bs-body-color: var(--admin-text);
+  --bs-border-color: var(--admin-border);
+  --bs-secondary-color: var(--admin-muted);
+  --bs-secondary-rgb: 176,176,176;
+  --bs-tertiary-bg: var(--admin-panel);
+  color-scheme: dark;
+}
+.admin-workspace .admin-toolbar {
+  background: var(--admin-panel);
+  color: var(--admin-text);
+  border-bottom: 1px solid var(--admin-border);
+}
+.admin-workspace .admin-nav {
+  /* There is no fixed public navbar inside admin: a 75px sticky offset leaves a gap. */
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--admin-panel);
+  border-bottom: 1px solid var(--admin-border);
+  box-shadow: 0 2px 12px rgba(15,23,42,.04);
+  margin: 0;
+  border-radius: 0;
+}
+.admin-workspace .admin-main { max-width: 1200px; animation: admin-page-enter .22s var(--admin-curve) both; }
+@keyframes admin-page-enter {
+  from { opacity:.65; transform:translateY(6px); }
+  to { opacity:1; transform:translateY(0); }
+}
+/* Public headings have a hard-coded dark color. Scope their CMS replacement. */
+.admin-workspace :is(h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6),
+.admin-workspace :is(.form-label,.form-check-label,label,.card-title) {
+  color: var(--admin-text);
+}
+.admin-workspace :is(.text-secondary,.text-muted) {
+  color: var(--admin-muted) !important;
+}
+.admin-workspace a:not(.btn):not(.text-reset) { color: var(--admin-link); }
+.admin-workspace .card,
+.admin-workspace .list-group-item,
+.admin-workspace .modal-content,
+.admin-workspace .accordion-item,
+.admin-workspace .accordion-button,
+.admin-workspace .dropdown-menu {
+  --bs-card-bg: var(--admin-panel);
+  --bs-card-color: var(--admin-text);
+  background-color: var(--admin-panel);
+  color: var(--admin-text);
+  border-color: var(--admin-border);
+}
+.admin-workspace .card {
+  border-radius: 14px;
+  transition: box-shadow .18s var(--admin-curve);
+}
+.admin-workspace .card:hover { box-shadow: 0 8px 26px rgba(15,23,42,.075) !important; }
+.admin-workspace .card-footer,
+.admin-workspace .card-header {
+  background-color: var(--admin-panel);
+  color: var(--admin-text);
+  border-color: var(--admin-border);
+}
+/* Bootstrap's .bg-white is !important, and was making dark editor footers white. */
+.admin-workspace :is(.bg-white,.bg-light) {
+  background-color: var(--admin-panel) !important;
+  color: var(--admin-text);
+}
+.admin-workspace .border,
+.admin-workspace .border-bottom,
+.admin-workspace .border-top,
+.admin-workspace .border-start,
+.admin-workspace .border-end { border-color: var(--admin-border) !important; }
+.admin-workspace :is(.form-control,.form-select,.input-group-text) {
+  background-color: var(--admin-input);
+  color: var(--admin-text);
+  border-color: var(--admin-input-border);
+}
+.admin-workspace :is(.form-control,.form-select)::placeholder {
+  color: var(--admin-muted);
+  opacity: 1;
+}
+.admin-workspace :is(.form-control,.form-select):focus {
+  background-color: var(--admin-input);
+  color: var(--admin-text);
+  border-color: var(--admin-primary);
+  box-shadow: 0 0 0 3px rgba(91,142,196,.16);
+}
+.admin-workspace .form-check-input { border-color: var(--admin-input-border); }
+.admin-workspace .form-check-input:checked {
+  background-color: var(--admin-primary);
+  border-color: var(--admin-primary);
+}
+.admin-workspace .btn {
+  transition: background-color .17s var(--admin-curve), color .17s var(--admin-curve),
+    border-color .17s var(--admin-curve), transform .17s var(--admin-curve);
+}
+.admin-workspace .admin-nav .btn { border-radius: 9px; white-space: nowrap; }
+.admin-workspace .btn-primary {
+  --bs-btn-bg: var(--admin-primary);
+  --bs-btn-color: var(--admin-primary-text);
+  --bs-btn-border-color: var(--admin-primary);
+  --bs-btn-hover-bg: var(--admin-primary-hover);
+  --bs-btn-hover-border-color: var(--admin-primary-hover);
+  --bs-btn-hover-color: var(--admin-primary-text);
+  background-color: var(--admin-primary);
+  color: var(--admin-primary-text);
+  border-color: var(--admin-primary);
+}
+.admin-workspace .btn-primary:hover,
+.admin-workspace .btn-primary:focus-visible {
+  background-color: var(--admin-primary-hover);
+  border-color: var(--admin-primary-hover);
+  color: var(--admin-primary-text);
+}
+.admin-workspace .btn-outline-primary {
+  --bs-btn-color: var(--admin-link);
+  --bs-btn-border-color: var(--admin-primary);
+  --bs-btn-hover-bg: var(--admin-primary);
+  --bs-btn-hover-border-color: var(--admin-primary);
+  --bs-btn-hover-color: var(--admin-primary-text);
+  color: var(--admin-link);
+  border-color: var(--admin-primary);
+}
+.admin-workspace .btn-outline-primary:hover,
+.admin-workspace .btn-outline-primary:focus-visible {
+  background-color: var(--admin-primary);
+  color: var(--admin-primary-text);
+  border-color: var(--admin-primary);
+}
+.admin-workspace .btn-outline-secondary {
+  --bs-btn-color: var(--admin-text);
+  --bs-btn-border-color: var(--admin-input-border);
+  --bs-btn-hover-color: var(--admin-text);
+  --bs-btn-hover-bg: var(--admin-border);
+  --bs-btn-hover-border-color: var(--admin-input-border);
+  color: var(--admin-text);
+  border-color: var(--admin-input-border);
+}
+.admin-workspace .btn-outline-secondary:hover {
+  background-color: var(--admin-border);
+  color: var(--admin-text);
+}
+.admin-workspace .table {
+  --bs-table-bg: var(--admin-panel);
+  --bs-table-color: var(--admin-text);
+  --bs-table-border-color: var(--admin-border);
+  --bs-table-striped-color: var(--admin-text);
+}
+.admin-workspace .page-link {
+  background: var(--admin-panel);
+  color: var(--admin-link);
+  border-color: var(--admin-border);
+}
+.admin-workspace[data-bs-theme="dark"] :is(.text-primary,.text-dark) {
+  color: var(--admin-link) !important;
+}
+.admin-workspace[data-bs-theme="dark"] .btn-outline-danger { color: #ff9ca5; border-color: #bc5862; }
+.admin-workspace[data-bs-theme="dark"] .btn-outline-danger:hover { color: #fff; background-color: #a13e4b; }
+.admin-workspace[data-bs-theme="dark"] .card:hover { box-shadow: 0 8px 26px rgba(0,0,0,.3) !important; }
+.admin-workspace .btn:not(:disabled):active { transform: scale(.98); }
+@media (max-width: 767.98px) {
+  .admin-workspace .admin-nav {
+    flex-wrap: nowrap !important;
+    overflow-x: auto;
+    scrollbar-width: thin;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .admin-workspace .admin-main { animation: none; }
+  .admin-workspace .btn, .admin-workspace .card { transition: none !important; }
+}
