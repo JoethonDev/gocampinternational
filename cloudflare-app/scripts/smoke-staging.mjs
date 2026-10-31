@@ -16,7 +16,17 @@ const tests=[
   {path:"/gallery",status:404},
   {path:"/media/00000000-0000-0000-0000-000000000000",status:404},
   {path:"/images/hero.webp",status:200,method:"HEAD"},
-  {path:"/images/bannnner.webp",status:200,method:"HEAD"}
+  {path:"/images/bannnner.webp",status:200,method:"HEAD"},
+  {path:"/home",status:301,location:"/"},
+  {path:"/index.php",status:301,location:"/"},
+  {path:"/home.php",status:301,location:"/"},
+  {path:"/about_us.php",status:301,location:"/about"},
+  {path:"/contact_us.php",status:301,location:"/contact"},
+  {path:"/faq.php",status:301,location:"/faq"},
+  {path:"/program/index",status:404},
+  {path:"/program/index.php",status:404},
+  {path:"/gallery.php",status:404},
+  {path:"/not-a-legacy-page",status:404}
 ];
 let failed=0;
 function sleep(ms){return new Promise(resolve=>setTimeout(resolve,ms));}

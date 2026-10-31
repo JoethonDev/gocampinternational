@@ -21,7 +21,7 @@ The full-stack React Router v7/TypeScript app builds and deploys to the user's *
 
 ## What to do next (recommended start)
 
-**Start with the public functional parity gap**. Inspect `cloudflare-app/app/routes.ts`, PHP's `program/index.php`, `program/category.php`, `destination/index.php` and `.htaccess`. Individual program-detail routes may still be missing; verify rather than guessing. Produce the URL→React mapping and implement missing public routes, status/visibility logic and interactions.
+**Start with the public functional parity gap**. Inspect `cloudflare-app/app/routes.ts`, PHP's `program/index.php`, `program/category.php`, `destination/index.php` and `.htaccess`. PR #40 has **no standalone individual program-detail routes**: cards and modal CTAs were deliberately disabled. Preserve non-clickable program cards; finish canonical PHP entrypoint/redirect coverage and the missing `/landing` marketing form, then test all destination/category slugs, status/visibility and interactions.
 
 Then complete **admin parity** against `admin/*.php`: real React editors (not only JSON text areas), scoped bulk operations, visibility, archive/restore, media, FAQ, memories and inquiries. Add protected authenticated test fixtures and verify permissions, CSRF, revision conflicts and D1 persistence.
 
@@ -55,3 +55,7 @@ GitHub browser workflow: [cloudflare-migration-visual-parity.yml](https://github
 ## Suggested prompt for a new conversation
 
 > Continue the GoCamp International PHP→React/Cloudflare Workers migration from GitHub branch `migration/cloudflare-react-workers-pr40`. Read `docs/cloudflare-migration/HANDOFF.md`, `PROGRESS.md`, `PHASES.md` and `UI_PARITY.md` first, then verify current GitHub HEAD/CI and Cloudflare staging. PR #40 (`80432a2...`) is the immutable source of truth for content and original UI/JS. Work on the existing branch, don't merge or touch production/DNS, keep Cloudflare personal Free. Prioritize complete public routes/program detail parity, then admin/media/forms, then security/performance/release gates. Run the parity and smoke checks, record exact evidence and update progress after each stage. Avoid a redesign or overengineering.
+
+## Important correction from source audit (2026-10-31)
+
+Do **not** implement invented `/program/:slug` detail pages. The original `index.php` only routes categories and destinations, and `sections/program_card_modern.php` leaves program detail modal triggers commented out. The next public gap is the **marketing landing page and its exact lead form/email behavior**, not a program details route. A small follow-up branch commit adds legacy PHP-style URL aliases and extends staging smoke tests; see PROGRESS.md §8. Once GitHub Actions/Cloudflare Builds report this commit, update the verified checkpoint above and record actual results.

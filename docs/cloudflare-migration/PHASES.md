@@ -33,7 +33,7 @@ Acceptance:
 
 ## Phase 3 — public website parity and SEO
 Setup: port current PHP templates into React route components, retaining layout, CSS, markup semantics, responsive behavior and JavaScript interactions. Prefer static asset delivery, static/pre-rendered stable pages where compatible, and cacheable SSR for dynamic content. Preserve routes/redirects and real-time admin visibility behavior via explicit cache invalidation/short TTL where required. Provide SEO title/meta, canonical URLs, sitemap, robots and semantic markup. Use images with intrinsic dimensions, responsive srcsets and lazy loading.
-Deliverables: home, destination list/detail, categories, nested program details, About, FAQ, Contact, gallery/memories, 404/redirects; no involuntary redesign.
+Deliverables: home, destination list/detail, categories, nested program cards (no standalone detail URL or enabled modal in PR #40), About, FAQ, Contact, marketing landing page, gallery/memories, 404/redirects; no involuntary redesign.
 Acceptance:
 - [ ] All public routes return expected HTTP status and canonical content without relying on JS for indexed text.
 - [ ] Program list top-level remains hidden according to current behavior; inner program pages work.

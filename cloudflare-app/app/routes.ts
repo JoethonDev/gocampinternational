@@ -24,5 +24,8 @@ export default [
   route("api/subscribe-newsletter.php","routes/api-newsletter.ts"),
   route("programs","routes/hidden-programs.tsx"),
   route("gallery","routes/hidden-gallery.tsx"),
-  route("memories","routes/hidden-memories.tsx")
+  route("memories","routes/hidden-memories.tsx"),
+  // Exact legacy PHP aliases; this is not a public program-detail URL.
+  route("program/:legacy","routes/legacy-program.ts"),
+  route(":legacy","routes/legacy-root.ts")
 ] satisfies RouteConfig;

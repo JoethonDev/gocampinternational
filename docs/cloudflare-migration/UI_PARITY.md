@@ -36,3 +36,7 @@ Playwright/Chromium captures paired screenshots, checks navbar styles (no underl
 Passing snapshots and geometry checks are not proof of pixel-by-pixel identity or **all** UI/JS functionality. Still needed: every destination/program/category, exact program detail route behavior, desktop/tablet/mobile and keyboard accessibility for remaining pages, carousel timing, interactions/forms/modals, visibility inheritance, admin UX, Safari/Firefox/device checks. Visually inspect screenshot artifacts and fix actual drift at source CSS/component level rather than arbitrary offsets. Avoid declaring all public pages finished until every route in PHASES.md is exercised.
 
 See [PROGRESS.md](./PROGRESS.md) for the wider functional, data and deployment status.
+
+## Program card and legacy URL contract correction (2026-10-31)
+
+PR #40 does not serve standalone program-detail routes. `sections/program_card_modern.php` explicitly disables click/CTA triggers; the React `ProgramCard` is non-clickable for this reason. The migration must not introduce new program links or reopen the modal. The alias compatibility change and expanded HTTP smoke tests are separate from the seven-route screenshot pass; verify CI/staging before checking them off. The source `landing.php` marketing page and its POST + mail semantics remain pending, not silently redirected.
