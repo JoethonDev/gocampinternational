@@ -100,3 +100,11 @@ A focused compatibility update adds explicit **301 redirects** for the legacy ho
 Known, still unported active public flow: `/landing` and `/landing.php`. PR #40 landing form collects child name, age, gender, interests, parent email/phone, consent and honeypot, and relies on PHP mail before persistence. The new D1 lead handler is not a drop-in substitute: email delivery and exact fields/validation need design and E2E verification. Do not produce a fake success message or silently redirect these URLs to Home.
 
 **Verification gates for this change:** new GitHub migration check and Cloudflare staging rebuild must complete, then the expanded smoke suite (25 checks) should pass against the deployed revision. This section does not claim those checks executed. No code released to production.
+
+## 9. Marketing landing-page port — staged implementation (pending verification)
+
+The active PR #40 `landing.php` is now represented by React route `/landing` and canonical `/landing.php` redirect. Layout, headline, form fields, four interest selections, trust and benefit sections are ported to scoped CSS; page remains `noindex,nofollow`. Server-side validation now explicitly enforces child age 7–18, gender, all checked interests, and privacy consent; source is `Landing Page`, persisted in the existing D1 lead/inquiry table with rate limiting and honeypot.
+
+**Important behavioral difference:** original PHP sends mail before saving. Staging currently **saves the lead to D1 but does not send an email**; successful UI copy only confirms persistence. Email provider choice, deliverability, dedupe/idempotency, and two-hour marketing wording need release review. This is *not* full landing-form acceptance. Test real authenticated inbox view and form POST validation with isolated fixtures.
+
+The landing GET and canonical redirect have been added to the read-only staging smoke suite (27 checks total). Verify new branch CI + Cloudflare staging build before calling it tested. Source claims about 2025 summer availability and response windows remain intentionally unchanged from PR #40 until content sign-off.

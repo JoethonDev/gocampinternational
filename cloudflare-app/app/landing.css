@@ -1,0 +1,55 @@
+/* Scoped port of the PR #40 marketing landing-page CSS; intentionally not a global redesign. */
+.landing-page{font-family:"Inter",sans-serif;line-height:1.6;color:#1a1a2e}
+.landing-page h1,.landing-page h2,.landing-page h3{font-family:"Poppins",sans-serif;font-weight:700}
+.landing-page .hero-landing{position:relative;min-height:100vh;background:linear-gradient(135deg,#0d1b2a 0%,#1b263b 50%,#0d1b2a 100%);overflow:hidden;padding-top:100px;padding-bottom:60px}
+.landing-page .hero-headline{font-size:3.5rem;font-weight:800;line-height:1.2;margin-bottom:20px;color:#fff;text-shadow:2px 4px 8px rgba(0,0,0,.3)}
+.landing-page .hero-headline .highlight{background:linear-gradient(135deg,#F9BB08,#e0a800);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.landing-page .hero-subheadline{font-size:1.4rem;color:rgba(255,255,255,.9);margin-bottom:30px;line-height:1.6}
+.landing-page .hero-usp-list{list-style:none;margin-bottom:30px;padding:0}
+.landing-page .hero-usp-list li{color:white;font-size:1.1rem;margin-bottom:15px;display:flex;align-items:center;gap:15px}
+.landing-page .hero-usp-list li i{color:#F9BB08;font-size:1.3rem;flex-shrink:0}
+.landing-page .hero-stats{background:rgba(255,255,255,.1);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.2);border-radius:15px;padding:25px;margin-top:40px}
+.landing-page .stat-item{text-align:center}
+.landing-page .stat-number{font-size:2.5rem;font-weight:800;color:#F9BB08;display:block;font-family:"Poppins",sans-serif}
+.landing-page .stat-label{font-size:.9rem;color:rgba(255,255,255,.8);text-transform:uppercase;letter-spacing:1px}
+.landing-page .form-container{position:relative;z-index:10}
+.landing-page .lead-form-card{background:#fff;border-radius:20px;padding:40px;box-shadow:0 20px 60px rgba(0,0,0,.25);position:sticky;top:120px}
+.landing-page .form-header{text-align:center;margin-bottom:30px}
+.landing-page .form-title{font-size:1.8rem;color:#00a4c0;margin-bottom:10px;font-weight:700}
+.landing-page .form-subtitle{color:#666;font-size:1rem}
+.landing-page .urgency-banner{background:linear-gradient(135deg,#F9BB08,#e0a800);color:#fff;padding:15px;border-radius:10px;margin-bottom:25px;text-align:center;font-weight:600}
+.landing-page .form-group{margin-bottom:25px}
+.landing-page .form-label{font-weight:600;color:#1a1a2e;margin-bottom:8px;display:block;font-size:.95rem}
+.landing-page .required{color:#dc3545}
+.landing-page .form-control,.landing-page .form-select{width:100%;padding:14px 18px;border:2px solid #e0e0e0;border-radius:10px;font-size:1rem;transition:all .3s ease}
+.landing-page .form-control:focus,.landing-page .form-select:focus{outline:none;border-color:#00a4c0;box-shadow:0 0 0 4px rgba(0,164,192,.1)}
+.landing-page .input-icon{position:relative}
+.landing-page .input-icon i{position:absolute;left:18px;top:50%;transform:translateY(-50%);color:#999;font-size:1.1rem}
+.landing-page .input-icon .form-control{padding-left:50px}
+.landing-page .interest-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:15px}
+.landing-page .interest-option{position:relative}
+.landing-page .interest-option input[type=checkbox]{position:absolute;opacity:0}
+.landing-page .interest-label{display:block;padding:15px;border:2px solid #e0e0e0;border-radius:10px;text-align:center;cursor:pointer;transition:all .3s ease;font-weight:600}
+.landing-page .interest-label i{display:block;font-size:1.5rem;margin-bottom:8px;color:#00a4c0}
+.landing-page .interest-option input:checked+.interest-label{background:linear-gradient(135deg,#00a4c0,#0088a3);color:#fff;border-color:#00a4c0;transform:translateY(-3px);box-shadow:0 10px 30px rgba(0,0,0,.15)}
+.landing-page .interest-option input:checked+.interest-label i{color:white}
+.landing-page .interest-option input:focus-visible+.interest-label{outline:3px solid #F9BB08;outline-offset:2px}
+.landing-page .btn-submit-landing{background:linear-gradient(135deg,#F9BB08,#e0a800);color:#fff;font-size:1.1rem;padding:18px 30px;border:0;border-radius:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px}
+.landing-page .btn-submit-landing:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(249,187,8,.4)}
+.landing-page .form-trust{text-align:center;margin-top:25px;padding-top:25px;border-top:1px solid #e0e0e0}
+.landing-page .trust-item{display:inline-flex;align-items:center;gap:8px;color:#666;font-size:.9rem;margin:0 15px}
+.landing-page .trust-item i{color:#28a745;font-size:1.1rem}
+.landing-page .why-section{padding:80px 0;background:#f8f9fa}
+.landing-page .section-header{text-align:center;margin-bottom:60px}
+.landing-page .section-title{font-size:2.5rem;color:#1a1a2e;margin-bottom:15px}
+.landing-page .section-subtitle{font-size:1.2rem;color:#666;max-width:600px;margin:0 auto}
+.landing-page .benefit-card{background:#fff;border-radius:15px;padding:35px;text-align:center;height:100%;transition:all .3s ease;border:2px solid transparent}
+.landing-page .benefit-card:hover{transform:translateY(-10px);box-shadow:0 10px 30px rgba(0,0,0,.15);border-color:#00a4c0}
+.landing-page .benefit-icon{width:80px;height:80px;margin:0 auto 25px;background:linear-gradient(135deg,#00a4c0,#0088a3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2rem;color:#fff}
+.landing-page .benefit-title{font-size:1.3rem;color:#1a1a2e;margin-bottom:15px}
+.landing-page .benefit-text{color:#666;line-height:1.8}
+.landing-page .guarantee-section{padding:60px 0;background:linear-gradient(135deg,#00a4c0,#0088a3);color:#fff;text-align:center}
+.landing-page .guarantee-badge{width:120px;height:120px;background:#F9BB08;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 30px;font-size:3rem;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+.landing-page .guarantee-title{font-size:2rem;margin-bottom:15px;color:white}
+@media(max-width:991px){.landing-page .hero-headline{font-size:2.5rem}.landing-page .lead-form-card{position:static;margin-top:40px}}
+@media(max-width:575px){.landing-page .lead-form-card{padding:24px}.landing-page .interest-grid{gap:8px}.landing-page .interest-label{padding:12px 8px}.landing-page .stat-number{font-size:1.8rem}}

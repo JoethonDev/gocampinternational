@@ -12,7 +12,11 @@ export async function submitInquiry(request:Request,db:D1Database,kind:Kind):Pro
   try{
     const type=request.headers.get("content-type")||"";
     if(type.includes("application/json")){const input=await request.json();if(!input||typeof input!=="object"||Array.isArray(input))return fail("Invalid request");raw=input as FormDataObject;}
-    else if(type.includes("application/x-www-form-urlencoded")||type.includes("multipart/form-data"))raw=Object.fromEntries((await request.formData()).entries());
+    else if(type.includes("application/x-www-form-urlencoded")||type.includes("multipart/form-data")){
+      const form=await request.formData();
+      raw=Object.fromEntries(form.entries());
+      if(kind==="lead" && form.get("source")==="Landing Page")raw["interests[]"]=form.getAll("interests[]");
+    }
     else return fail("Unsupported format",415);
   }catch{return fail("Invalid request");}
   if(raw.website)return Response.json({success:true,message:"Request received"},{headers:{"cache-control":"no-store"}});
@@ -31,6 +35,20 @@ export async function submitInquiry(request:Request,db:D1Database,kind:Kind):Pro
   if(kind==="lead"){
     for(const [key,max] of [["interest",5000],["source",5000]] as const){
       const value=clean(raw[key],max);if(value.length>max)return fail("Field too long");extra[key]=value;
+    }
+    // The PR #40 marketing page collects different fields from the modal CTA.
+    // Preserve all selections and enforce consent on the server, not only HTML.
+    if(raw.source==="Landing Page"){
+      const age=clean(raw.age,3),gender=clean(raw.gender,10);
+      const interests=raw["interests[]"];
+      const choices=Array.isArray(interests)?interests:interests?[interests]:[];
+      const allowed=new Set(["Sports","Language","Leadership","Academic"]);
+      if(!/^(?:[7-9]|1[0-8])$/.test(age)||!["Male","Female"].includes(gender)||
+          !["on","1","yes"].includes(String(raw.privacyConsent||""))||
+          choices.length>4||choices.some(x=>typeof x!=="string"||!allowed.has(x)))
+        return fail("Please enter the child's age, gender, and privacy consent correctly");
+      extra.age=age;extra.gender=gender;extra.interests=choices.join(", ");
+      extra.privacyConsent="yes";
     }
   }
   if(phone.length>30)return fail("Invalid phone");

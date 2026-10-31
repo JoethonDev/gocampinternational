@@ -20,8 +20,7 @@ const aliases: Readonly<Record<string, string>> = {
 
 export function loader({ params }: Route.LoaderArgs) {
   const alias = params.legacy ?? "";
-  // Unknown paths (including the not-yet-ported marketing landing page)
-  // must never be redirected to the homepage or silently reported as success.
+  // Unknown legacy paths must never silently redirect to the homepage.
   const canonical = Object.hasOwn(aliases, alias) ? aliases[alias] : null;
   if (!canonical) throw new Response("Not Found", { status: 404 });
   return redirect(canonical, 301);

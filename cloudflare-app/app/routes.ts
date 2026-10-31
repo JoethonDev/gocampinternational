@@ -17,6 +17,8 @@ export default [
   route("program/category.php","routes/category-legacy.ts"),
   route("programs/:slug","routes/category-redirect.ts"),
   route("faq","routes/faq.tsx"),
+  route("landing","routes/landing.tsx"),
+  route("landing.php","routes/landing-legacy.ts"),
   route("about","routes/about.tsx"),
   route("contact","routes/contact.tsx"),
   route("api/submit-contact.php","routes/api-contact.ts"),

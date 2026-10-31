@@ -59,3 +59,7 @@ GitHub browser workflow: [cloudflare-migration-visual-parity.yml](https://github
 ## Important correction from source audit (2026-10-31)
 
 Do **not** implement invented `/program/:slug` detail pages. The original `index.php` only routes categories and destinations, and `sections/program_card_modern.php` leaves program detail modal triggers commented out. The next public gap is the **marketing landing page and its exact lead form/email behavior**, not a program details route. A small follow-up branch commit adds legacy PHP-style URL aliases and extends staging smoke tests; see PROGRESS.md §8. Once GitHub Actions/Cloudflare Builds report this commit, update the verified checkpoint above and record actual results.
+
+## Landing page follow-up (2026-10-31)
+
+The branch now has initial React landing-page markup/CSS, correct form fields and D1 lead persistence, including explicit server-side age/gender/consent/interests validation. `/landing.php` redirects to `/landing`. It is **not yet accepted**: run browser/POST and admin inbox tests on staging, check visual parity, and add an email provider with accurate failure handling or obtain a documented decision that inbox-only delivery is sufficient. Never claim mail was delivered when only D1 has an inquiry. Read PROGRESS.md §9.

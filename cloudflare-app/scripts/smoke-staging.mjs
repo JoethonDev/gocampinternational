@@ -26,7 +26,9 @@ const tests=[
   {path:"/program/index",status:404},
   {path:"/program/index.php",status:404},
   {path:"/gallery.php",status:404},
-  {path:"/not-a-legacy-page",status:404}
+  {path:"/not-a-legacy-page",status:404},
+  {path:"/landing",status:200,contains:"Transform Your Teen"},
+  {path:"/landing.php",status:301,location:"/landing"}
 ];
 let failed=0;
 function sleep(ms){return new Promise(resolve=>setTimeout(resolve,ms));}
