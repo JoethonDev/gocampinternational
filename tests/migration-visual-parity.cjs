@@ -160,6 +160,40 @@ async function metrics(page) {
         }
         summary.push(each);
       }
+      // Admin has no public navbar. The original site's body top padding used
+      // to leave a white band and make the 100vh login background overflow.
+      const adminContext=await browser.newContext({
+        viewport:{width:viewport.width,height:viewport.height},
+        deviceScaleFactor:1,reducedMotion:"reduce",ignoreHTTPSErrors:true
+      });
+      const adminTab=await adminContext.newPage();
+      try {
+        const response=await adminTab.goto(staging+"/admin/login",{waitUntil:"domcontentloaded",timeout:30000});
+        assert(response?.status()===200,"React admin login returned "+response?.status());
+        await adminTab.locator(".gc-admin-login").waitFor();
+        await adminTab.evaluate(()=>document.fonts.ready);
+        const layout=await adminTab.evaluate(()=>{
+          const login=document.querySelector(".gc-admin-login");
+          const rect=login.getBoundingClientRect();
+          return {
+            bodyPaddingTop:parseFloat(getComputedStyle(document.body).paddingTop),
+            top:rect.top,
+            height:rect.height,
+            viewHeight:window.innerHeight,
+            docHeight:document.documentElement.scrollHeight,
+            gradient:getComputedStyle(login).backgroundImage
+          };
+        });
+        assert(layout.bodyPaddingTop===0,"Admin login inherits public navbar padding: "+layout.bodyPaddingTop);
+        assert(Math.abs(layout.top)<=1,"Admin login background starts below viewport: "+layout.top);
+        assert(layout.height>=layout.viewHeight-1,"Admin login background does not fill viewport");
+        assert(layout.docHeight<=layout.viewHeight+2,"Admin login unexpectedly scrolls: "+layout.docHeight+" > "+layout.viewHeight);
+        assert(layout.gradient.includes("radial-gradient"),"Admin login gradient missing");
+        await adminTab.screenshot({path:path.join(output,"admin-login-"+viewport.name+"-react.png"),animations:"disabled",fullPage:true});
+      }catch(err){
+        failed++;
+        console.error("FAIL react admin-login",viewport.name,String(err));
+      }finally{await adminContext.close();}
     }
   }finally{await browser.close();}
   await fs.writeFile(path.join(output,"metrics.json"),JSON.stringify(summary,null,2));
