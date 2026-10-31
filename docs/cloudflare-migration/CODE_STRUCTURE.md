@@ -31,7 +31,8 @@ cloudflare-app/
 │  │  ├─ contact/        ContactPage and form
 │  │  ├─ faq/            FaqPage
 │  │  ├─ landing/        marketing landing page
-│  │  └─ admin/          admin feature modules (dashboard, catalog, documents, media)
+│  │  └─ admin/          admin feature modules (dashboard, catalog, documents, media,
+│  │                     media-import.server.ts)
 │  ├─ hooks/             useSiteNavigation, useLightbox, useAdminTheme
 │  ├─ styles/            global interaction motion (feature CSS stays with its feature)
 │  ├─ lib/
@@ -87,6 +88,10 @@ Catalog, inquiries, trash and the dashboard recent table all use `AdminTable`; c
 
 `MediaSelector` is self-contained: it browses static/R2 assets, accepts an inline upload through `POST /admin/media/upload`, selects the new object immediately and refreshes the local picker grid without closing or navigating away. All callers pass the current admin CSRF token.
 
+The staging legacy-image import follows the same rule: the page at `/admin/media/import` is a normal UI route, while its authenticated batch action is the resource route `/admin/media/import/run`. Do not POST batch work to a UI route and expect JSON; React Router renders the document response instead. The inventory, byte-length check, SHA-256 metadata and R2 HEAD verification live in `features/admin/media-import.server.ts` and are shared by the page loader and resource action.
+
+Program editors load categories in every status (`listCategories(db, false)`) and append the non-active status to the option label. A program assigned to an inactive/trashed category must still display and preserve that relationship when edited. Category and destination slug renames update dependent catalog and join records server-side.
+
 ## 6. Adding a CMS field
 
 1. Add the type to `app/lib/domain.ts` when it is not a simple string.
@@ -101,7 +106,7 @@ Catalog, inquiries, trash and the dashboard recent table all use `AdminTable`; c
 - Secrets (`ADMIN_PASSWORD_SHA256`, `ADMIN_USERNAME`) live in Cloudflare, not in source.
 - `workers/app.ts` adds security headers, staging `noindex`, `Server-Timing`, and structured failure logging.
 - `upload_source_maps` and Workers Logs are enabled in `wrangler.json`.
-- Static assets are served by Workers Static Assets; uploaded media is served through the immutable `/media/:id` route with R2.
+- Static assets are served by Workers Static Assets; uploaded media is served through the immutable `/media/:id` route with R2. Legacy `/images/*` requests check the `MEDIA` bucket first (adding `X-GoCamp-Media-Source: r2`) and fall back to the bundled static asset during the migration. The fallback is removed only in a separate cutover.
 - Do not introduce a global mutable request cache or module-level user state.
 
 ## 8. Quality commands

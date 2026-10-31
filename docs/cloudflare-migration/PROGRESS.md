@@ -175,3 +175,40 @@ See [CONTENT_AND_CMS_RECONCILIATION.md](./CONTENT_AND_CMS_RECONCILIATION.md): PR
 - **Admin UX redesign (staging):** replaced the top-button admin chrome with a responsive sidebar shell and rebuilt the dashboard as an operational overview (KPIs, catalog health bars, quick actions, recent inquiries, recent edits, staging status). Standardised catalog, inquiries and trash tables on `AdminTable`; standardised search/filter toolbars, pagination, empty states, row actions and form sections. The editor, visibility/FAQ/memories documents, media library, import screen and login were all restyled to the same system. Select-all moved above the table; tables collapse to labelled cards on phones; pagination uses one compact summary/control bar; filters use compact shared sizing. The media picker now uploads inside its own modal and selects the new R2 object without closing it. Contact card contrast was raised to a dark teal gradient; the public header now uses a transparent logo variant; page/hover motion is restrained and respects reduced motion.
 - **Admin UX verification:** commit `e0ff7b36e644a752301bac2f97e20e00f1c80ffe` passed the React/PHP visual workflow and 27/27 staging smoke checks; the later `d55bddb` commit only formats the smoke assertion and does not change app code. The admin dashboard, catalog, editors, documents, media/import, inquiries, trash and login were all exercised against staging. Responsive tables stack as labelled cards, select-all is above the table, filters are compact, pagination is shared, and the media picker uploads/selects inside its modal.
 - **Still open:** outbound inquiry email delivery, one historical missing image, full backup/restore drill, all-slug SEO/a11y coverage, and final Cloudflare Free-budget evidence. No production merge or DNS cutover.
+
+## 2026-11-01 — acceptance sweep, asset recovery, R2 import, backup/restore
+
+**Scope:** authenticated staging only. No production binding, database, DNS or content was changed.
+
+### R2 legacy media import
+- Fixed a real integration defect: the import page POSTed batches to the UI route `/admin/media/import`, so a normal `fetch` received rendered HTML rather than JSON. Batch work now lives in the resource route `/admin/media/import/run`; shared inventory/validation/import logic is in `features/admin/media-import.server.ts`.
+- Authenticated import completed **332/332** inventory entries: **324 uploaded**, **8 already present**, **0 failures**.
+- `/images/logo.webp` and `/images/logo-transparent.webp` return `200` with `X-GoCamp-Media-Source: r2`; the bundled static fallback remains enabled.
+- The recovered historical upload `uploads/1_1761381038.webp` (1003×1077, 94,254 bytes) is now force-added despite the broad `uploads/` ignore rule and returns `200 image/webp` from staging. A D1 reference audit found **145 distinct image URLs and 0 missing local files**.
+- Program editors now load all category statuses and label non-active options. A category rename updates its programs' stored category association; this was verified by creating an inactive category and child program, renaming the category, checking the editor selection, then deleting both. Destination rename/relation behavior was exercised similarly.
+
+### Authenticated admin UAT
+- FAQ document: appended a marker item, confirmed it on public `/faq`, restored original content, confirmed removal.
+- Camp memories: appended an active slider item with a valid image, confirmed it on the public home page, restored original content, confirmed removal.
+- Inquiry: submitted via the public contact API, changed status to read in admin, deleted it, confirmed the marker was gone from D1.
+- Trash: created an inactive program, moved it to trash, restored it as **inactive**, then trashed/deleted it. No `migration-uat-*` catalog or inquiry fixtures remain.
+- Responsive check at 390px: no horizontal overflow on Home, About, Contact, FAQ, Italy, Landing, dashboard, catalog lists, program/category/destination editors, FAQ/memories/settings documents, media library, media import, inquiries or trash.
+
+### SEO and accessibility
+- Checked 19 public routes (all destinations and all six active category pages plus core pages): every response had a title, description, canonical URL and Open Graph title/description/image/URL/type; `/landing` remained `noindex`.
+- Axe WCAG 2 A/AA serious/critical scan now passes on Home, About, Contact, FAQ, Italy, Adult Academic, Landing, admin login, dashboard, catalog, media and inquiries. Fixes include a darker teal navbar, white nav text, higher-contrast breadcrumbs/links/outline buttons, the landing form heading and the admin login button.
+- **Known external exception:** the third-party Facebook timeline iframe contains two links without accessible names on Home, Italy and Adult Academic. The page provides a visible accessible “View on Facebook” link; the embedded widget is not modified because its DOM is controlled by Facebook.
+
+### Backup/restore drill (non-destructive)
+- `wrangler d1 export gocamp-staging-db --remote` produced a 193,531-byte SQL snapshot; it was imported into a temporary in-memory SQLite database, not over staging.
+- Restored snapshot counts: 82 catalog entities, 37 destination–program links, 3 documents, 0 media metadata, 0 inquiries, 6 import sources.
+- Catalog checksum `f3a1ea83eba24ca0d6046ac56d84b7fdc22d5558418daee318d58d668b524f98` and document checksum `4313ec23a042e8bdd770bcf34a85d06fc9b6a6e19e43fba3e5d6687b2cf9432b` matched the live remote D1 at the final check. The export contains admin-session rows and is intentionally not committed.
+
+### Cloudflare Free-plan evidence
+- Staging D1: **360 kB**, 24h metrics **12,486 read queries / 326 write queries**, **355,040 rows read / 974 rows written**. These are far below the Free daily row limits; the database is a tiny fraction of 5 GB.
+- Staging R2: 332 repository images (about 22 MB) plus the recovered upload, far below 10 GB. Import writes and image reads are low-volume staging traffic.
+- Account-wide Worker requests/CPU and R2 operations cannot be proven from `wrangler d1 info` alone; that remains an analytics/dashboard gate rather than a claimed pass.
+
+### Verification
+- `npm run typecheck`, `npm run build`, `wrangler deploy`, and the 27/27 read-only staging HTTP smoke suite passed for the application code in this sweep.
+- **Still open:** outbound email provider and delivery, account-wide Worker/R2 usage evidence, the third-party Facebook-iframe accessibility exception, and production release approval. No production merge or DNS cutover.
