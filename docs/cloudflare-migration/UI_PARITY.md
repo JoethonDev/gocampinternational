@@ -40,3 +40,7 @@ See [PROGRESS.md](./PROGRESS.md) for the wider functional, data and deployment s
 ## Program card and legacy URL contract correction (2026-10-31)
 
 PR #40 does not serve standalone program-detail routes. `sections/program_card_modern.php` explicitly disables click/CTA triggers; the React `ProgramCard` is non-clickable for this reason. The migration must not introduce new program links or reopen the modal. The alias compatibility change and expanded HTTP smoke tests are separate from the seven-route screenshot pass; verify CI/staging before checking them off. The source `landing.php` marketing page and its POST + mail semantics remain pending, not silently redirected.
+
+## Landing page in the browser acceptance matrix (pending CI result)
+
+The browser comparator now captures **8** public templates at desktop/tablet/mobile, 24 screenshot pairs total, including `/landing`. On landing it checks original field names/4 interest checkboxes, consent, hero/form geometry, original nav styling and horizontal overflow. This is tighter than an HTTP smoke check, but **not pixel-identical color/typography validation**. The PHP source explicitly cancels `body` padding on the landing page; the React scoped stylesheet now reproduces that exception. This row remains pending until the GitHub browser workflow for the new commit completes.

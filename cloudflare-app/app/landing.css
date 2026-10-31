@@ -1,7 +1,9 @@
 /* Scoped port of the PR #40 marketing landing-page CSS; intentionally not a global redesign. */
+/* PR40 landing.php explicitly cancels the shared fixed-navbar body offset. */
+body:has(.landing-page){padding-top:0!important;font-family:"Inter",sans-serif}
 .landing-page{font-family:"Inter",sans-serif;line-height:1.6;color:#1a1a2e}
 .landing-page h1,.landing-page h2,.landing-page h3{font-family:"Poppins",sans-serif;font-weight:700}
-.landing-page .hero-landing{position:relative;min-height:100vh;background:linear-gradient(135deg,#0d1b2a 0%,#1b263b 50%,#0d1b2a 100%);overflow:hidden;padding-top:100px;padding-bottom:60px}
+.landing-page .hero-landing{position:relative;min-height:100vh;background:linear-gradient(135deg,#0d1b2a 0%,#1b263b 50%,#0d1b2a 100%);overflow:hidden;padding-top:100px}
 .landing-page .hero-headline{font-size:3.5rem;font-weight:800;line-height:1.2;margin-bottom:20px;color:#fff;text-shadow:2px 4px 8px rgba(0,0,0,.3)}
 .landing-page .hero-headline .highlight{background:linear-gradient(135deg,#F9BB08,#e0a800);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .landing-page .hero-subheadline{font-size:1.4rem;color:rgba(255,255,255,.9);margin-bottom:30px;line-height:1.6}

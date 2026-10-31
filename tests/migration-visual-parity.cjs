@@ -5,7 +5,7 @@ const fs=require("node:fs/promises"),path=require("node:path");
 const legacy=process.env.LEGACY_URL||"http://127.0.0.1:8765";
 const staging=process.env.STAGING_URL||"https://gocamp-migration-staging.elprincedoca.workers.dev";
 const viewports=[{name:"desktop",width:1440,height:900},{name:"tablet",width:820,height:1180},{name:"mobile",width:390,height:844}];
-const pages=[{name:"home",url:"/",memories:true},{name:"destination-italy",url:"/destinations/italy",memories:true},{name:"category-academic",url:"/program/category?category=adult-academic",memories:true},{name:"category-kids",url:"/program/category?category=kids-camps",memories:true},{name:"about",url:"/about",memories:false},{name:"faq",url:"/faq",memories:false},{name:"contact",url:"/contact",memories:false}];
+const pages=[{name:"home",url:"/",memories:true},{name:"destination-italy",url:"/destinations/italy",memories:true},{name:"category-academic",url:"/program/category?category=adult-academic",memories:true},{name:"category-kids",url:"/program/category?category=kids-camps",memories:true},{name:"about",url:"/about",memories:false},{name:"faq",url:"/faq",memories:false},{name:"contact",url:"/contact",memories:false},{name:"landing",url:"/landing",memories:false}];
 const output=path.resolve("artifacts/migration-parity");
 async function requireMatchingStagingRevision(){
   const expected=process.env.GITHUB_SHA;
@@ -30,9 +30,15 @@ async function metrics(page) {
     const navLink=document.querySelector(".navbar .nav-link");
     const hero=document.querySelector("#home-hero-slider .carousel-item.active .hero-section, .destination-hero, .page-content .hero-section");
     const heroStyles=hero?getComputedStyle(hero):null;
+    const landingHero=document.querySelector(".hero-landing");
+    const landingForm=document.querySelector("#landingPageForm");
+    const landingFields=landingForm?Array.from(landingForm.querySelectorAll("[name]")).map(x=>x.getAttribute("name")).filter(x=>x!=="source").sort():[];
     const navStyles=navLink?getComputedStyle(navLink):null;
     return {
       navDecoration:navStyles?.textDecorationLine,
+      landingHeroHeight:Math.round(landingHero?.getBoundingClientRect().height||0),
+      landingFormWidth:Math.round(landingForm?.getBoundingClientRect().width||0),
+      landingFields,
       navDecorations:Array.from(document.querySelectorAll(".navbar .nav-link")).map(link=>getComputedStyle(link).textDecorationLine),
       navColor:navStyles?.color,
       navHeight:Math.round(navbar?.getBoundingClientRect().height||0),
@@ -73,6 +79,11 @@ async function metrics(page) {
             assert(results.navDecoration==="none",kind+" "+route.name+" nav links are underlined: "+results.navDecoration);
             assert(results.navDecorations.every(decoration=>decoration==="none"),kind+" "+route.name+" contains underlined navigation links: "+results.navDecorations.join(","));
             assert(!results.horizontalOverflow,kind+" "+route.name+" overflows horizontally");
+            if(route.name==="landing"){
+              assert(results.landingHeroHeight>0,kind+" landing hero missing");
+              assert(results.landingFormWidth>0,kind+" landing form missing");
+              assert(results.landingFields.includes("privacyConsent") && results.landingFields.filter(n=>n==="interests[]").length===4,kind+" landing original form options missing");
+            }
             if(route.memories){
               assert(results.memorySectionCount===1,kind+" "+route.name+" lost the shared memories section");
               assert(results.memoryCardCount>0,kind+" "+route.name+" has no memories cards");
@@ -101,8 +112,13 @@ async function metrics(page) {
           finally{await context.close();}
         }
         if(each.legacy&&each.react){
-          for(const key of ["navHeight","heroHeight","documentHeight","memoryCardCount"]){
-            if(Math.abs(each.legacy[key]-each.react[key])>(key==="documentHeight"?16:key==="memoryCardCount"?0:6)){failed++;console.error("FAIL",route.name,viewport.name,key,each.legacy[key],each.react[key]);}
+          const comparisonKeys=route.name==="landing"?["navHeight","landingHeroHeight","landingFormWidth"]:["navHeight","heroHeight","documentHeight","memoryCardCount"];
+          for(const key of comparisonKeys){
+            const tolerance=key==="documentHeight"?16:key==="memoryCardCount"?0:key==="landingHeroHeight"?32:key==="landingFormWidth"?12:6;
+            if(Math.abs(each.legacy[key]-each.react[key])>tolerance){failed++;console.error("FAIL",route.name,viewport.name,key,each.legacy[key],each.react[key]);}
+          }
+          if(route.name==="landing" && JSON.stringify(each.legacy.landingFields)!==JSON.stringify(each.react.landingFields)){
+            failed++;console.error("FAIL landing form field mapping",viewport.name,each.legacy.landingFields,each.react.landingFields);
           }
           // Every canonical banner should use the same source image as the PHP original.
           const normalize=(v)=>String(v||"").replace(/https?:\/\/[^/]+/g,"");
