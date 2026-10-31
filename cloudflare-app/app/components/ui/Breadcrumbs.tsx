@@ -2,10 +2,16 @@ import { Link } from "react-router";
 
 export type BreadcrumbItem = { label: string; to?: string };
 
-export function Breadcrumbs({ items }: { items: BreadcrumbItem[] }) {
+export function Breadcrumbs({
+  items,
+  className = ""
+}: {
+  items: BreadcrumbItem[];
+  className?: string;
+}) {
   return (
     <nav aria-label="breadcrumb">
-      <ol className="breadcrumb">
+      <ol className={"breadcrumb" + (className ? ` ${className}` : "")}>
         {items.map((item) => (
           <li
             key={item.label}

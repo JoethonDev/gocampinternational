@@ -135,6 +135,7 @@ export function CategoryPage({
       <div className="bg-light border-bottom">
         <div className="container py-2">
           <Breadcrumbs
+            className="mb-0"
             items={[{ label: "HOME", to: "/" }, { label: category.name.toUpperCase() }]}
           />
         </div>
