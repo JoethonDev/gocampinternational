@@ -98,8 +98,9 @@ html{scroll-behavior:smooth}body{margin:0}.visually-hidden-focusable:not(:focus)
 }
 @media (min-width:1200px) and (hover:hover) {
   /* Hover works even if the Bootstrap bundle is late or unavailable. */
-  .navbar.fixed-top .nav-item.dropdown:hover > .dropdown-menu,
-  .navbar.fixed-top .nav-item.dropdown:focus-within > .dropdown-menu { display:block; }
+  /* Hover-only fallback: :focus-within kept previously focused menus open
+     after Bootstrap had hidden them when a sibling menu was activated. */
+  .navbar.fixed-top .nav-item.dropdown:hover > .dropdown-menu { display:block; }
 }
 @media (max-width:1199.98px) {
   .page-content .hero-section:has(.category-hero-caption) { background-attachment: scroll; }
