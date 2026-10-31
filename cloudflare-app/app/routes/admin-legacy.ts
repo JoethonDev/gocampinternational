@@ -2,10 +2,12 @@ import {redirect} from "react-router";
 import type {Route} from "./+types/admin-legacy";
 /** Read-only compatibility for original admin bookmarks. Never redirect old POSTs to GET. */
 const aliases:Record<string,string>={
+  "index.php":"/admin/login","index":"/admin/login",
   "dashboard":"/admin","dashboard.php":"/admin",
   "programs":"/admin/catalog/program","programs.php":"/admin/catalog/program",
   "media-library":"/admin/media","media-library.php":"/admin/media",
   "site-visibility":"/admin/documents/site_settings","site-visibility.php":"/admin/documents/site_settings",
+  "edit-site-visibility":"/admin/documents/site_settings","edit-site-visibility.php":"/admin/documents/site_settings",
   "memories":"/admin/documents/camp_memories","memories.php":"/admin/documents/camp_memories",
   "edit-memories":"/admin/documents/camp_memories","edit-memories.php":"/admin/documents/camp_memories",
   "edit-faq":"/admin/documents/faq","edit-faq.php":"/admin/documents/faq",
