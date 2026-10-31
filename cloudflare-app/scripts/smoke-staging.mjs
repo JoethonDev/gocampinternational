@@ -76,4 +76,3 @@ if (failed) {
   console.error(failed + " staging smoke check(s) failed");
   process.exitCode = 1;
 } else console.log("Staging HTTP smoke checks passed:", tests.length);
-
