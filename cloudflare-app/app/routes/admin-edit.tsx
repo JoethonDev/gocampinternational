@@ -7,6 +7,7 @@ import { listCatalog } from "../lib/catalog.server";
 import { Repeater } from "../components/Repeater";
 import { MediaSelector } from "../components/MediaSelector";
 import { VisibilityOverrides } from "../components/VisibilityOverrides";
+import { RichTextInput } from "../components/RichTextInput";
 export function meta(){return [{title:"Edit GoCamp Content"},{name:"robots",content:"noindex,nofollow"}];}
 export async function loader({request,context,params}:Route.LoaderArgs){
   const db=context.cloudflare.env.DB,session=await requireAdmin(request,db),kind=ensureKind(params.kind||"");
@@ -41,19 +42,19 @@ export default function Edit({loaderData}:Route.ComponentProps){
       {kind==="program"&&<><div className="col-md-6"><label className="form-label">Category</label><select className="form-select" name="category_slug" defaultValue={v(item,"category_slug")}><option value="">Uncategorized</option>{categories.map(c=><option value={c.slug} key={c.slug}>{c.name}</option>)}</select></div>
         {(["image","tagline","price","level","color","duration","order"] as const).map(k=><div className="col-md-6" key={k}><label className="form-label" htmlFor={k}>{k}</label>{k==="image"?<MediaSelector id={k} name={k} label={k} initial={v(item,k)} uploaded={uploadedMedia}/>:<input className="form-control" id={k} name={k} defaultValue={item[k]==null?"":String(item[k])}/>}</div>)}
         {(["min","max"] as const).map(k=><div className="col-md-6" key={k}><label className="form-label" htmlFor={"age-"+k}>Age {k}</label><input type="number" min="0" max="120" className="form-control" id={"age-"+k} name={"ages_"+k} defaultValue={String((item.ages as Record<string,unknown>|undefined)?.[k]??(k==="min"?0:99))}/></div>)}
-        <div className="col-12"><label className="form-label" htmlFor="description">Description (HTML source preserved)</label><textarea className="form-control" rows={6} name="description" id="description" defaultValue={v(item,"description")}/></div>
+        <RichTextInput name="description" label="Program description" initial={v(item,"description")}/>
         {(["highlights","includes","excludes","badges","gallery"] as const).map(k=><div className="col-md-6" key={k}><label className="form-label" htmlFor={k}>{k} (one per line)</label><textarea className="form-control" id={k} name={k} rows={4} defaultValue={lines(item[k])}/></div>)}
         <Repeater name="schedule" title="Daily schedule" initial={Object.entries((item.schedule as unknown as Record<string,unknown> | undefined)||{}).map(([time,description])=>({time,description}))} fields={[{key:"time",label:"Time"},{key:"description",label:"Activity / description",kind:"long"}]}/>
       </>}
       {kind==="destination"&&<>{(["banner","tagline","intro_image"] as const).map(k=><div className="col-md-6" key={k}><label className="form-label" htmlFor={k}>{k}</label>{k==="banner"||k==="intro_image"?<MediaSelector id={k} label={k} name={k} initial={v(item,k)} uploaded={uploadedMedia}/>:<input className="form-control" id={k} name={k} defaultValue={v(item,k)}/>}</div>)}
-        <div className="col-12"><label className="form-label" htmlFor="intro_text">Introduction</label><textarea className="form-control" rows={5} id="intro_text" name="intro_text" defaultValue={v(item,"intro_text")}/></div>
+        <RichTextInput name="intro_text" label="Destination introduction" initial={v(item,"intro_text")}/>
         <div className="col-12"><label className="form-label" htmlFor="program_ids">Associated program IDs (one per line)</label><textarea className="form-control" id="program_ids" name="program_ids" rows={6} defaultValue={lines(item.program_ids)}/></div>
         <Repeater name="highlights" title="Destination highlights" initial={Array.isArray(item.highlights)?item.highlights as Record<string,unknown>[]:[]} fields={[{key:"icon",label:"Icon"},{key:"text",label:"Highlight text"}]}/>
         <Repeater name="stats" title="Destination statistics" initial={Array.isArray(item.stats)?item.stats as Record<string,unknown>[]:[]} fields={[{key:"number",label:"Number"},{key:"suffix",label:"Suffix"},{key:"label",label:"Label"},{key:"icon",label:"Icon"}]}/>
         <Repeater name="faq" title="Destination FAQs" initial={Array.isArray(item.faq)?item.faq as Record<string,unknown>[]:[]} fields={[{key:"q",label:"Question"},{key:"a",label:"Answer",kind:"long"}]}/>
       </>}
       {kind==="category"&&<>{(["banner","intro_image","color"] as const).map(k=><div className="col-md-6" key={k}><label className="form-label" htmlFor={k}>{k}</label><input className="form-control" id={k} name={k} defaultValue={v(item,k)}/></div>)}
-        <div className="col-12"><label className="form-label" htmlFor="intro">Introduction</label><textarea className="form-control" name="intro" id="intro" rows={5} defaultValue={v(item,"intro")}/></div>
+        <RichTextInput name="intro" label="Category introduction" initial={v(item,"intro")}/>
         <Repeater name="sections" title="Category content sections" initial={Array.isArray(item.sections)?item.sections as Record<string,unknown>[]:[]} fields={[{key:"title",label:"Section title"},{key:"image",label:"Image path"},{key:"content",label:"Content (HTML allowed)",kind:"long"},{key:"is_active",label:"Visible",kind:"flag"}]}/>
         <div className="col-12"><label htmlFor="category_gallery" className="form-label">Category gallery images (one path per line)</label><textarea id="category_gallery" name="gallery" className="form-control" rows={3} defaultValue={lines(item.gallery)}/></div>
       </>}
