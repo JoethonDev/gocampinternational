@@ -45,10 +45,11 @@ function readFields(form:FormData,kind:Kind,previous:Record<string,unknown>) {
     const order=toText(form.get("order"),12),duration=toText(form.get("duration"),12);
     const min=toText(form.get("ages_min"),3),max=toText(form.get("ages_max"),3);
     if([order,duration,min,max].some(v=>v&&!/^\d+$/.test(v)))throw new Response("Invalid numeric field",{status:400});
-    if((Number(min)||0)>(Number(max)||99))throw new Response("Invalid ages",{status:400});
+    if(min!==""&&max!==""&&Number(min)>Number(max))throw new Response("Invalid ages",{status:400});
     data.order=order===""?null:Number(order);
-    data.duration=Number(duration||0);
-    data.ages={min:min===""?0:Number(min),max:max===""?99:Number(max)};
+    data.duration=duration===""?null:Number(duration);
+    if(form.get("price")==="")data.price=null;
+    data.ages={min:min===""?null:Number(min),max:max===""?null:Number(max)};
     for(const field of ["highlights","includes","excludes","badges","gallery"]) {
       const raw=toText(form.get(field),25000);
       if(raw.length>25000)throw new Response("Field too large",{status:400});
