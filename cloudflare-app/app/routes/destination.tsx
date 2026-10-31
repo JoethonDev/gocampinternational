@@ -12,7 +12,7 @@ export async function loader({params,context}:Route.LoaderArgs){
   const programs=destination.status==="coming-soon"?[]:await listCatalog(context.cloudflare.env.DB,"program");
   const ids=Array.isArray(destination.program_ids)?destination.program_ids:[];
   const byId=new Map(programs.map(x=>[x.id||x.slug,x]));
-  return {destination,related:ids.map(id=>byId.get(id)).filter((x):x is CatalogRecord=>Boolean(x))};
+  return {destination,hasProgramIds:ids.length>0,related:ids.map(id=>byId.get(id)).filter((x):x is CatalogRecord=>Boolean(x))};
 }
 export function meta({data}:Route.MetaArgs){
   return [{title:"Go Camp :: "+(data?.destination.name||"Destination")},{name:"description",content:String(data?.destination.tagline||"Discover Your Adventure").slice(0,160)}];
@@ -35,7 +35,7 @@ export default function Destination({loaderData}:Route.ComponentProps){
       {d.intro_image&&<div className="col-lg-5"><img className="img-fluid rounded-4 shadow-sm w-100" src={String(d.intro_image)} alt={d.name} loading="lazy"/></div>}
     </div></div></section>}
     {isVisible("destination","programs",d,settings)&&<section className="section-padding bg-light" id="programs"><div className="container"><div className="row g-4 justify-content-center">{related.map(p=><div className="col-lg-4 col-md-6" key={p.slug}><ProgramCard program={p} settings={settings}/></div>)}
-      {(!Array.isArray(d.program_ids)||d.program_ids.length===0)&&<p className="text-center">No programs are currently available for this destination. Please check back soon!</p>}</div></div></section>}
+      {(!loaderData.hasProgramIds)&&<p className="text-center">No programs are currently available for this destination. Please check back soon!</p>}</div></div></section>}
     {isVisible("destination","faq",d,settings)&&faq.length>0&&<section className="section-padding"><div className="container"><FaqAccordion title={"Questions About "+d.name} items={faq} accordionId="destinationFaqAccordion"/></div></section>}
   </div>;
 }
