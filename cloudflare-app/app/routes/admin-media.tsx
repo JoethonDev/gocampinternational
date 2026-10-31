@@ -18,7 +18,8 @@ export async function loader({ request, context }: Route.LoaderArgs) {
     session,
     data,
     uploaded: new URL(request.url).searchParams.has("uploaded"),
-    updated: new URL(request.url).searchParams.has("updated")
+    updated: new URL(request.url).searchParams.has("updated"),
+    staging: context.cloudflare.env.GOCAMP_ENV === "staging"
   };
 }
 
@@ -40,10 +41,10 @@ export async function action({ request, context }: Route.ActionArgs) {
 }
 
 export default function AdminMedia({ loaderData }: Route.ComponentProps) {
-  const { session, data, uploaded, updated } = loaderData;
+  const { session, data, uploaded, updated, staging } = loaderData;
   return (
     <AdminShell username={session.username} csrf={session.csrf}>
-      <MediaLibraryPage data={data} csrf={session.csrf} uploaded={uploaded} updated={updated} />
+      <MediaLibraryPage data={data} csrf={session.csrf} uploaded={uploaded} updated={updated} staging={staging} />
     </AdminShell>
   );
 }

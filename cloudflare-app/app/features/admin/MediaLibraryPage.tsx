@@ -188,12 +188,14 @@ export function MediaLibraryPage({
   data,
   csrf,
   uploaded,
-  updated
+  updated,
+  staging
 }: {
   data: MediaLibraryData;
   csrf: string;
   uploaded: boolean;
   updated: boolean;
+  staging: boolean;
 }) {
   return (
     <>
@@ -207,6 +209,12 @@ export function MediaLibraryPage({
       {(uploaded || updated) && (
         <div className="alert alert-success" role="status">
           Media saved.
+        </div>
+      )}
+{staging && (
+        <div className="alert alert-info d-flex align-items-center justify-content-between gap-3 flex-wrap">
+          <span>Staging: import committed legacy images into private Cloudflare R2 before switching off static copies.</span>
+          <a className="btn btn-sm btn-primary" href="/admin/media/import">Import images to R2</a>
         </div>
       )}
       <MediaSearch query={data.q} folder={data.folder} />
