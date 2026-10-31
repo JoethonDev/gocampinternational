@@ -45,6 +45,7 @@ export function ProgramFields({
             {categories.map((category) => (
               <option value={category.slug} key={category.slug}>
                 {category.name}
+                {category.status !== "active" ? ` (${category.status})` : ""}
               </option>
             ))}
           </select>

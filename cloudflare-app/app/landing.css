@@ -325,3 +325,7 @@ body:has(.landing-page) {
     margin-top: 40px;
   }
 }
+/* Keep the landing form heading above the WCAG large-text contrast floor. */
+.landing-page .form-title {
+  color: #00758a;
+}

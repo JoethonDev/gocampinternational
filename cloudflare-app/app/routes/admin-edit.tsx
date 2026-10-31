@@ -29,7 +29,7 @@ export async function loader({ request, context, params }: Route.LoaderArgs) {
   if (!isNew && !row) throw new Response("Not found", { status: 404 });
 
   const [categories, programs, media] = await Promise.all([
-    kind === "program" ? listCategories(db) : Promise.resolve<CategoryRecord[]>([]),
+    kind === "program" ? listCategories(db, false) : Promise.resolve<CategoryRecord[]>([]),
     kind === "destination" ? listPrograms(db, false) : Promise.resolve<ProgramRecord[]>([]),
     db
       .prepare("SELECT id FROM media_assets WHERE is_public=1 ORDER BY created_at DESC LIMIT 300")

@@ -1,30 +1,12 @@
 import { useState } from "react";
 import { Link } from "react-router";
 import type { Route } from "./+types/admin-media-import";
-import legacy from "../legacy-media.json";
-import { requireAdmin, verifyAdminPost } from "../lib/admin.server";
+import { requireAdmin } from "../lib/admin.server";
+import { LEGACY_IMAGES, requireStaging } from "../features/admin/media-import.server";
 import { AdminShell } from "../components/admin/AdminShell";
 import { AdminPageHeader } from "../components/admin/AdminPageHeader";
 import { AdminPanel } from "../components/admin/AdminPanel";
 import { AdminProgress } from "../components/admin/AdminProgress";
-
-const BATCH_SIZE = 8;
-type LegacyImage = { path: string; bytes: number; folder: string };
-const images = (legacy as LegacyImage[]).filter((item) => item.path.startsWith("/images/"));
-const formats: Record<string, string> = {
-  webp: "image/webp",
-  png: "image/png",
-  jpg: "image/jpeg",
-  jpeg: "image/jpeg",
-  gif: "image/gif",
-  avif: "image/avif",
-  svg: "image/svg+xml",
-  ico: "image/x-icon"
-};
-
-function requireStaging(env: Env) {
-  if (env.GOCAMP_ENV !== "staging") throw new Response("Not found", { status: 404 });
-}
 
 export function meta() {
   return [
@@ -39,85 +21,9 @@ export async function loader({ request, context }: Route.LoaderArgs) {
   const session = await requireAdmin(request, env.DB);
   return {
     session,
-    total: images.length,
-    totalBytes: images.reduce((sum, item) => sum + item.bytes, 0)
+    total: LEGACY_IMAGES.length,
+    totalBytes: LEGACY_IMAGES.reduce((sum, item) => sum + item.bytes, 0)
   };
-}
-
-async function importImage(item: LegacyImage, request: Request, env: Env) {
-  const key = item.path.slice(1);
-  const ext = key.split(".").at(-1)?.toLowerCase() || "";
-  const mime = formats[ext];
-  if (!mime) throw new Error("Unsupported extension");
-  const assetResponse = await env.ASSETS.fetch(
-    new Request(new URL(item.path, request.url), { method: "GET" })
-  );
-  if (!assetResponse.ok) throw new Error("Source asset returned HTTP " + assetResponse.status);
-  const buffer = await assetResponse.arrayBuffer();
-  if (buffer.byteLength !== item.bytes)
-    throw new Error("Source length differs from repository inventory");
-  const hash = Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", buffer)))
-    .map((byte) => byte.toString(16).padStart(2, "0"))
-    .join("");
-  const stored = await env.MEDIA.head(key);
-  if (stored) {
-    if (stored.size !== buffer.byteLength || stored.customMetadata?.sha256 !== hash) {
-      throw new Error("Existing R2 object differs from source; refusing to overwrite");
-    }
-    return "already-present" as const;
-  }
-  await env.MEDIA.put(key, buffer, {
-    httpMetadata: { contentType: mime, cacheControl: "public, max-age=86400" },
-    customMetadata: { sha256: hash }
-  });
-  const verified = await env.MEDIA.head(key);
-  if (
-    !verified ||
-    verified.size !== buffer.byteLength ||
-    verified.customMetadata?.sha256 !== hash
-  ) {
-    throw new Error("R2 verification failed");
-  }
-  return "uploaded" as const;
-}
-
-export async function action({ request, context }: Route.ActionArgs) {
-  const env = context.cloudflare.env;
-  requireStaging(env);
-  if (request.method !== "POST") throw new Response("Method not allowed", { status: 405 });
-  const form = await request.formData();
-  await verifyAdminPost(request, env.DB, form);
-  const raw = String(form.get("cursor") ?? "");
-  const cursor = Number(raw);
-  if (!/^\d+$/.test(raw) || !Number.isSafeInteger(cursor) || cursor > images.length) {
-    throw new Response("Invalid cursor", { status: 400 });
-  }
-  const batch = images.slice(cursor, cursor + BATCH_SIZE);
-  const results = await Promise.allSettled(batch.map((item) => importImage(item, request, env)));
-  const failures = results.flatMap((result, index) =>
-    result.status === "rejected"
-      ? [
-          {
-            path: batch[index].path,
-            reason: result.reason instanceof Error ? result.reason.message : "Import failed"
-          }
-        ]
-      : []
-  );
-  return Response.json(
-    {
-      uploaded: results.filter(
-        (result) => result.status === "fulfilled" && result.value === "uploaded"
-      ).length,
-      existing: results.filter(
-        (result) => result.status === "fulfilled" && result.value === "already-present"
-      ).length,
-      failures,
-      nextCursor: failures.length ? cursor : Math.min(images.length, cursor + BATCH_SIZE),
-      total: images.length
-    },
-    { headers: { "Cache-Control": "no-store" } }
-  );
 }
 
 export default function AdminMediaImport({ loaderData }: Route.ComponentProps) {
@@ -140,7 +46,7 @@ export default function AdminMediaImport({ loaderData }: Route.ComponentProps) {
     let cursor = 0;
     try {
       while (cursor < total) {
-        const response = await fetch("/admin/media/import", {
+        const response = await fetch("/admin/media/import/run", {
           method: "POST",
           credentials: "same-origin",
           headers: { "Content-Type": "application/x-www-form-urlencoded" },

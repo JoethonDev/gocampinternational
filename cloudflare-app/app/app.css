@@ -350,3 +350,35 @@ body {
 .camp-memories .fb-page {
   min-height: 300px;
 }
+
+/* WCAG contrast adjustments layered over the legacy palette. */
+.navbar.gc-site-navbar {
+  background-color: #006b7d !important;
+}
+.navbar.gc-site-navbar .nav-link {
+  color: #fff !important;
+}
+.navbar.gc-site-navbar .nav-link.active {
+  color: #fff !important;
+}
+.navbar.gc-site-navbar .nav-link.active::after {
+  background: #f9bb08;
+}
+.breadcrumb .breadcrumb-item a {
+  color: #006b7d;
+}
+.btn.btn-outline-primary {
+  color: #006b7d;
+  border-color: #006b7d;
+}
+.btn.btn-outline-primary:hover,
+.btn.btn-outline-primary:focus-visible {
+  background-color: #006b7d;
+  border-color: #006b7d;
+  color: #fff;
+}
+.gc-admin-login .btn-primary {
+  background-color: #006b7d !important;
+  border-color: #006b7d !important;
+  color: #fff !important;
+}
