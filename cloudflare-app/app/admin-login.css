@@ -1,0 +1,9 @@
+/* Faithful React replacement for the source PHP admin sign-in page. */
+.gc-admin-login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:2rem 1rem;
+ background:radial-gradient(circle at 10% 20%,rgb(242,246,252) 0%,rgb(230,236,245) 90%);color:var(--bs-body-color)}
+.gc-admin-login[data-bs-theme="dark"]{background:radial-gradient(circle at 10% 20%,#1a1d21 0%,#212529 90%)}
+.gc-admin-login-card{width:100%;max-width:420px;border:0;border-radius:1rem;box-shadow:0 10px 30px rgba(0,0,0,.08);
+ background:var(--bs-body-bg);color:var(--bs-body-color)}
+.gc-admin-login .form-floating>.form-control{background:var(--bs-body-bg);border-color:var(--bs-border-color);color:var(--bs-body-color)}
+.gc-admin-login .form-floating>.form-control:focus{box-shadow:0 0 0 .25rem rgba(0,164,192,.1)}
+@media(prefers-reduced-motion:reduce){.gc-admin-login *{animation:none!important;transition:none!important}}
