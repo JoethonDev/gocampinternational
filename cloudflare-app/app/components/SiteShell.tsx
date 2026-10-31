@@ -10,11 +10,11 @@ export function SiteHeader({categories,destinations}:{categories:CatalogRecord[]
           <li className="nav-item"><Link className="nav-link" to="/">Home</Link></li>
           <li className="nav-item"><Link className="nav-link" to="/about">About Us</Link></li>
           <li className="nav-item dropdown">
-            <button className="nav-link dropdown-toggle btn btn-link" id="programsDropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">Programs</button>
+            <a className="nav-link dropdown-toggle" href="#" id="programsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Programs</a>
             <ul className="dropdown-menu" aria-labelledby="programsDropdown">{categories.map(c=><li key={c.slug}><Link className="dropdown-item" to={"/program/category?category="+encodeURIComponent(c.slug)}>{c.name}</Link></li>)}</ul>
           </li>
           <li className="nav-item dropdown">
-            <button className="nav-link dropdown-toggle btn btn-link" id="destinationsDropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">Destinations</button>
+            <a className="nav-link dropdown-toggle" href="#" id="destinationsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Destinations</a>
             <ul className="dropdown-menu" aria-labelledby="destinationsDropdown">{destinations.map(d=><li key={d.slug}><Link className="dropdown-item" to={"/destinations/"+encodeURIComponent(d.slug)}>{d.name}</Link></li>)}</ul>
           </li>
           <li className="nav-item"><Link className="nav-link" to="/faq">FAQ</Link></li>
@@ -30,8 +30,8 @@ export function SiteFooter() {
     <div className="row gy-4">
       <div className="col-lg-3 col-md-6"><h5 className="fw-bold text-uppercase mb-3">About</h5><ul className="list-unstyled"><li className="mb-2"><Link to="/">Home</Link></li><li className="mb-2"><Link to="/about">About Us</Link></li><li className="mb-2"><Link to="/faq">F.A.Q</Link></li><li><Link to="/contact">Contact Us</Link></li></ul></div>
       <div className="col-lg-3 col-md-6"><h5 className="fw-bold text-uppercase mb-3">Programs</h5><ul className="list-unstyled"><li><Link to="/program/category?category=kids-camps">Language & Activity</Link></li><li><Link to="/program/category?category=adult-academic">Adult Academic</Link></li><li><Link to="/program/category?category=young-leader-program">Young Leader</Link></li><li><Link to="/program/category?category=soccer-camps">Soccer Camps</Link></li></ul></div>
-      <div className="col-lg-3 col-md-6"><h5 className="fw-bold text-uppercase mb-3">Get in Touch</h5><p><strong>Zeinab El Sokkary</strong><small className="d-block">Managing Director</small></p><p>+20 122 171 9621</p><a href="mailto:Zeinab@gocampinternational.net">Email Us</a></div>
-      <div className="col-lg-3 col-md-6"><h5 className="fw-bold text-uppercase mb-3">Follow Us</h5><div className="social-icons mb-4"><a href="https://www.facebook.com/GoCampGo" target="_blank" rel="noopener noreferrer"><img src="/images/facebook_icon.webp" alt="Facebook"/></a> <a href="https://www.instagram.com/gocampgo/" target="_blank" rel="noopener noreferrer"><img src="/images/instagram_icon.webp" alt="Instagram"/></a></div><img src="/images/icef_logo.webp" alt="ICEF Accredited" style={{maxWidth:100}}/></div>
-    </div><hr className="my-4"/><p className="mb-0 text-center">Go Camp International</p>
-  </div></footer>;
+      <div className="col-lg-3 col-md-6"><h5 className="fw-bold text-uppercase mb-3">Get in Touch</h5><p className="mb-2"><strong>Zeinab El Sokkary</strong><br/><small>Managing Director</small></p><p className="mb-2"><i className="bi bi-telephone-fill me-2"/>+20 122 171 9621</p><p><a href="mailto:Zeinab@gocampinternational.net"><i className="bi bi-envelope-fill me-2"/>Email Us</a></p></div>
+      <div className="col-lg-3 col-md-6 text-center text-md-start"><h5 className="fw-bold text-uppercase mb-3">Follow Us</h5><div className="social-icons mb-4"><a href="https://www.facebook.com/GoCampGo" target="_blank" rel="noopener noreferrer" className="me-2"><img src="/images/facebook_icon.webp" alt="Facebook"/></a> <a href="https://www.instagram.com/gocampgo/" target="_blank" rel="noopener noreferrer" className="me-2"><img src="/images/instagram_icon.webp" alt="Instagram"/></a> <a href="https://www.linkedin.com/in/zeinab-el-sokkary-97245a34/" target="_blank" rel="noopener noreferrer" className="me-2"><img src="/images/linkin_icon.webp" alt="LinkedIn"/></a></div><img src="/images/icef_logo.webp" alt="ICEF Accredited" style={{maxWidth:100}}/></div>
+    </div>
+  </div><hr className="my-4"/><div className="row"><div className="col-md-6 text-center text-md-start"><small>© {new Date().getFullYear()} GO CAMP International. All Rights Reserved.</small></div><div className="col-md-6 text-center text-md-end"><small>Powered by Graphicano</small></div></div></div></footer>;
 }

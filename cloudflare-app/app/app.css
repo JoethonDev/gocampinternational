@@ -1,2 +1,8 @@
 /* Structural fallback while the original PR40 stylesheets remain authoritative. */
 html{scroll-behavior:smooth}body{margin:0}.visually-hidden-focusable:not(:focus){position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+
+/* Fidelity: public links use the legacy CSS, never Bootstrap .btn-link overrides. */
+.navbar .nav-link.dropdown-toggle { text-decoration: none; font: inherit; }
+.navbar .nav-link.dropdown-toggle:hover, .navbar .nav-link.dropdown-toggle:focus { text-decoration: none; }
+/* The original PHP uses its Bootstrap carousel without added styling. */
+#backToTop { cursor: pointer; }
