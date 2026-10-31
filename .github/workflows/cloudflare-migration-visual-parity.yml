@@ -4,6 +4,9 @@ on:
     branches: [migration/cloudflare-react-workers-pr40]
     paths: ["cloudflare-app/app/**", "cloudflare-app/tests/**", "tests/migration-visual-parity.cjs", ".github/workflows/cloudflare-migration-visual-parity.yml"]
   workflow_dispatch:
+concurrency:
+  group: gocamp-visual-parity-staging
+  cancel-in-progress: true
 permissions:
   contents: read
 jobs:
