@@ -19,6 +19,7 @@ function readFields(form:FormData,kind:Kind,previous:Record<string,unknown>) {
   for(const [field,max] of fields[kind]) {
     const value=toText(form.get(field),max);
     if(value.length>max)throw new Response("Field exceeds maximum length",{status:400});
+    if(value===""&&!Object.hasOwn(previous,field))continue;
     data[field]=value;
   }
 
@@ -48,15 +49,22 @@ function readFields(form:FormData,kind:Kind,previous:Record<string,unknown>) {
     if(min!==""&&max!==""&&Number(min)>Number(max))throw new Response("Invalid ages",{status:400});
     data.order=order===""?null:Number(order);
     data.duration=duration===""?null:Number(duration);
-    if(form.get("price")==="")data.price=null;
+    if(form.get("price")===""&&Object.hasOwn(previous,"price"))data.price=null;
     data.ages={min:min===""?null:Number(min),max:max===""?null:Number(max)};
     for(const field of ["highlights","includes","excludes","badges","gallery"]) {
       const raw=toText(form.get(field),25000);
       if(raw.length>25000)throw new Response("Field too large",{status:400});
+      if(raw===""&&!Object.hasOwn(previous,field))continue;
       data[field]=raw.split("\n").map(v=>v.trim()).filter(Boolean).slice(0,150);
     }
     const schedule=jsonList("schedule",[["time",100,"string"],["description",3000,"string"]]);
-    if(schedule)data.schedule=Object.fromEntries(schedule.filter(x=>x.time).map(x=>[x.time,x.description]));
+    if(schedule){
+      const scheduled=schedule.filter(x=>x.time);
+      if(scheduled.length)data.schedule=Object.fromEntries(scheduled.map(x=>[x.time,x.description]));
+      else if(Array.isArray(previous.schedule))data.schedule=[];
+      else if(Object.hasOwn(previous,"schedule"))data.schedule={};
+      else delete data.schedule;
+    }
     data.id=String(previous.id||form.get("slug")||"");
   }
   if(kind==="destination") {
@@ -87,14 +95,16 @@ export async function saveEntity(request:Request,db:D1Database,kind:Kind,form:Fo
   const original=originalSlug||slug;
   // Slugs remain stable during editing; migrating references during rename is a later acceptance gate.
   if(originalSlug&&slug!==originalSlug)throw new Response("Changing the slug is not supported yet",{status:409});
-  const row=await db.prepare("SELECT content_json,revision FROM catalog_entities WHERE kind=? AND slug=?").bind(kind,original).first<{content_json:string;revision:number}>();
+  const row=await db.prepare("SELECT content_json,revision,sort_order FROM catalog_entities WHERE kind=? AND slug=?").bind(kind,original).first<{content_json:string;revision:number;sort_order:number}>();
   const previous=row?JSON.parse(row.content_json) as Record<string,unknown>:{};
   const data=readFields(form,kind,previous);
   if(kind==="destination")data.slug=slug;
   if(kind==="category")data.slug=slug;
   const revision=Number(form.get("revision")||0);
   const category=kind==="program"?String(data.category_slug||""):null;
-  const order=kind==="program"?(Number(data.order)||0):0;
+  // A content-only edit must not silently reorder categories/destinations or
+  // records whose order is intentionally unspecified in source data.
+  const order=kind==="program"&&data.order!==null&&data.order!==undefined?Number(data.order):(row?.sort_order??0);
   const jobs:D1PreparedStatement[]=[];
   if(kind==="destination") {
     const ids=[...new Set((data.program_ids as string[])||[])];
