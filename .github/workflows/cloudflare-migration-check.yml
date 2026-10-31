@@ -29,6 +29,12 @@ jobs:
         run: npx wrangler deploy --dry-run
       - name: Check PR40 source snapshot with PHP
         run: php scripts/export-pr40.php --check
+      - name: Test and generate read-only D1 seed
+        run: |
+          node --test tests/*.test.mjs
+          php scripts/export-pr40.php --output build/imports/legacy-pr40.json
+          node scripts/make-d1-seed.mjs build/imports/legacy-pr40.json build/imports/seed-pr40.sql
+          test -s build/imports/seed-pr40.sql
       - name: Inspect duplicate legacy paths and source leakage
         run: |
           test ! -e build/client/data/legacy

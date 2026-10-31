@@ -1,8 +1,7 @@
 # GoCamp React Router migration
+Isolated React Router v7 + Cloudflare Vite plugin app. Authoritative source: PR #40 commit 80432a2a6fcb4b0de6f14710748e53781ddef58c.
 
-This subproject is isolated from the PHP application. It starts with Cloudflare's official React Router starter template, then adds GoCamp-specific configuration. The deployed staging account currently contains a separate health-only placeholder; this source replaces it only after CI build validation.
-
-## Commands
+## Local build
 ```bash
 cd cloudflare-app
 npm ci
@@ -12,6 +11,15 @@ npm run build
 npx wrangler deploy --dry-run
 ```
 
-Staging deploy only after CI success: `npm run deploy`. The production Worker is intentionally unrouted. Source-of-truth: PR #40 @ 80432a2a6fcb4b0de6f14710748e53781ddef58c.
+## Staging data setup
+```bash
+php scripts/export-pr40.php --check
+php scripts/export-pr40.php --output build/imports/legacy-pr40.json
+node scripts/make-d1-seed.mjs build/imports/legacy-pr40.json build/imports/seed-pr40.sql
+npx wrangler d1 migrations apply gocamp-staging-db --remote
+# REVIEW generated SQL and staging state before optional remote import
+npx wrangler d1 execute gocamp-staging-db --remote --file build/imports/seed-pr40.sql
+```
+No production import or deployment is automated. Browser preview is intentionally incomplete and noindex. Legacy public assets are copied from repository at build time; no PHP is packaged.
 
-Static assets are copied from committed PHP-era folders at build time; no PHP files are copied. The initial home page is deliberately branded as incomplete and noindex. Public/admin parity is tracked in docs/cloudflare-migration/PHASES.md.
+D1 uses **indexed typed summary columns plus lossless JSON content per entity**, not a row for every highlight. This simplification preserves every PR40 dynamic field with lower migration risk and fewer queries. PR40 PostgreSQL schema is a reference, not a D1 migration.
