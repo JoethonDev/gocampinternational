@@ -22,7 +22,11 @@ async function metrics(page) {
       heroHeight:Math.round(hero?.getBoundingClientRect().height||0),
       heroBackground:heroStyles?.backgroundImage,
       fontFamily:getComputedStyle(document.body).fontFamily,
-      horizontalOverflow:document.documentElement.scrollWidth>window.innerWidth+3
+      horizontalOverflow:document.documentElement.scrollWidth>window.innerWidth+3,
+      documentHeight:document.documentElement.scrollHeight,
+      memorySectionCount:document.querySelectorAll(".camp-memories").length,
+      memoryCardCount:document.querySelectorAll(".camp-memories .camp-memory").length,
+      bannerOverlay:hero?getComputedStyle(hero,"::before").backgroundImage:"none"
     };
   });
 }
@@ -49,6 +53,9 @@ async function metrics(page) {
             await tab.screenshot({path:path.join(output,route.name+"-"+viewport.name+"-"+kind+".png"),animations:"disabled",fullPage:true});
             assert(results.navDecoration==="none",kind+" "+route.name+" nav links are underlined: "+results.navDecoration);
             assert(!results.horizontalOverflow,kind+" "+route.name+" overflows horizontally");
+            assert(results.memorySectionCount===1,kind+" "+route.name+" lost the shared memories section");
+            assert(results.memoryCardCount>0,kind+" "+route.name+" has no memories cards");
+            if(route.name==="category-academic")assert(results.bannerOverlay.includes("linear-gradient"),kind+" category banner lost the PR40 dark overlay");
             if(viewport.name==="desktop"&&route.name==="home"){
               for(const label of ["Programs","Destinations"]){
                 const navItem=tab.locator(".navbar .nav-item.dropdown").filter({has:tab.locator(".dropdown-toggle",{hasText:label})});
@@ -65,8 +72,8 @@ async function metrics(page) {
           finally{await context.close();}
         }
         if(each.legacy&&each.react){
-          for(const key of ["navHeight","heroHeight"]){
-            if(Math.abs(each.legacy[key]-each.react[key])>6){failed++;console.error("FAIL",route.name,viewport.name,key,each.legacy[key],each.react[key]);}
+          for(const key of ["navHeight","heroHeight","documentHeight","memoryCardCount"]){
+            if(Math.abs(each.legacy[key]-each.react[key])>(key==="documentHeight"?16:key==="memoryCardCount"?0:6)){failed++;console.error("FAIL",route.name,viewport.name,key,each.legacy[key],each.react[key]);}
           }
           // Every canonical banner should use the same source image as the PHP original.
           const normalize=(v)=>String(v||"").replace(/https?:\/\/[^/]+/g,"");

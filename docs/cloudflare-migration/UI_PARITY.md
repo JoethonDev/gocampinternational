@@ -20,3 +20,9 @@ The workflow is expected to find remaining drift and can fail before pixel perfe
 - Verify dropdown hover/click on real touch and keyboard devices, carousel auto advance and menu cleanup on client-side route navigation.
 - Ensure no artificial title underlines; original `nav-link::after` accent animation on hover should remain.
 - Add visual baselines for About, FAQ, Contact, all destination/status variants, and admin pages after the public baseline passes.
+
+## Verified browser evidence — 2026-10-31
+GitHub visual parity run https://github.com/JoethonDev/gocampinternational/actions/runs/41211402619 **PASSED**, covering original PHP and staged React with 18 screenshots (Home, Italy, Academic; desktop 1440, tablet 820, mobile 390).
+Inspected desktop full-page screenshots; document heights were identical: Home 3709px, Italy 4144px, Academic 3846px. Hero/navbar heights match. Browser checks found no nav underline or horizontal overflow and both dropdowns opened on hover.
+Regressions fixed: category hero dark overlay and responsive height, missing shared memories across all 3 route types, header anchor/hover semantics, footer details and scroll/lightbox interactions.
+The stricter follow-up run also checks the memories section/cards, overlay and full-page height. Pixel-level parity across all routes, admin styling, carousel advancement, cross-browser checks and Free quota load tests remain outstanding.

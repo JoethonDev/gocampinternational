@@ -33,3 +33,9 @@ Complete phases only when their checkboxes in PHASES.md pass and executed eviden
 - Added initial admin auth/session/CSRF, catalog CRUD/bulk status, site document editing, inquiries, private R2 media ingestion and gated media delivery; features are **not yet full PHP visual parity**.
 - Applied a staging-only ADMIN_PASSWORD_SHA256 Worker secret; not stored in GitHub. Added deployment-time HTTP smoke script; status to be recorded after run.
 - Source content was imported into staging D1: 63 programs, 9 destinations, 8 categories, 37 associations, 28 memories, 11 FAQ and 6 source hash records; verified from Cloudflare D1 in this turn. Existing progress statement claiming 'no data imported' is superseded. Production D1 remains empty.
+
+## Browser-verified visual parity — 2026-10-31
+- PHP/React comparison https://github.com/JoethonDev/gocampinternational/actions/runs/41211402619: PASSED (18 screenshots: Home/Italy/Academic at 3 viewports). Desktop full-page heights identical (3709, 4144, 3846px); category banner gradient and memories slider restored.
+- Staging deployment of 4a243ea23d8a8842be5fab78909fea272f54913b passed Cloudflare Build, 13 live HTTP smoke routes and GitHub CI.
+- Fixed nav underline (btn-link replaced by legacy anchor), desktop hover open, active link/scroll/back-to-top/lightbox, original footer, text shadows, banner layout, missing home/category/destination memories.
+- Broader visual route coverage, cross-browser interaction and authenticated admin parity not yet completed.
