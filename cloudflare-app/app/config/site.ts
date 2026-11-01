@@ -13,7 +13,7 @@ export const SITE = {
     linkedin: "https://www.linkedin.com/in/zeinab-el-sokkary-97245a34/"
   },
   images: {
-    logo: "/media/7170ad54-c31e-5ca2-88ce-058510aab773",
+    logo: "/media/49c7cbd7-a00e-5970-9ed1-1e14e077e016",
     favicon: "/images/favi.png",
     contactBanner: "/images/contact_banner.webp",
     aboutBanner: "/images/about_banner.webp",
@@ -84,20 +84,20 @@ export const ABOUT_SECTIONS: AboutSection[] = [
   },
   {
     title: "Beyond Camps: Schools, Parents & Global Collaboration",
-    image: "/media/7aa4ce7d-9b13-5a59-88e5-955306d46a86",
+    image: "/media/31f77667-fa6a-5bb6-a4eb-5b10404caec8",
     gallery: [
       {
-        image: "/media/d3806ba7-1ce9-50dd-bb96-3a0c40702b2f",
+        image: "/media/601023e8-2e95-592a-99da-055709bfbeb9",
         caption: "DEO School presentation",
         alt: "Students discussing an educational presentation at DEO School"
       },
       {
-        image: "/media/c4853380-3719-5c6f-92bb-c11bf3e27c1d",
+        image: "/media/a0db6d29-35fa-5d72-9f21-44963ef73da2",
         caption: "International educators workshop — Berlin",
         alt: "International education partners meeting at a Berlin workshop"
       },
       {
-        image: "/media/36959e71-6b19-5de7-afa6-c9c9a8c97069",
+        image: "/media/838bbc52-d644-5cc7-a27d-1322fd84c263",
         caption: "Meeting global education partners",
         alt: "Go Camp representative speaking with education partners at a conference"
       }
