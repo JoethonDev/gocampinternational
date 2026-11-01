@@ -40,7 +40,7 @@ export async function action({ request, context }: Route.ActionArgs) {
   const form = await request.formData();
   const operation = String(form.get("operation") || "");
   if (operation === "upload") {
-    const result = await uploadMediaFiles(request, context.cloudflare.env, form);
+    const result = await uploadMediaFiles(request, context.cloudflare.env, form, context.cloudflare.ctx);
     const error = result.errors.map((item) => `${item.name}: ${item.message}`).join("; ");
     if (!result.uploaded.length) {
       return redirect(
