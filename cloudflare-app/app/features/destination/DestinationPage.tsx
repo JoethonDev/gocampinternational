@@ -15,7 +15,7 @@ import { isVisible } from "../../lib/visibility";
 
 function ComingSoon({ destination }: { destination: DestinationRecord }) {
   return (
-    <div className="page-content">
+    <div className="page-content coming-soon-page">
       <div className="container text-center py-5 my-5">
         <h1 className="display-3 fw-bold text-brand-primary mb-4">Coming Soon</h1>
         <h2 className="mb-3">{destination.name} is not available yet.</h2>

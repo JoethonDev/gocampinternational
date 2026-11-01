@@ -1,4 +1,4 @@
-/* Text-only family testimonials under the homepage category cards. */
+/* Text-only family testimonials: one continuous row under the homepage categories. */
 .testimonials-section {
   position: relative;
   overflow: hidden;
@@ -17,20 +17,27 @@
   content: "";
   pointer-events: none;
 }
+.testimonials-heading-wrap {
+  position: relative;
+  z-index: 1;
+  padding-inline: 1rem;
+}
 .testimonials-heading {
   position: relative;
   max-width: 670px;
-  margin: 0 auto 2.4rem;
+  margin: 0 auto 2rem;
   text-align: center;
 }
 .testimonials-kicker {
-  display: inline-block;
-  margin-bottom: 0.65rem;
-  color: var(--brand-primary);
-  font-size: 0.72rem;
-  font-weight: 800;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  display: block;
+  margin: 0 0 0.65rem;
+  color: #65777c;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.05rem;
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
 }
 .testimonials-heading .section-title {
   margin-bottom: 0.65rem;
@@ -41,18 +48,38 @@
   font-size: 1rem;
   line-height: 1.65;
 }
-.testimonials-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+.testimonials-marquee {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  overflow: hidden;
+  padding-block: 0.5rem 1rem;
+  mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+}
+.testimonials-track {
+  display: flex;
+  width: max-content;
+  animation: testimonials-drift 70s linear infinite;
+  will-change: transform;
+}
+.testimonials-marquee:hover .testimonials-track,
+.testimonials-marquee:focus-within .testimonials-track {
+  animation-play-state: paused;
+}
+.testimonials-set {
+  display: flex;
+  flex: 0 0 auto;
   gap: 1.15rem;
-  max-width: 1080px;
-  margin: 0 auto;
+  padding-right: 1.15rem;
 }
 .testimonial-card {
   position: relative;
   display: flex;
+  width: clamp(280px, 34vw, 420px);
+  min-height: 245px;
+  flex: 0 0 clamp(280px, 34vw, 420px);
   flex-direction: column;
-  min-height: 230px;
   padding: 2rem 2.1rem 1.55rem;
   margin: 0;
   overflow: hidden;
@@ -86,6 +113,10 @@
 .testimonial-quote {
   position: relative;
   z-index: 1;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  justify-content: center;
   color: #34454a;
   font-family: Georgia, "Times New Roman", serif;
   font-size: 1.08rem;
@@ -121,45 +152,34 @@
   font-style: italic;
   font-weight: 700;
 }
-.testimonial-flag {
-  display: inline-flex;
-  width: 1.3rem;
-  height: 1rem;
-  flex: 0 0 auto;
-  overflow: hidden;
-  border: 1px solid rgba(24, 42, 47, 0.16);
-  border-radius: 2px;
-  background: #fff;
-  font-size: 1rem;
-  line-height: 1;
-}
-.testimonial-flag svg {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-.testimonial-flag-fallback {
-  width: auto;
-  min-width: 1.3rem;
-  padding-inline: 0.15rem;
-  border: 0;
-  background: transparent;
-  font-size: 1.15rem;
+@keyframes testimonials-drift {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
 }
 @media (max-width: 767.98px) {
   .testimonials-section::before {
     display: none;
   }
   .testimonials-heading {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.4rem;
     text-align: left;
   }
-  .testimonials-grid {
-    grid-template-columns: 1fr;
+  .testimonials-marquee {
+    mask-image: none;
+    -webkit-mask-image: none;
+  }
+  .testimonials-set {
     gap: 0.85rem;
+    padding-right: 0.85rem;
   }
   .testimonial-card {
+    width: 82vw;
     min-height: 0;
+    flex-basis: 82vw;
     padding: 1.65rem 1.35rem 1.2rem;
     border-radius: 18px;
   }
@@ -170,5 +190,22 @@
   .testimonial-quote {
     font-size: 1rem;
     line-height: 1.6;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .testimonials-marquee {
+    overflow-x: auto;
+    mask-image: none;
+    -webkit-mask-image: none;
+    scrollbar-width: thin;
+  }
+  .testimonials-track {
+    animation: none;
+  }
+  .testimonials-track > .testimonials-set[aria-hidden="true"] {
+    display: none;
+  }
+  .testimonials-set {
+    padding-right: 0;
   }
 }

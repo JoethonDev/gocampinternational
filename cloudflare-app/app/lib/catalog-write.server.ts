@@ -1,4 +1,5 @@
 import { verifyAdminPost } from "./admin.server";
+import type { DocumentKey } from "./documents";
 import {
   CATALOG_STATUSES,
   ensureCatalogKind,
@@ -331,7 +332,7 @@ export async function changeBulkStatus(
 export async function saveDocument(
   request: Request,
   db: D1Database,
-  key: "site_settings" | "camp_memories" | "faq" | "testimonials",
+  key: DocumentKey,
   form: FormData
 ): Promise<void> {
   await verifyAdminPost(request, db, form);

@@ -38,6 +38,7 @@ function FacebookPanel() {
         <div className="card-body p-2">
           <div
             className="fb-page"
+            aria-hidden="true"
             data-href={SITE.social.facebook}
             data-tabs="timeline"
             data-width="500"
@@ -113,8 +114,16 @@ export function CampMemories({ data }: { data: MemoriesDocument | null | undefin
         FB?: { XFBML?: { parse: (element?: Element | null) => void } };
       }
     ).FB;
+    const removeEmbeddedKeyboardStop = () => {
+      document.querySelectorAll<HTMLIFrameElement>(".fb-page iframe").forEach((frame) => {
+        frame.tabIndex = -1;
+        frame.setAttribute("aria-hidden", "true");
+      });
+    };
     if (facebook?.XFBML) {
       facebook.XFBML.parse(document.querySelector(".camp-memories") || undefined);
+      window.setTimeout(removeEmbeddedKeyboardStop, 800);
+      window.setTimeout(removeEmbeddedKeyboardStop, 2500);
       return;
     }
     if (!document.querySelector('script[data-gocamp-facebook="1"]')) {
@@ -124,8 +133,11 @@ export function CampMemories({ data }: { data: MemoriesDocument | null | undefin
       script.defer = true;
       script.crossOrigin = "anonymous";
       script.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v19.0";
+      script.addEventListener("load", removeEmbeddedKeyboardStop);
       document.body.appendChild(script);
     }
+    window.setTimeout(removeEmbeddedKeyboardStop, 1500);
+    window.setTimeout(removeEmbeddedKeyboardStop, 3500);
   }, [data?.show_facebook, items.length]);
 
   if (!items.length) return null;

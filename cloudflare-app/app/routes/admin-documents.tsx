@@ -4,16 +4,11 @@ import { requireAdmin } from "../lib/admin.server";
 import { saveDocument } from "../lib/catalog-write.server";
 import { AdminShell } from "../components/admin/AdminShell";
 import { DocumentEditorPage } from "../features/admin/documents/DocumentEditorPage";
+import { isDocumentKey } from "../lib/documents";
 import type { DocumentKey } from "../features/admin/documents/shared";
 
 const parseKey = (value: string): DocumentKey => {
-  if (
-    value === "site_settings" ||
-    value === "faq" ||
-    value === "camp_memories" ||
-    value === "testimonials"
-  )
-    return value;
+  if (isDocumentKey(value)) return value;
   throw new Response("Not Found", { status: 404 });
 };
 

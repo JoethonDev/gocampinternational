@@ -1,4 +1,5 @@
 import { RichTextInput } from "../../../components/RichTextInput";
+import { FlagIcon } from "../../../components/ui/FlagIcon";
 import type { DocumentItem } from "./shared";
 import { asDocument, asDocumentText, asVisibleBoolean } from "./shared";
 
@@ -137,13 +138,16 @@ export function TestimonialsEditor({
                   <label className="form-label" htmlFor={`testimonial-flag-${index}`}>
                     Flag or country code
                   </label>
-                  <input
-                    id={`testimonial-flag-${index}`}
-                    className="form-control"
-                    value={asDocumentText(item.flag)}
-                    placeholder="e.g. CH or 🇨🇭"
-                    onChange={(event) => patchItem(index, { flag: event.target.value })}
-                  />
+                  <div className="d-flex align-items-center gap-2">
+                    <input
+                      id={`testimonial-flag-${index}`}
+                      className="form-control"
+                      value={asDocumentText(item.flag)}
+                      placeholder="e.g. CH or 🇨🇭"
+                      onChange={(event) => patchItem(index, { flag: event.target.value })}
+                    />
+                    <FlagIcon value={asDocumentText(item.flag)} />
+                  </div>
                 </div>
               </div>
               <div className="mt-2">

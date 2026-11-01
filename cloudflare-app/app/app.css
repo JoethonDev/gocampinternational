@@ -353,7 +353,9 @@ body {
 
 /* Public contrast refinements layered over the legacy palette. The navbar keeps
    the required --brand-primary background from the original design. */
-.navbar.gc-site-navbar .nav-link {
+.navbar.gc-site-navbar .nav-link,
+.navbar.gc-site-navbar .nav-link:hover,
+.navbar.gc-site-navbar .nav-link:focus-visible {
   color: #fff !important;
 }
 .navbar.gc-site-navbar .nav-link.active {
@@ -379,4 +381,19 @@ body {
   background-color: #006b7d !important;
   border-color: #006b7d !important;
   color: #fff !important;
+}
+
+/* Coming-soon pages need AA contrast while keeping the public brand teal. */
+.coming-soon-page .text-brand-primary {
+  color: #00758a !important;
+}
+.coming-soon-page .btn-primary {
+  background-color: #00758a !important;
+  border-color: #00758a !important;
+  color: #fff !important;
+}
+.coming-soon-page .btn-primary:hover,
+.coming-soon-page .btn-primary:focus-visible {
+  background-color: #005f70 !important;
+  border-color: #005f70 !important;
 }

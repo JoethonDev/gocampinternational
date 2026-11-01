@@ -196,14 +196,15 @@ See [CONTENT_AND_CMS_RECONCILIATION.md](./CONTENT_AND_CMS_RECONCILIATION.md): PR
 
 ### SEO and accessibility
 - Checked 19 public routes (all destinations and all six active category pages plus core pages): every response had a title, description, canonical URL and Open Graph title/description/image/URL/type; `/landing` remained `noindex`.
-- Axe WCAG 2 A/AA serious/critical scan passes on Landing and all admin pages tested; first-party page content also passes. Higher-contrast breadcrumbs/links/outline buttons, the landing form heading and the admin login button remain.
-- **Deliberate design exception (2026-11-01):** the public navbar background must remain `var(--brand-primary)` (`#00a4c0`) per owner direction. White nav text on that teal does not meet the 4.5:1 normal-text threshold, so axe flags navbar links on public pages. This is a documented brand constraint, not an unresolved CSS regression.
+- Axe WCAG 2 A/AA serious/critical scan passes on all tested admin pages, including the new Testimonials editor. Public first-party content passes except the documented navbar brand-colour contrast exception below.
+- **Deliberate design exception (owner-confirmed):** the public navbar background must remain `var(--brand-primary)` (`#00a4c0`) with white nav text. White on that teal is 2.96:1, below the 4.5:1 normal-text threshold, so axe reports six navbar links on every public page. Darkening the text was rejected during owner review; the original white treatment is restored. Do not treat this as an unresolved CSS regression without an owner decision.
+- The previous third-party Facebook iframe link-name failures were removed by presenting the embedded timeline as a redundant, visually hidden-from-assistive-tech widget and keeping the visible “View on Facebook” link as its accessible equivalent.
 - **Known external exception:** the third-party Facebook timeline iframe contains two links without accessible names on Home, Italy and Adult Academic. The page provides a visible accessible “View on Facebook” link; the embedded widget is not modified because its DOM is controlled by Facebook.
 
 ### Backup/restore drill (non-destructive)
-- `wrangler d1 export gocamp-staging-db --remote` produced a 193,531-byte SQL snapshot; it was imported into a temporary in-memory SQLite database, not over staging.
-- Restored snapshot counts: 82 catalog entities, 37 destination–program links, 3 documents, 0 media metadata, 0 inquiries, 6 import sources.
-- Catalog checksum `f3a1ea83eba24ca0d6046ac56d84b7fdc22d5558418daee318d58d668b524f98` and document checksum `4313ec23a042e8bdd770bcf34a85d06fc9b6a6e19e43fba3e5d6687b2cf9432b` matched the live remote D1 at the final check. The export contains admin-session rows and is intentionally not committed.
+- Re-exported `gocamp-staging-db` after the testimonial migration and the final ten-card testimonial content: a 339,581-byte SQL snapshot, imported into a temporary in-memory SQLite database, never over staging.
+- Restored counts: 82 catalog entities, **39** destination–program links (concurrent content activation added two), **4** site documents (`site_settings`, `faq`, `camp_memories`, `testimonials`), **336** media registry rows, 0 inquiries, 6 import sources.
+- Catalog hash `27b1565ebf125f23575e8da99f38188bfa9f21a4378fdec5bba9bdde51577af4` and document hash `1e331c7a8d64b69b974cd6fedb2aef5045554a24b8b10765e4b39b0f64b97ee4` matched live remote D1 exactly. The export contains admin sessions and is intentionally not committed.
 
 ### Cloudflare Free-plan evidence
 - Staging D1: **360 kB**, 24h metrics **12,486 read queries / 326 write queries**, **355,040 rows read / 974 rows written**. These are far below the Free daily row limits; the database is a tiny fraction of 5 GB.
@@ -252,9 +253,10 @@ The product owner selected **D1-only** persistence for this staging phase. No ou
 
 ### Family testimonials
 - Added a new editable D1 document, `testimonials`, with a title, optional introduction and ordered cards containing **name, flag/country code and quote** only. No testimonial photos are used.
-- Added `server/db/migrations/0004_testimonials.sql`, which widens the `site_documents` key constraint and seeds the four supplied examples (Maria & Family, Ahmed S., Karen, Abdel Rahman). The migration was applied to staging D1.
+- Added `server/db/migrations/0004_testimonials.sql`, which widens the `site_documents` key constraint and seeds the four supplied examples (Maria & Family, Ahmed S., Karen, Abdel Rahman). The migration was applied to staging D1. The current staging document contains **ten active testimonial cards** after later CMS entries were added.
 - The public homepage now renders the testimonial cards directly below "Explore Our Program Categories", before the existing photo memories section. The section has an independent `family_testimonials` visibility toggle in the admin Visibility editor.
-- Quotes use the document-style rich-text editor, so phrases can be highlighted without exposing HTML. Flags accept either an emoji or a country code; CH, DE, IT and GB render as crisp inline SVG flags for Windows browsers that do not show flag emoji.
+- All testimonials are presented in **one continuous row** that drifts left-to-right, with duplicate cards for a seamless loop and no slider buttons. The marquee pauses on hover/focus and becomes a normal horizontal scroll area when reduced motion is requested.
+- Quotes use the document-style rich-text editor, so phrases can be highlighted without exposing HTML. Flags accept either an emoji or a country code; CH, DE, IT and GB render as crisp borderless inline SVG flags for Windows browsers that do not show flag emoji.
 - Added an admin `Testimonials` document editor and sidebar link. Verified editing a name, confirming the public card changed, and restoring the original content.
 
 ### Associated-program CMS
@@ -262,4 +264,11 @@ The product owner selected **D1-only** persistence for this staging phase. No ou
 - Each associated program now has an **Activate** quick action when inactive and an **Edit** link to its program editor. Activation uses an authenticated resource route, updates D1 status/revision, and updates the row immediately without leaving the destination.
 - Search suggestions show all unassigned matches (up to eight at a time) and include the program's ID and current status. Verified searching 8 unassigned Italy programs, activating an inactive German program, and restoring that program to inactive afterwards.
 
-**Verification:** `npm run typecheck` and `npm run build` pass; admin testimonial save/revert and associated-program activation/search were exercised on staging. The public testimonial section renders four cards and four SVG flags; mobile uses a single-column card layout.
+**Verification:** `npm run typecheck` and `npm run build` pass; admin testimonial save/revert and associated-program activation/search were exercised on staging. The public testimonial section currently renders a two-set, twenty-card marquee (ten active testimonials, duplicated for a seamless loop) with borderless SVG flags where supplied, no document overflow, and reduced-motion fallback. The heading is ordered `What Families Say` first, with “Families who travelled with us” as the subtitle below it; quotes are vertically centred in the card body.
+
+**Reusable additions:** `components/ui/FlagIcon.tsx` (shared borderless flags), `components/TestimonialCard.tsx` (shared public card), and `lib/documents.ts` (`DOCUMENT_KEYS`, `DocumentKey`, `isDocumentKey`) are now the single source used by the public section, admin editor, document loader/writer and admin route validation.
+
+### Re-verification after the testimonial migration
+- **SEO:** 19 public routes (all 8 destination slugs, all 6 active category slugs, plus Home/About/Contact/FAQ/Landing) passed title, description, canonical, Open Graph and landing-noindex checks with **0 failures**. All 8 destination alias redirects and all 6 category alias redirects passed.
+- **Accessibility:** axe WCAG 2 A/AA was run on all 19 public routes and the Testimonials admin page. All first-party content and every admin page pass; the only remaining public findings are the six white-on-`#00a4c0` navbar links covered by the owner-confirmed brand exception. The Facebook iframe link-name findings are gone after the accessible-equivalent treatment.
+- **Backup/restore:** the post-migration snapshot restored all 4 documents and 336 media registry rows; catalog and document hashes matched live D1 (see the updated drill above).

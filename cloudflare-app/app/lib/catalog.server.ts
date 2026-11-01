@@ -5,6 +5,7 @@ import type {
   DestinationRecord,
   ProgramRecord
 } from "./domain";
+import type { DocumentKey } from "./documents";
 
 export type { CatalogKind, CatalogRecord, CategoryRecord, DestinationRecord, ProgramRecord };
 
@@ -63,10 +64,7 @@ export const findDestination = (db: D1Database, slug: string) =>
 export const findCategory = (db: D1Database, slug: string) =>
   findCatalog<CategoryRecord>(db, "category", slug);
 
-export async function loadDocument<T>(
-  db: D1Database,
-  key: "site_settings" | "camp_memories" | "faq" | "testimonials"
-): Promise<T | null> {
+export async function loadDocument<T>(db: D1Database, key: DocumentKey): Promise<T | null> {
   const row = await db
     .prepare("SELECT content_json FROM site_documents WHERE key=?")
     .bind(key)

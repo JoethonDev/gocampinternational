@@ -6,7 +6,8 @@
 
 - **Route modules are thin.** A file in `app/routes/` owns its loader/action/meta and composes a feature component. Page markup belongs in `app/features/`.
 - **Server-only code is explicit.** Files ending in `.server.ts` may touch D1, R2, cookies or secrets. Never import them from client components.
-- **Domain types are shared.** `app/lib/domain.ts` holds catalog/document/media/inquiry types and small narrowing helpers. Homepage testimonials use `TestimonialsDocument`/`TestimonialItem`; the `site_documents` key is `testimonials`. Avoid re-declaring `Record<string, unknown>` shapes in components.
+- **Domain types are shared.** `app/lib/domain.ts` holds catalog/document/media/inquiry types and small narrowing helpers. Homepage testimonials use `TestimonialsDocument`/`TestimonialItem`; the canonical document key list/type guard lives in `app/lib/documents.ts` and is reused by the loader, writer and admin route. Avoid re-declaring `Record<string, unknown>` shapes in components.
+- **Shared visual primitives stay shared.** `TestimonialCard` and `FlagIcon` are reused by the homepage and admin flag preview. Do not reintroduce a local flag map or a second testimonial card implementation.
 - **Configuration is not duplicated.** Site identity, contact details, public nav/footer links, hero slides and About copy live in `app/config/site.ts`; admin navigation lives in `app/config/admin.ts`.
 - **One concern per component.** Large pages are split into named sections. Shared primitives live in `app/components/ui/`; admin-only primitives live in `app/components/admin/`. Feature CSS lives beside the feature (for example `features/admin/dashboard/dashboard.css`) rather than accumulating in one global stylesheet.
 - **Cloudflare-native.** Use bindings (`context.cloudflare.env.DB`, `MEDIA`) directly. No REST calls to Cloudflare services from the Worker. No request-scoped module state.
@@ -20,8 +21,8 @@ cloudflare-app/
 │  │  ├─ admin/          AdminShell, panels, tables, toolbars, form sections, actions,
 │  │  │                 metric cards, empty states, row actions, status badges
 │  │  ├─ site/           public header, footer
-│  │  ├─ ui/             Breadcrumbs, PageBanner, Pagination, error pages
-│  │  └─ *.tsx           reusable public/admin controls (media, repeaters, cards)
+│  │  ├─ ui/             Breadcrumbs, PageBanner, Pagination, FlagIcon, error pages
+│  │  └─ *.tsx           reusable public/admin controls (media, repeaters, testimonial card)
 │  ├─ config/            site identity, public links, admin navigation
 │  ├─ features/
 │  │  ├─ home/           HomePage, TestimonialsSection and their CSS
@@ -37,6 +38,7 @@ cloudflare-app/
 │  ├─ styles/            global interaction motion (feature CSS stays with its feature)
 │  ├─ lib/
 │  │  ├─ domain.ts       shared types and narrowing helpers
+│  │  ├─ documents.ts    canonical site-document keys and type guard
 │  │  ├─ catalog.server.ts        typed catalog/document reads
 │  │  ├─ catalog-fields.server.ts form parsing and validation
 │  │  ├─ catalog-write.server.ts  saves, renames, duplicates, bulk, documents

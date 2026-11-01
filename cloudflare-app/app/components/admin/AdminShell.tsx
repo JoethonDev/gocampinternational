@@ -44,7 +44,11 @@ export function AdminShell({
       />
       <aside id="admin-sidebar" className={"admin-sidebar" + (mobileOpen ? " open" : "")}>
         <div className="admin-brand">
-          <Link to="/admin" className="admin-brand-mark">
+          <Link
+            to="/admin"
+            className="admin-brand-mark"
+            aria-label="GoCamp content studio dashboard"
+          >
             <i className="bi bi-compass" />
           </Link>
           <div>
