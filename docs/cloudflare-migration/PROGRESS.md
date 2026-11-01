@@ -1,8 +1,8 @@
 # GoCamp Cloudflare migration — verified progress snapshot
 
-**Last reviewed:** 2026-11-01, after [migration CI run 41284413636](https://github.com/JoethonDev/gocampinternational/actions/runs/41284413636) for the testimonial/quick-action checkpoint. The parallel visual workflow is recorded separately because the new homepage testimonial section is intentionally absent from the PHP comparison source.
+**Last reviewed:** 2026-11-01, after [migration CI run 41288004398](https://github.com/JoethonDev/gocampinternational/actions/runs/41288004398) for the final testimonial/SEO/restore checkpoint. The parallel visual workflow is recorded separately because the new homepage testimonial section is intentionally absent from the PHP comparison source.
 **Migration branch:** [`migration/cloudflare-react-workers-pr40`](https://github.com/JoethonDev/gocampinternational/tree/migration/cloudflare-react-workers-pr40)  
-**Verified application checkpoint:** `afaf6d3730d383c6bc37b86e380dc230fcb36c3e` — Cloudflare deployment success, 32/32 staging HTTP checks, 333/333 R2/D1 media verification, and the new homepage testimonials/associated-program quick actions. No production merge or DNS cutover.
+**Verified application checkpoint:** `78da45e557faa0fb7f884b34824494ac13d81f54` — Cloudflare deployment success, 32/32 staging HTTP checks, 333/333 R2/D1 media verification, 19-route SEO/alias checks, and post-testimonial backup/restore hash match. No production merge or DNS cutover.
 **Source of truth:** [PR #40](https://github.com/JoethonDev/gocampinternational/pull/40), head `80432a2a6fcb4b0de6f14710748e53781ddef58c`, open/unmerged at last inspection. This branch was created from that exact PR head; do not replace its imported snapshot with unrelated `main`/`develop` data.  
 **Public staging:** https://gocamp-migration-staging.elprincedoca.workers.dev/  
 **Release state:** Staging operational; **NOT production ready**, **NOT merged**, **NO DNS cutover**.
