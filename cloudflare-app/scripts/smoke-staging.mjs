@@ -101,6 +101,39 @@ for (const test of tests) {
     failed++;
   }
 }
+
+// Verify real R2 variants are delivered, not silently replaced by originals.
+try {
+  const source = "/images/about_map.webp";
+  const original = await fetch(base + source, { method: "HEAD" });
+  const originalTag = original.headers.get("etag");
+  if (original.status !== 200 || !originalTag) throw Error("Original not readable");
+  for (const preset of ["mobile", "tablet", "desktop"]) {
+    const response = await fetch(base + source + "?variant=" + preset, { method: "HEAD" });
+    if (
+      response.status !== 200 ||
+      !response.headers.get("content-type")?.includes("image/webp") ||
+      response.headers.get("etag") === originalTag
+    ) {
+      throw Error(preset + " image did not serve an optimized R2 object");
+    }
+    console.log("PASS responsive R2", preset);
+  }
+  const mediaId = "6d4a8098-3883-56d3-a9d4-0edd607016cf";
+  const mediaOriginal = await fetch(base + "/media/" + mediaId);
+  const mediaVariant = await fetch(base + "/media/" + mediaId + "?variant=mobile");
+  if (
+    mediaOriginal.status !== 200 || mediaVariant.status !== 200 ||
+    !mediaVariant.headers.get("content-type")?.includes("image/webp") ||
+    mediaVariant.headers.get("etag") === mediaOriginal.headers.get("etag")
+  ) throw Error("/media ID did not resolve its R2 mobile variant");
+  await Promise.all([mediaOriginal.arrayBuffer(), mediaVariant.arrayBuffer()]);
+  console.log("PASS responsive D1 /media ID");
+} catch (error) {
+  failed++;
+  console.error("FAIL responsive media delivery:", String(error));
+}
+
 if (failed) {
   console.error(failed + " staging smoke check(s) failed");
   process.exitCode = 1;
