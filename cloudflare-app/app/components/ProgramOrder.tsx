@@ -1,5 +1,7 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router";
+import { DragHandle } from "./ui/DragHandle";
+import { moveItem, useDragReorder } from "../hooks/useDragReorder";
 
 type Program = { slug: string; name: string; status?: string; id?: string };
 
@@ -21,6 +23,7 @@ export function ProgramOrder({
   const [statuses, setStatuses] = useState<Record<string, string>>({});
   const [activating, setActivating] = useState("");
   const [error, setError] = useState("");
+  const drag = useDragReorder((from, to) => setSelected((current) => moveItem(current, from, to)));
   const byId = useMemo(() => new Map(programs.map((p) => [String(p.id || p.slug), p])), [programs]);
   const statusFor = (program: Program) =>
     statuses[String(program.id || program.slug)] ?? program.status;
@@ -38,13 +41,7 @@ export function ProgramOrder({
   };
 
   const move = (index: number, step: number) =>
-    setSelected((current) => {
-      const next = [...current];
-      const target = index + step;
-      if (target < 0 || target >= next.length) return current;
-      [next[index], next[target]] = [next[target], next[index]];
-      return next;
-    });
+    setSelected((current) => moveItem(current, index, index + step));
 
   const activate = async (program: Program) => {
     const id = String(program.id || program.slug);
@@ -145,7 +142,16 @@ export function ProgramOrder({
           const program = byId.get(id);
           const status = program ? statusFor(program) : "missing";
           return (
-            <div className="program-order-row" key={id}>
+            <div
+              className={
+                "program-order-row sortable-item" +
+                (drag.draggingIndex === index ? " is-dragging" : "") +
+                (drag.overIndex === index ? " is-drop-target" : "")
+              }
+              key={id}
+              {...drag.itemProps(index)}
+            >
+              <DragHandle label={program?.name || id} {...drag.handleProps(index)} />
               <span className="program-order-index">{index + 1}</span>
               <span className="program-order-name">
                 <strong>{program?.name || id}</strong>

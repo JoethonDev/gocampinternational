@@ -77,7 +77,7 @@ export function SiteFooter() {
             <small>© {new Date().getFullYear()} GO CAMP International. All Rights Reserved.</small>
           </div>
           <div className="col-md-6 text-center text-md-end">
-            <small>Powered by Graphicano</small>
+            <small>Powered by JoethonDev</small>
           </div>
         </div>
       </div>

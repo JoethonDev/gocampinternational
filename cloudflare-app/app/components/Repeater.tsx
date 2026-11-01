@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { moveItem, useDragReorder } from "../hooks/useDragReorder";
+import { DragHandle } from "./ui/DragHandle";
 import { MediaSelector } from "./MediaSelector";
 import { RichTextInput } from "./RichTextInput";
 
@@ -105,6 +107,7 @@ export function Repeater({
   csrf: string;
 }) {
   const [rows, setRows] = useState<Record<string, unknown>[]>(initial);
+  const drag = useDragReorder((from, to) => setRows((current) => moveItem(current, from, to)));
 
   const edit = (index: number, key: string, value: unknown) =>
     setRows((current) =>
@@ -112,13 +115,7 @@ export function Repeater({
     );
 
   const move = (index: number, step: number) =>
-    setRows((current) => {
-      const target = index + step;
-      if (target < 0 || target >= current.length) return current;
-      const next = [...current];
-      [next[index], next[target]] = [next[target], next[index]];
-      return next;
-    });
+    setRows((current) => moveItem(current, index, index + step));
 
   const add = () =>
     setRows((current) => [
@@ -138,12 +135,23 @@ export function Repeater({
         </button>
       </div>
       {rows.map((row, index) => (
-        <div className="card border mb-2 shadow-sm" key={index}>
+        <div
+          className={
+            "card border mb-2 shadow-sm sortable-item" +
+            (drag.draggingIndex === index ? " is-dragging" : "") +
+            (drag.overIndex === index ? " is-drop-target" : "")
+          }
+          key={index}
+          {...drag.itemProps(index)}
+        >
           <div className="card-body p-3">
             <div className="d-flex align-items-center justify-content-between mb-2">
-              <strong className="small text-secondary">
-                {title} #{index + 1}
-              </strong>
+              <div className="d-flex align-items-center gap-2">
+                <DragHandle label={`${title} ${index + 1}`} {...drag.handleProps(index)} />
+                <strong className="small text-secondary">
+                  {title} #{index + 1}
+                </strong>
+              </div>
               <button
                 type="button"
                 className="btn btn-sm btn-outline-danger"

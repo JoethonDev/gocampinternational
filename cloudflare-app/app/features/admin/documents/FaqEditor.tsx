@@ -1,4 +1,6 @@
 import { RichTextInput } from "../../../components/RichTextInput";
+import { DragHandle } from "../../../components/ui/DragHandle";
+import { moveItem, useDragReorder } from "../../../hooks/useDragReorder";
 import type { DocumentItem } from "./shared";
 import { asDocumentText } from "./shared";
 
@@ -9,16 +11,11 @@ export function FaqEditor({
   entries: DocumentItem[];
   onChange: (next: DocumentItem[]) => void;
 }) {
+  const drag = useDragReorder((from, to) => onChange(moveItem(entries, from, to)));
   const patch = (index: number, value: DocumentItem) =>
     onChange(entries.map((entry, current) => (current === index ? { ...entry, ...value } : entry)));
 
-  const move = (index: number, step: number) => {
-    const target = index + step;
-    if (target < 0 || target >= entries.length) return;
-    const next = [...entries];
-    [next[index], next[target]] = [next[target], next[index]];
-    onChange(next);
-  };
+  const move = (index: number, step: number) => onChange(moveItem(entries, index, index + step));
 
   return (
     <>
@@ -26,9 +23,20 @@ export function FaqEditor({
         Questions appear in this order. Answers may contain the source HTML for formatting.
       </p>
       {entries.map((entry, index) => (
-        <section className="border rounded-3 p-3 mb-3" key={index}>
+        <section
+          className={
+            "border rounded-3 p-3 mb-3 sortable-item" +
+            (drag.draggingIndex === index ? " is-dragging" : "") +
+            (drag.overIndex === index ? " is-drop-target" : "")
+          }
+          key={index}
+          {...drag.itemProps(index)}
+        >
           <div className="d-flex justify-content-between align-items-center mb-3">
-            <strong>Question {index + 1}</strong>
+            <div className="d-flex align-items-center gap-2">
+              <DragHandle label={`question ${index + 1}`} {...drag.handleProps(index)} />
+              <strong>Question {index + 1}</strong>
+            </div>
             <button
               type="button"
               className="btn btn-sm btn-outline-danger"

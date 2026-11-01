@@ -1,5 +1,7 @@
 import { RichTextInput } from "../../../components/RichTextInput";
+import { DragHandle } from "../../../components/ui/DragHandle";
 import { FlagIcon } from "../../../components/ui/FlagIcon";
+import { moveItem, useDragReorder } from "../../../hooks/useDragReorder";
 import type { DocumentItem } from "./shared";
 import { asDocument, asDocumentText, asVisibleBoolean } from "./shared";
 
@@ -12,6 +14,9 @@ export function TestimonialsEditor({
 }) {
   const document = asDocument(value);
   const items = Array.isArray(document.items) ? (document.items as DocumentItem[]) : [];
+  const drag = useDragReorder((from, to) =>
+    onChange({ ...document, items: moveItem(items, from, to) })
+  );
 
   const patchDocument = (next: DocumentItem) => onChange({ ...document, ...next });
   const patchItem = (index: number, next: DocumentItem) =>
@@ -19,13 +24,8 @@ export function TestimonialsEditor({
       ...document,
       items: items.map((item, current) => (current === index ? { ...item, ...next } : item))
     });
-  const move = (index: number, step: number) => {
-    const target = index + step;
-    if (target < 0 || target >= items.length) return;
-    const next = [...items];
-    [next[index], next[target]] = [next[target], next[index]];
-    onChange({ ...document, items: next });
-  };
+  const move = (index: number, step: number) =>
+    onChange({ ...document, items: moveItem(items, index, index + step) });
 
   return (
     <>
@@ -77,10 +77,24 @@ export function TestimonialsEditor({
       </div>
       <div className="testimonial-admin-list">
         {items.map((item, index) => (
-          <section className="card border mb-3" key={index}>
+          <section
+            className={
+              "card border mb-3 sortable-item" +
+              (drag.draggingIndex === index ? " is-dragging" : "") +
+              (drag.overIndex === index ? " is-drop-target" : "")
+            }
+            key={index}
+            {...drag.itemProps(index)}
+          >
             <div className="card-body">
               <div className="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
-                <strong className="small text-secondary">Testimonial #{index + 1}</strong>
+                <div className="d-flex align-items-center gap-2">
+                  <DragHandle
+                    label={`testimonial ${asDocumentText(item.name) || index + 1}`}
+                    {...drag.handleProps(index)}
+                  />
+                  <strong className="small text-secondary">Testimonial #{index + 1}</strong>
+                </div>
                 <div className="d-flex flex-wrap align-items-center gap-2">
                   <label className="form-check form-check-inline mb-0 me-0">
                     <input

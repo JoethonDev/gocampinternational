@@ -21,7 +21,7 @@ cloudflare-app/
 │  │  ├─ admin/          AdminShell, panels, tables, toolbars, form sections, actions,
 │  │  │                 metric cards, empty states, row actions, status badges
 │  │  ├─ site/           public header, footer
-│  │  ├─ ui/             Breadcrumbs, PageBanner, Pagination, FlagIcon, error pages
+│  │  ├─ ui/             Breadcrumbs, PageBanner, Pagination, FlagIcon, DragHandle, error pages
 │  │  └─ *.tsx           reusable public/admin controls (media, repeaters, testimonial card)
 │  ├─ config/            site identity, public links, admin navigation
 │  ├─ features/
@@ -34,7 +34,7 @@ cloudflare-app/
 │  │  ├─ landing/        marketing landing page
 │  │  └─ admin/          admin feature modules (dashboard, catalog, documents, media,
 │  │                     media-import.server.ts, content-studio.css)
-│  ├─ hooks/             useSiteNavigation, useLightbox, useAdminTheme
+│  ├─ hooks/             useSiteNavigation, useLightbox, useAdminTheme, useDragReorder
 │  ├─ styles/            global interaction motion (feature CSS stays with its feature)
 │  ├─ lib/
 │  │  ├─ domain.ts       shared types and narrowing helpers
@@ -93,6 +93,8 @@ Catalog, inquiries, trash and the dashboard recent table all use `AdminTable`; c
 `RichTextInput` is a document-style `contentEditable` editor, not an HTML textarea. Toolbar actions operate on the current selection and write to a hidden input (or the repeater callback). Do not add a "source" toggle for editors; non-technical users must never need to see HTML. When adding a toolbar format, add the tag to the `SafeRichText` allowlist and verify the public renderer and HTML sanitisation contract.
 
 `ProgramOrder` is used by destination editors. The search input filters unassigned programs by name/ID and adds a selected match without submitting the destination form. Each row exposes `Activate` (using `/admin/program-quick-status`, CSRF and D1 revision update) and `Edit` (opens the program editor in a new tab). Keep this as the single associated-program control; do not reintroduce the old plain select.
+
+Reordering uses the shared `useDragReorder` hook and `DragHandle` button. Apply the hook's `itemProps` to the sortable container and `handleProps` to the handle; keep the Up/Down controls as non-drag and keyboard fallbacks. Do not add another drag implementation or HTML5 drag handlers per component.
 
 The staging legacy-image verification follows the same rule: the page at `/admin/media/import` is a normal UI route, while its authenticated batch action is the resource route `/admin/media/import/run`. Do not POST batch work to a UI route and expect JSON; React Router renders the document response instead. The 333-entry inventory and the D1/R2 size + SHA-256 comparison live in `features/admin/media-import.server.ts` and are shared by the page loader and resource action. Post-cutover this is verification-only; it does not upload missing files.
 

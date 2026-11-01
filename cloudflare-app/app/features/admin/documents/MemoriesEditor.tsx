@@ -1,4 +1,6 @@
 import { MediaSelector } from "../../../components/MediaSelector";
+import { DragHandle } from "../../../components/ui/DragHandle";
+import { moveItem, useDragReorder } from "../../../hooks/useDragReorder";
 import type { DocumentItem } from "./shared";
 import { asDocumentText } from "./shared";
 
@@ -17,16 +19,11 @@ export function MemoriesEditor({
   onChangeDocument: (next: DocumentItem) => void;
   onChangeItems: (next: DocumentItem[]) => void;
 }) {
+  const drag = useDragReorder((from, to) => onChangeItems(moveItem(items, from, to)));
   const patch = (index: number, value: DocumentItem) =>
     onChangeItems(items.map((item, current) => (current === index ? { ...item, ...value } : item)));
 
-  const move = (index: number, step: number) => {
-    const target = index + step;
-    if (target < 0 || target >= items.length) return;
-    const next = [...items];
-    [next[index], next[target]] = [next[target], next[index]];
-    onChangeItems(next);
-  };
+  const move = (index: number, step: number) => onChangeItems(moveItem(items, index, index + step));
 
   return (
     <>
@@ -68,7 +65,15 @@ export function MemoriesEditor({
         </button>
       </div>
       {items.map((item, index) => (
-        <section className="border rounded-3 p-3 mb-3" key={index}>
+        <section
+          className={
+            "border rounded-3 p-3 mb-3 sortable-item" +
+            (drag.draggingIndex === index ? " is-dragging" : "") +
+            (drag.overIndex === index ? " is-drop-target" : "")
+          }
+          key={index}
+          {...drag.itemProps(index)}
+        >
           <div className="row g-3 align-items-start">
             <div className="col-md-3">
               {Boolean(item.image) && (
@@ -86,7 +91,10 @@ export function MemoriesEditor({
             </div>
             <div className="col-md-9">
               <div className="d-flex justify-content-between mb-2">
-                <strong>Photo {index + 1}</strong>
+                <div className="d-flex align-items-center gap-2">
+                  <DragHandle label={`photo ${index + 1}`} {...drag.handleProps(index)} />
+                  <strong>Photo {index + 1}</strong>
+                </div>
                 <button
                   type="button"
                   className="btn btn-sm btn-outline-danger"

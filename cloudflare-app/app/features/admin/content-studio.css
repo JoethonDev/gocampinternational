@@ -804,3 +804,36 @@
   gap: 0.25rem;
   margin-left: auto;
 }
+
+/* Shared drag-and-drop reorder affordance. */
+.drag-handle {
+  display: inline-grid;
+  place-items: center;
+  width: 1.8rem;
+  height: 1.8rem;
+  flex: 0 0 auto;
+  padding: 0;
+  border: 1px solid var(--admin-border);
+  border-radius: 7px;
+  background: var(--admin-panel);
+  color: var(--admin-muted);
+  cursor: grab;
+  font-size: 0.9rem;
+  touch-action: none;
+}
+.drag-handle:hover,
+.drag-handle:focus-visible {
+  border-color: var(--admin-primary);
+  background: color-mix(in srgb, var(--admin-primary) 7%, var(--admin-panel));
+  color: var(--admin-primary);
+}
+.drag-handle:active {
+  cursor: grabbing;
+}
+.sortable-item.is-dragging {
+  opacity: 0.55;
+}
+.sortable-item.is-drop-target {
+  outline: 2px dashed color-mix(in srgb, var(--admin-primary) 65%, transparent);
+  outline-offset: 2px;
+}

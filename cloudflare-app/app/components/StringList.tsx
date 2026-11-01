@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { moveItem, useDragReorder } from "../hooks/useDragReorder";
+import { DragHandle } from "./ui/DragHandle";
 import { MediaSelector } from "./MediaSelector";
 export function StringList({
   name,
@@ -20,16 +22,11 @@ export function StringList({
   csrf: string;
 }) {
   const [rows, setRows] = useState<string[]>(initial.length ? initial : []);
+  const drag = useDragReorder((from, to) => setRows((old) => moveItem(old, from, to)));
   const edit = (index: number, value: string) =>
     setRows((old) => old.map((row, i) => (i === index ? value : row)));
   const move = (index: number, step: number) =>
-    setRows((old) => {
-      const next = [...old],
-        target = index + step;
-      if (target < 0 || target >= next.length) return old;
-      [next[index], next[target]] = [next[target], next[index]];
-      return next;
-    });
+    setRows((old) => moveItem(old, index, index + step));
   return (
     <section className="col-12 border rounded-3 p-3 mt-3" aria-label={title}>
       <input
@@ -50,11 +47,22 @@ export function StringList({
         </button>
       </div>
       {rows.map((row, index) => (
-        <div className="border rounded-3 p-3 mb-2" key={index}>
+        <div
+          className={
+            "border rounded-3 p-3 mb-2 sortable-item" +
+            (drag.draggingIndex === index ? " is-dragging" : "") +
+            (drag.overIndex === index ? " is-drop-target" : "")
+          }
+          key={index}
+          {...drag.itemProps(index)}
+        >
           <div className="d-flex align-items-center justify-content-between mb-2">
-            <strong className="small text-secondary">
-              {title} #{index + 1}
-            </strong>
+            <div className="d-flex align-items-center gap-2">
+              <DragHandle label={`${title} ${index + 1}`} {...drag.handleProps(index)} />
+              <strong className="small text-secondary">
+                {title} #{index + 1}
+              </strong>
+            </div>
             <button
               type="button"
               className="btn btn-sm btn-outline-danger"

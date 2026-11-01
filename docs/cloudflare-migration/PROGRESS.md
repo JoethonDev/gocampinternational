@@ -268,6 +268,12 @@ The product owner selected **D1-only** persistence for this staging phase. No ou
 
 **Reusable additions:** `components/ui/FlagIcon.tsx` (shared borderless flags), `components/TestimonialCard.tsx` (shared public card), and `lib/documents.ts` (`DOCUMENT_KEYS`, `DocumentKey`, `isDocumentKey`) are now the single source used by the public section, admin editor, document loader/writer and admin route validation.
 
+### Drag-and-drop ordering
+- Added shared `hooks/useDragReorder.ts`, `components/ui/DragHandle.tsx` and styles in `content-studio.css`.
+- Drag handles now reorder associated programs, testimonial cards, repeater rows, string/image lists, FAQ entries and memory photos. Existing Up/Down controls remain as keyboard/touch fallbacks.
+- Verified reordering an associated program row and testimonial cards on staging; saves remain revision-guarded.
+- Footer credit changed from “Powered by Graphicano” to “Powered by JoethonDev”.
+
 ### Re-verification after the testimonial migration
 - **SEO:** 19 public routes (all 8 destination slugs, all 6 active category slugs, plus Home/About/Contact/FAQ/Landing) passed title, description, canonical, Open Graph and landing-noindex checks with **0 failures**. All 8 destination alias redirects and all 6 category alias redirects passed.
 - **Accessibility:** axe WCAG 2 A/AA was run on all 19 public routes and the Testimonials admin page. All first-party content and every admin page pass; the only remaining public findings are the six white-on-`#00a4c0` navbar links covered by the owner-confirmed brand exception. The Facebook iframe link-name findings are gone after the accessible-equivalent treatment.
