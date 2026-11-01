@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 /**
  * Responsive URLs point only to permanent R2 variants.
  * Original image URLs remain the fallback when a variant is not yet generated.
@@ -24,12 +25,12 @@ export function responsiveSrcSet(source: string | null | undefined): string | un
 }
 
 /** Exposes CSS variables for real viewport-based hero media selection. */
-export function heroImageStyles(source: string): React.CSSProperties {
+export function heroImageStyles(source: string): CSSProperties {
   if (!supportsVariants(source)) return { backgroundImage: `url(${JSON.stringify(source)})` };
   return {
     "--gc-image-mobile": `url(${JSON.stringify(responsiveUrl(source, "mobile"))})`,
     "--gc-image-tablet": `url(${JSON.stringify(responsiveUrl(source, "tablet"))})`,
     "--gc-image-desktop": `url(${JSON.stringify(responsiveUrl(source, "desktop"))})`,
     backgroundImage: `url(${JSON.stringify(source)})`
-  } as React.CSSProperties;
+  } as CSSProperties;
 }
