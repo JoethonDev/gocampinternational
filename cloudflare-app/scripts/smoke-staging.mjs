@@ -40,7 +40,12 @@ const tests = [
     method: "HEAD",
     contentType: "image/webp"
   },
-  { path: "/media/a3bb62bf-6d92-4ca5-91e5-5cb1f2348c1b", status: 200, method: "HEAD", contentType: "image/webp" },
+  {
+    path: "/media/a3bb62bf-6d92-4ca5-91e5-5cb1f2348c1b",
+    status: 200,
+    method: "HEAD",
+    contentType: "image/webp"
+  },
   { path: "/home", status: 301, location: "/" },
   { path: "/index.php", status: 301, location: "/" },
   { path: "/home.php", status: 301, location: "/" },
