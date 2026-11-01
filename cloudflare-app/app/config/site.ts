@@ -13,7 +13,7 @@ export const SITE = {
     linkedin: "https://www.linkedin.com/in/zeinab-el-sokkary-97245a34/"
   },
   images: {
-    logo: "/media/a3bb62bf-6d92-4ca5-91e5-5cb1f2348c1b",
+    logo: "/media/7170ad54-c31e-5ca2-88ce-058510aab773",
     favicon: "/images/favi.png",
     contactBanner: "/images/contact_banner.webp",
     aboutBanner: "/images/about_banner.webp",
@@ -62,6 +62,7 @@ export type AboutSection = {
   image: string;
   reverse?: boolean;
   body: string[];
+  gallery?: { image: string; caption: string; alt: string }[];
 };
 
 export const ABOUT_SECTIONS: AboutSection[] = [
@@ -83,7 +84,24 @@ export const ABOUT_SECTIONS: AboutSection[] = [
   },
   {
     title: "Beyond Camps: Schools, Parents & Global Collaboration",
-    image: "/images/about_3.webp",
+    image: "/media/7aa4ce7d-9b13-5a59-88e5-955306d46a86",
+    gallery: [
+      {
+        image: "/media/d3806ba7-1ce9-50dd-bb96-3a0c40702b2f",
+        caption: "DEO School presentation",
+        alt: "Students discussing an educational presentation at DEO School"
+      },
+      {
+        image: "/media/c4853380-3719-5c6f-92bb-c11bf3e27c1d",
+        caption: "International educators workshop — Berlin",
+        alt: "International education partners meeting at a Berlin workshop"
+      },
+      {
+        image: "/media/36959e71-6b19-5de7-afa6-c9c9a8c97069",
+        caption: "Meeting global education partners",
+        alt: "Go Camp representative speaking with education partners at a conference"
+      }
+    ],
     body: [
       "We also regularly host parent presentations, orientation sessions, and partner-led meetings—both independently and in cooperation with our international partners. These events allow parents and students to gain direct insight into programs, destinations, safety standards, and educational outcomes.",
       "Through these face-to-face interactions, parents can ask questions, meet representatives from overseas institutions, and feel confident about every step of their child's journey.\n\nOur long-standing partnerships and on-the-ground experience ensure that every program is delivered with transparency, care, and international best practices."
