@@ -1,3 +1,5 @@
+import { responsiveSrcSet } from "../../lib/responsive-media";
+
 export function PageBanner({
   image,
   alt,
@@ -12,7 +14,7 @@ export function PageBanner({
   return (
     <div className="container-fluid p-0">
       <div className="position-relative">
-        <img src={image} className="img-fluid w-100 page-banner-image" alt={alt} />
+        <img src={image} srcSet={responsiveSrcSet(image)} sizes="100vw" className="img-fluid w-100 page-banner-image" alt={alt} />
         {hiddenTitle ? (
           <h1 className="visually-hidden">{title}</h1>
         ) : (
