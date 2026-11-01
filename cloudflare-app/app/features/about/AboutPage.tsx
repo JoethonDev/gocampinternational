@@ -22,7 +22,7 @@ function AboutSection({
             sizes="(max-width: 992px) 100vw, 42vw"
             alt={section.title}
             className="img-fluid h-100"
-            style={index === 3 ? { objectFit: "cover" } : undefined}
+            style={{ objectFit: "cover", width: "100%" }}
             loading="lazy"
           />
         </div>
@@ -55,6 +55,29 @@ function AboutSection({
           </div>
         </div>
       </div>
+      {section.gallery && section.gallery.length > 0 && (
+        <div className="row g-3 px-3 pb-4">
+          {section.gallery.map((photo) => (
+            <div className="col-md-4" key={photo.image}>
+              <figure className="h-100 mb-0">
+                <img
+                  src={photo.image}
+                  srcSet={responsiveSrcSet(photo.image)}
+                  sizes="(max-width: 768px) 100vw, 30vw"
+                  alt={photo.alt}
+                  className="w-100 rounded-3"
+                  style={{ height: 190, objectFit: "cover" }}
+                  loading="lazy"
+                  decoding="async"
+                />
+                <figcaption className="text-secondary small mt-2 text-center">
+                  {photo.caption}
+                </figcaption>
+              </figure>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
