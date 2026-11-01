@@ -1,3 +1,4 @@
+import { responsiveSrcSet } from "../../lib/responsive-media";
 import { ABOUT_SECTIONS, SITE } from "../../config/site";
 import { PageBanner } from "../../components/ui/PageBanner";
 import { Breadcrumbs } from "../../components/ui/Breadcrumbs";
@@ -17,6 +18,8 @@ function AboutSection({
         <div className="col-lg-5">
           <img
             src={section.image}
+            srcSet={responsiveSrcSet(section.image)}
+            sizes="(max-width: 992px) 100vw, 42vw"
             alt={section.title}
             className="img-fluid h-100"
             style={index === 3 ? { objectFit: "cover" } : undefined}
