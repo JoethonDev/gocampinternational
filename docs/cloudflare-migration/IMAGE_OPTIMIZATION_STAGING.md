@@ -1,5 +1,21 @@
 # Staging image enhancement — completed
 
+## AI high-resolution correction — November 1, 2026
+
+Earlier 1600px variants were insufficient for full-viewport banners sourced from 1350×408px panoramas or 800–849px destination photos. The baseline responsive system was serving the right R2 objects, but these were not inherently sharp enough for large-screen hero covers.
+
+**Completed targeted correction directly on staging Cloudflare:**
+- Selected 43 real page/category/destination/home hero or banner images with source width >= 700px.
+- Cloudflare Images **`upscale: "generate"` (ESRGAN AI)** produced 43 new 3840px-wide desktop assets in WebP, quality 89 (recompression to 80 only if needed to satisfy 2MB limit).
+- Replaced only the corresponding `optimized/desktop/<original>.webp` R2 objects; updated the **existing** `media_variants` rows in D1 with true 3840px dimensions/bytes and `method = 'ai'`. No new D1 tables, no new variant types, no duplicate rows.
+- Verified all 43 / 43 have width exactly 3840px; 43 / 43 method AI; total ~20.7MB; representative outputs: homepage main hero 3840×1395, destination square photos 3840×3840, wide banners 3840×1160.
+- Upgraded `PageBanner` and About content to request R2 responsive variants instead of unconditionally fetching the source image.
+- Hero `image-set()` favours existing higher-resolution variants. Versioned desktop URLs now include `v=ai4k-20261101` to avoid an old browser response for a replaced R2 object.
+- Temporary AI processing Worker deleted and one-time GitHub Actions workflow removed. Production untouched, no new cache service, no recurring job, no additional paid plan.
+
+**Important limitations:** Upscaling generates detail estimates, not authentic pixels missing from the source. Especially blurry or strongly compressed low-resolution originals can still require replacement with a higher-quality photograph. Only the 43 high-impact banners/heroes were rebuilt at 3840px; the other eligible photos keep their previously verified three responsive optimized versions (up to 1600px).
+
+
 Verified November 1, 2026. Cloudflare full-stack deployment only; production untouched.
 
 ## Images and R2/D1 integrity
