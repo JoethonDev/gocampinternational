@@ -38,8 +38,8 @@ async function makeVariant(
   preset: Preset,
   sourceWidth: number
 ): Promise<{ data: ArrayBuffer; method: "ai" | "standard" }> {
-  const ai = sourceWidth < preset.width;
-  const base = { width: preset.width, fit: "scale-up" as const };
+  const ai = sourceWidth < preset.width && preset.width <= sourceWidth * 4;
+  const base = { width: preset.width, fit: (sourceWidth < preset.width ? "scale-up" : "scale-down") as "scale-up" | "scale-down" };
   const run = async (generated: boolean) => {
     // Transform options match Cloudflare's 2026 Images feature options.
     const options = generated ? { ...base, upscale: "generate" as const } : base;
