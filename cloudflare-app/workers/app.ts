@@ -31,7 +31,7 @@ async function serveR2Image(request: Request, env: Env): Promise<Response> {
   const key = pathname.slice(1);
   // Only read image files from the staging R2 bucket; never expose arbitrary object keys.
   if (
-    !/^images\/[a-zA-Z0-9_().%+-][a-zA-Z0-9_().%+\/-]*\.(webp|png|jpe?g|avif|gif|svg|ico)$/i.test(
+    !new RegExp("^(?:images|uploads)/[a-zA-Z0-9_().%+-][a-zA-Z0-9_().%+/-]*[.](webp|png|jpe?g|avif|gif|svg|ico)$", "i").test(
       key
     ) ||
     key.includes("..") ||
