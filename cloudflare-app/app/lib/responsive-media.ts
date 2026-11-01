@@ -1,16 +1,21 @@
 /**
- * Generate srcset URLs for permanent R2 variants. The Worker serves these
- * using a stable variant query parameter and falls back to the original
- * until the staging optimizer has completed that image.
+ * Responsive URLs point only to permanent R2 variants.
+ * Original image URLs remain the fallback when a variant is not yet generated.
  */
-export function responsiveUrl(source: string, preset: "mobile" | "tablet" | "desktop"): string {
+export type ImagePreset = "mobile" | "tablet" | "desktop";
+
+export function responsiveUrl(source: string, preset: ImagePreset): string {
   return source + (source.includes("?") ? "&" : "?") + "variant=" + preset;
 }
 
+function supportsVariants(source: string): boolean {
+  return source.startsWith("/images/") ||
+    source.startsWith("/uploads/") ||
+    /^\/media\/[a-f0-9-]{36}(?:\?|$)/i.test(source);
+}
+
 export function responsiveSrcSet(source: string | null | undefined): string | undefined {
-  if (!source || !/^(?:\\/(?:images|uploads)\\/|\\/media\\/[a-f0-9-]{36}(?:\\?|$))/i.test(source)) {
-    return undefined;
-  }
+  if (!source || !supportsVariants(source)) return undefined;
   return [
     `${responsiveUrl(source, "mobile")} 480w`,
     `${responsiveUrl(source, "tablet")} 960w`,
@@ -18,8 +23,13 @@ export function responsiveSrcSet(source: string | null | undefined): string | un
   ].join(", ");
 }
 
-/** Used for CSS-background hero banners where srcset is not available. */
-export function responsiveBackground(source: string): string {
-  if (!responsiveSrcSet(source)) return `url(${JSON.stringify(source)})`;
-  return `image-set(url(${JSON.stringify(responsiveUrl(source, "mobile"))}) 1x, url(${JSON.stringify(responsiveUrl(source, "desktop"))}) 2x)`;
+/** Exposes CSS variables for real viewport-based hero media selection. */
+export function heroImageStyles(source: string): React.CSSProperties {
+  if (!supportsVariants(source)) return { backgroundImage: `url(${JSON.stringify(source)})` };
+  return {
+    "--gc-image-mobile": `url(${JSON.stringify(responsiveUrl(source, "mobile"))})`,
+    "--gc-image-tablet": `url(${JSON.stringify(responsiveUrl(source, "tablet"))})`,
+    "--gc-image-desktop": `url(${JSON.stringify(responsiveUrl(source, "desktop"))})`,
+    backgroundImage: `url(${JSON.stringify(source)})`
+  } as React.CSSProperties;
 }
