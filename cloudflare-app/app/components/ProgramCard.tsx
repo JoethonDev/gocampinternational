@@ -1,3 +1,4 @@
+import { responsiveSrcSet } from "../lib/responsive-media";
 import { SITE } from "../config/site";
 import { asNumber, asStringArray, type ProgramRecord, type SiteSettings } from "../lib/domain";
 import { isVisible } from "../lib/visibility";
@@ -26,6 +27,8 @@ export function ProgramCard({
           <div className="position-relative overflow-hidden program-card-media">
             <img
               src={program.image || SITE.images.placeholder}
+              srcSet={responsiveSrcSet(program.image || SITE.images.placeholder)}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               alt={program.name}
               className="card-img-top h-100 w-100 object-fit-cover program-card-image"
               loading="lazy"
