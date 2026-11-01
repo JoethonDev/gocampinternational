@@ -247,3 +247,19 @@ The product owner selected **D1-only** persistence for this staging phase. No ou
 - Public header logo renders crisply at 60 px high; admin login uses the same configured source.
 
 **Verification:** typecheck/build/deploy pass; the 390 px admin catalog, inquiries, trash, media and media-picker checks pass without document overflow. Final commit/CI evidence is recorded in the handoff response.
+
+## 2026-11-01 - Homepage testimonials and associated-program quick actions
+
+### Family testimonials
+- Added a new editable D1 document, `testimonials`, with a title, optional introduction and ordered cards containing **name, flag/country code and quote** only. No testimonial photos are used.
+- Added `server/db/migrations/0004_testimonials.sql`, which widens the `site_documents` key constraint and seeds the four supplied examples (Maria & Family, Ahmed S., Karen, Abdel Rahman). The migration was applied to staging D1.
+- The public homepage now renders the testimonial cards directly below "Explore Our Program Categories", before the existing photo memories section. The section has an independent `family_testimonials` visibility toggle in the admin Visibility editor.
+- Quotes use the document-style rich-text editor, so phrases can be highlighted without exposing HTML. Flags accept either an emoji or a country code; CH, DE, IT and GB render as crisp inline SVG flags for Windows browsers that do not show flag emoji.
+- Added an admin `Testimonials` document editor and sidebar link. Verified editing a name, confirming the public card changed, and restoring the original content.
+
+### Associated-program CMS
+- Replaced the plain associated-program select with a searchable program picker (name or ID) and an ordered list.
+- Each associated program now has an **Activate** quick action when inactive and an **Edit** link to its program editor. Activation uses an authenticated resource route, updates D1 status/revision, and updates the row immediately without leaving the destination.
+- Search suggestions show all unassigned matches (up to eight at a time) and include the program's ID and current status. Verified searching 8 unassigned Italy programs, activating an inactive German program, and restoring that program to inactive afterwards.
+
+**Verification:** `npm run typecheck` and `npm run build` pass; admin testimonial save/revert and associated-program activation/search were exercised on staging. The public testimonial section renders four cards and four SVG flags; mobile uses a single-column card layout.

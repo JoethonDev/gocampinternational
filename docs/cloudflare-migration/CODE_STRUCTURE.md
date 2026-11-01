@@ -6,7 +6,7 @@
 
 - **Route modules are thin.** A file in `app/routes/` owns its loader/action/meta and composes a feature component. Page markup belongs in `app/features/`.
 - **Server-only code is explicit.** Files ending in `.server.ts` may touch D1, R2, cookies or secrets. Never import them from client components.
-- **Domain types are shared.** `app/lib/domain.ts` holds catalog/document/media/inquiry types and small narrowing helpers. Avoid re-declaring `Record<string, unknown>` shapes in components.
+- **Domain types are shared.** `app/lib/domain.ts` holds catalog/document/media/inquiry types and small narrowing helpers. Homepage testimonials use `TestimonialsDocument`/`TestimonialItem`; the `site_documents` key is `testimonials`. Avoid re-declaring `Record<string, unknown>` shapes in components.
 - **Configuration is not duplicated.** Site identity, contact details, public nav/footer links, hero slides and About copy live in `app/config/site.ts`; admin navigation lives in `app/config/admin.ts`.
 - **One concern per component.** Large pages are split into named sections. Shared primitives live in `app/components/ui/`; admin-only primitives live in `app/components/admin/`. Feature CSS lives beside the feature (for example `features/admin/dashboard/dashboard.css`) rather than accumulating in one global stylesheet.
 - **Cloudflare-native.** Use bindings (`context.cloudflare.env.DB`, `MEDIA`) directly. No REST calls to Cloudflare services from the Worker. No request-scoped module state.
@@ -24,7 +24,7 @@ cloudflare-app/
 │  │  └─ *.tsx           reusable public/admin controls (media, repeaters, cards)
 │  ├─ config/            site identity, public links, admin navigation
 │  ├─ features/
-│  │  ├─ home/           HomePage and its sections
+│  │  ├─ home/           HomePage, TestimonialsSection and their CSS
 │  │  ├─ destination/    DestinationPage, coming-soon state
 │  │  ├─ category/       CategoryPage sections
 │  │  ├─ about/          AboutPage
@@ -89,6 +89,8 @@ Catalog, inquiries, trash and the dashboard recent table all use `AdminTable`; c
 `MediaSelector` is self-contained: it browses static/R2 assets, accepts an inline multi-file upload through `POST /admin/media/upload` (up to 12 files), adds every result to the local picker grid, selects the first and does not close or navigate away. It portals the dialog to `.admin-workspace` so the route-transition transform cannot become the fixed-position containing block; the dialog is capped at 780 x 640 and disables nonessential transitions while open. All callers pass the current admin CSRF token.
 
 `RichTextInput` is a document-style `contentEditable` editor, not an HTML textarea. Toolbar actions operate on the current selection and write to a hidden input (or the repeater callback). Do not add a "source" toggle for editors; non-technical users must never need to see HTML. When adding a toolbar format, add the tag to the `SafeRichText` allowlist and verify the public renderer and HTML sanitisation contract.
+
+`ProgramOrder` is used by destination editors. The search input filters unassigned programs by name/ID and adds a selected match without submitting the destination form. Each row exposes `Activate` (using `/admin/program-quick-status`, CSRF and D1 revision update) and `Edit` (opens the program editor in a new tab). Keep this as the single associated-program control; do not reintroduce the old plain select.
 
 The staging legacy-image verification follows the same rule: the page at `/admin/media/import` is a normal UI route, while its authenticated batch action is the resource route `/admin/media/import/run`. Do not POST batch work to a UI route and expect JSON; React Router renders the document response instead. The 333-entry inventory and the D1/R2 size + SHA-256 comparison live in `features/admin/media-import.server.ts` and are shared by the page loader and resource action. Post-cutover this is verification-only; it does not upload missing files.
 

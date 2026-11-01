@@ -7,7 +7,13 @@ import { DocumentEditorPage } from "../features/admin/documents/DocumentEditorPa
 import type { DocumentKey } from "../features/admin/documents/shared";
 
 const parseKey = (value: string): DocumentKey => {
-  if (value === "site_settings" || value === "faq" || value === "camp_memories") return value;
+  if (
+    value === "site_settings" ||
+    value === "faq" ||
+    value === "camp_memories" ||
+    value === "testimonials"
+  )
+    return value;
   throw new Response("Not Found", { status: 404 });
 };
 

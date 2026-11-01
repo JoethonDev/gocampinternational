@@ -5,9 +5,11 @@ import type {
   CategoryRecord,
   DestinationRecord,
   MemoriesDocument,
-  SiteSettings
+  SiteSettings,
+  TestimonialsDocument
 } from "../../lib/domain";
 import { isVisible } from "../../lib/visibility";
+import { TestimonialsSection } from "./TestimonialsSection";
 
 function HeroCarousel() {
   return (
@@ -157,13 +159,15 @@ export function HomePage({
   categories,
   eligible,
   settings,
-  memories
+  memories,
+  testimonials
 }: {
   destinations: DestinationRecord[];
   categories: CategoryRecord[];
   eligible: string[];
   settings: SiteSettings;
   memories: MemoriesDocument | null;
+  testimonials: TestimonialsDocument | null;
 }) {
   const featuredCategories = categories
     .filter((category) => eligible.includes(category.slug))
@@ -177,6 +181,9 @@ export function HomePage({
       )}
       {isVisible("home", "featured_categories", settings, settings) && (
         <FeaturedCategories categories={featuredCategories} />
+      )}
+      {isVisible("home", "family_testimonials", settings, settings) && (
+        <TestimonialsSection data={testimonials} />
       )}
       {isVisible("home", "testimonials", settings, settings) && <CampMemories data={memories} />}
     </div>

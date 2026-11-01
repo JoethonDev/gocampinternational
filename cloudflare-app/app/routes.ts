@@ -7,6 +7,7 @@ export default [
   route("admin/logout", "routes/admin-logout.ts"),
   route("admin/catalog/:kind", "routes/admin-catalog.tsx"),
   route("admin/catalog/:kind/:slug", "routes/admin-edit.tsx"),
+  route("admin/program-quick-status", "routes/admin-program-quick-status.ts"),
   route("admin/documents/:key", "routes/admin-documents.tsx"),
   route("admin/inquiries", "routes/admin-inquiries.tsx"),
   route("admin/media", "routes/admin-media.tsx"),

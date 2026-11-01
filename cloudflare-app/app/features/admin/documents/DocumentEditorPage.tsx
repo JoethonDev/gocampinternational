@@ -6,6 +6,7 @@ import { AdminPanel } from "../../../components/admin/AdminPanel";
 import { FaqEditor } from "./FaqEditor";
 import { MemoriesEditor } from "./MemoriesEditor";
 import { SiteSettingsEditor } from "./SiteSettingsEditor";
+import { TestimonialsEditor } from "./TestimonialsEditor";
 import type { DocumentKey } from "./shared";
 import { asDocument, asDocumentArray } from "./shared";
 
@@ -21,6 +22,10 @@ const TITLES: Record<DocumentKey, { title: string; description: string }> = {
   camp_memories: {
     title: "Camp Memories",
     description: "Curate the photo memories carousel and Facebook panel."
+  },
+  testimonials: {
+    title: "Family Testimonials",
+    description: "Edit the text-only testimonial cards shown under the homepage categories."
   }
 };
 
@@ -126,6 +131,13 @@ export function DocumentEditorPage({
         ) : documentKey === "faq" ? (
           <AdminPanel title="Questions" description="Drag-free ordering with move controls.">
             <FaqEditor entries={entries} onChange={update} />
+          </AdminPanel>
+        ) : documentKey === "testimonials" ? (
+          <AdminPanel
+            title="Homepage testimonials"
+            description="Text and name only; no images are shown in this section."
+          >
+            <TestimonialsEditor value={value} onChange={update} />
           </AdminPanel>
         ) : (
           <AdminPanel title="Memory photos" description="Active photos can appear in the slider.">

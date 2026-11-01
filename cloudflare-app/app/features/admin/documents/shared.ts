@@ -1,4 +1,4 @@
-export type DocumentKey = "site_settings" | "faq" | "camp_memories";
+export type DocumentKey = "site_settings" | "faq" | "camp_memories" | "testimonials";
 export type DocumentItem = Record<string, unknown>;
 
 export const asDocument = (value: unknown): DocumentItem =>

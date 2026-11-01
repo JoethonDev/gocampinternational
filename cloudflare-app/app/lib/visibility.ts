@@ -8,6 +8,7 @@ const DEFAULTS: Record<Entity, Record<string, boolean>> = {
     intro: true,
     destinations: true,
     featured_categories: true,
+    family_testimonials: true,
     testimonials: true
   },
   destination: {

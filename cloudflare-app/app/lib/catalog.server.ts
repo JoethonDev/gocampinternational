@@ -65,7 +65,7 @@ export const findCategory = (db: D1Database, slug: string) =>
 
 export async function loadDocument<T>(
   db: D1Database,
-  key: "site_settings" | "camp_memories" | "faq"
+  key: "site_settings" | "camp_memories" | "faq" | "testimonials"
 ): Promise<T | null> {
   const row = await db
     .prepare("SELECT content_json FROM site_documents WHERE key=?")

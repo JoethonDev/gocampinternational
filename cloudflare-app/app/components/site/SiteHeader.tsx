@@ -50,7 +50,7 @@ export function SiteHeader({
     >
       <div className="container">
         <Link className="navbar-brand" to="/">
-          <img src={SITE.images.logo} alt={`${SITE.name} logo`} style={{ height: 60 }} />
+          <img src={SITE.images.logo} alt={`${SITE.name} logo`} />
         </Link>
         <button
           className="navbar-toggler"

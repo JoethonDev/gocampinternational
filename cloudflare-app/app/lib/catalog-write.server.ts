@@ -331,7 +331,7 @@ export async function changeBulkStatus(
 export async function saveDocument(
   request: Request,
   db: D1Database,
-  key: "site_settings" | "camp_memories" | "faq",
+  key: "site_settings" | "camp_memories" | "faq" | "testimonials",
   form: FormData
 ): Promise<void> {
   await verifyAdminPost(request, db, form);
@@ -369,6 +369,30 @@ export async function saveDocument(
   if (key === "site_settings") {
     if (!value || typeof value !== "object" || Array.isArray(value)) {
       throw new Response("Invalid settings data", { status: 400 });
+    }
+  }
+  if (key === "testimonials") {
+    const data = value as { items?: unknown };
+    if (!value || typeof value !== "object" || Array.isArray(value) || !Array.isArray(data.items)) {
+      throw new Response("Invalid testimonials data", { status: 400 });
+    }
+    if (data.items.length > 50) {
+      throw new Response("Use at most 50 testimonials", { status: 400 });
+    }
+    for (const item of data.items) {
+      const row = item as Record<string, unknown>;
+      if (
+        !row ||
+        typeof row !== "object" ||
+        typeof row.name !== "string" ||
+        row.name.length > 160 ||
+        typeof row.quote !== "string" ||
+        row.quote.length > 10000 ||
+        (row.flag !== undefined && typeof row.flag !== "string") ||
+        (typeof row.flag === "string" && row.flag.length > 16)
+      ) {
+        throw new Response("Invalid testimonial entry", { status: 400 });
+      }
     }
   }
   const revision = Number(form.get("revision") || 0);

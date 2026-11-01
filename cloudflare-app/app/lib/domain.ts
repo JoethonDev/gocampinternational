@@ -94,6 +94,19 @@ export interface MemoriesDocument {
   items: MemoryItem[];
 }
 
+export interface TestimonialItem {
+  name: string;
+  flag?: string;
+  quote: string;
+  is_active?: boolean;
+}
+
+export interface TestimonialsDocument {
+  title: string;
+  intro?: string;
+  items: TestimonialItem[];
+}
+
 export interface SiteSettings extends JsonObject {
   section_visibility?: Record<string, boolean | string>;
   global_visibility?: Record<string, Record<string, boolean>>;

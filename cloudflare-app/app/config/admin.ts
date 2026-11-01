@@ -28,6 +28,11 @@ export const ADMIN_NAV_GROUPS: AdminNavGroup[] = [
     items: [
       { href: "/admin/documents/site_settings", label: "Visibility", icon: "bi-toggles" },
       { href: "/admin/documents/faq", label: "FAQs", icon: "bi-question-circle" },
+      {
+        href: "/admin/documents/testimonials",
+        label: "Testimonials",
+        icon: "bi-chat-quote"
+      },
       { href: "/admin/documents/camp_memories", label: "Memories", icon: "bi-camera" }
     ]
   },

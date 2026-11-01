@@ -2,7 +2,14 @@ import type { DocumentItem } from "./shared";
 import { asDocument, asVisibleBoolean } from "./shared";
 
 const SECTIONS: Record<string, string[]> = {
-  home: ["hero", "intro", "destinations", "featured_categories", "testimonials"],
+  home: [
+    "hero",
+    "intro",
+    "destinations",
+    "featured_categories",
+    "family_testimonials",
+    "testimonials"
+  ],
   destination: [
     "hero",
     "intro",
@@ -35,6 +42,7 @@ const DEFAULTS: Record<string, Record<string, boolean>> = {
     intro: true,
     destinations: true,
     featured_categories: true,
+    family_testimonials: true,
     testimonials: true
   },
   destination: {

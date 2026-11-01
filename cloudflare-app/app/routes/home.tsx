@@ -6,7 +6,8 @@ import type {
   CategoryRecord,
   DestinationRecord,
   MemoriesDocument,
-  SiteSettings
+  SiteSettings,
+  TestimonialsDocument
 } from "../lib/domain";
 import { originFrom, seoMeta } from "../lib/seo";
 
@@ -22,8 +23,9 @@ export function meta({ matches }: Route.MetaArgs) {
 
 export async function loader({ context }: Route.LoaderArgs) {
   const db = context.cloudflare.env.DB;
-  const [memories, rows] = await Promise.all([
+  const [memories, testimonials, rows] = await Promise.all([
     loadDocument<MemoriesDocument>(db, "camp_memories"),
+    loadDocument<TestimonialsDocument>(db, "testimonials"),
     db
       .prepare(
         `
@@ -47,7 +49,7 @@ export async function loader({ context }: Route.LoaderArgs) {
         .map((row) => row.category_slug)
     )
   ];
-  return { eligible, memories };
+  return { eligible, memories, testimonials };
 }
 
 export default function Home({ loaderData }: Route.ComponentProps) {
@@ -65,6 +67,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
       eligible={loaderData.eligible}
       settings={root?.settings || {}}
       memories={loaderData.memories}
+      testimonials={loaderData.testimonials}
     />
   );
 }
