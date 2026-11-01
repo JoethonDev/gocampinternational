@@ -1,49 +1,65 @@
-# GoCamp — Media requests received 2026-11-01 after 14:40
+# GoCamp — Confirmed scope from WhatsApp after 14:40 (2026-11-01)
 
-## Strict scope
+## Source and boundary
 
-Only the WhatsApp messages **after 14:40 Cairo time on November 1, 2026** are in scope. The author's latest outgoing message in the supplied export was at 11:51, so there is no later sender reply that supersedes this boundary. Messages before 14:41, including the 14:37–14:40 photo pair, are context **not new tasks**.
+Only November 1, 2026 WhatsApp messages **after 14:40 Cairo time**. The last outgoing author message in the export was 11:51 AM; none supersedes this cutoff. Earlier messages may explain context but authorize no new work.
 
-Source archive and private media are **not committed to this public repository**.
+Sources analyzed: the messages, 17 unique received photos, and three OPUS voice notes at **14:51 (27s), 15:20 (80s), 15:21 (10s)**. Audio was transcribed using Cloudflare-hosted Whisper Large v3 Turbo, with the 80-second note split into overlapping segments. This document is a **task interpretation**, not a verbatim publication of a private conversation.
 
-## Editorial inventory (17 unique photos)
+Do **not** commit the private WhatsApp archive, audio or supplied photos to this public repository. The original files remain in the separately prepared private import package.
 
-| Image filename suffix | Site area | Intended handling |
+## Voice-note conclusions (now verified)
+
+- **14:51:** Photos are being sent directly from original laptop/flash storage because existing images on the website appear stretched/distorted. Some sent photos may be repeated. Choose the best version instead of adding duplicates.
+- **15:20:** Main priority is to restore good-looking, authentic original photographs and genuine testimonials, including **real named participants and the relevant year**. She explicitly provided school images for **Alsum** and **DEO** in About Us. She is done sending for the day. She may later review typography, colors, spacing and format consistency across pages on mobile, beginning from Home and About Us; **website wording is intended to remain the same**. This is later editorial/design review, not permission to rewrite text now.
+- **15:21:** She believes the real photos will substantially improve the site and explicitly says the current **logo looks bad**, which is why she sent the original. Compare and correct the displayed logo, not only archive it.
+
+The Arabic speech may contain minor automatic-transcription errors; the requirements above are reinforced by matching text messages.
+
+## By website section — required media
+
+| Section | Source | Specific change |
 | --- | --- | --- |
-| WA0033, WA0031 | Fashion | Compare with currently published workshop photography; use if clearer, associate with correct UK/Switzerland content |
-| WA0027 | Austria memories / testimonial candidate | Sent twice (14:46 and 15:00); retain only once, check existing records first |
-| WA0032 | Italy adventure | Rafting image; associate with appropriate adventure content, not the Italy destination hero unless explicitly selected |
-| WA0025 | About Us | School presentation; sent twice (14:54 and 15:03); keep best original once |
-| WA0030, WA0029, WA0028 | Memories / genuine testimonial candidates | London / young-leader historical photographs; do not create testimonials without their exact words |
-| WA0026 | About Us | Original conference photo; placement requires comparison |
-| WA0017 | Brand logo | Compare against current R2 logo before replacing; no automatic downgrade |
-| WA0024 | About Us | Original photograph; check if already displayed |
-| WA0019 | Reference only | Website screenshot, not publishable editorial photo |
-| WA0018 | About Us | Berlin workshop with educators |
-| WA0020 | Reference only | Screenshot of a photo; original requested, so do not publish the screenshot |
-| WA0021, WA0022, WA0023 | About Us | DEO school-presentation alternatives; choose strongest photo instead of posting all |
+| **About Us / School collaborations** | **WA0025** | Alsum School Future Leaders presentation; repeated in the chat. Use one best-quality original. |
+| **About Us / School collaborations** | **WA0021, WA0022, WA0023** | DEO school presentation options. Choose best-quality suitable framing (WA0023 is a preliminary favorite), keep the others as alternatives rather than arbitrarily publishing all. |
+| **About Us / International educators** | **WA0018** | Berlin educators workshop; place in the international partnerships/collaboration context. |
+| **About Us / International events** | **WA0026** | Original conference photograph; compare with existing photo before changing placement. |
+| **About Us / existing historical photo** | **WA0024** | Compare with current site; update only if it is a better original of the already-published photo. |
+| **Real camper stories / family testimonials** | **WA0027** | Maya & Nour, Austria Adventure, **2019**. Received twice — import once. |
+| **Real camper stories / family testimonials** | **WA0030** | Ziad, London, **2020**. |
+| **Real camper stories / family testimonials** | **WA0029** | Yehia, London, **2019**. |
+| **Real camper stories / family testimonials** | **WA0028** | Youssef & Mohamed, **Young Leader**, **2018**. |
+| **Fashion programs** | **WA0033, WA0031** | Higher-resolution originals for Fashion in **UK and Switzerland**; replace matching low-quality old photos where appropriate, without inventing a new program. |
+| **Italy adventure programs** | **WA0032** | Original rafting photo, place with the appropriate Italy adventure content. Do not automatically change the Italy-wide banner or change an inactive program's status. |
+| **Brand logo** | **WA0017** | Original Go Camp International logo. Current site logo is criticized as poor quality. Preserve branding while making the display genuinely clean/sharp, avoiding stretched/incorrect image; check current R2 logo first. |
+| **Reference screenshots only** | **WA0019, WA0020** | Identify older images shown in screenshots; do not publish the screenshots as images. Zeinab says she is trying to obtain original of WA0020. |
 
-**Voice notes:** 14:51, 15:20 and 15:21 are part of the requested scope. Their original OPUS attachments are available in the private import package, but were not transcribed; do not infer requirements from them.
+**No deduplication of people across trips:** the same campers appearing on different years/destinations is legitimate. Deduplicate repeat media, not campers.
 
-## Staging cross-check
+## CMS implications
 
-- Target: `migration/cloudflare-react-workers-pr40` and `gocamp-staging-db` + `gocamp-staging-media` only.
-- The existing `media_assets` table returned **zero byte-identical SHA-256 matches** for these 17 JPEGs. That does not prove no photos were previously uploaded with different encoding.
-- Existing Camp Memories and text-only homepage Testimonials were inspected for semantics; photographs should not be represented as fabricated customer quotes.
-- Original image dimensions range from phone/screenshot sizes to 1600px wide. Preserve the highest real resolution; do not upscale arbitrary screenshots or replace existing higher-quality photos blindly.
-- Existing production resources must stay untouched.
+- The existing `testimonials` document is text-only and already has named quotes. Do not fabricate any quote from these photographs. Plan for genuine camper-story photo metadata or verified testimonial-photo support while retaining truthful source attribution.
+- Current About Us images are configured in `cloudflare-app/app/config/site.ts`, rather than D1 document image fields. Change the intended static image references in that file on the working migration branch while preserving layout/copy.
+- All new media should live in **staging R2**; use **staging D1** for managed media registry and dynamic references. Keep full-quality originals; responsive media serving does not justify upscaling blurry photos.
+- Match originals with existing R2 visuals, not only the file hash. Existing staging D1 returned **zero byte-identical SHA-256 matches** for the 17 JPEGs, but same visual content may be in WebP or another format.
+- The current Italy Outdoor Exploration program is inactive. Do not turn it on as an accidental side effect of adding a photograph.
+- **Copy and sitewide fonts:** no wholesale wording change is requested now. Zeinab will separately review typography/color/format/mobile scroll consistency.
 
-## Execution checklist and current status
+## Operational constraints
 
-- [x] Restrict to messages after cutoff
-- [x] Inventory original images and voice attachments
-- [x] Eliminate repeated WA0025 / WA0027 submissions
-- [x] Compute dimensions, checksums and intended placement
-- [x] Check for exact existing D1 media checksum matches
-- [ ] Listen to and transcribe all 3 voice notes; resolve any changed instructions
-- [ ] Compare visual duplicate candidates with current R2 media and destination/program images
-- [ ] Upload selected originals to staging R2 through existing admin media pipeline
-- [ ] Update staging D1 CMS references with revision checks; preserve original metadata and avoid duplicates
-- [ ] Verify staging rendering on mobile and desktop
+Staging only: `migration/cloudflare-react-workers-pr40`, `gocamp-staging-db`, `gocamp-staging-media`. No production modification or merge. No new programs or broad redesign. Do not place screenshot photos as full-resolution sources. Do not overwrite higher-quality current assets with worse copies.
 
-**No media upload, D1 mutation, deployment, or production change is claimed by this document.** The complete original-photo/media manifest bundle is maintained privately, not in git.
+## Checklist
+
+- [x] Apply cutoff after 14:40, analyze text and 17 unique images
+- [x] Transcribe and interpret all 3 voice notes, including the longer recording
+- [x] Preserve original filenames, year/place captions, and avoid repeated WA0025 / WA0027
+- [x] Check exact media hash overlaps in staging D1
+- [x] Produce visual contact sheets showing *only* original user-provided images
+- [ ] Compare visually with current serving R2 objects and choose best source by section
+- [ ] Upload approved originals to staging R2 via the existing admin media pipeline
+- [ ] Update the appropriate image references in staging D1 and GitHub (with revision guards)
+- [ ] Verify correct responsive serving, logo edges and About Us placements
+- [ ] Review copy/typography changes separately when Zeinab provides follow-up review
+
+**Status:** Request analysis and evidence review complete. **No staging media upload, D1 content mutation, public deployment, or production change has been executed by this documentation update.**
