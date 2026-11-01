@@ -31,6 +31,8 @@ const media = [
   ...(await findMedia(path.join(root, "build", "client")))
 ];
 if (media.length) {
-  throw new Error("R2-only media violation: image files found in React static assets:\n" + media.join("\n"));
+  throw new Error(
+    "R2-only media violation: image files found in React static assets:\n" + media.join("\n")
+  );
 }
 console.log("PASS: no image binaries in React public assets or client build");

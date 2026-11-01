@@ -243,7 +243,7 @@ The product owner selected **D1-only** persistence for this staging phase. No ou
 
 ### Logo
 - The owner placed the original transparent 2167 x 726 PNG at `branding/logo-source.png`.
-- Generated a sharp 720 x 292 WebP header asset, replacing the previous low-resolution derived file; staging R2 and the D1 media registry both carry the new 45,220-byte file with SHA-256 `6736c0565bf7ed62415747bb517335bf7d1addb69ac1486d2ed6bf89df5462c5`, and `/images/logo-transparent.webp` serves it with `X-GoCamp-Media-Source: r2`.
-- Public header logo renders crisply at 60 px high; admin login uses the same source.
+- The current header uses the optimized 960 x 502 WebP registered in D1 as media `a3bb62bf-6d92-4ca5-91e5-5cb1f2348c1b`: 79,350 bytes, SHA-256 `4f1884e2bc1ba09814d52943b33e5a846c660e4fdc5b9b45346cab63d8295be9`, object key `images/branding/gocamp-international-logo-20261101.webp`. The earlier 720 x 292 derivative remains available at `/images/logo-transparent.webp` (45,220 bytes) but is no longer the configured header image.
+- Public header logo renders crisply at 60 px high; admin login uses the same configured source.
 
 **Verification:** typecheck/build/deploy pass; the 390 px admin catalog, inquiries, trash, media and media-picker checks pass without document overflow. Final commit/CI evidence is recorded in the handoff response.

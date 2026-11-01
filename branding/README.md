@@ -19,4 +19,4 @@ Requirements:
 
 After adding the file, tell the agent the exact filename. The agent will create the optimized transparent header asset at `images/logo-transparent.webp` and update the site configuration if needed.
 
-**Current source:** `branding/logo-source.png` (2167 x 726, transparent), processed to `images/logo-transparent.webp` (720 x 292) and mirrored to staging R2.
+**Current source:** `branding/logo-source.png` (2167 x 726, transparent). The active optimized header asset is the 960 x 502 WebP registered in D1 as `a3bb62bf-6d92-4ca5-91e5-5cb1f2348c1b` (`images/branding/gocamp-international-logo-20261101.webp`); an earlier 720 x 292 derivative remains at `images/logo-transparent.webp` but is not the configured logo.
