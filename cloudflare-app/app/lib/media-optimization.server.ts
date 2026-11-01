@@ -56,7 +56,7 @@ async function makeVariant(
     } catch (error) {
       const message = String(error instanceof Error ? error.message : error).toLowerCase();
       // Never retry on plan limit or account authorization errors.
-      if (/9422|quota|limit|billing|403|not authorized/.test(message)) throw error;
+      if (/9422|quota|limit|billing/.test(message)) throw error;
       return { data: await run(false), method: "standard" };
     }
   }
@@ -107,6 +107,10 @@ export async function optimizeStoredMedia(env: Env, asset: MediaSource): Promise
     }
     try {
       const optimized = await makeVariant(env, bytes, preset, info.width);
+      if (optimized.data.byteLength > 2 * 1024 * 1024) {
+        result.skipped.push(`${preset.name}: exceeds 2 MB target`);
+        continue;
+      }
       const transformedInfo = await env.IMAGES.info(new Blob([optimized.data]).stream());
       if (!isValidDimension(transformedInfo.width) || !isValidDimension(transformedInfo.height)) {
         throw new Error("No valid output dimensions");
