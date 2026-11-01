@@ -1,5 +1,20 @@
 # October 30, 2026 GoCamp email content — Cloudflare staging
 
+## Current approved staging state — November 1, 2026
+
+Following the original inactive-draft import documented below, the user explicitly approved **activating the Special Interests Camps category and disabling all other programs in that category**.
+
+- Category `special-interests-camps`: **active**, including updated introduction/sections that describe only the two approved programs.
+- Approved/active: `austria-adventure-camp`, `uk-creative-summer` (the latter's image reference was changed separately in staging; verify editorial suitability before production).
+- Set from active to inactive: `italy-fashion`, `italy-food`, `italy-outdoor-exploration`, `switzerland-adventure-camp`, `switzerland-ski-camp`.
+- Already inactive and retained: `canada-adventure-summer`.
+- Already in trash, retained without restoration: `italy-sea-quest`, `switzerland-film-academy`.
+- Final verified staging count: **2 active, 6 inactive, 2 trash**. Status columns and JSON status fields match. No records, R2 images or destination associations were deleted.
+
+The durable, idempotent SQL patch is `cloudflare-app/migration/overlays/special-interests-approved-programs-staging.sql`. It is **staging-only**, applied after the earlier PR39 overlays; it preserves later editor changes unless the original category content matches the known source revision. Production D1/R2 and cPanel were not modified by this update.
+
+---
+
 ## Applied on staging
 Both approved PR39 program drafts already existed in `gocamp-staging-db` before this follow-up (inactive). This update retained them as **inactive drafts**, added the two Austria email JPEGs optimized to WebP in the private `gocamp-staging-media` bucket, created their `media_assets` rows and program references, recorded the seven UK disciplines as JSON content, and linked the drafts to their respective destinations in both `destination_programs` and destination JSON.
 
