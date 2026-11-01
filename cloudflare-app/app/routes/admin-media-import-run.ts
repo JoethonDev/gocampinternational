@@ -42,12 +42,8 @@ export async function action({ request, context }: Route.ActionArgs) {
   );
   return Response.json(
     {
-      uploaded: results.filter(
-        (result) => result.status === "fulfilled" && result.value === "uploaded"
-      ).length,
-      existing: results.filter(
-        (result) => result.status === "fulfilled" && result.value === "already-present"
-      ).length,
+      uploaded: 0,
+      existing: results.filter((result) => result.status === "fulfilled").length,
       failures,
       nextCursor: failures.length ? cursor : Math.min(LEGACY_IMAGES.length, cursor + BATCH_SIZE),
       total: LEGACY_IMAGES.length

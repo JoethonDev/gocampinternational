@@ -48,16 +48,20 @@ if (!Array.isArray(inventory) || inventory.length !== 333) {
 }
 const paths = new Set();
 for (const item of inventory) {
+  const key = String(item?.path || "").replace(/^\//, "");
   if (
     !item ||
-    !new RegExp("^/(?:images|uploads)/[a-zA-Z0-9_().%+/-]+[.](webp|png|jpe?g|avif|gif|svg|ico)$", "i").test(item.path) ||
+    !new RegExp(
+      "^(?:images|uploads)/[a-zA-Z0-9_().%+/-]+[.](webp|png|jpe?g|avif|gif|svg|ico)$",
+      "i"
+    ).test(key) ||
     !Number.isSafeInteger(item.bytes) ||
     item.bytes <= 0 ||
-    paths.has(item.path)
+    paths.has(key)
   ) {
     throw new Error("Invalid or duplicate migrated media inventory entry");
   }
-  paths.add(item.path);
+  paths.add(key);
 }
 
 const revision = execFileSync("git", ["rev-parse", "HEAD"], {
@@ -65,4 +69,7 @@ const revision = execFileSync("git", ["rev-parse", "HEAD"], {
   encoding: "utf8"
 }).trim();
 await writeFile(path.join(root, "public", "migration-commit.txt"), revision + "\n");
-console.log("Prepared R2-backed legacy inventory (" + inventory.length + " media files); revision", revision.slice(0, 12));
+console.log(
+  "Prepared R2-backed legacy inventory (" + inventory.length + " media files); revision",
+  revision.slice(0, 12)
+);

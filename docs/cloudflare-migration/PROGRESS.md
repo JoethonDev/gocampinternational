@@ -180,11 +180,11 @@ See [CONTENT_AND_CMS_RECONCILIATION.md](./CONTENT_AND_CMS_RECONCILIATION.md): PR
 
 **Scope:** authenticated staging only. No production binding, database, DNS or content was changed.
 
-### R2 legacy media import
-- Fixed a real integration defect: the import page POSTed batches to the UI route `/admin/media/import`, so a normal `fetch` received rendered HTML rather than JSON. Batch work now lives in the resource route `/admin/media/import/run`; shared inventory/validation/import logic is in `features/admin/media-import.server.ts`.
-- Authenticated import completed **332/332** inventory entries: **324 uploaded**, **8 already present**, **0 failures**.
-- `/images/logo.webp` and `/images/logo-transparent.webp` return `200` with `X-GoCamp-Media-Source: r2`; the bundled static fallback remains enabled.
-- The recovered historical upload `uploads/1_1761381038.webp` (1003×1077, 94,254 bytes) is now force-added despite the broad `uploads/` ignore rule and returns `200 image/webp` from staging. A D1 reference audit found **145 distinct image URLs and 0 missing local files**.
+### R2 legacy media registry and cutover
+- Fixed a real integration defect: the import page POSTed batches to the UI route `/admin/media/import`, so a normal `fetch` received rendered HTML rather than JSON. Batch work now lives in the resource route `/admin/media/import/run`; shared inventory/validation logic is in `features/admin/media-import.server.ts`.
+- The concurrent R2 cutover changed this action from an importer to a **read-only verifier**. Final authenticated check: **333/333** entries (332 `/images` + the recovered `/uploads` asset) match both the D1 media registry and R2 bytes/SHA-256, with **0 failures**.
+- `/images/logo.webp` and `/images/logo-transparent.webp` return `200` with `X-GoCamp-Media-Source: r2`; `/uploads/*` is served R2-only. The Worker has no bundled-image fallback after cutover.
+- The recovered historical upload `uploads/1_1761381038.webp` (1003×1077, 94,254 bytes) is force-added despite the broad `uploads/` ignore rule and returns `200 image/webp` from staging. A D1 reference audit found **145 distinct image URLs and 0 missing local files**.
 - Program editors now load all category statuses and label non-active options. A category rename updates its programs' stored category association; this was verified by creating an inactive category and child program, renaming the category, checking the editor selection, then deleting both. Destination rename/relation behavior was exercised similarly.
 
 ### Authenticated admin UAT
@@ -243,7 +243,7 @@ The product owner selected **D1-only** persistence for this staging phase. No ou
 
 ### Logo
 - The owner placed the original transparent 2167 x 726 PNG at `branding/logo-source.png`.
-- Generated a sharp 720 x 292 WebP header asset, replacing the previous low-resolution derived file; upload to staging R2 completed and `/images/logo-transparent.webp` now serves the new asset with `X-GoCamp-Media-Source: r2`.
+- Generated a sharp 720 x 292 WebP header asset, replacing the previous low-resolution derived file; staging R2 and the D1 media registry both carry the new 45,220-byte file with SHA-256 `6736c0565bf7ed62415747bb517335bf7d1addb69ac1486d2ed6bf89df5462c5`, and `/images/logo-transparent.webp` serves it with `X-GoCamp-Media-Source: r2`.
 - Public header logo renders crisply at 60 px high; admin login uses the same source.
 
 **Verification:** typecheck/build/deploy pass; the 390 px admin catalog, inquiries, trash, media and media-picker checks pass without document overflow. Final commit/CI evidence is recorded in the handoff response.

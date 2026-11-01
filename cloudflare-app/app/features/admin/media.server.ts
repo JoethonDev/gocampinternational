@@ -40,14 +40,20 @@ async function loadUsage(
     const refs: string[] = [];
     let count = 0;
     for (const row of catalog.results || []) {
-      const countForRow = patterns.reduce((total, pattern) => total + (row.content_json.match(pattern)?.length || 0), 0);
+      const countForRow = patterns.reduce(
+        (total, pattern) => total + (row.content_json.match(pattern)?.length || 0),
+        0
+      );
       if (countForRow) {
         count += countForRow;
         refs.push(`catalog:${row.kind}/${row.slug}`);
       }
     }
     for (const row of documents.results || []) {
-      const countForRow = patterns.reduce((total, pattern) => total + (row.content_json.match(pattern)?.length || 0), 0);
+      const countForRow = patterns.reduce(
+        (total, pattern) => total + (row.content_json.match(pattern)?.length || 0),
+        0
+      );
       if (countForRow) {
         count += countForRow;
         refs.push(`document:${row.key}`);

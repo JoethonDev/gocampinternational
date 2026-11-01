@@ -90,7 +90,7 @@ Catalog, inquiries, trash and the dashboard recent table all use `AdminTable`; c
 
 `RichTextInput` is a document-style `contentEditable` editor, not an HTML textarea. Toolbar actions operate on the current selection and write to a hidden input (or the repeater callback). Do not add a "source" toggle for editors; non-technical users must never need to see HTML. When adding a toolbar format, add the tag to the `SafeRichText` allowlist and verify the public renderer and HTML sanitisation contract.
 
-The staging legacy-image import follows the same rule: the page at `/admin/media/import` is a normal UI route, while its authenticated batch action is the resource route `/admin/media/import/run`. Do not POST batch work to a UI route and expect JSON; React Router renders the document response instead. The inventory, byte-length check, SHA-256 metadata and R2 HEAD verification live in `features/admin/media-import.server.ts` and are shared by the page loader and resource action.
+The staging legacy-image verification follows the same rule: the page at `/admin/media/import` is a normal UI route, while its authenticated batch action is the resource route `/admin/media/import/run`. Do not POST batch work to a UI route and expect JSON; React Router renders the document response instead. The 333-entry inventory and the D1/R2 size + SHA-256 comparison live in `features/admin/media-import.server.ts` and are shared by the page loader and resource action. Post-cutover this is verification-only; it does not upload missing files.
 
 Program editors load categories in every status (`listCategories(db, false)`) and append the non-active status to the option label. A program assigned to an inactive/trashed category must still display and preserve that relationship when edited. Category and destination slug renames update dependent catalog and join records server-side.
 
@@ -108,7 +108,7 @@ Program editors load categories in every status (`listCategories(db, false)`) an
 - Secrets (`ADMIN_PASSWORD_SHA256`, `ADMIN_USERNAME`) live in Cloudflare, not in source.
 - `workers/app.ts` adds security headers, staging `noindex`, `Server-Timing`, and structured failure logging.
 - `upload_source_maps` and Workers Logs are enabled in `wrangler.json`.
-- Static assets are served by Workers Static Assets; uploaded media is served through the immutable `/media/:id` route with R2. Legacy `/images/*` requests check the `MEDIA` bucket first (adding `X-GoCamp-Media-Source: r2`) and fall back to the bundled static asset during the migration. The fallback is removed only in a separate cutover.
+- Static CSS/JS assets are served by Workers Static Assets; uploaded media uses the immutable `/media/:id` route with R2. Legacy `/images/*` and `/uploads/*` requests are **R2-only** after the cutover, add `X-GoCamp-Media-Source: r2`, and return 404 when the object is absent. The Worker deliberately has no bundled-image fallback.
 - Do not introduce a global mutable request cache or module-level user state.
 
 ## 8. Quality commands

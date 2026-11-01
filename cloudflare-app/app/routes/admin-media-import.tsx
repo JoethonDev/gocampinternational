@@ -101,7 +101,8 @@ export default function AdminMediaImport({ loaderData }: Route.ComponentProps) {
         <AdminProgress value={processed} max={Math.max(total, 1)} label="R2 migration progress" />
         {finished && (
           <div className="alert alert-success mt-3">
-            All legacy image objects are verified in staging R2 and D1. No GitHub static media fallback is required.
+            All legacy image objects are verified in staging R2 and D1. No GitHub static media
+            fallback is required.
           </div>
         )}
         {failure && (
