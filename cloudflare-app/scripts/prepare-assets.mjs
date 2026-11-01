@@ -50,7 +50,7 @@ const paths = new Set();
 for (const item of inventory) {
   if (
     !item ||
-    !new RegExp("^(?:images|uploads)/[a-zA-Z0-9_().%+/-]+[.](webp|png|jpe?g|avif|gif|svg|ico)$", "i").test(item.path) ||
+    !new RegExp("^/(?:images|uploads)/[a-zA-Z0-9_().%+/-]+[.](webp|png|jpe?g|avif|gif|svg|ico)$", "i").test(item.path) ||
     !Number.isSafeInteger(item.bytes) ||
     item.bytes <= 0 ||
     paths.has(item.path)
