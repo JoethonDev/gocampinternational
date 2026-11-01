@@ -1,8 +1,5 @@
 name: Deploy responsive images to Cloudflare staging
 on:
-  push:
-    branches: [feat/staging-r2-responsive-images-20261101]
-    paths: [".github/workflows/deploy-staging-images.yml"]
   workflow_dispatch:
 permissions:
   contents: read
