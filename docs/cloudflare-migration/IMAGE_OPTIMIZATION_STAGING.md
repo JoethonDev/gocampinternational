@@ -1,3 +1,31 @@
+# Final staging image enhancement results — Nov 1, 2026
+
+**R2 enhancement completed via Cloudflare MCP + temporary one-time Worker.** No paid plan enabled; no cache changes; production untouched.
+
+- **336** original staging R2 objects and matching D1 media rows.
+- **335** eligible images were enhanced into **1,005 R2 variants** (335 mobile 480px, 335 tablet 960px, 335 desktop 1600px).
+- **656** of these variants used Cloudflare's real AI upscaling (`upscale=generate`), with standard resizing for other variants.
+- **1** `images/loading2.gif` intentionally kept unchanged; it is an animated loader not suitable for photo upscaling.
+- Verified **1,341** R2 objects total = 336 originals + 1,005 enhanced files.
+- Verified D1 references to all 1,341 objects: **0 missing and 0 unregistered**.
+- D1 metadata dimensions were populated for eligible originals; all saved variants have valid dimensions, type and size (none above 2 MB).
+- Temporary processing Worker and test probe Worker were both deleted when finished.
+
+**Deployment caveat:** The optimized R2 assets and D1 mapping are complete, but the currently running staging website still uses legacy original image URLs. The React Router responsive image pipeline code in this PR builds successfully, but the GitHub Actions staging deployment did **not** run because the repository's `CLOUDFLARE_API_TOKEN` secret is missing. Do not state the live website is delivering responsive variants until that code is deployed through authorized credentials.
+
+## Implementation
+
+- `media_variants` schema applied directly to staging D1; migration file in PR.
+- Upload-time transformation (AI when upscaling) and responsive image URL selection prepared in this PR.
+- Current original R2 objects and D1 media IDs are preserved.
+- No cache layer or cache policy introduced.
+- Staging code build/typecheck passed; live deployment is pending.
+
+## Final gate for staging activation
+
+Deploy `cloudflare-app` from this PR's branch to `gocamp-migration-staging` using a Cloudflare-authorized Wrangler deployment (e.g. set a scoped GitHub Actions `CLOUDFLARE_API_TOKEN` secret and invoke the manual staging deploy workflow). Verify `?variant=mobile|tablet|desktop` requests return the pre-generated R2 versions. **Do not deploy production or merge this PR automatically.**
+
+---
 # Staging R2 image enhancement and responsive assets
 
 Status: **Code prepared on branch, D1 media_variants table applied directly to staging, bulk transformation NOT executed and staging Worker NOT deployed.**
