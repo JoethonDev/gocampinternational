@@ -115,6 +115,7 @@ export default function Trash({ loaderData }: Route.ComponentProps) {
       ),
     [rows, search]
   );
+  const hasFilters = Boolean(search);
 
   const columns: AdminTableColumn<TrashRow>[] = [
     {
@@ -203,7 +204,21 @@ export default function Trash({ loaderData }: Route.ComponentProps) {
           Trash updated.
         </div>
       )}
-      <AdminToolbar>
+      <AdminToolbar
+        actions={
+          <div className="admin-toolbar-summary">
+            <span className="admin-count-pill">
+              <strong>{visible.length}</strong>
+              <span>of {rows.length}</span>
+            </span>
+            {hasFilters && (
+              <button type="button" className="admin-filter-clear" onClick={() => setSearch("")}>
+                Clear
+              </button>
+            )}
+          </div>
+        }
+      >
         <AdminToolbarField label="Search" htmlFor="trash-search">
           <input
             id="trash-search"

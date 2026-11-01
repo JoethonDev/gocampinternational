@@ -18,3 +18,5 @@ Requirements:
 - do not overwrite `images/logo.webp` (that original is used for social/Open Graph previews).
 
 After adding the file, tell the agent the exact filename. The agent will create the optimized transparent header asset at `images/logo-transparent.webp` and update the site configuration if needed.
+
+**Current source:** `branding/logo-source.png` (2167 x 726, transparent), processed to `images/logo-transparent.webp` (720 x 292) and mirrored to staging R2.

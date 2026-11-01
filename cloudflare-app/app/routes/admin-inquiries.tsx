@@ -135,6 +135,12 @@ export default function Inquiries({ loaderData }: Route.ComponentProps) {
       }),
     [rows, search, statusFilter, kindFilter]
   );
+  const hasFilters = Boolean(search || statusFilter || kindFilter);
+  const clearFilters = () => {
+    setSearch("");
+    setStatusFilter("");
+    setKindFilter("");
+  };
 
   const columns: AdminTableColumn<InquiryRecord>[] = [
     {
@@ -226,7 +232,21 @@ export default function Inquiries({ loaderData }: Route.ComponentProps) {
           Inquiry deleted.
         </p>
       )}
-      <AdminToolbar>
+      <AdminToolbar
+        actions={
+          <div className="admin-toolbar-summary">
+            <span className="admin-count-pill">
+              <strong>{visible.length}</strong>
+              <span>of {rows.length}</span>
+            </span>
+            {hasFilters && (
+              <button type="button" className="admin-filter-clear" onClick={clearFilters}>
+                Clear
+              </button>
+            )}
+          </div>
+        }
+      >
         <AdminToolbarField label="Search" htmlFor="inquiry-search">
           <input
             id="inquiry-search"

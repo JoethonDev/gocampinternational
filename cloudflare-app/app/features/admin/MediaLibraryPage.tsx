@@ -101,21 +101,22 @@ function MediaUploadForm({ csrf }: { csrf: string }) {
   return (
     <Form method="post" encType="multipart/form-data" className="mb-4">
       <AdminFormSection
-        title="Upload an image"
-        description="JPEG, PNG, WebP, AVIF or GIF up to 3 MB. New files are stored privately in R2."
+        title="Upload images"
+        description="Select up to 12 JPEG, PNG, WebP, AVIF or GIF files (3 MB each). New files are stored privately in R2."
       >
         <input type="hidden" name="csrf" value={csrf} />
         <input type="hidden" name="operation" value="upload" />
         <div className="col-md-8">
           <label htmlFor="mediaFile" className="form-label">
-            Image file
+            Image files
           </label>
           <input
             className="form-control"
             type="file"
-            name="file"
+            name="files"
             id="mediaFile"
             accept="image/jpeg,image/png,image/webp,image/avif,image/gif"
+            multiple
             required
           />
         </div>
@@ -197,12 +198,14 @@ export function MediaLibraryPage({
   data,
   csrf,
   uploaded,
+  uploadError,
   updated,
   staging
 }: {
   data: MediaLibraryData;
   csrf: string;
-  uploaded: boolean;
+  uploaded: number;
+  uploadError: string | null;
   updated: boolean;
   staging: boolean;
 }) {
@@ -215,9 +218,19 @@ export function MediaLibraryPage({
           <span className="badge bg-secondary rounded-pill fs-6">{data.total} matching images</span>
         }
       />
-      {(uploaded || updated) && (
+      {uploaded > 0 && (
         <div className="alert alert-success" role="status">
-          Media saved.
+          {uploaded} image{uploaded === 1 ? "" : "s"} uploaded.
+        </div>
+      )}
+      {updated && (
+        <div className="alert alert-success" role="status">
+          Media updated.
+        </div>
+      )}
+      {uploadError && (
+        <div className="alert alert-danger" role="alert">
+          {uploadError}
         </div>
       )}
       {staging && (

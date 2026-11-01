@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { ADMIN_NAV, ADMIN_NAV_GROUPS } from "../../config/admin";
 import { useAdminTheme } from "../../hooks/useAdminTheme";
 import "../../admin.css";
+import "../../features/admin/content-studio.css";
 
 function isActivePath(pathname: string, href: string) {
   if (href === "/admin") return pathname === "/admin";

@@ -1,9 +1,17 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { useFetcher } from "react-router";
 import sourceMedia from "../legacy-media.json";
 
 const STATIC_PATHS = (sourceMedia as Array<{ path: string }>).map((item) => item.path);
-type UploadResult = { success?: boolean; path?: string; error?: string };
+type UploadFile = { id: string; path: string; name: string };
+type UploadResult = {
+  success?: boolean;
+  files?: UploadFile[];
+  path?: string;
+  error?: string;
+  errors?: { name: string; message: string }[];
+};
 
 export function MediaSelector({
   id,
@@ -29,6 +37,7 @@ export function MediaSelector({
   const [search, setSearch] = useState("");
   const [extraUploads, setExtraUploads] = useState<string[]>([]);
   const [uploadMessage, setUploadMessage] = useState("");
+  const [queued, setQueued] = useState(0);
   const returnFocus = useRef<HTMLElement | null>(null);
   const searchInput = useRef<HTMLInputElement>(null);
   const fileInput = useRef<HTMLInputElement>(null);
@@ -57,6 +66,8 @@ export function MediaSelector({
     if (!open) return;
     returnFocus.current = document.activeElement as HTMLElement | null;
     searchInput.current?.focus();
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         event.preventDefault();
@@ -65,32 +76,39 @@ export function MediaSelector({
     };
     document.addEventListener("keydown", onKeyDown);
     return () => {
+      document.body.style.overflow = previousOverflow;
       document.removeEventListener("keydown", onKeyDown);
       returnFocus.current?.focus();
     };
   }, [open]);
 
   useEffect(() => {
-    if (!uploader.data?.success || !uploader.data.path) return;
-    const path = uploader.data.path;
-    setExtraUploads((current) => [path, ...current.filter((item) => item !== path)]);
-    setValue(path);
+    if (!uploader.data?.success || !uploader.data.files?.length) return;
+    const files = uploader.data.files;
+    const paths = files.map((file) => file.path);
+    setExtraUploads((current) => [...paths, ...current.filter((item) => !paths.includes(item))]);
+    setValue(paths[0]);
     setSearch("");
-    setUploadMessage("Image uploaded and selected.");
+    setUploadMessage(
+      `${paths.length} image${paths.length === 1 ? "" : "s"} uploaded. ${
+        paths.length === 1 ? "The image is" : "The first image is"
+      } selected.`
+    );
     if (fileInput.current) fileInput.current.value = "";
+    setQueued(0);
   }, [uploader.data]);
 
   const upload = () => {
-    const file = fileInput.current?.files?.[0];
-    if (!file) {
-      setUploadMessage("Choose an image file first.");
+    const files = Array.from(fileInput.current?.files || []);
+    if (!files.length) {
+      setUploadMessage("Choose at least one image first.");
       return;
     }
-    setUploadMessage("");
     const form = new FormData();
     form.set("csrf", csrf);
     form.set("operation", "upload");
-    form.set("file", file);
+    files.forEach((file) => form.append("files", file));
+    setUploadMessage("");
     uploader.submit(form, {
       method: "post",
       action: "/admin/media/upload",
@@ -129,113 +147,146 @@ export function MediaSelector({
           loading="lazy"
         />
       )}
-      {open && (
-        <div className="media-selector-backdrop" role="presentation" onClick={() => setOpen(false)}>
+      {open &&
+        typeof document !== "undefined" &&
+        createPortal(
           <div
-            role="dialog"
-            aria-modal="true"
-            aria-label={`Choose image for ${label}`}
-            className="card shadow-lg border-0 w-100 media-selector-dialog"
-            onClick={(event) => event.stopPropagation()}
+            className="media-selector-backdrop"
+            role="presentation"
+            onClick={() => setOpen(false)}
           >
-            <div className="card-header d-flex justify-content-between align-items-center gap-3">
-              <h3 className="h5 m-0">Choose {label.replaceAll("_", " ")} image</h3>
-              <button
-                type="button"
-                className="btn-close"
-                aria-label="Close media selector"
-                onClick={() => setOpen(false)}
-              />
-            </div>
-            <div className="card-body overflow-auto">
-              <div className="media-selector-upload">
-                <div className="flex-grow-1">
-                  <label className="form-label small fw-semibold" htmlFor={`${id}-upload`}>
-                    Upload a new image
-                  </label>
-                  <input
-                    ref={fileInput}
-                    id={`${id}-upload`}
-                    className="form-control form-control-sm"
-                    type="file"
-                    accept="image/jpeg,image/png,image/webp,image/avif,image/gif"
-                  />
+            <div
+              role="dialog"
+              aria-modal="true"
+              aria-label={`Choose image for ${label}`}
+              className="card shadow-lg border-0 media-selector-dialog"
+              onClick={(event) => event.stopPropagation()}
+            >
+              <div className="card-header media-selector-header">
+                <div>
+                  <h3 className="h6 m-0">Choose {label.replaceAll("_", " ")} image</h3>
+                  <p className="small text-secondary mb-0">
+                    Browse the library or upload new images.
+                  </p>
                 </div>
                 <button
                   type="button"
-                  className="btn btn-sm btn-primary"
-                  onClick={upload}
-                  disabled={uploader.state !== "idle"}
+                  className="btn-close"
+                  aria-label="Close media selector"
+                  onClick={() => setOpen(false)}
+                />
+              </div>
+              <div className="card-body media-selector-body">
+                <div className="media-selector-upload">
+                  <div className="flex-grow-1">
+                    <label className="form-label small fw-semibold" htmlFor={`${id}-upload`}>
+                      Upload new images
+                    </label>
+                    <input
+                      ref={fileInput}
+                      id={`${id}-upload`}
+                      className="form-control form-control-sm"
+                      type="file"
+                      accept="image/jpeg,image/png,image/webp,image/avif,image/gif"
+                      multiple
+                      onChange={(event) => setQueued(event.target.files?.length || 0)}
+                    />
+                    <span className="small text-secondary">Choose up to 12 images, 3 MB each.</span>
+                  </div>
+                  <button
+                    type="button"
+                    className="btn btn-sm btn-primary"
+                    onClick={upload}
+                    disabled={uploader.state !== "idle"}
+                  >
+                    {uploader.state !== "idle"
+                      ? "Uploading…"
+                      : `Upload${queued ? ` (${queued})` : ""}`}
+                  </button>
+                </div>
+                {uploadMessage && (
+                  <p className="small text-secondary mb-2" role="status">
+                    {uploadMessage}
+                  </p>
+                )}
+                {uploader.data?.error && (
+                  <p className="small text-danger mb-2" role="alert">
+                    {uploader.data.error}
+                  </p>
+                )}
+                {!!uploader.data?.errors?.length && (
+                  <ul className="small text-danger mb-2 ps-3" role="alert">
+                    {uploader.data.errors.map((error) => (
+                      <li key={error.name + error.message}>
+                        {error.name}: {error.message}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                <div className="media-selector-search">
+                  <i className="bi bi-search" aria-hidden="true" />
+                  <input
+                    ref={searchInput}
+                    className="form-control form-control-sm"
+                    aria-label="Search image paths"
+                    placeholder="Search images by filename…"
+                    value={search}
+                    onChange={(event) => setSearch(event.target.value)}
+                  />
+                </div>
+                <div className="media-selector-results">
+                  <div className="media-selector-grid">
+                    {choices.map((path) => (
+                      <button
+                        type="button"
+                        className={
+                          "media-selector-card" +
+                          (path === value ? " media-selector-card-selected" : "")
+                        }
+                        key={path}
+                        aria-pressed={path === value}
+                        onClick={() => {
+                          setValue(path);
+                          setOpen(false);
+                          setSearch("");
+                        }}
+                      >
+                        <img src={path} alt="" loading="lazy" />
+                        <span>{path.split("/").at(-1)}</span>
+                      </button>
+                    ))}
+                  </div>
+                  {choices.length === 0 && (
+                    <p className="text-secondary small mb-0 p-3">No images match that search.</p>
+                  )}
+                </div>
+                {all.length > choices.length && (
+                  <p className="small text-secondary mb-0 mt-2">
+                    Showing {choices.length} of {all.length} images. Search to refine.
+                  </p>
+                )}
+              </div>
+              <div className="card-footer media-selector-footer">
+                <a
+                  className="btn btn-sm btn-outline-primary"
+                  href="/admin/media"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
-                  {uploader.state !== "idle" ? "Uploading…" : "Upload"}
+                  Manage library
+                </a>
+                <button
+                  type="button"
+                  className="btn btn-sm btn-outline-secondary"
+                  onClick={() => setOpen(false)}
+                >
+                  Close
                 </button>
               </div>
-              {uploadMessage && <p className="small text-secondary mb-2">{uploadMessage}</p>}
-              {uploader.data?.error && (
-                <p className="small text-danger mb-2" role="alert">
-                  {uploader.data.error}
-                </p>
-              )}
-              <input
-                ref={searchInput}
-                className="form-control form-control-sm mb-3"
-                aria-label="Search image paths"
-                placeholder="Search file names"
-                value={search}
-                onChange={(event) => setSearch(event.target.value)}
-              />
-              <div className="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-6 g-2">
-                {choices.map((path) => (
-                  <div className="col" key={path}>
-                    <button
-                      type="button"
-                      className="card p-2 text-start w-100 h-100 border"
-                      onClick={() => {
-                        setValue(path);
-                        setOpen(false);
-                        setSearch("");
-                      }}
-                    >
-                      <img
-                        src={path}
-                        alt=""
-                        className="media-selector-option-image"
-                        loading="lazy"
-                      />
-                      <span className="small text-break media-selector-filename">
-                        {path.split("/").at(-1)}
-                      </span>
-                    </button>
-                  </div>
-                ))}
-              </div>
-              {choices.length === 0 && <p className="text-secondary">No matches.</p>}
-              {all.length > choices.length && (
-                <p className="small text-secondary mt-3">
-                  Displaying up to 48 of {all.length} assets. Search to refine.
-                </p>
-              )}
             </div>
-            <div className="card-footer d-flex justify-content-between">
-              <a
-                className="btn btn-sm btn-outline-primary"
-                href="/admin/media"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Manage library
-              </a>
-              <button
-                type="button"
-                className="btn btn-sm btn-outline-secondary"
-                onClick={() => setOpen(false)}
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+          </div>,
+          document.querySelector(".admin-workspace") || document.body
+        )}
     </div>
   );
 }

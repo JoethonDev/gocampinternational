@@ -1,8 +1,11 @@
 import { verifyAdminPost } from "./admin.server";
 
 export const MAX_UPLOAD_BYTES = 3 * 1024 * 1024;
+export const MAX_UPLOAD_FILES = 12;
 
 type ImageType = { type: string; extension: string };
+export type UploadedMedia = { id: string; path: string; name: string };
+type UploadFailure = { name: string; message: string };
 
 function ascii(bytes: Uint8Array, offset: number, length: number) {
   return String.fromCharCode(...bytes.subarray(offset, offset + length));
@@ -39,10 +42,8 @@ function detectImageType(bytes: Uint8Array): ImageType | null {
   return null;
 }
 
-export async function uploadMedia(request: Request, env: Env, form: FormData): Promise<string> {
-  await verifyAdminPost(request, env.DB, form);
-  const file = form.get("file");
-  if (!(file instanceof File) || !file.size || file.size > MAX_UPLOAD_BYTES) {
+async function uploadOne(file: File, env: Env): Promise<UploadedMedia> {
+  if (!file.size || file.size > MAX_UPLOAD_BYTES) {
     throw new Response("Choose an image up to 3 MB", { status: 413 });
   }
 
@@ -60,7 +61,13 @@ export async function uploadMedia(request: Request, env: Env, form: FormData): P
   )
     .bind(checksum)
     .first<{ id: string }>();
-  if (existing) return existing.id;
+  if (existing) {
+    return {
+      id: existing.id,
+      path: `/media/${existing.id}`,
+      name: file.name.slice(0, 180).replace(/[\u0000-\u001f]/g, "")
+    };
+  }
 
   const objectKey = `images/${checksum.slice(0, 2)}/${checksum}.${imageType.extension}`;
   const existed = Boolean(await env.MEDIA.head(objectKey));
@@ -87,7 +94,52 @@ export async function uploadMedia(request: Request, env: Env, form: FormData): P
     if (!existed) await env.MEDIA.delete(objectKey).catch(() => undefined);
     throw error;
   }
-  return id;
+  return { id, path: `/media/${id}`, name: displayName };
+}
+
+export async function uploadMedia(request: Request, env: Env, form: FormData): Promise<string> {
+  await verifyAdminPost(request, env.DB, form);
+  const file = form.get("file");
+  if (!(file instanceof File)) {
+    throw new Response("Choose an image up to 3 MB", { status: 413 });
+  }
+  return (await uploadOne(file, env)).id;
+}
+
+export async function uploadMediaFiles(
+  request: Request,
+  env: Env,
+  form: FormData
+): Promise<{ uploaded: UploadedMedia[]; errors: UploadFailure[] }> {
+  await verifyAdminPost(request, env.DB, form);
+  const files = [...form.getAll("files"), ...form.getAll("file")].filter(
+    (entry): entry is File => entry instanceof File && entry.size > 0
+  );
+  if (!files.length) {
+    throw new Response("Choose at least one image up to 3 MB each", { status: 413 });
+  }
+  if (files.length > MAX_UPLOAD_FILES) {
+    throw new Response(`Upload at most ${MAX_UPLOAD_FILES} images at once`, { status: 413 });
+  }
+
+  const uploaded: UploadedMedia[] = [];
+  const errors: UploadFailure[] = [];
+  for (const file of files) {
+    try {
+      uploaded.push(await uploadOne(file, env));
+    } catch (error) {
+      errors.push({
+        name: file.name.slice(0, 180),
+        message:
+          error instanceof Response
+            ? await error.text().catch(() => "Upload failed")
+            : error instanceof Error
+              ? error.message
+              : "Upload failed"
+      });
+    }
+  }
+  return { uploaded, errors };
 }
 
 export async function mutateMedia(request: Request, env: Env, form: FormData): Promise<void> {

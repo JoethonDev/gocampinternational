@@ -35,6 +35,7 @@ export function CatalogListPage({
   const [categoryFilter, setCategoryFilter] = useState("");
   const [destinationFilter, setDestinationFilter] = useState("");
   const [selected, setSelected] = useState<string[]>([]);
+  const [bulkStatus, setBulkStatus] = useState("");
   const [page, setPage] = useState(1);
   const pageSize = 15;
 
@@ -64,6 +65,15 @@ export function CatalogListPage({
   const totalPages = Math.max(1, Math.ceil(visible.length / pageSize));
   const safePage = Math.min(page, totalPages);
   const paged = visible.slice((safePage - 1) * pageSize, safePage * pageSize);
+  const hasFilters = Boolean(search || statusFilter || categoryFilter || destinationFilter);
+  const clearFilters = () => {
+    setSearch("");
+    setStatusFilter("");
+    setCategoryFilter("");
+    setDestinationFilter("");
+    setSelected([]);
+    setPage(1);
+  };
 
   const select = (slug: string, checked: boolean) =>
     setSelected((previous) =>
@@ -104,17 +114,20 @@ export function CatalogListPage({
           </span>
           <span>
             <strong>{item.name}</strong>
-            {kind === "program" && item.category_slug && (
-              <span className="d-block small text-secondary">
-                {categories.find((category) => category.slug === item.category_slug)?.name ||
-                  item.category_slug}
-              </span>
-            )}
+            <span className="admin-table-slug">
+              {kind === "program" && item.category_slug && (
+                <span>
+                  {categories.find((category) => category.slug === item.category_slug)?.name ||
+                    item.category_slug}
+                  <span aria-hidden="true"> · </span>
+                </span>
+              )}
+              <code>{item.slug}</code>
+            </span>
           </span>
         </div>
       )
     },
-    { key: "slug", label: "ID", render: (item) => <code>{item.slug}</code> },
     { key: "status", label: "Status", render: (item) => <StatusBadge status={item.status} /> },
     {
       key: "edit",
@@ -122,11 +135,8 @@ export function CatalogListPage({
       className: "text-end",
       render: (item) => (
         <AdminRowActions>
-          <Link
-            to={`/admin/catalog/${kind}/${item.slug}`}
-            className="btn btn-sm btn-outline-primary"
-          >
-            Edit <i className="bi bi-arrow-right ms-1" />
+          <Link to={`/admin/catalog/${kind}/${item.slug}`} className="admin-row-open">
+            Edit <i className="bi bi-arrow-up-right" />
           </Link>
         </AdminRowActions>
       )
@@ -151,9 +161,17 @@ export function CatalogListPage({
       )}
       <AdminToolbar
         actions={
-          <span className="admin-badge-soft">
-            {visible.length} shown / {records.length} total
-          </span>
+          <div className="admin-toolbar-summary">
+            <span className="admin-count-pill">
+              <strong>{visible.length}</strong>
+              <span>of {records.length}</span>
+            </span>
+            {hasFilters && (
+              <button type="button" className="admin-filter-clear" onClick={clearFilters}>
+                Clear
+              </button>
+            )}
+          </div>
         }
       >
         <AdminToolbarField label="Search" htmlFor="catalog-search">
@@ -234,7 +252,8 @@ export function CatalogListPage({
       <Form method="post">
         <input type="hidden" name="csrf" value={csrf} />
         <AdminPanel
-          title={`${meta.label} catalog`}
+          className="admin-list-panel"
+          title={`${meta.label} library`}
           description="Select records for a scoped bulk status change."
         >
           <div className="admin-bulk-bar">
@@ -257,11 +276,10 @@ export function CatalogListPage({
               className="form-select form-select-sm bulk-status-select"
               name="status"
               required
-              defaultValue=""
+              value={bulkStatus}
+              onChange={(event) => setBulkStatus(event.target.value)}
             >
-              <option value="" disabled>
-                Choose status
-              </option>
+              <option value="">Choose status</option>
               {statuses.map((value) => (
                 <option key={value} value={value}>
                   {value}
@@ -269,7 +287,7 @@ export function CatalogListPage({
               ))}
             </select>
             <button
-              disabled={navigation.state !== "idle" || selected.length === 0}
+              disabled={navigation.state !== "idle" || selected.length === 0 || !bulkStatus}
               className="btn btn-sm btn-outline-primary"
             >
               Apply to {selected.length}
@@ -292,9 +310,6 @@ export function CatalogListPage({
             ariaLabel={`${meta.label} pages`}
             summary={`Showing ${paged.length} of ${visible.length} · page ${safePage} of ${totalPages}`}
           />
-          <div className="admin-table-footer">
-            <span className="small text-secondary">{selected.length} selected</span>
-          </div>
         </AdminPanel>
       </Form>
     </>

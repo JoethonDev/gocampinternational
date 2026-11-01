@@ -32,7 +32,7 @@ cloudflare-app/
 │  │  ├─ faq/            FaqPage
 │  │  ├─ landing/        marketing landing page
 │  │  └─ admin/          admin feature modules (dashboard, catalog, documents, media,
-│  │                     media-import.server.ts)
+│  │                     media-import.server.ts, content-studio.css)
 │  ├─ hooks/             useSiteNavigation, useLightbox, useAdminTheme
 │  ├─ styles/            global interaction motion (feature CSS stays with its feature)
 │  ├─ lib/
@@ -75,8 +75,8 @@ Do not duplicate these patterns in a route:
 |---|---|
 | Page title, description and top-right action | `AdminPageHeader` |
 | Section card with header/description/action | `AdminPanel` |
-| Standard table, empty state and responsive wrapper | `AdminTable` (sticky header; stacked labelled cards below 768px) |
-| Search/filter toolbar and labelled field | `AdminToolbar`, `AdminToolbarField` (compact shared sizing) |
+| Standard table, empty state and responsive wrapper | `AdminTable` (branded table surface; stacked labelled cards below 768px) |
+| Search/filter command bar and labelled field | `AdminToolbar`, `AdminToolbarField` (visually hidden labels, integrated search, count/clear actions) |
 | Form section and sticky save footer | `AdminFormSection`, `AdminFormActions` |
 | Consistent action group inside a table row | `AdminRowActions` |
 | Empty list/table message | `AdminEmptyState` |
@@ -84,9 +84,11 @@ Do not duplicate these patterns in a route:
 | Status pill | `StatusBadge` |
 | Pagination | `Pagination` in `components/ui` |
 
-Catalog, inquiries, trash and the dashboard recent table all use `AdminTable`; catalog, inquiries, media and trash all use `AdminToolbar`; catalog, inquiries and media use the same `Pagination` bar with summary text. Select-all controls live in the table toolbar above the table, not in a separate footer. Any new list screen should follow the same pattern. Feature-specific CSS belongs next to its feature (`dashboard/dashboard.css`, `contact/contact.css`), not in the global public stylesheet.
+Catalog, inquiries, trash and the dashboard recent table all use `AdminTable`; catalog, inquiries, media and trash all use `AdminToolbar`; catalog, inquiries and media use the same `Pagination` bar with summary text. Select-all controls live in the table toolbar above the table, not in a separate footer. Any new list screen should follow the same pattern. Feature-specific CSS belongs next to its feature (`dashboard/dashboard.css`, `features/admin/content-studio.css`, `contact/contact.css`), not in the global public stylesheet. `content-studio.css` is imported after `admin.css` and owns the branded list/filter, media-picker and rich-text presentation.
 
-`MediaSelector` is self-contained: it browses static/R2 assets, accepts an inline upload through `POST /admin/media/upload`, selects the new object immediately and refreshes the local picker grid without closing or navigating away. All callers pass the current admin CSRF token.
+`MediaSelector` is self-contained: it browses static/R2 assets, accepts an inline multi-file upload through `POST /admin/media/upload` (up to 12 files), adds every result to the local picker grid, selects the first and does not close or navigate away. It portals the dialog to `.admin-workspace` so the route-transition transform cannot become the fixed-position containing block; the dialog is capped at 780 x 640 and disables nonessential transitions while open. All callers pass the current admin CSRF token.
+
+`RichTextInput` is a document-style `contentEditable` editor, not an HTML textarea. Toolbar actions operate on the current selection and write to a hidden input (or the repeater callback). Do not add a "source" toggle for editors; non-technical users must never need to see HTML. When adding a toolbar format, add the tag to the `SafeRichText` allowlist and verify the public renderer and HTML sanitisation contract.
 
 The staging legacy-image import follows the same rule: the page at `/admin/media/import` is a normal UI route, while its authenticated batch action is the resource route `/admin/media/import/run`. Do not POST batch work to a UI route and expect JSON; React Router renders the document response instead. The inventory, byte-length check, SHA-256 metadata and R2 HEAD verification live in `features/admin/media-import.server.ts` and are shared by the page loader and resource action.
 

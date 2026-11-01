@@ -1,17 +1,23 @@
 /* Admin-only layout and palette. Keep public PR40 CSS untouched. */
+/* A transformed route wrapper would become the containing block for the fixed
+   media modal, pushing it below the viewport. Admin has its own page entrance. */
+body.gc-admin-route .gc-route-view {
+  animation: none;
+  transform: none;
+}
 .admin-workspace {
   --admin-curve: cubic-bezier(0.2, 0.75, 0.25, 1);
-  --admin-bg: #f4f6f9;
+  --admin-bg: #f3f7f8;
   --admin-panel: #fff;
-  --admin-text: #212529;
-  --admin-muted: #6c757d;
-  --admin-border: #e2e6ec;
+  --admin-text: #182a2f;
+  --admin-muted: #65777c;
+  --admin-border: #dfe8eb;
   --admin-input: #fff;
-  --admin-input-border: #ced4da;
-  --admin-primary: #0d6efd;
-  --admin-primary-hover: #0b5ed7;
+  --admin-input-border: #cfdde1;
+  --admin-primary: #00758a;
+  --admin-primary-hover: #005f70;
   --admin-primary-text: #fff;
-  --admin-link: #0b5ed7;
+  --admin-link: #006c7f;
   --bs-body-bg: var(--admin-bg);
   --bs-body-color: var(--admin-text);
   --bs-border-color: var(--admin-border);
@@ -28,17 +34,17 @@
 }
 .admin-workspace[data-bs-theme="dark"] {
   /* Match the approved PR40 admin-modern dark palette. */
-  --admin-bg: #121212;
-  --admin-panel: #1e1e1e;
-  --admin-text: #f0f0f0;
-  --admin-muted: #b0b0b0;
-  --admin-border: #383838;
-  --admin-input: #2c2c2c;
-  --admin-input-border: #555;
-  --admin-primary: #5b8ec4;
-  --admin-primary-hover: #79a7d8;
-  --admin-primary-text: #0b1b2c;
-  --admin-link: #a9cefa;
+  --admin-bg: #111718;
+  --admin-panel: #1a2224;
+  --admin-text: #edf6f7;
+  --admin-muted: #9db0b4;
+  --admin-border: #2d3a3d;
+  --admin-input: #223033;
+  --admin-input-border: #405155;
+  --admin-primary: #4fc3d4;
+  --admin-primary-hover: #70d6e4;
+  --admin-primary-text: #082b31;
+  --admin-link: #8ee1ea;
   --bs-body-bg: var(--admin-bg);
   --bs-body-color: var(--admin-text);
   --bs-border-color: var(--admin-border);
@@ -327,6 +333,14 @@
 .admin-workspace .form-check-input:checked {
   background-color: var(--admin-primary);
   border-color: var(--admin-primary);
+}
+.admin-workspace
+  :is(.form-control, .form-select, .btn, .page-link, .rich-editor-tool):focus-visible {
+  outline: 3px solid rgba(0, 117, 138, 0.32);
+  outline-offset: 2px;
+}
+.admin-workspace .rich-editor-surface:focus-visible {
+  outline: none;
 }
 .admin-workspace .btn {
   transition:
@@ -794,6 +808,24 @@
   }
   .admin-table tbody tr:hover {
     background: var(--admin-panel);
+  }
+  .admin-table-primary {
+    min-width: 0;
+  }
+  .admin-table-primary > span:last-child {
+    min-width: 0;
+  }
+  .admin-table-slug {
+    min-width: 0;
+  }
+  .admin-table-slug code {
+    max-width: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+  .admin-table tbody td {
+    min-width: 0;
+    overflow-wrap: anywhere;
   }
 }
 .media-selector-upload {

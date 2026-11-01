@@ -1,14 +1,20 @@
-const COLORS: Record<string, string> = {
+const TONE: Record<string, string> = {
   active: "success",
-  inactive: "secondary",
-  "coming-soon": "warning",
-  trash: "danger",
-  new: "warning",
-  read: "secondary",
   replied: "success",
-  archived: "secondary"
+  inactive: "neutral",
+  read: "neutral",
+  archived: "neutral",
+  "coming-soon": "warning",
+  new: "warning",
+  trash: "danger"
 };
 
 export function StatusBadge({ status }: { status: string }) {
-  return <span className={`badge bg-${COLORS[status] || "secondary"}`}>{status}</span>;
+  const tone = TONE[status] || "neutral";
+  return (
+    <span className={`admin-status admin-status-${tone}`}>
+      <span className="admin-status-dot" aria-hidden="true" />
+      {status}
+    </span>
+  );
 }

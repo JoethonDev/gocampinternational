@@ -218,3 +218,32 @@ See [CONTENT_AND_CMS_RECONCILIATION.md](./CONTENT_AND_CMS_RECONCILIATION.md): PR
 
 ### 2026-11-01 decision — outbound email deferred
 The product owner selected **D1-only** persistence for this staging phase. No outbound inquiry, lead or newsletter email is sent, and no provider credentials are required. Public success copy continues to confirm only that the submission was saved; the authenticated admin inquiry inbox is the source of truth. Do not add a mail provider or claim email delivery until a separate provider/recipient decision is approved. This closes the implementation decision, not the production email-parity requirement.
+
+## 2026-11-01 - Content Studio list, WYSIWYG and media picker redesign
+
+**Scope:** admin-only UX. Public content and routes are unchanged except the owner-requested navbar colour and new logo asset.
+
+### Shared list/filter/search redesign
+- Replaced the generic blue admin palette with the GoCamp teal palette: `--admin-primary: #00758a`, matching the public brand while keeping light/dark admin themes.
+- `AdminToolbar` is now a compact command bar: integrated search icon, visually hidden labels, fixed-width filter selects, a live result-count pill and a Clear action. This applies to programs, categories, destinations, inquiries, trash and media filters.
+- `AdminTable` has a cleaner content-studio treatment: branded header tint, roomy but compact rows, hover accent, inline slug/category metadata, soft status pills with dots, a compact Edit/Open action and larger shared pagination controls.
+- Catalog pages use a flush list panel: header, bulk-selection strip, table and pagination share one surface. The bulk-status select is compact, accessible and cannot be applied without a status.
+- Mobile table cards were fixed to break long names/slugs instead of overflowing; 390 px checks report no document-level horizontal overflow.
+
+### Document-style rich text
+- Replaced the code/textarea + preview workflow with a `contentEditable` document editor. The toolbar provides bold, italic, underline, H2, H3, paragraph, bulleted/numbered lists, links, clear formatting and undo/redo behavior. HTML source is never shown to editors.
+- A hidden input carries the resulting HTML into the existing save pipeline. `SafeRichText` now allows and safely renders `h2`, `h3` and `u` in addition to the existing structural tags.
+- Verified on an isolated inactive program: the editor displayed formatted text, updating it to "Updated description" with Bold produced `<p><b>Updated description</b></p>` in D1, saved successfully, and the fixture was deleted.
+
+### Media picker and multi-upload
+- The media picker is rendered through a portal to escape the route-transition transform that was placing the dialog below the viewport. It is now a centred **780 x 640** dialog on desktop (366 x 680 on a 390 px phone), with no hover/transition lag.
+- The picker uses a 5-column thumbnail grid with a compact search field, upload panel and footer. Images are lazy-loaded; verified rendered thumbnails.
+- Inline upload accepts **multiple files at once** (up to 12, 3 MB each). The endpoint returns every uploaded path plus per-file failures, and the picker adds all new files to its grid, selects the first and stays open. Verified with two files: "2 images uploaded. The first image is selected."; both test assets were removed afterwards.
+- The full Media Library upload form also accepts multiple files and reports per-file errors instead of a false success.
+
+### Logo
+- The owner placed the original transparent 2167 x 726 PNG at `branding/logo-source.png`.
+- Generated a sharp 720 x 292 WebP header asset, replacing the previous low-resolution derived file; upload to staging R2 completed and `/images/logo-transparent.webp` now serves the new asset with `X-GoCamp-Media-Source: r2`.
+- Public header logo renders crisply at 60 px high; admin login uses the same source.
+
+**Verification:** typecheck/build/deploy pass; the 390 px admin catalog, inquiries, trash, media and media-picker checks pass without document overflow. Final commit/CI evidence is recorded in the handoff response.
