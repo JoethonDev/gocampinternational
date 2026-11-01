@@ -10,7 +10,7 @@ export function loader() {
 export async function action({ request, context }: Route.ActionArgs) {
   try {
     const form = await request.formData();
-    const result = await uploadMediaFiles(request, context.cloudflare.env, form);
+    const result = await uploadMediaFiles(request, context.cloudflare.env, form, context.cloudflare.ctx);
     return Response.json(
       {
         success: result.uploaded.length > 0,
