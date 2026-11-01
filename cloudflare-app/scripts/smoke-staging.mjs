@@ -17,8 +17,11 @@ const tests = [
   { path: "/programs", status: 404 },
   { path: "/gallery", status: 404 },
   { path: "/media/00000000-0000-0000-0000-000000000000", status: 404 },
-  { path: "/images/hero.webp", status: 200, method: "HEAD" },
-  { path: "/images/bannnner.webp", status: 200, method: "HEAD" },
+  { path: "/images/hero.webp", status: 200, method: "HEAD", source: "r2" },
+  { path: "/images/bannnner.webp", status: 200, method: "HEAD", source: "r2" },
+  { path: "/images/logo-transparent.webp", status: 200, method: "HEAD", source: "r2", contentType: "image/webp" },
+  { path: "/uploads/1_1761381038.webp", status: 200, method: "HEAD", source: "r2", contentType: "image/webp" },
+  { path: "/media/317d8670-b7ec-5f99-a007-bc93813e7e7d", status: 200, method: "HEAD", contentType: "image/webp" },
   { path: "/home", status: 301, location: "/" },
   { path: "/index.php", status: 301, location: "/" },
   { path: "/home.php", status: 301, location: "/" },
@@ -52,7 +55,9 @@ for (const test of tests) {
       const passed =
         res.status === test.status &&
         (!test.contains || text.toLowerCase().includes(test.contains.toLowerCase())) &&
-        (!test.location || location.includes(test.location));
+        (!test.location || location.includes(test.location)) &&
+        (!test.contentType || (res.headers.get("content-type") || "").includes(test.contentType)) &&
+        (!test.source || res.headers.get("x-gocamp-media-source") === test.source);
       result = {
         status: res.status,
         passed,
