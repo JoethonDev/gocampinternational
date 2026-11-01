@@ -1,8 +1,8 @@
 # GoCamp Cloudflare migration — verified progress snapshot
 
-**Last reviewed:** 2026-11-01, after [visual run 41248055902](https://github.com/JoethonDev/gocampinternational/actions/runs/41248055902) and [migration CI run 41248055859](https://github.com/JoethonDev/gocampinternational/actions/runs/41248055859).
+**Last reviewed:** 2026-11-01, after [migration CI run 41284413636](https://github.com/JoethonDev/gocampinternational/actions/runs/41284413636) for the testimonial/quick-action checkpoint. The parallel visual workflow is recorded separately because the new homepage testimonial section is intentionally absent from the PHP comparison source.
 **Migration branch:** [`migration/cloudflare-react-workers-pr40`](https://github.com/JoethonDev/gocampinternational/tree/migration/cloudflare-react-workers-pr40)  
-**Verified application checkpoint:** `2ded8539de0112e9f8c6385d1036c1be3c293c81` — Cloudflare deployment success, 27/27 staging HTTP checks, 24/24 screenshot comparisons, and the 332/332 R2 import. Later documentation-only commits do not change application behavior.
+**Verified application checkpoint:** `afaf6d3730d383c6bc37b86e380dc230fcb36c3e` — Cloudflare deployment success, 32/32 staging HTTP checks, 333/333 R2/D1 media verification, and the new homepage testimonials/associated-program quick actions. No production merge or DNS cutover.
 **Source of truth:** [PR #40](https://github.com/JoethonDev/gocampinternational/pull/40), head `80432a2a6fcb4b0de6f14710748e53781ddef58c`, open/unmerged at last inspection. This branch was created from that exact PR head; do not replace its imported snapshot with unrelated `main`/`develop` data.  
 **Public staging:** https://gocamp-migration-staging.elprincedoca.workers.dev/  
 **Release state:** Staging operational; **NOT production ready**, **NOT merged**, **NO DNS cutover**.
@@ -231,8 +231,8 @@ The product owner selected **D1-only** persistence for this staging phase. No ou
 - Mobile table cards were fixed to break long names/slugs instead of overflowing; 390 px checks report no document-level horizontal overflow.
 
 ### Document-style rich text
-- Replaced the code/textarea + preview workflow with a `contentEditable` document editor. The toolbar provides bold, italic, underline, H2, H3, paragraph, bulleted/numbered lists, links, clear formatting and undo/redo behavior. HTML source is never shown to editors.
-- A hidden input carries the resulting HTML into the existing save pipeline. `SafeRichText` now allows and safely renders `h2`, `h3` and `u` in addition to the existing structural tags.
+- Replaced the code/textarea + preview workflow with a `contentEditable` document editor. The toolbar provides bold, italic, paragraph, bulleted/numbered lists, links, clear formatting and undo/redo behavior. HTML source is never shown to editors.
+- A hidden input carries the resulting HTML into the existing save pipeline. `SafeRichText` keeps its PR40 structural allowlist (paragraphs, emphasis, links and lists) so existing public pages cannot change shape because of editor-only markup.
 - Verified on an isolated inactive program: the editor displayed formatted text, updating it to "Updated description" with Bold produced `<p><b>Updated description</b></p>` in D1, saved successfully, and the fixture was deleted.
 
 ### Media picker and multi-upload

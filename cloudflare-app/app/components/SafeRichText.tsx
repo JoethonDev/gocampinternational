@@ -1,22 +1,8 @@
 import { createElement, Fragment, type ReactNode } from "react";
 
 /* PR40 CMS formatting: allow only structural text tags. Never run stored HTML. */
-type Tag = "p" | "h2" | "h3" | "ul" | "ol" | "li" | "br" | "strong" | "em" | "u" | "a" | "b" | "i";
-const allowed = new Set<Tag>([
-  "p",
-  "h2",
-  "h3",
-  "ul",
-  "ol",
-  "li",
-  "br",
-  "strong",
-  "em",
-  "u",
-  "a",
-  "b",
-  "i"
-]);
+type Tag = "p" | "ul" | "ol" | "li" | "br" | "strong" | "em" | "a" | "b" | "i";
+const allowed = new Set<Tag>(["p", "ul", "ol", "li", "br", "strong", "em", "a", "b", "i"]);
 const decode = (s: string) =>
   s.replace(/&(#x[0-9a-f]+|#[0-9]+|amp|lt|gt|quot|apos|nbsp);/gi, (_m, code: string) => {
     const c = code.toLowerCase();

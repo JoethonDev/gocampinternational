@@ -11,10 +11,7 @@ type FormatAction = {
 const ACTIONS: FormatAction[] = [
   { label: "Bold", icon: "bi-type-bold", command: "bold" },
   { label: "Italic", icon: "bi-type-italic", command: "italic" },
-  { label: "Underline", icon: "bi-type-underline", command: "underline" },
-  { label: "Heading 2", icon: "bi-type-h2", command: "formatBlock", value: "h2", divider: true },
-  { label: "Heading 3", icon: "bi-type-h3", command: "formatBlock", value: "h3" },
-  { label: "Paragraph", icon: "bi-paragraph", command: "formatBlock", value: "p" },
+  { label: "Paragraph", icon: "bi-paragraph", command: "formatBlock", value: "p", divider: true },
   {
     label: "Bulleted list",
     icon: "bi-list-ul",
