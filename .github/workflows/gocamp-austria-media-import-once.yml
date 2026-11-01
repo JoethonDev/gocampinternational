@@ -1,0 +1,20 @@
+name: Temporary Austria staging media import
+on:
+  push:
+    branches:
+      - migration/cloudflare-react-workers-pr40
+    paths:
+      - .github/workflows/gocamp-austria-media-import-once.yml
+permissions:
+  contents: read
+jobs:
+  import-staging-austria:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Upload approved Austria email photos to Cloudflare R2 staging
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail-with-body --silent --show-error --max-time 120 \
+            "https://gocamp-austria-import-temp.elprincedoca.workers.dev/import-austria-20261030"
