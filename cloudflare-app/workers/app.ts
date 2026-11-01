@@ -27,7 +27,8 @@ function applyResponseHeaders(response: Response, env: Env): Response {
 }
 
 async function serveR2Image(request: Request, env: Env): Promise<Response> {
-  const pathname = new URL(request.url).pathname;
+  const url = new URL(request.url);
+  const pathname = url.pathname;
   const key = pathname.slice(1);
   // Only read image files from the staging R2 bucket; never expose arbitrary object keys.
   if (
@@ -41,7 +42,15 @@ async function serveR2Image(request: Request, env: Env): Promise<Response> {
   ) {
     return new Response("Not found", { status: 404 });
   }
-  const obj = request.method === "HEAD" ? await env.MEDIA.head(key) : await env.MEDIA.get(key);
+  const preset = url.searchParams.get("variant");
+  const optimizedKey =
+    preset && ["mobile", "tablet", "desktop"].includes(preset)
+      ? `optimized/${preset}/${key}.webp`
+      : null;
+  const read = (candidate: string) =>
+    request.method === "HEAD" ? env.MEDIA.head(candidate) : env.MEDIA.get(candidate);
+  // Materialized R2 variants, not dynamic transformation and not a cache.
+  const obj = (optimizedKey && await read(optimizedKey)) || await read(key);
   if (obj) {
     const headers = new Headers();
     obj.writeHttpMetadata(headers);
