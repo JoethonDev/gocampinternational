@@ -6,7 +6,7 @@ const base = (
 const tests = [
   { path: "/health", status: 200, contains: "gocamp" },
   { path: "/", status: 200, contains: "Go Camp" },
-  { path: "/", status: 200, contains: "/media/7170ad54-c31e-5ca2-88ce-058510aab773" },
+  { path: "/", status: 200, contains: "/media/49c7cbd7-a00e-5970-9ed1-1e14e077e016" },
   { path: "/about", status: 200, contains: "About Us" },
   { path: "/faq", status: 200 },
   { path: "/contact", status: 200 },
@@ -41,10 +41,10 @@ const tests = [
     contentType: "image/webp"
   },
   {
-    path: "/media/7170ad54-c31e-5ca2-88ce-058510aab773",
+    path: "/media/49c7cbd7-a00e-5970-9ed1-1e14e077e016",
     status: 200,
     method: "HEAD",
-    contentType: "image/png"
+    contentType: "image/webp"
   },
   { path: "/home", status: 301, location: "/" },
   { path: "/index.php", status: 301, location: "/" },
