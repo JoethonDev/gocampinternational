@@ -1,8 +1,8 @@
 # GoCamp Cloudflare migration — verified progress snapshot
 
-**Last reviewed:** 2026-10-31, after [visual run 41222450875](https://github.com/JoethonDev/gocampinternational/actions/runs/41222450875) and [migration CI run 41222450867](https://github.com/JoethonDev/gocampinternational/actions/runs/41222450867).
+**Last reviewed:** 2026-11-01, after [visual run 41248055902](https://github.com/JoethonDev/gocampinternational/actions/runs/41248055902) and [migration CI run 41248055859](https://github.com/JoethonDev/gocampinternational/actions/runs/41248055859).
 **Migration branch:** [`migration/cloudflare-react-workers-pr40`](https://github.com/JoethonDev/gocampinternational/tree/migration/cloudflare-react-workers-pr40)  
-**Verified application checkpoint:** `9484732ad9f31787983a5364b0da5b9f9dde308c` — Cloudflare deployment success, 27/27 staging HTTP checks, 24/24 screenshot comparisons. Subsequent handoff documentation updates contain no new application code.
+**Verified application checkpoint:** `2ded8539de0112e9f8c6385d1036c1be3c293c81` — Cloudflare deployment success, 27/27 staging HTTP checks, 24/24 screenshot comparisons, and the 332/332 R2 import. Later documentation-only commits do not change application behavior.
 **Source of truth:** [PR #40](https://github.com/JoethonDev/gocampinternational/pull/40), head `80432a2a6fcb4b0de6f14710748e53781ddef58c`, open/unmerged at last inspection. This branch was created from that exact PR head; do not replace its imported snapshot with unrelated `main`/`develop` data.  
 **Public staging:** https://gocamp-migration-staging.elprincedoca.workers.dev/  
 **Release state:** Staging operational; **NOT production ready**, **NOT merged**, **NO DNS cutover**.
@@ -210,5 +210,7 @@ See [CONTENT_AND_CMS_RECONCILIATION.md](./CONTENT_AND_CMS_RECONCILIATION.md): PR
 - Account-wide Worker requests/CPU and R2 operations cannot be proven from `wrangler d1 info` alone; that remains an analytics/dashboard gate rather than a claimed pass.
 
 ### Verification
-- `npm run typecheck`, `npm run build`, `wrangler deploy`, and the 27/27 read-only staging HTTP smoke suite passed for the application code in this sweep.
+- **Application SHA `2ded8539de0112e9f8c6385d1036c1be3c293c81`.** [Migration checks 41248055859](https://github.com/JoethonDev/gocampinternational/actions/runs/41248055859) **SUCCESS** (format, typecheck, build, Wrangler dry-run, PHP source checks, seed tests).
+- [React vs PHP visual parity 41248055902](https://github.com/JoethonDev/gocampinternational/actions/runs/41248055902) **SUCCESS**; the log confirms the staging deploy revision `2ded8539de0112e9f8c6385d1036c1be3c293c81` and **24 screenshot pairs**.
+- Cloudflare staging deployment `ad11926e-86cd-4400-8bac-7a93bda16c9f`; `/migration-commit.txt` reported the same application SHA. The 27/27 read-only HTTP smoke suite passed after deployment.
 - **Still open:** outbound email provider and delivery, account-wide Worker/R2 usage evidence, the third-party Facebook-iframe accessibility exception, and production release approval. No production merge or DNS cutover.
