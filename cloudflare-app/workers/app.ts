@@ -26,10 +26,10 @@ function applyResponseHeaders(response: Response, env: Env): Response {
   });
 }
 
-async function serveLegacyImage(request: Request, env: Env): Promise<Response> {
+async function serveR2Image(request: Request, env: Env): Promise<Response> {
   const pathname = new URL(request.url).pathname;
   const key = pathname.slice(1);
-  // Never resolve an arbitrary object key; this route is only for committed public images.
+  // Only read image files from the staging R2 bucket; never expose arbitrary object keys.
   if (
     !/^images\/[a-zA-Z0-9_().%+-][a-zA-Z0-9_().%+\/-]*\.(webp|png|jpe?g|avif|gif|svg|ico)$/i.test(
       key
@@ -53,8 +53,8 @@ async function serveLegacyImage(request: Request, env: Env): Promise<Response> {
       headers
     });
   }
-  // Transitional fallback: original committed images are still deployed as static assets.
-  return env.ASSETS.fetch(request);
+  // R2 is the source of truth: no local/GitHub static-asset fallback after migration.
+  return new Response("Image not found", { status: 404 });
 }
 
 export default {
@@ -64,9 +64,9 @@ export default {
       const pathname = new URL(request.url).pathname;
       if (
         (request.method === "GET" || request.method === "HEAD") &&
-        pathname.startsWith("/images/")
+        (pathname.startsWith("/images/") || pathname.startsWith("/uploads/"))
       ) {
-        return applyResponseHeaders(await serveLegacyImage(request, env), env);
+        return applyResponseHeaders(await serveR2Image(request, env), env);
       }
       const response = await handle(request, { cloudflare: { env, ctx } });
       const headers = new Headers(response.headers);

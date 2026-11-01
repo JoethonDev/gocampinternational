@@ -1,74 +1,68 @@
-import { cp, mkdir, readdir, stat, writeFile } from "node:fs/promises";
+import { cp, mkdir, readdir, stat, readFile, writeFile } from "node:fs/promises";
 import { execFileSync } from "node:child_process";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const source = path.resolve(root, "..");
+
+// Catalog images and uploads have been migrated to R2.
+// Only ordinary CSS/JS assets remain in the static build.
 const targets = {
-  images: new Set([".png", ".jpg", ".jpeg", ".webp", ".avif", ".gif", ".svg", ".ico"]),
   css: new Set([".css"]),
-  js: new Set([".js"]),
-  uploads: new Set([".png", ".jpg", ".jpeg", ".webp", ".avif", ".gif", ".svg"])
+  js: new Set([".js"])
 };
-async function copySafe(dir, from, to, allowed) {
-  for (const ent of await readdir(from, { withFileTypes: true })) {
-    if (ent.isSymbolicLink()) continue;
-    const origin = path.join(from, ent.name),
-      dest = path.join(to, ent.name);
-    if (ent.isDirectory()) {
+
+async function copySafe(from, to, allowed) {
+  for (const entry of await readdir(from, { withFileTypes: true })) {
+    if (entry.isSymbolicLink()) continue;
+    const origin = path.join(from, entry.name);
+    const dest = path.join(to, entry.name);
+    if (entry.isDirectory()) {
       await mkdir(dest, { recursive: true });
-      await copySafe(dir, origin, dest, allowed);
-    } else if (ent.isFile() && allowed.has(path.extname(ent.name).toLowerCase())) {
+      await copySafe(origin, dest, allowed);
+    } else if (entry.isFile() && allowed.has(path.extname(entry.name).toLowerCase())) {
       await mkdir(path.dirname(dest), { recursive: true });
       await cp(origin, dest);
     }
   }
 }
+
 for (const [dir, allowed] of Object.entries(targets)) {
   const from = path.join(source, dir);
   try {
-    if ((await stat(from)).isDirectory())
-      await copySafe(dir, from, path.join(root, "public", dir), allowed);
-  } catch (error) {
-    if (error.code !== "ENOENT") throw error;
-  }
-}
-// Build a searchable media inventory (path + byte size) for the admin library.
-async function collectMedia(dir, urlPrefix) {
-  const found = [];
-  try {
-    for (const entry of await readdir(dir, { withFileTypes: true })) {
-      if (entry.isSymbolicLink()) continue;
-      const full = path.join(dir, entry.name);
-      if (entry.isDirectory())
-        found.push(...(await collectMedia(full, urlPrefix + "/" + entry.name)));
-      else if (entry.isFile() && targets.images.has(path.extname(entry.name).toLowerCase())) {
-        found.push({
-          path: urlPrefix + "/" + entry.name,
-          folder: "images",
-          bytes: (await stat(full)).size
-        });
-      }
+    if ((await stat(from)).isDirectory()) {
+      await copySafe(from, path.join(root, "public", dir), allowed);
     }
   } catch (error) {
     if (error.code !== "ENOENT") throw error;
   }
-  return found;
 }
-const inventory = (await collectMedia(path.join(source, "images"), "/images")).sort((a, b) =>
-  a.path.localeCompare(b.path)
-);
-await writeFile(
-  path.join(root, "app", "legacy-media.json"),
-  JSON.stringify(inventory, null, 2) + "\n"
-);
-// Identify the exact Git revision served by the static-asset deployment.
+
+// Keep the committed legacy media inventory, so editors can browse and
+// reference migrated R2 images even after Git binaries are removed.
+const inventoryPath = path.join(root, "app", "legacy-media.json");
+const inventory = JSON.parse(await readFile(inventoryPath, "utf8"));
+if (!Array.isArray(inventory) || inventory.length !== 333) {
+  throw new Error("R2 media manifest is incomplete (expected 333 items)");
+}
+const paths = new Set();
+for (const item of inventory) {
+  if (
+    !item ||
+    !/^\\/(images|uploads)\\/[a-zA-Z0-9_().%+\\/-]+\\.(webp|png|jpe?g|avif|gif|svg|ico)$/i.test(item.path) ||
+    !Number.isSafeInteger(item.bytes) ||
+    item.bytes <= 0 ||
+    paths.has(item.path)
+  ) {
+    throw new Error("Invalid or duplicate migrated media inventory entry");
+  }
+  paths.add(item.path);
+}
+
 const revision = execFileSync("git", ["rev-parse", "HEAD"], {
   cwd: source,
   encoding: "utf8"
 }).trim();
 await writeFile(path.join(root, "public", "migration-commit.txt"), revision + "\n");
-console.log(
-  "Prepared committed legacy public assets (no PHP copied), revision",
-  revision.slice(0, 12)
-);
+console.log("Prepared R2-backed legacy inventory (" + inventory.length + " media files); revision", revision.slice(0, 12));

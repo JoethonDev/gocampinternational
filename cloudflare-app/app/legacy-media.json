@@ -932,7 +932,7 @@
   {
     "path": "/images/logo-transparent.webp",
     "folder": "images",
-    "bytes": 7696
+    "bytes": 45220
   },
   {
     "path": "/images/logo.webp",
@@ -1658,5 +1658,10 @@
     "path": "/images/young_new.webp",
     "folder": "images",
     "bytes": 30462
+  },
+  {
+    "path": "/uploads/1_1761381038.webp",
+    "folder": "uploads",
+    "bytes": 94254
   }
 ]

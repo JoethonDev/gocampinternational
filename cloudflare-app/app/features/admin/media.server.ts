@@ -15,30 +15,41 @@ async function loadUsage(
   items: StaticMedia[]
 ): Promise<Record<string, MediaUsage>> {
   if (items.length === 0) return {};
-  const [catalog, documents] = await Promise.all([
+  const [catalog, documents, registered] = await Promise.all([
     db
       .prepare("SELECT kind,slug,content_json FROM catalog_entities")
       .all<{ kind: string; slug: string; content_json: string }>(),
     db
       .prepare("SELECT key,content_json FROM site_documents")
-      .all<{ key: string; content_json: string }>()
+      .all<{ key: string; content_json: string }>(),
+    db
+      .prepare(
+        "SELECT legacy_path,id FROM media_assets WHERE legacy_path IN (" +
+          items.map(() => "?").join(",") +
+          ")"
+      )
+      .bind(...items.map((item) => item.path))
+      .all<{ legacy_path: string; id: string }>()
   ]);
   const usage: Record<string, MediaUsage> = {};
+  const ids = new Map((registered.results || []).map((row) => [row.legacy_path, row.id]));
   for (const item of items) {
-    const pattern = new RegExp(`${escapeRegExp(item.path)}(?![a-zA-Z0-9_.-])`, "g");
+    const patterns = [item.path, ids.has(item.path) ? `/media/${ids.get(item.path)}` : null]
+      .filter((path): path is string => Boolean(path))
+      .map((path) => new RegExp(`${escapeRegExp(path)}(?![a-zA-Z0-9_.-])`, "g"));
     const refs: string[] = [];
     let count = 0;
     for (const row of catalog.results || []) {
-      const matches = row.content_json.match(pattern);
-      if (matches) {
-        count += matches.length;
+      const countForRow = patterns.reduce((total, pattern) => total + (row.content_json.match(pattern)?.length || 0), 0);
+      if (countForRow) {
+        count += countForRow;
         refs.push(`catalog:${row.kind}/${row.slug}`);
       }
     }
     for (const row of documents.results || []) {
-      const matches = row.content_json.match(pattern);
-      if (matches) {
-        count += matches.length;
+      const countForRow = patterns.reduce((total, pattern) => total + (row.content_json.match(pattern)?.length || 0), 0);
+      if (countForRow) {
+        count += countForRow;
         refs.push(`document:${row.key}`);
       }
     }
@@ -65,6 +76,7 @@ export async function loadMediaLibrary(db: D1Database, url: URL) {
       .prepare(
         `SELECT id,display_name,mime_type,bytes,is_public,created_at
        FROM media_assets
+       WHERE legacy_path IS NULL
        ORDER BY created_at DESC
        LIMIT 300`
       )

@@ -42,7 +42,8 @@
   "assets": {
     "binding": "ASSETS",
     "run_worker_first": [
-      "/images/*"
+      "/images/*",
+      "/uploads/*"
     ]
   }
 }

@@ -210,7 +210,7 @@ export function MediaLibraryPage({
     <>
       <AdminPageHeader
         title="Media Library"
-        description={`Browse the ${data.totalStatic} committed site images and published R2 uploads. Search, inspect references and reuse paths in any editor.`}
+        description={`Browse ${data.totalStatic} R2-backed legacy images and uploaded media. Search, inspect references and reuse paths in any editor.`}
         aside={
           <span className="badge bg-secondary rounded-pill fs-6">{data.total} matching images</span>
         }
@@ -223,18 +223,17 @@ export function MediaLibraryPage({
       {staging && (
         <div className="alert alert-info d-flex align-items-center justify-content-between gap-3 flex-wrap">
           <span>
-            Staging: import committed legacy images into private Cloudflare R2 before switching off
-            static copies.
+            Staging: verify that every migrated site image is registered in D1 and present in R2.
           </span>
           <a className="btn btn-sm btn-primary" href="/admin/media/import">
-            Import images to R2
+            Verify R2 migration
           </a>
         </div>
       )}
       <MediaSearch query={data.q} folder={data.folder} />
       <AdminPanel
-        title="Committed site images"
-        description="Referenced by the public site and available to every editor."
+        title="R2-backed site images"
+        description="Original image paths remain valid, but files are served from Cloudflare R2 rather than GitHub."
       >
         {data.items.length === 0 ? (
           <AdminEmptyState
@@ -270,7 +269,7 @@ export function MediaLibraryPage({
 
       <div className="mt-5" id="uploads">
         <AdminPanel
-          title="R2 uploads"
+          title="New R2 uploads"
           description="New images are stored privately in R2. Only published media is served by its immutable ID."
         >
           <MediaUploadForm csrf={csrf} />

@@ -10,7 +10,7 @@ import { AdminProgress } from "../components/admin/AdminProgress";
 
 export function meta() {
   return [
-    { title: "Staging R2 media import | GoCamp" },
+    { title: "Staging R2 media verification | GoCamp" },
     { name: "robots", content: "noindex,nofollow" }
   ];
 }
@@ -79,8 +79,8 @@ export default function AdminMediaImport({ loaderData }: Route.ComponentProps) {
   return (
     <AdminShell username={session.username} csrf={session.csrf}>
       <AdminPageHeader
-        title="Import legacy images to R2"
-        description={`Copy ${total} repository images (${(totalBytes / 1024 / 1024).toFixed(1)} MB) to the private staging R2 bucket, preserving exact /images/... paths.`}
+        title="Verify migrated R2 images"
+        description={`Verify ${total} R2 image objects (${(totalBytes / 1024 / 1024).toFixed(1)} MB) against the D1 media registry, preserving /images/... and /uploads/... paths.`}
         aside={
           <Link to="/admin/media" className="btn btn-sm btn-outline-secondary">
             <i className="bi bi-arrow-left me-1" /> Back to Media Library
@@ -88,12 +88,12 @@ export default function AdminMediaImport({ loaderData }: Route.ComponentProps) {
         }
       />
       <AdminPanel
-        title="Staging import"
-        description="Existing objects are checked by SHA-256. Nothing is deleted or changed in production."
+        title="Staging verification"
+        description="R2 object sizes and SHA-256 metadata must match the D1 registry. This check makes no changes."
       >
         <button type="button" className="btn btn-primary" onClick={startImport} disabled={running}>
           <i className="bi bi-cloud-arrow-up me-1" />
-          {running ? "Importing…" : finished ? "Verify again" : "Start / resume R2 import"}
+          {running ? "Verifying…" : finished ? "Verify again" : "Start / resume verification"}
         </button>
         <p className="mt-3 mb-2" role="status">
           {processed} / {total} verified · {uploaded} uploaded · {existing} already present
@@ -101,8 +101,7 @@ export default function AdminMediaImport({ loaderData }: Route.ComponentProps) {
         <AdminProgress value={processed} max={Math.max(total, 1)} label="R2 migration progress" />
         {finished && (
           <div className="alert alert-success mt-3">
-            All repository images are verified in staging R2. The static fallback remains enabled
-            until cutover.
+            All legacy image objects are verified in staging R2 and D1. No GitHub static media fallback is required.
           </div>
         )}
         {failure && (
@@ -111,8 +110,7 @@ export default function AdminMediaImport({ loaderData }: Route.ComponentProps) {
           </div>
         )}
         <p className="text-secondary small mt-3 mb-0">
-          Keep this page open while importing. The operation runs in small authenticated batches to
-          stay within Worker request limits.
+          Keep this page open during verification. Checks run in small authenticated batches.
         </p>
       </AdminPanel>
     </AdminShell>
