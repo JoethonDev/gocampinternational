@@ -1,3 +1,4 @@
+import { heroImageStyles, responsiveSrcSet } from "../../lib/responsive-media";
 import { Link } from "react-router";
 import { CampMemories } from "../../components/CampMemories";
 import { HOME_COPY, HOME_HERO_SLIDES, SITE } from "../../config/site";
@@ -18,12 +19,8 @@ function HeroCarousel() {
         {HOME_HERO_SLIDES.map((slide, index) => (
           <div className={"carousel-item" + (index === 0 ? " active" : "")} key={slide.image}>
             <div
-              className="hero-section d-flex align-items-center justify-content-center text-center"
-              style={{
-                backgroundImage: `url('${slide.image}')`,
-                backgroundSize: "cover",
-                backgroundPosition: "center"
-              }}
+              className="hero-section gc-responsive-hero d-flex align-items-center justify-content-center text-center"
+              style={{ ...heroImageStyles(slide.image), backgroundSize: "cover", backgroundPosition: "center" }}
             >
               <div className="hero-overlay" />
               <div className="container position-relative home-hero-caption d-flex flex-column align-items-center justify-content-end text-center">
@@ -74,6 +71,8 @@ function DestinationsSection({ destinations }: { destinations: DestinationRecord
               >
                 <img
                   src={destination.banner || SITE.images.placeholder}
+                  srcSet={responsiveSrcSet(destination.banner || SITE.images.placeholder)}
+                  sizes="(max-width: 576px) 100vw, (max-width: 992px) 50vw, 33vw"
                   className="card-img"
                   alt={destination.name}
                   loading="lazy"
@@ -119,6 +118,8 @@ function FeaturedCategories({ categories }: { categories: CategoryRecord[] }) {
                   <div className="position-relative overflow-hidden category-card-media">
                     <img
                       src={category.banner || SITE.images.placeholder}
+                      srcSet={responsiveSrcSet(category.banner || SITE.images.placeholder)}
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       alt={category.name}
                       className="card-img-top h-100 w-100 object-fit-cover category-card-image"
                       loading="lazy"
