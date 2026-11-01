@@ -35,9 +35,9 @@
   },
   "private": true,
   "scripts": {
-    "dev": "npm run assets:prepare && react-router dev",
+    "dev": "npm run assets:prepare && node scripts/verify-no-static-media.mjs && react-router dev",
     "assets:prepare": "node scripts/prepare-assets.mjs",
-    "build": "npm run assets:prepare && react-router build",
+    "build": "npm run assets:prepare && react-router build && node scripts/verify-no-static-media.mjs",
     "typegen": "react-router typegen",
     "typecheck": "react-router typegen && tsc -b",
     "check": "npm run typecheck && npm run build && wrangler deploy --dry-run",

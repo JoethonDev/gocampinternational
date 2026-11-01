@@ -36,7 +36,6 @@ export interface ProgramRecord extends CatalogRecord {
   schedule?: Record<string, string> | unknown[];
   duration?: number | null;
   level?: string;
-  price?: string | null;
   order?: number | null;
 }
 

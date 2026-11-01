@@ -28,7 +28,6 @@ const TEXT_FIELDS: Record<CatalogFormKind, readonly FieldDefinition[]> = {
     ["category_slug", 160],
     ["image", 2048],
     ["tagline", 1500],
-    ["price", 120],
     ["level", 160],
     ["color", 60],
     ["description", 50000]
@@ -60,6 +59,8 @@ export function readCatalogFields(
   }
 
   const data: Record<string, unknown> = { ...previous, name, status };
+  // Price is retired from the GoCamp catalog; never persist legacy form values.
+  if (kind === "program") delete data.price;
   for (const [field, maxLength] of TEXT_FIELDS[kind]) {
     const value = formText(form.get(field), maxLength);
     if (value.length > maxLength) {
@@ -156,9 +157,6 @@ export function readCatalogFields(
     }
     data.order = order === "" ? null : Number(order);
     data.duration = duration === "" ? null : Number(duration);
-    if (form.get("price") === "" && Object.hasOwn(previous, "price")) {
-      data.price = null;
-    }
     data.ages = {
       min: min === "" ? null : Number(min),
       max: max === "" ? null : Number(max)

@@ -43,7 +43,9 @@ export function makeSeed(snapshot) {
         throw Error("Malformed " + source + "/" + key);
       const slug = kind === "program" ? record.id || key : record.slug || key;
       if (slug !== key) throw Error("Unexpected mismatched ID: " + key + "/" + slug);
-      const order = Number(record.order ?? record.display_order);
+      const data = kind === "program" ? { ...record } : record;
+      if (kind === "program") delete data.price;
+      const order = Number(data.order ?? data.display_order);
       out.push(
         "INSERT OR IGNORE INTO catalog_entities(kind,slug,name,status,category_slug,sort_order,content_json) VALUES (" +
           [
@@ -53,7 +55,7 @@ export function makeSeed(snapshot) {
             q(record.status || "inactive"),
             q(kind === "program" ? record.category_slug || null : null),
             Number.isFinite(order) ? Math.trunc(order) : position,
-            q(JSON.stringify(record))
+            q(JSON.stringify(data))
           ].join(",") +
           ");"
       );

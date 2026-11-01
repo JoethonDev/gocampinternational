@@ -1,10 +1,15 @@
-import { cp, mkdir, readdir, stat, readFile, writeFile } from "node:fs/promises";
+import { cp, mkdir, readdir, stat, readFile, writeFile, rm } from "node:fs/promises";
 import { execFileSync } from "node:child_process";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const source = path.resolve(root, "..");
+
+// Clean leftover media from older local/dev builds; these are served only by R2.
+for (const directory of ["images", "uploads"]) {
+  await rm(path.join(root, "public", directory), { recursive: true, force: true });
+}
 
 // Catalog images and uploads have been migrated to R2.
 // Only ordinary CSS/JS assets remain in the static build.

@@ -7,7 +7,6 @@ import { asNumber, asString, asStringArray, type CategoryRecord } from "../../..
 
 const SIMPLE_FIELDS = [
   { key: "tagline", label: "Tagline" },
-  { key: "price", label: "Price" },
   { key: "level", label: "Level" },
   { key: "color", label: "Colour" },
   { key: "duration", label: "Duration" },
