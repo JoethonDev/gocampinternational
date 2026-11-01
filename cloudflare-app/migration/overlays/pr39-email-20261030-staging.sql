@@ -1,0 +1,14 @@
+-- GoCamp approved 2026-10-30 emails: staging D1 overlay after PR39 inactive-draft insertion.
+-- Requires the two verified R2 objects in gocamp-staging-media.
+-- Safe to re-run: preserves later CMS updates and does NOT publish programs or reactivate the trashed category.
+PRAGMA foreign_keys = ON;
+BEGIN TRANSACTION;
+INSERT OR IGNORE INTO media_assets (id,object_key,legacy_path,display_name,mime_type,bytes,sha256,width,height,is_public) VALUES ('a94e8e5e-e808-5d15-9355-584ff938827e','images/programs/austria-adventure-camp/austria-camp-preparation.webp',NULL,'austria-camp-preparation.webp','image/webp',72966,'4478e4474efc86db0c8966bbe21da14f95b8b72a981eeadfb32519232a9c731d',1024,682,1);
+INSERT OR IGNORE INTO media_assets (id,object_key,legacy_path,display_name,mime_type,bytes,sha256,width,height,is_public) VALUES ('a91e66de-6fce-5e12-b63f-a919564ec653','images/programs/austria-adventure-camp/austria-adventure-hero.webp',NULL,'austria-adventure-hero.webp','image/webp',60450,'2eaef27bd601215742152f2774b7908a65ea3753e362eb199381b1326acd0883',1024,682,1);
+UPDATE catalog_entities SET content_json=json_set(content_json,'$.image','/media/a91e66de-6fce-5e12-b63f-a919564ec653','$.gallery',json('["/media/a94e8e5e-e808-5d15-9355-584ff938827e","/media/a91e66de-6fce-5e12-b63f-a919564ec653"]')),revision=revision+1,updated_at=unixepoch() WHERE kind='program' AND slug='austria-adventure-camp' AND json_extract(content_json,'$.image')='' AND status='inactive';
+UPDATE catalog_entities SET content_json=json_set(content_json,'$.disciplines',json('["3D Design","Acting & Professional Performance","3D Modelling, Sculpting, Animation & Rigging","Branding & Advertising","Fashion Styling","Film Making","Game Design"]')),revision=revision+1,updated_at=unixepoch() WHERE kind='program' AND slug='uk-creative-summer' AND json_type(content_json,'$.disciplines') IS NULL AND status='inactive';
+INSERT OR IGNORE INTO destination_programs(destination_slug,program_slug,position) VALUES('austria','austria-adventure-camp',(SELECT COALESCE(MAX(position),-1)+1 FROM destination_programs WHERE destination_slug='austria'));
+INSERT OR IGNORE INTO destination_programs(destination_slug,program_slug,position) VALUES('uk','uk-creative-summer',(SELECT COALESCE(MAX(position),-1)+1 FROM destination_programs WHERE destination_slug='uk'));
+UPDATE catalog_entities SET content_json=json_insert(content_json,'$.program_ids[#]','austria-adventure-camp'),revision=revision+1,updated_at=unixepoch() WHERE kind='destination' AND slug='austria' AND NOT EXISTS(SELECT 1 FROM json_each(content_json,'$.program_ids') WHERE value='austria-adventure-camp');
+UPDATE catalog_entities SET content_json=json_insert(content_json,'$.program_ids[#]','uk-creative-summer'),revision=revision+1,updated_at=unixepoch() WHERE kind='destination' AND slug='uk' AND NOT EXISTS(SELECT 1 FROM json_each(content_json,'$.program_ids') WHERE value='uk-creative-summer');
+COMMIT;

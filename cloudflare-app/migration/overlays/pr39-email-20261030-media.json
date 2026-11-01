@@ -1,0 +1,69 @@
+{
+  "source": "GoCamp email requests dated 2026-10-30; existing PR39 draft records",
+  "target": "staging only",
+  "github_branch": "migration/cloudflare-react-workers-pr40",
+  "d1_database": "gocamp-staging-db",
+  "r2_bucket": "gocamp-staging-media",
+  "image_format": "image/webp",
+  "assets": [
+    {
+      "id": "a94e8e5e-e808-5d15-9355-584ff938827e",
+      "key": "images/programs/austria-adventure-camp/austria-camp-preparation.webp",
+      "display_name": "austria-camp-preparation.webp",
+      "email_attachment": "austria.jpg",
+      "sha256": "4478e4474efc86db0c8966bbe21da14f95b8b72a981eeadfb32519232a9c731d",
+      "bytes": 72966,
+      "width": 1024,
+      "height": 682,
+      "role": "gallery"
+    },
+    {
+      "id": "a91e66de-6fce-5e12-b63f-a919564ec653",
+      "key": "images/programs/austria-adventure-camp/austria-adventure-hero.webp",
+      "display_name": "austria-adventure-hero.webp",
+      "email_attachment": "austria photo 2.jpg",
+      "sha256": "2eaef27bd601215742152f2774b7908a65ea3753e362eb199381b1326acd0883",
+      "bytes": 60450,
+      "width": 1024,
+      "height": 682,
+      "role": "hero_and_gallery"
+    }
+  ],
+  "content": {
+    "austria-adventure-camp": {
+      "status": "inactive",
+      "image": "/media/a91e66de-6fce-5e12-b63f-a919564ec653",
+      "gallery": [
+        "/media/a94e8e5e-e808-5d15-9355-584ff938827e",
+        "/media/a91e66de-6fce-5e12-b63f-a919564ec653"
+      ],
+      "destination_slug": "austria"
+    },
+    "uk-creative-summer": {
+      "status": "inactive",
+      "image": "",
+      "destination_slug": "uk",
+      "disciplines": [
+        "3D Design",
+        "Acting & Professional Performance",
+        "3D Modelling, Sculpting, Animation & Rigging",
+        "Branding & Advertising",
+        "Fashion Styling",
+        "Film Making",
+        "Game Design"
+      ],
+      "missing_image": true
+    }
+  },
+  "unchanged": {
+    "category": "special-interests-camps",
+    "category_status": "trash",
+    "existing_german_program": "austria-vienna-teenagers"
+  },
+  "notes": [
+    "The Village Camps reference link in Austria email is internal-only; it is not published.",
+    "No production database or R2 objects are changed.",
+    "Apply the base PR39 inactive drafts first, then ensure these R2 objects exist before running the SQL.",
+    "Destination program associations retain draft statuses and do not automatically publish programs."
+  ]
+}
