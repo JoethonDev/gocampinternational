@@ -6,7 +6,8 @@ import type { CSSProperties } from "react";
 export type ImagePreset = "mobile" | "tablet" | "desktop";
 
 export function responsiveUrl(source: string, preset: ImagePreset): string {
-  return source + (source.includes("?") ? "&" : "?") + "variant=" + preset;
+  const suffix = preset === "desktop" ? "&v=ai4k-20261101" : "";
+  return source + (source.includes("?") ? "&" : "?") + "variant=" + preset + suffix;
 }
 
 function supportsVariants(source: string): boolean {
