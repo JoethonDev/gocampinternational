@@ -397,3 +397,12 @@ body {
   background-color: #005f70 !important;
   border-color: #005f70 !important;
 }
+
+/* Resolved from pre-generated R2 variants; no runtime transforms or cache work. */
+.gc-responsive-hero { background-image: var(--gc-image-mobile) !important; }
+@media (min-width: 641px) {
+  .gc-responsive-hero { background-image: var(--gc-image-tablet) !important; }
+}
+@media (min-width: 1025px) {
+  .gc-responsive-hero { background-image: var(--gc-image-desktop) !important; }
+}
