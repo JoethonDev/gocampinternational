@@ -351,10 +351,8 @@ body {
   min-height: 300px;
 }
 
-/* WCAG contrast adjustments layered over the legacy palette. */
-.navbar.gc-site-navbar {
-  background-color: #006b7d !important;
-}
+/* Public contrast refinements layered over the legacy palette. The navbar keeps
+   the required --brand-primary background from the original design. */
 .navbar.gc-site-navbar .nav-link {
   color: #fff !important;
 }

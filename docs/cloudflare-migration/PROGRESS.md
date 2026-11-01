@@ -196,7 +196,8 @@ See [CONTENT_AND_CMS_RECONCILIATION.md](./CONTENT_AND_CMS_RECONCILIATION.md): PR
 
 ### SEO and accessibility
 - Checked 19 public routes (all destinations and all six active category pages plus core pages): every response had a title, description, canonical URL and Open Graph title/description/image/URL/type; `/landing` remained `noindex`.
-- Axe WCAG 2 A/AA serious/critical scan now passes on Home, About, Contact, FAQ, Italy, Adult Academic, Landing, admin login, dashboard, catalog, media and inquiries. Fixes include a darker teal navbar, white nav text, higher-contrast breadcrumbs/links/outline buttons, the landing form heading and the admin login button.
+- Axe WCAG 2 A/AA serious/critical scan passes on Landing and all admin pages tested; first-party page content also passes. Higher-contrast breadcrumbs/links/outline buttons, the landing form heading and the admin login button remain.
+- **Deliberate design exception (2026-11-01):** the public navbar background must remain `var(--brand-primary)` (`#00a4c0`) per owner direction. White nav text on that teal does not meet the 4.5:1 normal-text threshold, so axe flags navbar links on public pages. This is a documented brand constraint, not an unresolved CSS regression.
 - **Known external exception:** the third-party Facebook timeline iframe contains two links without accessible names on Home, Italy and Adult Academic. The page provides a visible accessible “View on Facebook” link; the embedded widget is not modified because its DOM is controlled by Facebook.
 
 ### Backup/restore drill (non-destructive)
@@ -213,7 +214,7 @@ See [CONTENT_AND_CMS_RECONCILIATION.md](./CONTENT_AND_CMS_RECONCILIATION.md): PR
 - **Application SHA `2ded8539de0112e9f8c6385d1036c1be3c293c81`.** [Migration checks 41248055859](https://github.com/JoethonDev/gocampinternational/actions/runs/41248055859) **SUCCESS** (format, typecheck, build, Wrangler dry-run, PHP source checks, seed tests).
 - [React vs PHP visual parity 41248055902](https://github.com/JoethonDev/gocampinternational/actions/runs/41248055902) **SUCCESS**; the log confirms the staging deploy revision `2ded8539de0112e9f8c6385d1036c1be3c293c81` and **24 screenshot pairs**.
 - Cloudflare staging deployment `ad11926e-86cd-4400-8bac-7a93bda16c9f`; `/migration-commit.txt` reported the same application SHA. The 27/27 read-only HTTP smoke suite passed after deployment.
-- **Still open:** account-wide Worker/R2 usage evidence, the third-party Facebook-iframe accessibility exception, and production release approval. No production merge or DNS cutover.
+- **Still open:** account-wide Worker/R2 usage evidence, the documented navbar brand-contrast tradeoff, the third-party Facebook-iframe accessibility exception, and production release approval. No production merge or DNS cutover.
 
 ### 2026-11-01 decision — outbound email deferred
 The product owner selected **D1-only** persistence for this staging phase. No outbound inquiry, lead or newsletter email is sent, and no provider credentials are required. Public success copy continues to confirm only that the submission was saved; the authenticated admin inquiry inbox is the source of truth. Do not add a mail provider or claim email delivery until a separate provider/recipient decision is approved. This closes the implementation decision, not the production email-parity requirement.
