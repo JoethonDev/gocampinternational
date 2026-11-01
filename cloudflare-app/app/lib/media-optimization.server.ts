@@ -39,7 +39,7 @@ async function makeVariant(
   sourceWidth: number
 ): Promise<{ data: ArrayBuffer; method: "ai" | "standard" }> {
   const ai = sourceWidth < preset.width && preset.width <= sourceWidth * 4;
-  const base = { width: preset.width, fit: (sourceWidth < preset.width ? "scale-up" : "scale-down") as "scale-up" | "scale-down" };
+  const base = { width: preset.width, fit: (sourceWidth < preset.width ? "contain" : "scale-down") as "contain" | "scale-down" };
   const run = async (generated: boolean) => {
     // Transform options match Cloudflare's 2026 Images feature options.
     const options = generated ? { ...base, upscale: "generate" as const } : base;
@@ -82,7 +82,7 @@ export async function optimizeStoredMedia(env: Env, asset: MediaSource): Promise
   let info: { width: number; height: number };
   try {
     const raw = await env.IMAGES.info(new Blob([bytes]).stream());
-    if (!isValidDimension(raw.width) || !isValidDimension(raw.height)) {
+    if (!("width" in raw && "height" in raw) || !isValidDimension(raw.width) || !isValidDimension(raw.height)) {
       throw new Error("Cloudflare returned invalid image dimensions");
     }
     info = { width: raw.width, height: raw.height };
@@ -112,7 +112,7 @@ export async function optimizeStoredMedia(env: Env, asset: MediaSource): Promise
         continue;
       }
       const transformedInfo = await env.IMAGES.info(new Blob([optimized.data]).stream());
-      if (!isValidDimension(transformedInfo.width) || !isValidDimension(transformedInfo.height)) {
+      if (!("width" in transformedInfo && "height" in transformedInfo) || !isValidDimension(transformedInfo.width) || !isValidDimension(transformedInfo.height)) {
         throw new Error("No valid output dimensions");
       }
       const previous = await env.MEDIA.head(key);
