@@ -1,3 +1,4 @@
+import { heroImageStyles, responsiveSrcSet } from "../../lib/responsive-media";
 import { CampMemories } from "../../components/CampMemories";
 import { ProgramCard } from "../../components/ProgramCard";
 import { SafeRichText } from "../../components/SafeRichText";
@@ -14,11 +15,9 @@ import { isVisible } from "../../lib/visibility";
 function CategoryHero({ category }: { category: CategoryRecord }) {
   return (
     <section
-      className="hero-section"
+      className="hero-section gc-responsive-hero"
       aria-label={`${category.name} banner`}
-      style={{
-        backgroundImage: `url(${JSON.stringify(category.banner || SITE.images.placeholder)})`
-      }}
+      style={heroImageStyles(category.banner || SITE.images.placeholder)}
     >
       <div className="container position-relative category-hero-caption">
         <h1>{category.name}</h1>
@@ -45,6 +44,8 @@ function CategoryIntro({ category }: { category: CategoryRecord }) {
             <div className="col-lg-6">
               <img
                 src={category.intro_image}
+                srcSet={responsiveSrcSet(category.intro_image)}
+                sizes="(max-width: 992px) 100vw, 50vw"
                 alt={`${category.name} Introduction`}
                 className="img-fluid intro-image"
                 loading="lazy"
@@ -81,6 +82,8 @@ function CategorySections({ category }: { category: CategoryRecord }) {
                 <div className={"col-lg-6" + (index % 2 ? " order-lg-1" : "")}>
                   <img
                     src={section.image}
+                    srcSet={responsiveSrcSet(section.image)}
+                    sizes="(max-width: 992px) 100vw, 50vw"
                     alt={section.title || ""}
                     className="img-fluid content-image"
                     loading="lazy"
