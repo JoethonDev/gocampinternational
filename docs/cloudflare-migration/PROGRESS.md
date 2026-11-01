@@ -213,4 +213,7 @@ See [CONTENT_AND_CMS_RECONCILIATION.md](./CONTENT_AND_CMS_RECONCILIATION.md): PR
 - **Application SHA `2ded8539de0112e9f8c6385d1036c1be3c293c81`.** [Migration checks 41248055859](https://github.com/JoethonDev/gocampinternational/actions/runs/41248055859) **SUCCESS** (format, typecheck, build, Wrangler dry-run, PHP source checks, seed tests).
 - [React vs PHP visual parity 41248055902](https://github.com/JoethonDev/gocampinternational/actions/runs/41248055902) **SUCCESS**; the log confirms the staging deploy revision `2ded8539de0112e9f8c6385d1036c1be3c293c81` and **24 screenshot pairs**.
 - Cloudflare staging deployment `ad11926e-86cd-4400-8bac-7a93bda16c9f`; `/migration-commit.txt` reported the same application SHA. The 27/27 read-only HTTP smoke suite passed after deployment.
-- **Still open:** outbound email provider and delivery, account-wide Worker/R2 usage evidence, the third-party Facebook-iframe accessibility exception, and production release approval. No production merge or DNS cutover.
+- **Still open:** account-wide Worker/R2 usage evidence, the third-party Facebook-iframe accessibility exception, and production release approval. No production merge or DNS cutover.
+
+### 2026-11-01 decision — outbound email deferred
+The product owner selected **D1-only** persistence for this staging phase. No outbound inquiry, lead or newsletter email is sent, and no provider credentials are required. Public success copy continues to confirm only that the submission was saved; the authenticated admin inquiry inbox is the source of truth. Do not add a mail provider or claim email delivery until a separate provider/recipient decision is approved. This closes the implementation decision, not the production email-parity requirement.
