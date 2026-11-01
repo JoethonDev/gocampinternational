@@ -26,7 +26,15 @@ export function responsiveSrcSet(source: string | null | undefined): string | un
 
 /** Exposes CSS variables for real viewport-based hero media selection. */
 export function heroImageStyles(source: string): CSSProperties {
-  if (!supportsVariants(source)) return { backgroundImage: `url(${JSON.stringify(source)})` };
+  if (!supportsVariants(source)) {
+    const fallback = `url(${JSON.stringify(source)})`;
+    return {
+      "--gc-image-mobile": fallback,
+      "--gc-image-tablet": fallback,
+      "--gc-image-desktop": fallback,
+      backgroundImage: fallback
+    } as CSSProperties;
+  }
   return {
     "--gc-image-mobile": `url(${JSON.stringify(responsiveUrl(source, "mobile"))})`,
     "--gc-image-tablet": `url(${JSON.stringify(responsiveUrl(source, "tablet"))})`,
