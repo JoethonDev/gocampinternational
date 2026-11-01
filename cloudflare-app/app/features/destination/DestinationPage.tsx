@@ -1,3 +1,4 @@
+import { heroImageStyles, responsiveSrcSet } from "../../lib/responsive-media";
 import { Link } from "react-router";
 import { CampMemories } from "../../components/CampMemories";
 import { FaqAccordion } from "../../components/FaqAccordion";
@@ -41,9 +42,9 @@ function Hero({ destination }: { destination: DestinationRecord }) {
         <h1>{destination.name}</h1>
       </div>
       <div
-        className="hero-background position-absolute top-0 start-0 w-100 h-100"
+        className="hero-background gc-responsive-hero position-absolute top-0 start-0 w-100 h-100"
         style={{
-          backgroundImage: `url(${JSON.stringify(destination.banner || SITE.images.placeholder)})`,
+          ...heroImageStyles(destination.banner || SITE.images.placeholder),
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundAttachment: "fixed"
@@ -93,6 +94,8 @@ function Introduction({ destination }: { destination: DestinationRecord }) {
               <img
                 className="img-fluid rounded-4 shadow-sm w-100"
                 src={destination.intro_image}
+                srcSet={responsiveSrcSet(destination.intro_image)}
+                sizes="(max-width: 992px) 100vw, 42vw"
                 alt={destination.name}
                 loading="lazy"
               />

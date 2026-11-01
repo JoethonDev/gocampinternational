@@ -397,3 +397,13 @@ body {
   background-color: #005f70 !important;
   border-color: #005f70 !important;
 }
+
+/* Full-width hero covers need more pixels than ordinary image cards.
+   Prefer the already-generated higher-resolution R2 variants on mobile/DPR
+   screens; keep the same cover geometry and the original image fallback. */
+.gc-responsive-hero {
+  background-image: image-set(var(--gc-image-tablet) 1x, var(--gc-image-desktop) 2x) !important;
+}
+@media (min-width: 641px) {
+  .gc-responsive-hero { background-image: var(--gc-image-desktop) !important; }
+}

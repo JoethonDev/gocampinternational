@@ -1,3 +1,4 @@
+import { responsiveSrcSet } from "../lib/responsive-media";
 import { useEffect, useRef, useState } from "react";
 import { SITE } from "../config/site";
 import type { MemoriesDocument, MemoryItem } from "../lib/domain";
@@ -19,6 +20,8 @@ function MemoryCard({ item }: { item: MemoryItem }) {
       >
         <img
           src={memoryUrl(item.image)}
+          srcSet={responsiveSrcSet(memoryUrl(item.image))}
+          sizes="(max-width: 576px) 100vw, (max-width: 992px) 50vw, 33vw"
           alt={item.caption}
           loading="lazy"
           decoding="async"

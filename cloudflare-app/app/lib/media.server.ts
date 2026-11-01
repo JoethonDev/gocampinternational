@@ -1,4 +1,5 @@
 import { verifyAdminPost } from "./admin.server";
+import { optimizeStoredMedia } from "./media-optimization.server";
 
 export const MAX_UPLOAD_BYTES = 3 * 1024 * 1024;
 export const MAX_UPLOAD_FILES = 12;
@@ -42,7 +43,7 @@ function detectImageType(bytes: Uint8Array): ImageType | null {
   return null;
 }
 
-async function uploadOne(file: File, env: Env): Promise<UploadedMedia> {
+async function uploadOne(file: File, env: Env, ctx?: ExecutionContext): Promise<UploadedMedia> {
   if (!file.size || file.size > MAX_UPLOAD_BYTES) {
     throw new Response("Choose an image up to 3 MB", { status: 413 });
   }
@@ -57,11 +58,15 @@ async function uploadOne(file: File, env: Env): Promise<UploadedMedia> {
   const digest = new Uint8Array(await crypto.subtle.digest("SHA-256", buffer));
   const checksum = Array.from(digest, (value) => value.toString(16).padStart(2, "0")).join("");
   const existing = await env.DB.prepare(
-    "SELECT id FROM media_assets WHERE sha256=? AND is_public=1 LIMIT 1"
+    "SELECT id,object_key,mime_type FROM media_assets WHERE sha256=? AND is_public=1 LIMIT 1"
   )
     .bind(checksum)
-    .first<{ id: string }>();
+    .first<{ id: string; object_key: string; mime_type: string }>();
   if (existing) {
+    // A retry/duplicate still repairs missing variants, without creating a new media asset.
+    ctx?.waitUntil(
+      optimizeStoredMedia(env, existing).catch(() => undefined)
+    );
     return {
       id: existing.id,
       path: `/media/${existing.id}`,
@@ -94,22 +99,29 @@ async function uploadOne(file: File, env: Env): Promise<UploadedMedia> {
     if (!existed) await env.MEDIA.delete(objectKey).catch(() => undefined);
     throw error;
   }
+  // The uploaded original is durable before the optimized variants begin.
+  // waitUntil avoids blocking large multi-image uploads on GPU inference.
+  ctx?.waitUntil(
+    optimizeStoredMedia(env, { id, object_key: objectKey, mime_type: imageType.type })
+      .catch(() => undefined)
+  );
   return { id, path: `/media/${id}`, name: displayName };
 }
 
-export async function uploadMedia(request: Request, env: Env, form: FormData): Promise<string> {
+export async function uploadMedia(request: Request, env: Env, form: FormData, ctx?: ExecutionContext): Promise<string> {
   await verifyAdminPost(request, env.DB, form);
   const file = form.get("file");
   if (!(file instanceof File)) {
     throw new Response("Choose an image up to 3 MB", { status: 413 });
   }
-  return (await uploadOne(file, env)).id;
+  return (await uploadOne(file, env, ctx)).id;
 }
 
 export async function uploadMediaFiles(
   request: Request,
   env: Env,
-  form: FormData
+  form: FormData,
+  ctx?: ExecutionContext
 ): Promise<{ uploaded: UploadedMedia[]; errors: UploadFailure[] }> {
   await verifyAdminPost(request, env.DB, form);
   const files = [...form.getAll("files"), ...form.getAll("file")].filter(
@@ -126,7 +138,7 @@ export async function uploadMediaFiles(
   const errors: UploadFailure[] = [];
   for (const file of files) {
     try {
-      uploaded.push(await uploadOne(file, env));
+      uploaded.push(await uploadOne(file, env, ctx));
     } catch (error) {
       errors.push({
         name: file.name.slice(0, 180),
@@ -180,11 +192,17 @@ export async function mutateMedia(request: Request, env: Env, form: FormData): P
       );
     }
 
+    const variants = await env.DB.prepare(
+      "SELECT object_key FROM media_variants WHERE media_id=?"
+    ).bind(id).all<{ object_key: string }>();
     const result = await env.DB.prepare("DELETE FROM media_assets WHERE id=?").bind(id).run();
     if (result.meta.changes !== 1) {
       throw new Response("Media changed. Reload.", { status: 409 });
     }
-    await env.MEDIA.delete(row.object_key);
+    await Promise.all([
+      env.MEDIA.delete(row.object_key),
+      ...(variants.results || []).map((variant) => env.MEDIA.delete(variant.object_key))
+    ]);
     return;
   }
 

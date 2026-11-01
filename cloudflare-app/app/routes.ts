@@ -14,6 +14,7 @@ export default [
   route("admin/media/import", "routes/admin-media-import.tsx"),
   route("admin/media/import/run", "routes/admin-media-import-run.ts"),
   route("admin/media/upload", "routes/admin-media-upload.ts"),
+  route("admin/media/optimize/run", "routes/admin-media-optimize-run.ts"),
   route("admin/media/preview/:id", "routes/admin-media-preview.ts"),
   route("admin/trash", "routes/admin-trash.tsx"),
   route("admin/:legacy", "routes/admin-legacy.ts"),

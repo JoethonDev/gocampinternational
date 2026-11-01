@@ -1,4 +1,5 @@
 import { Form, useNavigation } from "react-router";
+import { MediaOptimizePanel } from "./MediaOptimizePanel";
 import { AdminEmptyState } from "../../components/admin/AdminEmptyState";
 import { AdminFormSection } from "../../components/admin/AdminFormSection";
 import { AdminPageHeader } from "../../components/admin/AdminPageHeader";
@@ -218,6 +219,7 @@ export function MediaLibraryPage({
           <span className="badge bg-secondary rounded-pill fs-6">{data.total} matching images</span>
         }
       />
+      {staging && <MediaOptimizePanel csrf={csrf} />}
       {uploaded > 0 && (
         <div className="alert alert-success" role="status">
           {uploaded} image{uploaded === 1 ? "" : "s"} uploaded.
