@@ -153,6 +153,10 @@ export async function submitInquiry(
     }
   }
 
+  if (kind === "contact" && !extra.message) {
+    return fail("Please include a message describing your enquiry");
+  }
+
   if (kind === "lead") {
     for (const [key, max] of [
       ["interest", 5000],
