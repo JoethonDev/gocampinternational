@@ -8,6 +8,11 @@ const tests = [
   { path: "/", status: 200, contains: "Go Camp" },
   { path: "/", status: 200, contains: "/media/49c7cbd7-a00e-5970-9ed1-1e14e077e016" },
   { path: "/about", status: 200, contains: "About Us" },
+  { path: "/about", status: 200, contains: "Zeinab El Sokkary" },
+  { path: "/faq", status: 200, contains: "Are airport transfers arranged?" },
+  { path: "/contact", status: 200, contains: "https://wa.me/201221719621" },
+  { path: "/robots.txt", status: 200, contains: "Disallow: /" },
+  { path: "/sitemap.xml", status: 404 },
   { path: "/faq", status: 200 },
   { path: "/contact", status: 200 },
   { path: "/destinations/italy", status: 200, contains: "Italy" },
@@ -100,6 +105,55 @@ for (const test of tests) {
     console.error("FAIL", test.path, JSON.stringify({ expected: test.status, result, error }));
     failed++;
   }
+}
+
+// Verify SSR metadata and staging indexing protection on every active catalog page.
+const seoPaths = [
+  "/", "/about", "/faq", "/contact",
+  ...["italy", "switzerland", "germany", "uk", "austria"].map(
+    (slug) => "/destinations/" + slug
+  ),
+  ...["kids-camps", "adult-academic", "young-leader-program", "soccer-camps", "special-interests-camps", "tennis"].map(
+    (slug) => "/program/category?category=" + slug
+  ),
+  "/landing"
+];
+for (const path of seoPaths) {
+  try {
+    const response = await fetch(base + path, { signal: AbortSignal.timeout(20000) });
+    const html = await response.text();
+    const head = html.split(/<\/head>/i)[0];
+    const title = /<title>[^<]+<\/title>/i.test(head);
+    const description = /<meta\s+name="description"\s+content="[^"]+"/i.test(head);
+    const og = /<meta\s+property="og:title"\s+content="[^"]+"/i.test(head);
+    const canonical = head.match(/<link\b(?=[^>]*\brel="canonical")(?=[^>]*\bhref="([^"]+)")[^>]*>/i)?.[1];
+    const expected = base + path;
+    const noindex = (response.headers.get("x-robots-tag") || "").includes("noindex");
+    const landingNoindex = path !== "/landing" || /name="robots"\s+content="noindex,nofollow"/i.test(head);
+    const pass = response.status === 200 && title && description && og &&
+      canonical === expected && noindex && landingNoindex;
+    if (!pass) {
+      failed++;
+      console.error("FAIL SEO", path, JSON.stringify({status:response.status,title,description,og,canonical,expected,noindex,landingNoindex}));
+    } else console.log("PASS SEO", path);
+  } catch (error) {
+    failed++;
+    console.error("FAIL SEO", path, String(error));
+  }
+}
+// Tracking parameters must never become a second canonical URL.
+try {
+  const path = "/program/category?category=kids-camps&utm_source=seo-audit";
+  const response = await fetch(base + path, { signal: AbortSignal.timeout(20000) });
+  const head = (await response.text()).split(/<\/head>/i)[0];
+  const canonical = head.match(/<link\b(?=[^>]*\brel="canonical")(?=[^>]*\bhref="([^"]+)")[^>]*>/i)?.[1];
+  if (canonical !== base + "/program/category?category=kids-camps") {
+    failed++;
+    console.error("FAIL category canonical query normalization", canonical);
+  } else console.log("PASS category canonical query normalization");
+} catch (error) {
+  failed++;
+  console.error("FAIL category canonical query normalization", String(error));
 }
 
 // Verify real R2 variants are delivered, not silently replaced by originals.
