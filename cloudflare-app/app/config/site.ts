@@ -122,8 +122,7 @@ export const ABOUT_PAGE_DEFAULT: AboutPageContent = {
   profile: {
     name: SITE.director,
     title: SITE.directorTitle,
-    body:
-      "Families are supported in choosing an appropriate international educational experience, not simply booking a camp. Zeinab El Sokkary helps parents explore programs suited to each student's interests and development, with information about overseas education, sports, language learning and cultural opportunities. GO Camp International also works with schools, parents and international partners through presentations, orientation sessions and educational discussions."
+    body: "Zeinab El Sokkary is the Managing Director of GO Camp International. Her professional background spans education, travel and tourism, helping families explore suitable overseas learning experiences. Alongside international summer camps, her work includes advising students considering study abroad, helping parents assess boarding-school options, and supporting educational and cultural school travel. Families receive personal guidance when comparing programs and destinations, supported by parent presentations, orientation sessions, international partnerships and an educational-agent network that has included ICEF professional connections."
   },
   sections: ABOUT_SECTIONS
 };
