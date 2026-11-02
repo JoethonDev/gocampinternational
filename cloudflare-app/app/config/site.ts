@@ -34,8 +34,7 @@ export const FOOTER_LINKS = {
     { label: "About Us", to: "/about" },
     { label: "F.A.Q", to: "/faq" },
     { label: "Contact Us", to: "/contact" }
-  ],
-  programs: []
+  ]
 } as const;
 
 export const HOME_HERO_SLIDES = [
