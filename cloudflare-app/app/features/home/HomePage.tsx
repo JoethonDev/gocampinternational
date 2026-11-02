@@ -185,8 +185,8 @@ export function HomePage({
       {isVisible("home", "family_testimonials", settings, settings) && (
         <TestimonialsSection data={testimonials} />
       )}
-      <SocialFeeds memories={memories} />
       {isVisible("home", "testimonials", settings, settings) && <CampMemories data={memories} />}
+      <SocialFeeds memories={memories} />
     </div>
   );
 }

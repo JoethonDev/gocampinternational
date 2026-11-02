@@ -98,15 +98,6 @@
   transform: scale(1.04);
 }
 
-.social-feed-preview-note {
-  margin: 0;
-  padding: 0.8rem 1rem;
-  color: #52666b;
-  font-size: 0.875rem;
-  line-height: 1.5;
-  text-align: center;
-}
-
 .social-feed-no-photos {
   display: flex;
   min-height: 290px;
@@ -123,26 +114,30 @@
   color: #0b94b0;
 }
 
-.social-feed-live iframe {
-  margin: 0 auto;
+.social-feed-facebook-content {
+  position: relative;
+  min-height: 450px;
 }
 
-.social-feed-toggle {
-  align-self: center;
-  margin-top: 0.75rem;
-  padding: 0.45rem 0.75rem;
-  border: 1px solid #a3c8d0;
-  border-radius: 8px;
-  background: #fff;
-  color: #096a83;
-  font: inherit;
-  font-weight: 600;
-  cursor: pointer;
+.social-feed-facebook-content .social-feed-photo-grid {
+  grid-template-rows: repeat(2, 225px);
 }
 
-.social-feed-toggle:hover,
-.social-feed-toggle:focus-visible {
-  background: #eef9fa;
+.social-feed-facebook-frame {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  max-width: 500px;
+  height: 450px;
+  border: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.social-feed-facebook-frame.is-ready {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .social-feed-link {

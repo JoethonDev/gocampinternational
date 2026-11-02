@@ -61,9 +61,7 @@ function CampPhotoPreview({
           <p>See our latest camp adventures on {platform}.</p>
         </div>
       )}
-      <p className="social-feed-preview-note">
-        Photos from our camp gallery. For the latest posts, visit {platform}.
-      </p>
+
     </div>
   );
 }
@@ -71,14 +69,20 @@ function CampPhotoPreview({
 function FacebookPage({ photos }: { photos: MemoryItem[] }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [width, setWidth] = useState(340);
-  const [showLive, setShowLive] = useState(false);
+  const [ready, setReady] = useState(false);
+  const [failed, setFailed] = useState(false);
 
   useEffect(() => {
     const element = containerRef.current;
     if (!element) return;
     const measure = () => {
       const nextWidth = Math.max(180, Math.min(500, Math.floor(element.clientWidth)));
-      setWidth((previous) => (previous === nextWidth ? previous : nextWidth));
+      setWidth((previous) => {
+        if (previous === nextWidth) return previous;
+        setReady(false);
+        setFailed(false);
+        return nextWidth;
+      });
     };
     measure();
     if (!("ResizeObserver" in window)) return;
@@ -109,37 +113,31 @@ function FacebookPage({ photos }: { photos: MemoryItem[] }) {
           <p>News and updates from Go Camp</p>
         </div>
       </div>
-      <div ref={containerRef} className="social-feed-content">
-        {showLive ? (
-          <div className="social-feed-live">
-            <iframe
-              title="Go Camp International Facebook timeline"
-              src={facebookIframeUrl}
-              width={width}
-              height={450}
-              loading="lazy"
-              scrolling="no"
-              allow="encrypted-media"
-              referrerPolicy="strict-origin-when-cross-origin"
-              style={{ display: "block", width: "100%", maxWidth: 500, height: 450, border: 0 }}
-            />
-            <p className="social-feed-preview-note">
-              Facebook controls which public posts appear here. If the timeline is empty,
-              open the page directly.
-            </p>
-          </div>
-        ) : (
-          <CampPhotoPreview photos={photos} platform="Facebook" />
+      <div
+        ref={containerRef}
+        className="social-feed-content social-feed-facebook-content"
+        aria-label="Go Camp Facebook page"
+      >
+        {(!ready || failed) && <CampPhotoPreview photos={photos} platform="Facebook" />}
+        {!failed && (
+          <iframe
+            key={width}
+            title="Go Camp International Facebook timeline"
+            src={facebookIframeUrl}
+            width={width}
+            height={450}
+            loading="lazy"
+            scrolling="no"
+            allow="encrypted-media"
+            referrerPolicy="strict-origin-when-cross-origin"
+            className={ready ? "social-feed-facebook-frame is-ready" : "social-feed-facebook-frame"}
+            tabIndex={ready ? 0 : -1}
+            aria-hidden={!ready}
+            onLoad={() => setReady(true)}
+            onError={() => setFailed(true)}
+          />
         )}
       </div>
-      <button
-        type="button"
-        className="social-feed-toggle"
-        onClick={() => setShowLive((visible) => !visible)}
-        aria-expanded={showLive}
-      >
-        {showLive ? "Show camp highlights" : "Try live Facebook timeline"}
-      </button>
       <SocialLink href={SITE.social.facebook}>Visit our Facebook page</SocialLink>
     </article>
   );
