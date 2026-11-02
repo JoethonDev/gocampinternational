@@ -37,7 +37,7 @@ export async function loader({ request, context }: Route.LoaderArgs) {
   return { category, related, memories };
 }
 
-export function meta({ data, matches, location }: Route.MetaArgs) {
+export function meta({ data, matches }: Route.MetaArgs) {
   return seoMeta({
     origin: originFrom(matches),
     path: location.pathname + location.search,
