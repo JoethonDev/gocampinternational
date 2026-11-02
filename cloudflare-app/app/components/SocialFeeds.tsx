@@ -1,79 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import { SITE } from "../config/site";
+import type { MemoriesDocument, MemoryItem } from "../lib/domain";
+import { responsiveSrcSet } from "../lib/responsive-media";
 import "./social-feeds.css";
 
-type MetaWindow = Window & {
-  instgrm?: { Embeds?: { process: () => void } };
-};
-
-// Meta does not publish a dedicated React wrapper for Instagram embeds.
-// Facebook's Page Plugin uses its official iframe URL below, so it doesn't
-// inject Facebook's JavaScript SDK into our React document.
-const scriptLoads = new Map<string, Promise<void>>();
-
-function loadMetaScript(id: string, src: string): Promise<void> {
-  const cached = scriptLoads.get(id);
-  if (cached) return cached;
-
-  const task = new Promise<void>((resolve, reject) => {
-    const existing = document.getElementById(id) as HTMLScriptElement | null;
-    if (existing?.dataset.loaded === "true") {
-      resolve();
-      return;
-    }
-
-    const script = existing || document.createElement("script");
-    script.addEventListener(
-      "load",
-      () => {
-        script.dataset.loaded = "true";
-        resolve();
-      },
-      { once: true }
-    );
-    script.addEventListener("error", () => reject(new Error("Social embed unavailable")), {
-      once: true
-    });
-    if (!existing) {
-      script.id = id;
-      script.src = src;
-      script.async = true;
-      script.crossOrigin = "anonymous";
-      document.body.appendChild(script);
-    }
-  }).catch((error) => {
-    scriptLoads.delete(id);
-    document.getElementById(id)?.remove();
-    throw error;
-  });
-  scriptLoads.set(id, task);
-  return task;
-}
-
-function useNearViewport(ref: React.RefObject<HTMLDivElement | null>) {
-  const [near, setNear] = useState(false);
-
-  useEffect(() => {
-    const element = ref.current;
-    if (!element) return;
-    if (!("IntersectionObserver" in window)) {
-      setNear(true);
-      return;
-    }
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((entry) => entry.isIntersecting)) {
-          setNear(true);
-          observer.disconnect();
-        }
-      },
-      { rootMargin: "400px 0px" }
-    );
-    observer.observe(element);
-    return () => observer.disconnect();
-  }, [ref]);
-
-  return near;
+// The live Meta embeds cannot guarantee that posts are public or available in
+// visitors' browsers. Our own published camp photos provide a reliable preview.
+function photoUrl(path: string) {
+  if (path.startsWith("/") || /^https?:\/\//i.test(path)) return path;
+  return `/images/${encodeURIComponent(path)}`;
 }
 
 function SocialLink({ href, children }: { href: string; children: React.ReactNode }) {
@@ -84,9 +19,59 @@ function SocialLink({ href, children }: { href: string; children: React.ReactNod
   );
 }
 
-function FacebookPage() {
+function CampPhotoPreview({
+  photos,
+  platform
+}: {
+  photos: MemoryItem[];
+  platform: "Facebook" | "Instagram";
+}) {
+  return (
+    <div className="social-feed-preview">
+      {photos.length > 0 ? (
+        <div className="social-feed-photo-grid" aria-label="Photos from our camp gallery">
+          {photos.map((photo) => {
+            const url = photoUrl(photo.image);
+            return (
+              <a
+                key={photo.image}
+                href={url}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`View camp photo: ${photo.caption || photo.country || "Go Camp"}`}
+              >
+                <img
+                  src={url}
+                  srcSet={responsiveSrcSet(url)}
+                  sizes="(max-width: 600px) 45vw, 230px"
+                  loading="lazy"
+                  decoding="async"
+                  alt={photo.caption || photo.country || "Go Camp camp memory"}
+                />
+              </a>
+            );
+          })}
+        </div>
+      ) : (
+        <div className="social-feed-no-photos">
+          <i
+            className={platform === "Facebook" ? "bi bi-facebook" : "bi bi-instagram"}
+            aria-hidden="true"
+          />
+          <p>See our latest camp adventures on {platform}.</p>
+        </div>
+      )}
+      <p className="social-feed-preview-note">
+        Photos from our camp gallery. For the latest posts, visit {platform}.
+      </p>
+    </div>
+  );
+}
+
+function FacebookPage({ photos }: { photos: MemoryItem[] }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [width, setWidth] = useState(340);
+  const [showLive, setShowLive] = useState(false);
 
   useEffect(() => {
     const element = containerRef.current;
@@ -124,44 +109,43 @@ function FacebookPage() {
           <p>News and updates from Go Camp</p>
         </div>
       </div>
-      <div ref={containerRef} className="social-feed-embed" aria-label="Go Camp Facebook page">
-        <iframe
-          title="Go Camp International Facebook timeline"
-          src={facebookIframeUrl}
-          width={width}
-          height={450}
-          loading="lazy"
-          scrolling="no"
-          allow="encrypted-media"
-          referrerPolicy="strict-origin-when-cross-origin"
-          style={{ display: "block", width: "100%", maxWidth: 500, height: 450, border: 0 }}
-        />
+      <div ref={containerRef} className="social-feed-content">
+        {showLive ? (
+          <div className="social-feed-live">
+            <iframe
+              title="Go Camp International Facebook timeline"
+              src={facebookIframeUrl}
+              width={width}
+              height={450}
+              loading="lazy"
+              scrolling="no"
+              allow="encrypted-media"
+              referrerPolicy="strict-origin-when-cross-origin"
+              style={{ display: "block", width: "100%", maxWidth: 500, height: 450, border: 0 }}
+            />
+            <p className="social-feed-preview-note">
+              Facebook controls which public posts appear here. If the timeline is empty,
+              open the page directly.
+            </p>
+          </div>
+        ) : (
+          <CampPhotoPreview photos={photos} platform="Facebook" />
+        )}
       </div>
+      <button
+        type="button"
+        className="social-feed-toggle"
+        onClick={() => setShowLive((visible) => !visible)}
+        aria-expanded={showLive}
+      >
+        {showLive ? "Show camp highlights" : "Try live Facebook timeline"}
+      </button>
       <SocialLink href={SITE.social.facebook}>Visit our Facebook page</SocialLink>
     </article>
   );
 }
 
-function InstagramProfile() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const near = useNearViewport(containerRef);
-  const [failed, setFailed] = useState(false);
-
-  useEffect(() => {
-    if (!near) return;
-    let alive = true;
-    loadMetaScript("gocamp-instagram-embed", "https://www.instagram.com/embed.js")
-      .then(() => {
-        if (alive) (window as MetaWindow).instgrm?.Embeds?.process();
-      })
-      .catch(() => {
-        if (alive) setFailed(true);
-      });
-    return () => {
-      alive = false;
-    };
-  }, [near]);
-
+function InstagramProfile({ photos }: { photos: MemoryItem[] }) {
   return (
     <article className="social-feed-card">
       <div className="social-feed-heading">
@@ -173,29 +157,27 @@ function InstagramProfile() {
           <p>Photos and moments from our adventures</p>
         </div>
       </div>
-      <div ref={containerRef} className="social-feed-embed" aria-label="Go Camp Instagram profile">
-        {near && !failed ? (
-          <blockquote
-            className="instagram-media"
-            data-instgrm-permalink={SITE.social.instagram}
-            data-instgrm-version="14"
-            style={{ width: "100%", maxWidth: 500, margin: "0 auto" }}
-          >
-            <a href={SITE.social.instagram}>View @gocampgo on Instagram</a>
-          </blockquote>
-        ) : (
-          <div className="social-feed-profile-fallback">
-            <i className="bi bi-instagram" aria-hidden="true" />
-            <p>Explore our camp photos and experiences on Instagram.</p>
-          </div>
-        )}
+      <div className="social-feed-content">
+        <CampPhotoPreview photos={photos} platform="Instagram" />
       </div>
-      <SocialLink href={SITE.social.instagram}>Follow @gocampgo</SocialLink>
+      <SocialLink href={SITE.social.instagram}>See the latest posts @gocampgo</SocialLink>
     </article>
   );
 }
 
-export function SocialFeeds() {
+export function SocialFeeds({ memories }: { memories: MemoriesDocument | null }) {
+  const seen = new Set<string>();
+  const photos = (memories?.items || [])
+    .filter((item) => {
+      if (!item?.image || item.is_active === false || item.in_slider === false) return false;
+      if (seen.has(item.image)) return false;
+      seen.add(item.image);
+      return true;
+    })
+    .slice(0, 6);
+  const facebookPhotos = photos.slice(0, 3);
+  const instagramPhotos = photos.length > 3 ? photos.slice(3, 6) : facebookPhotos;
+
   return (
     <section className="section-padding social-feeds-section" aria-labelledby="social-feeds-title">
       <div className="container">
@@ -204,15 +186,15 @@ export function SocialFeeds() {
             Follow Our Adventures
           </h2>
           <p className="lead text-muted">
-            Get a glimpse of camp life and stay connected with Go Camp International.
+            Explore our camp highlights and follow Go Camp International for new posts.
           </p>
         </div>
         <div className="row g-4 justify-content-center">
           <div className="col-12 col-lg-6 d-flex">
-            <FacebookPage />
+            <FacebookPage photos={facebookPhotos} />
           </div>
           <div className="col-12 col-lg-6 d-flex">
-            <InstagramProfile />
+            <InstagramProfile photos={instagramPhotos} />
           </div>
         </div>
       </div>

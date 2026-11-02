@@ -1,6 +1,5 @@
 import { responsiveSrcSet } from "../lib/responsive-media";
 import { useEffect, useRef, useState } from "react";
-import { SITE } from "../config/site";
 import type { MemoriesDocument, MemoryItem } from "../lib/domain";
 
 function memoryUrl(path: string) {
@@ -31,44 +30,6 @@ function MemoryCard({ item }: { item: MemoryItem }) {
       </a>
       <figcaption className="p-3 text-center">{item.caption}</figcaption>
     </figure>
-  );
-}
-
-function FacebookPanel() {
-  return (
-    <div className="col-lg-4">
-      <div className="card shadow-lg">
-        <div className="card-body p-2">
-          <div
-            className="fb-page"
-            aria-hidden="true"
-            data-href={SITE.social.facebook}
-            data-tabs="timeline"
-            data-width="500"
-            data-height="450"
-            data-small-header="false"
-            data-adapt-container-width="true"
-            data-hide-cover="false"
-            data-show-facepile="true"
-            data-lazy="true"
-          >
-            <blockquote cite={SITE.social.facebook} className="fb-xfbml-parse-ignore">
-              <a href={SITE.social.facebook}>{SITE.name}</a>
-            </blockquote>
-          </div>
-          <div className="text-center mt-2">
-            <a
-              href={SITE.social.facebook}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn btn-sm btn-outline-primary"
-            >
-              View on Facebook
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
   );
 }
 
@@ -110,39 +71,6 @@ export function CampMemories({ data }: { data: MemoriesDocument | null | undefin
     };
   }, [items.length]);
 
-  useEffect(() => {
-    if (!data?.show_facebook || items.length === 0) return;
-    const facebook = (
-      window as Window & {
-        FB?: { XFBML?: { parse: (element?: Element | null) => void } };
-      }
-    ).FB;
-    const removeEmbeddedKeyboardStop = () => {
-      document.querySelectorAll<HTMLIFrameElement>(".fb-page iframe").forEach((frame) => {
-        frame.tabIndex = -1;
-        frame.setAttribute("aria-hidden", "true");
-      });
-    };
-    if (facebook?.XFBML) {
-      facebook.XFBML.parse(document.querySelector(".camp-memories") || undefined);
-      window.setTimeout(removeEmbeddedKeyboardStop, 800);
-      window.setTimeout(removeEmbeddedKeyboardStop, 2500);
-      return;
-    }
-    if (!document.querySelector('script[data-gocamp-facebook="1"]')) {
-      const script = document.createElement("script");
-      script.dataset.gocampFacebook = "1";
-      script.async = true;
-      script.defer = true;
-      script.crossOrigin = "anonymous";
-      script.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v19.0";
-      script.addEventListener("load", removeEmbeddedKeyboardStop);
-      document.body.appendChild(script);
-    }
-    window.setTimeout(removeEmbeddedKeyboardStop, 1500);
-    window.setTimeout(removeEmbeddedKeyboardStop, 3500);
-  }, [data?.show_facebook, items.length]);
-
   if (!items.length) return null;
 
   const scroll = (direction: number) => {
@@ -158,7 +86,6 @@ export function CampMemories({ data }: { data: MemoriesDocument | null | undefin
     });
   };
 
-  const showFacebook = data?.show_facebook !== false;
 
   return (
     <section className="section-padding camp-memories" aria-labelledby="camp-memories-title">
@@ -167,7 +94,7 @@ export function CampMemories({ data }: { data: MemoriesDocument | null | undefin
           {data?.title || "Go Campers Memories"}
         </h2>
         <div className="row gx-lg-5 align-items-start">
-          <div className={(showFacebook ? "col-lg-8" : "col-12") + " mb-5 mb-lg-0"}>
+          <div className="col-12 mb-0">
             <div className="camp-memories-slider">
               <button
                 type="button"
@@ -205,7 +132,6 @@ export function CampMemories({ data }: { data: MemoriesDocument | null | undefin
               </button>
             </div>
           </div>
-          {showFacebook && <FacebookPanel />}
         </div>
       </div>
     </section>

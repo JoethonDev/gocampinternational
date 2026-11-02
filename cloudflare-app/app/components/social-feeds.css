@@ -53,59 +53,96 @@
   background: linear-gradient(135deg, #833ab4, #e1306c 55%, #f77737);
 }
 
-.social-feed-embed {
+.social-feed-content {
   width: 100%;
   max-width: 500px;
-  min-height: 450px;
   margin: 0 auto;
   overflow: hidden;
   border-radius: 12px;
   background: #f5f7f9;
+}
+
+.social-feed-preview {
+  width: 100%;
+}
+
+.social-feed-photo-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(2, 145px);
+  gap: 5px;
+  overflow: hidden;
+  border-radius: 12px 12px 0 0;
+}
+
+.social-feed-photo-grid a {
+  display: block;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.social-feed-photo-grid a:first-child {
+  grid-row: span 2;
+}
+
+.social-feed-photo-grid img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 200ms ease-out;
+}
+
+.social-feed-photo-grid a:hover img {
+  transform: scale(1.04);
+}
+
+.social-feed-preview-note {
+  margin: 0;
+  padding: 0.8rem 1rem;
+  color: #52666b;
+  font-size: 0.875rem;
+  line-height: 1.5;
   text-align: center;
 }
 
-.social-feed-embed .fb-page,
-.social-feed-embed .instagram-media {
-  margin-inline: auto !important;
-}
-
-.social-feed-placeholder {
-  width: 100%;
-  min-height: 450px;
-  background: linear-gradient(110deg, #f5f7f9 30%, #eaf1f4 45%, #f5f7f9 60%);
-  background-size: 200% 100%;
-  animation: social-feed-skeleton 1.8s ease-in-out infinite;
-}
-
-.social-feed-profile-fallback {
+.social-feed-no-photos {
   display: flex;
-  min-height: 450px;
+  min-height: 290px;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 0.7rem;
-  padding: 1.5rem;
   color: #52666b;
+  text-align: center;
 }
 
-.social-feed-profile-fallback i {
+.social-feed-no-photos i {
   font-size: 3rem;
-  color: #c13584;
+  color: #0b94b0;
 }
 
-.social-feed-profile-fallback p,
-.social-feed-fallback {
-  max-width: 270px;
-  margin: auto;
-  line-height: 1.6;
+.social-feed-live iframe {
+  margin: 0 auto;
 }
 
-.social-feed-fallback {
-  display: flex;
-  min-height: 450px;
-  align-items: center;
-  justify-content: center;
-  padding: 1.5rem;
+.social-feed-toggle {
+  align-self: center;
+  margin-top: 0.75rem;
+  padding: 0.45rem 0.75rem;
+  border: 1px solid #a3c8d0;
+  border-radius: 8px;
+  background: #fff;
+  color: #096a83;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.social-feed-toggle:hover,
+.social-feed-toggle:focus-visible {
+  background: #eef9fa;
 }
 
 .social-feed-link {
@@ -119,6 +156,7 @@
   padding: 1rem 0.5rem 0;
   color: var(--brand-primary, #097d9c);
   font-weight: 700;
+  text-align: center;
   text-decoration: none;
 }
 
@@ -127,14 +165,8 @@
   text-decoration: underline;
 }
 
-@keyframes social-feed-skeleton {
-  to {
-    background-position-x: -200%;
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .social-feed-placeholder {
-    animation: none;
+  .social-feed-photo-grid img {
+    transition: none;
   }
 }
