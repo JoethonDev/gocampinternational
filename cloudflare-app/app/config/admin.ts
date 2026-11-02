@@ -26,6 +26,7 @@ export const ADMIN_NAV_GROUPS: AdminNavGroup[] = [
   {
     label: "Experience",
     items: [
+      { href: "/admin/about", label: "About Us", icon: "bi-person-badge" },
       { href: "/admin/documents/site_settings", label: "Visibility", icon: "bi-toggles" },
       { href: "/admin/documents/faq", label: "FAQs", icon: "bi-question-circle" },
       {
