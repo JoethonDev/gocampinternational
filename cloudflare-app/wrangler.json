@@ -44,7 +44,10 @@
     "run_worker_first": [
       "/images/*",
       "/uploads/*",
-      "/media/*"
+      "/media/*",
+      "/robots.txt",
+      "/sitemap.xml",
+      "/llms.txt"
     ]
   }
 }

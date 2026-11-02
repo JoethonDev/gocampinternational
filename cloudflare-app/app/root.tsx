@@ -15,6 +15,7 @@ import type { CategoryRecord, DestinationRecord, SiteSettings } from "./lib/doma
 import { SiteHeader } from "./components/site/SiteHeader";
 import { SiteFooter } from "./components/site/SiteFooter";
 import { SITE } from "./config/site";
+import { safeJsonLd } from "./lib/seo";
 import { LeadModal } from "./components/LeadModal";
 import { SiteInteractions } from "./components/SiteInteractions";
 import { NotFoundPage, ServiceErrorPage } from "./components/ui/ErrorPages";
@@ -23,7 +24,8 @@ import "./styles/motion.css";
 
 export async function loader({ request, context }: Route.LoaderArgs) {
   const environment = context.cloudflare.env.GOCAMP_ENV;
-  const origin = new URL(request.url).origin;
+  const origin = environment === "production"
+    ? "https://gocampinternational.net" : new URL(request.url).origin;
   if (new URL(request.url).pathname.startsWith("/admin")) {
     return { destinations: [], categories: [], settings: {}, environment, origin };
   }
@@ -69,16 +71,41 @@ export const links: Route.LinksFunction = () => [
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const data = useRouteLoaderData("root") as
-    { destinations: DestinationRecord[]; categories: CategoryRecord[] } | undefined;
+    { destinations: DestinationRecord[]; categories: CategoryRecord[]; origin: string } | undefined;
   const location = useLocation();
   const navigation = useNavigation();
   const isAdmin = location.pathname.startsWith("/admin");
+  const base = data?.origin || "https://gocampinternational.net";
   return (
     <html lang="en">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href={SITE.images.favicon} />
+        {!isAdmin && (
+          <script type="application/ld+json" dangerouslySetInnerHTML={{
+            __html: safeJsonLd({
+              "@context": "https://schema.org",
+              "@graph": [
+                {
+                  "@type": "Organization",
+                  "@id": base + "/#organization",
+                  name: SITE.name, url: base + "/",
+                  logo: base + SITE.images.logo,
+                  email: SITE.email, telephone: SITE.phone,
+                  sameAs: [SITE.social.facebook, SITE.social.instagram, SITE.social.linkedin]
+                },
+                {
+                  "@type": "WebSite",
+                  "@id": base + "/#website",
+                  url: base + "/", name: SITE.name,
+                  publisher: { "@id": base + "/#organization" },
+                  inLanguage: "en"
+                }
+              ]
+            })
+          }} />
+        )}
         <Meta />
         <Links />
       </head>
