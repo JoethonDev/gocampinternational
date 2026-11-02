@@ -118,7 +118,7 @@ export default {
       });
     }
   },
-  async scheduled(_event: ScheduledEvent, env: Env, ctx: ExecutionContext) {
+  async scheduled(_event: ScheduledController, env: Env, ctx: ExecutionContext) {
     if (env.GOCAMP_ENV !== "staging") return;
     ctx.waitUntil(
       backfillWebp(env, 20).then((result) => {

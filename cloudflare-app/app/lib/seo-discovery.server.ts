@@ -50,7 +50,7 @@ function response(body: string, type: string, ttl = 900) {
 export async function discoveryResponse(url: URL, env: Env): Promise<Response | null> {
   const path = url.pathname;
   if (!["/robots.txt", "/sitemap.xml", "/llms.txt"].includes(path)) return null;
-  if (env.GOCAMP_ENV !== "production") {
+  if (String(env.GOCAMP_ENV) !== "production") {
     return path === "/robots.txt"
       ? response("User-agent: *\nDisallow: /\n", "text/plain; charset=utf-8", 300)
       : new Response("Not found", { status: 404, headers: { "x-robots-tag": "noindex,nofollow" } });

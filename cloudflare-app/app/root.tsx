@@ -23,7 +23,7 @@ import "./app.css";
 import "./styles/motion.css";
 
 export async function loader({ request, context }: Route.LoaderArgs) {
-  const environment = context.cloudflare.env.GOCAMP_ENV;
+  const environment: string = context.cloudflare.env.GOCAMP_ENV;
   const origin =
     environment === "production" ? "https://gocampinternational.net" : new URL(request.url).origin;
   if (new URL(request.url).pathname.startsWith("/admin")) {
