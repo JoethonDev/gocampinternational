@@ -1,5 +1,4 @@
-import { cp, mkdir, readdir, stat, readFile, writeFile, rm } from "node:fs/promises";
-import { execFileSync } from "node:child_process";
+import { cp, mkdir, readdir, stat, readFile, rm } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -69,12 +68,4 @@ for (const item of inventory) {
   paths.add(key);
 }
 
-const revision = execFileSync("git", ["rev-parse", "HEAD"], {
-  cwd: source,
-  encoding: "utf8"
-}).trim();
-await writeFile(path.join(root, "public", "migration-commit.txt"), revision + "\n");
-console.log(
-  "Prepared R2-backed legacy inventory (" + inventory.length + " media files); revision",
-  revision.slice(0, 12)
-);
+console.log("Prepared R2-backed legacy inventory (" + inventory.length + " media files)");
