@@ -68,6 +68,7 @@ function CampPhotoPreview({
 
 function FacebookPage({ photos }: { photos: MemoryItem[] }) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const widthRef = useRef(340);
   const [width, setWidth] = useState(340);
   const [ready, setReady] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -77,12 +78,12 @@ function FacebookPage({ photos }: { photos: MemoryItem[] }) {
     if (!element) return;
     const measure = () => {
       const nextWidth = Math.max(180, Math.min(500, Math.floor(element.clientWidth)));
-      setWidth((previous) => {
-        if (previous === nextWidth) return previous;
+      if (widthRef.current !== nextWidth) {
+        widthRef.current = nextWidth;
         setReady(false);
         setFailed(false);
-        return nextWidth;
-      });
+        setWidth(nextWidth);
+      }
     };
     measure();
     if (!("ResizeObserver" in window)) return;
