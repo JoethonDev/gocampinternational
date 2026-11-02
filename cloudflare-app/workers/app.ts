@@ -1,3 +1,4 @@
+import { getMediaObject, imageResponse, requestedWidth } from "../app/lib/responsive-media.server";
 import { backfillWebp } from "../app/lib/media-backfill.server";
 import { createRequestHandler } from "react-router";
 import { logEvent } from "../app/lib/logger.server";
@@ -42,29 +43,26 @@ async function serveR2Image(request: Request, env: Env): Promise<Response> {
   ) {
     return new Response("Not found", { status: 404 });
   }
-  let r2Key = key;
-  if (/\.(png|gif|jpe?g)$/i.test(key)) {
-    const registered = await env.DB.prepare(
-      "SELECT object_key,mime_type FROM media_assets WHERE legacy_path=? AND is_public=1 LIMIT 1"
-    ).bind("/" + key).first<{ object_key: string; mime_type: string }>();
-    if (registered?.mime_type === "image/webp") r2Key = registered.object_key;
-  }
-  const obj = request.method === "HEAD" ? await env.MEDIA.head(r2Key) : await env.MEDIA.get(r2Key);
-  if (obj) {
-    const headers = new Headers();
-    obj.writeHttpMetadata(headers);
-    headers.set("Cache-Control", r2Key === key ? "public, max-age=86400" : "public, max-age=3600");
-    headers.set("X-Content-Type-Options", "nosniff");
-    headers.set("ETag", obj.httpEtag);
-    headers.set("X-GoCamp-Media-Source", "r2");
-    if (request.headers.get("If-None-Match") === obj.httpEtag) {
-      return new Response(null, { status: 304, headers });
+  const width = requestedWidth(new URL(request.url));
+  if (width) {
+    const row = await env.DB.prepare(
+      "SELECT id,object_key,mime_type,sha256,width FROM media_assets WHERE legacy_path=? AND is_public=1 LIMIT 1"
+    ).bind("/" + key).first<{
+      id: string; object_key: string; mime_type: string; sha256: string; width: number | null
+    }>();
+    if (row) {
+      const object = await getMediaObject(env, row, width);
+      if (object) return imageResponse(request, object);
     }
-    return new Response(request.method === "HEAD" ? null : (obj as R2ObjectBody).body, {
-      status: 200,
-      headers
-    });
   }
+  const registered = /\.(jpg|jpeg|png|gif)$/i.test(key)
+    ? await env.DB.prepare(
+      "SELECT object_key,mime_type FROM media_assets WHERE legacy_path=? AND is_public=1"
+    ).bind("/" + key).first<{ object_key: string; mime_type: string }>()
+    : null;
+  const storedKey = registered?.mime_type === "image/webp" ? registered.object_key : key;
+  const object = await env.MEDIA.get(storedKey);
+  if (object) return imageResponse(request, object);
   // R2 is the source of truth: no local/GitHub static-asset fallback after migration.
   return new Response("Image not found", { status: 404 });
 }
