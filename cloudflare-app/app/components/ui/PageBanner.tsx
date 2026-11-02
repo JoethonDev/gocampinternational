@@ -13,7 +13,13 @@ export function PageBanner({
   return (
     <div className="container-fluid p-0">
       <div className="position-relative">
-        <OptimizedImage src={image} className="img-fluid w-100 page-banner-image" sizes="100vw" priority alt={alt} />
+        <OptimizedImage
+          src={image}
+          className="img-fluid w-100 page-banner-image"
+          sizes="100vw"
+          priority
+          alt={alt}
+        />
         {hiddenTitle ? (
           <h1 className="visually-hidden">{title}</h1>
         ) : (

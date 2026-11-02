@@ -20,9 +20,14 @@ function HeroCarousel() {
         {HOME_HERO_SLIDES.map((slide, index) => (
           <div className={"carousel-item" + (index === 0 ? " active" : "")} key={slide.image}>
             <div className="hero-section position-relative d-flex align-items-center justify-content-center text-center">
-              <OptimizedImage src={slide.image} alt={slide.title} priority={index === 0}
-                sizes="100vw" className="position-absolute w-100 h-100 object-fit-cover"
-                style={{ inset: 0 }} />
+              <OptimizedImage
+                src={slide.image}
+                alt={slide.title}
+                priority={index === 0}
+                sizes="100vw"
+                className="position-absolute w-100 h-100 object-fit-cover"
+                style={{ inset: 0 }}
+              />
               <div className="hero-overlay" />
               <div className="container position-relative home-hero-caption d-flex flex-column align-items-center justify-content-end text-center">
                 {index === 0 ? (
@@ -72,9 +77,11 @@ function DestinationsSection({ destinations }: { destinations: DestinationRecord
               >
                 <OptimizedImage
                   src={destination.banner || SITE.images.placeholder}
-                  className="card-img" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  className="card-img"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   alt={`Summer camps in ${destination.name} — Go Camp International`}
-                  width={960} height={640}
+                  width={960}
+                  height={640}
                   loading="lazy"
                 />
                 <div className="card-img-overlay d-flex align-items-end p-0">
@@ -119,7 +126,8 @@ function FeaturedCategories({ categories }: { categories: CategoryRecord[] }) {
                     <OptimizedImage
                       src={category.banner || SITE.images.placeholder}
                       alt={`${category.name} summer camp programs — Go Camp International`}
-                      width={960} height={640}
+                      width={960}
+                      height={640}
                       className="card-img-top h-100 w-100 object-fit-cover category-card-image"
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       loading="lazy"

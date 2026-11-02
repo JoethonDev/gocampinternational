@@ -8,14 +8,27 @@ export function safeJsonLd(value: unknown) {
   return JSON.stringify(value).replace(/</g, "\\u003c");
 }
 export function seoMeta({
-  title, description, path, origin, image = "/images/banner.webp", robots
+  title,
+  description,
+  path,
+  origin,
+  image = "/images/banner.webp",
+  robots
 }: {
-  title: string; description: string; path: string; origin: string;
-  image?: string; robots?: string;
+  title: string;
+  description: string;
+  path: string;
+  origin: string;
+  image?: string;
+  robots?: string;
 }) {
   const canonical = new URL(path, origin || "https://gocampinternational.net").href;
   const imageUrl = new URL(image, origin || "https://gocampinternational.net").href;
-  const summary = description.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim().slice(0, 160);
+  const summary = description
+    .replace(/<[^>]*>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 160);
   return [
     { title },
     { name: "description", content: summary },

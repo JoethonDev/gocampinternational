@@ -10,7 +10,9 @@ export async function loader({ request, context, params }: Route.LoaderArgs) {
   const env = context.cloudflare.env;
   const row = await env.DB.prepare(
     "SELECT id,object_key,mime_type,sha256,width FROM media_assets WHERE id=? AND is_public=1"
-  ).bind(id).first<ManagedMedia>();
+  )
+    .bind(id)
+    .first<ManagedMedia>();
   if (!row) throw new Response("Not found", { status: 404 });
   const object = await getMediaObject(env, row, requestedWidth(new URL(request.url)));
   if (!object) throw new Response("Not found", { status: 404 });

@@ -41,9 +41,13 @@ function Hero({ destination }: { destination: DestinationRecord }) {
       <div className="container position-relative destination-hero-caption">
         <h1>{destination.name}</h1>
       </div>
-      <OptimizedImage src={destination.banner || SITE.images.placeholder}
-        alt={"Summer camp in " + destination.name} priority sizes="100vw"
-        className="hero-background position-absolute top-0 start-0 w-100 h-100 object-fit-cover" />
+      <OptimizedImage
+        src={destination.banner || SITE.images.placeholder}
+        alt={"Summer camp in " + destination.name}
+        priority
+        sizes="100vw"
+        className="hero-background position-absolute top-0 start-0 w-100 h-100 object-fit-cover"
+      />
     </section>
   );
 }

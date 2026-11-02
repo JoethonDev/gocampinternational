@@ -28,7 +28,8 @@ export function ProgramCard({
             <OptimizedImage
               src={program.image || SITE.images.placeholder}
               alt={program.name}
-              className="card-img-top h-100 w-100 object-fit-cover program-card-image" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              className="card-img-top h-100 w-100 object-fit-cover program-card-image"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
               loading="lazy"
             />
             <div className="position-absolute bottom-0 start-0 w-100 h-100 program-card-scrim" />

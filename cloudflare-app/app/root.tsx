@@ -24,8 +24,8 @@ import "./styles/motion.css";
 
 export async function loader({ request, context }: Route.LoaderArgs) {
   const environment = context.cloudflare.env.GOCAMP_ENV;
-  const origin = environment === "production"
-    ? "https://gocampinternational.net" : new URL(request.url).origin;
+  const origin =
+    environment === "production" ? "https://gocampinternational.net" : new URL(request.url).origin;
   if (new URL(request.url).pathname.startsWith("/admin")) {
     return { destinations: [], categories: [], settings: {}, environment, origin };
   }
@@ -83,28 +83,34 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href={SITE.images.favicon} />
         {!isAdmin && (
-          <script type="application/ld+json" dangerouslySetInnerHTML={{
-            __html: safeJsonLd({
-              "@context": "https://schema.org",
-              "@graph": [
-                {
-                  "@type": "Organization",
-                  "@id": base + "/#organization",
-                  name: SITE.name, url: base + "/",
-                  logo: base + SITE.images.logo,
-                  email: SITE.email, telephone: SITE.phone,
-                  sameAs: [SITE.social.facebook, SITE.social.instagram, SITE.social.linkedin]
-                },
-                {
-                  "@type": "WebSite",
-                  "@id": base + "/#website",
-                  url: base + "/", name: SITE.name,
-                  publisher: { "@id": base + "/#organization" },
-                  inLanguage: "en"
-                }
-              ]
-            })
-          }} />
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: safeJsonLd({
+                "@context": "https://schema.org",
+                "@graph": [
+                  {
+                    "@type": "Organization",
+                    "@id": base + "/#organization",
+                    name: SITE.name,
+                    url: base + "/",
+                    logo: base + SITE.images.logo,
+                    email: SITE.email,
+                    telephone: SITE.phone,
+                    sameAs: [SITE.social.facebook, SITE.social.instagram, SITE.social.linkedin]
+                  },
+                  {
+                    "@type": "WebSite",
+                    "@id": base + "/#website",
+                    url: base + "/",
+                    name: SITE.name,
+                    publisher: { "@id": base + "/#organization" },
+                    inLanguage: "en"
+                  }
+                ]
+              })
+            }}
+          />
         )}
         <Meta />
         <Links />

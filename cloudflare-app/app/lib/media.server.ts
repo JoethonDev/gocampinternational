@@ -42,7 +42,6 @@ function detectImageType(bytes: Uint8Array): ImageType | null {
   return null;
 }
 
-
 const WEBP_QUALITY = 86;
 const WEBP_PIPELINE = "webp-q86-v1";
 
@@ -70,7 +69,9 @@ async function uploadOne(file: File, env: Env): Promise<UploadedMedia> {
   if (detected.type === "image/webp") {
     const existing = await env.DB.prepare(
       "SELECT id FROM media_assets WHERE sha256=? AND mime_type='image/webp' AND is_public=1 LIMIT 1"
-    ).bind(sourceSha).first<{ id: string }>();
+    )
+      .bind(sourceSha)
+      .first<{ id: string }>();
     if (existing) return { id: existing.id, path: `/media/${existing.id}`, name: displayName };
   }
 
@@ -79,7 +80,9 @@ async function uploadOne(file: File, env: Env): Promise<UploadedMedia> {
   const objectKey = `images/optimized/${sourceSha.slice(0, 2)}/${sourceSha}-${WEBP_PIPELINE}.webp`;
   const reuse = await env.DB.prepare(
     "SELECT id FROM media_assets WHERE object_key=? AND is_public=1 LIMIT 1"
-  ).bind(objectKey).first<{ id: string }>();
+  )
+    .bind(objectKey)
+    .first<{ id: string }>();
   if (reuse) return { id: reuse.id, path: `/media/${reuse.id}`, name: displayName };
 
   const cached = await env.MEDIA.head(objectKey);
@@ -89,8 +92,11 @@ async function uploadOne(file: File, env: Env): Promise<UploadedMedia> {
   if (!cached || cached.httpMetadata?.contentType !== "image/webp" || !contentSha) {
     // Transform once at upload time, not on every public image request.
     const transformed = (
-      await env.IMAGES.input(new Blob([buffer]).stream())
-        .output({ format: "image/webp", quality: WEBP_QUALITY, anim: true })
+      await env.IMAGES.input(new Blob([buffer]).stream()).output({
+        format: "image/webp",
+        quality: WEBP_QUALITY,
+        anim: true
+      })
     ).response();
     if (!transformed.ok || !transformed.headers.get("content-type")?.startsWith("image/webp")) {
       throw new Response("Image optimization failed", { status: 502 });
@@ -105,7 +111,9 @@ async function uploadOne(file: File, env: Env): Promise<UploadedMedia> {
   // Reuse the existing registered object rather than storing another copy.
   const sameBytes = await env.DB.prepare(
     "SELECT id FROM media_assets WHERE sha256=? AND mime_type='image/webp' AND is_public=1 LIMIT 1"
-  ).bind(contentSha).first<{ id: string }>();
+  )
+    .bind(contentSha)
+    .first<{ id: string }>();
   if (sameBytes) return { id: sameBytes.id, path: `/media/${sameBytes.id}`, name: displayName };
 
   if (output) {
@@ -122,12 +130,16 @@ async function uploadOne(file: File, env: Env): Promise<UploadedMedia> {
   try {
     await env.DB.prepare(
       `INSERT INTO media_assets (id,object_key,display_name,mime_type,bytes,sha256,is_public) VALUES(?,?,?,'image/webp',?,?,1)`
-    ).bind(id, objectKey, displayName, byteSize, contentSha).run();
+    )
+      .bind(id, objectKey, displayName, byteSize, contentSha)
+      .run();
   } catch (error) {
     // Handle concurrent identical uploads. Do not delete their shared R2 object.
     const raced = await env.DB.prepare(
       "SELECT id FROM media_assets WHERE object_key=? AND is_public=1 LIMIT 1"
-    ).bind(objectKey).first<{ id: string }>();
+    )
+      .bind(objectKey)
+      .first<{ id: string }>();
     if (raced) return { id: raced.id, path: `/media/${raced.id}`, name: displayName };
     throw error;
   }

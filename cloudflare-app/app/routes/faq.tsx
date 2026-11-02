@@ -22,20 +22,33 @@ export function meta({ matches }: Route.MetaArgs) {
 
 export default function Faq({ loaderData }: Route.ComponentProps) {
   const questions = Array.isArray(loaderData.items) ? loaderData.items : [];
-  const entities = questions.map((item) => ({
-    "@type": "Question",
-    name: String(item.question || item.q || "").replace(/<[^>]*>/g, "").trim(),
-    acceptedAnswer: {
-      "@type": "Answer",
-      text: String(item.answer || item.a || "").replace(/<[^>]*>/g, " ").trim()
-    }
-  })).filter((item) => item.name && item.acceptedAnswer.text);
+  const entities = questions
+    .map((item) => ({
+      "@type": "Question",
+      name: String(item.question || item.q || "")
+        .replace(/<[^>]*>/g, "")
+        .trim(),
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: String(item.answer || item.a || "")
+          .replace(/<[^>]*>/g, " ")
+          .trim()
+      }
+    }))
+    .filter((item) => item.name && item.acceptedAnswer.text);
   return (
     <>
       {entities.length > 0 && (
-        <script type="application/ld+json" dangerouslySetInnerHTML={{
-          __html: safeJsonLd({ "@context": "https://schema.org", "@type": "FAQPage", mainEntity: entities })
-        }} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: safeJsonLd({
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              mainEntity: entities
+            })
+          }}
+        />
       )}
       <FaqPage items={loaderData.items} />
     </>

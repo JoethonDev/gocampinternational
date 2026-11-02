@@ -48,9 +48,15 @@ async function serveR2Image(request: Request, env: Env): Promise<Response> {
   if (width) {
     const row = await env.DB.prepare(
       "SELECT id,object_key,mime_type,sha256,width FROM media_assets WHERE legacy_path=? AND is_public=1 LIMIT 1"
-    ).bind("/" + key).first<{
-      id: string; object_key: string; mime_type: string; sha256: string; width: number | null
-    }>();
+    )
+      .bind("/" + key)
+      .first<{
+        id: string;
+        object_key: string;
+        mime_type: string;
+        sha256: string;
+        width: number | null;
+      }>();
     if (row) {
       const object = await getMediaObject(env, row, width);
       if (object) return imageResponse(request, object);
@@ -58,8 +64,10 @@ async function serveR2Image(request: Request, env: Env): Promise<Response> {
   }
   const registered = /\.(jpg|jpeg|png|gif)$/i.test(key)
     ? await env.DB.prepare(
-      "SELECT object_key,mime_type FROM media_assets WHERE legacy_path=? AND is_public=1"
-    ).bind("/" + key).first<{ object_key: string; mime_type: string }>()
+        "SELECT object_key,mime_type FROM media_assets WHERE legacy_path=? AND is_public=1"
+      )
+        .bind("/" + key)
+        .first<{ object_key: string; mime_type: string }>()
     : null;
   const storedKey = registered?.mime_type === "image/webp" ? registered.object_key : key;
   const object = await env.MEDIA.get(storedKey);
@@ -112,8 +120,10 @@ export default {
   },
   async scheduled(_event: ScheduledEvent, env: Env, ctx: ExecutionContext) {
     if (env.GOCAMP_ENV !== "staging") return;
-    ctx.waitUntil(backfillWebp(env, 20).then((result) => {
-      logEvent("info", "webp backfill", result);
-    }));
+    ctx.waitUntil(
+      backfillWebp(env, 20).then((result) => {
+        logEvent("info", "webp backfill", result);
+      })
+    );
   }
 } satisfies ExportedHandler<Env>;
