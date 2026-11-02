@@ -19,7 +19,20 @@ const aliases: Readonly<Record<string, string>> = {
   "about_us.php": "/about",
   contact_us: "/contact",
   "contact_us.php": "/contact",
-  "faq.php": "/faq"
+  "faq.php": "/faq",
+  // Historical PHP pages still surfaced in search results. Keep equivalent permanent routes.
+  "programs.php": "/#program-categories",
+  "kids_camp.php": "/program/category?category=kids-camps",
+  "adult_academic.php": "/program/category?category=adult-academic",
+  "young_leader_program.php": "/program/category?category=young-leader-program",
+  "soccer_program.php": "/program/category?category=soccer-camps",
+  "language_and_activity_camps.php": "/program/category?category=kids-camps",
+  "italy.php": "/destinations/italy",
+  "switzerland.php": "/destinations/switzerland",
+  "germany.php": "/destinations/germany",
+  "england.php": "/destinations/uk",
+  "spain.php": "/destinations/spain",
+  "faq_details_1.php": "/faq"
 };
 
 export function loader({ params }: Route.LoaderArgs) {
