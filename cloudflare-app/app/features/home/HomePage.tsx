@@ -73,7 +73,8 @@ function DestinationsSection({ destinations }: { destinations: DestinationRecord
                 <OptimizedImage
                   src={destination.banner || SITE.images.placeholder}
                   className="card-img" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  alt={destination.name}
+                  alt={`Summer camps in ${destination.name} — Go Camp International`}
+                  width={960} height={640}
                   loading="lazy"
                 />
                 <div className="card-img-overlay d-flex align-items-end p-0">
@@ -117,7 +118,8 @@ function FeaturedCategories({ categories }: { categories: CategoryRecord[] }) {
                   <div className="position-relative overflow-hidden category-card-media">
                     <OptimizedImage
                       src={category.banner || SITE.images.placeholder}
-                      alt={category.name}
+                      alt={`${category.name} summer camp programs — Go Camp International`}
+                      width={960} height={640}
                       className="card-img-top h-100 w-100 object-fit-cover category-card-image"
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       loading="lazy"
