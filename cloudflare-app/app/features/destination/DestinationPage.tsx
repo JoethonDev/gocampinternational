@@ -1,4 +1,4 @@
-import { heroImageStyles, responsiveSrcSet } from "../../lib/responsive-media";
+import { responsiveSrcSet } from "../../lib/responsive-media";
 import { Link } from "react-router";
 import { CampMemories } from "../../components/CampMemories";
 import { FaqAccordion } from "../../components/FaqAccordion";
@@ -41,15 +41,11 @@ function Hero({ destination }: { destination: DestinationRecord }) {
       <div className="container position-relative destination-hero-caption">
         <h1>{destination.name}</h1>
       </div>
-      <div
-        className="hero-background gc-responsive-hero position-absolute top-0 start-0 w-100 h-100"
-        style={{
-          ...heroImageStyles(destination.banner || SITE.images.placeholder),
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundAttachment: "fixed"
-        }}
-      />
+      <img src={destination.banner || SITE.images.placeholder}
+        srcSet={responsiveSrcSet(destination.banner || SITE.images.placeholder)} sizes="100vw"
+        alt={"Summer camp destination: " + destination.name} loading="eager"
+        fetchPriority="high" decoding="async"
+        className="hero-background position-absolute top-0 start-0 w-100 h-100 object-fit-cover" />
     </section>
   );
 }
