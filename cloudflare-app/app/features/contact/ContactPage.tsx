@@ -91,7 +91,7 @@ function ContactForm() {
             </div>
             <div className="col-12">
               <label htmlFor="contact-message" className="form-label">
-                Message
+                Message *
               </label>
               <textarea
                 id="contact-message"
