@@ -125,7 +125,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         </main>
         {!isAdmin && (
           <>
-            <SiteFooter />
+            <SiteFooter categories={data?.categories || []} destinations={data?.destinations || []} />
             <LeadModal />
             <SiteInteractions />
           </>
