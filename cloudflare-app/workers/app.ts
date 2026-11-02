@@ -1,3 +1,4 @@
+import { backfillWebp } from "../app/lib/media-backfill.server";
 import { discoveryResponse } from "../app/lib/seo-discovery.server";
 import { createRequestHandler } from "react-router";
 import { logEvent } from "../app/lib/logger.server";
@@ -109,5 +110,11 @@ export default {
         }
       });
     }
+  },
+  async scheduled(_event: ScheduledEvent, env: Env, ctx: ExecutionContext) {
+    if (env.GOCAMP_ENV !== "staging") return;
+    ctx.waitUntil(backfillWebp(env, 17).then((result) => {
+      logEvent("info", "staging WebP backfill", result);
+    }));
   }
 } satisfies ExportedHandler<Env>;
