@@ -43,69 +43,101 @@ function detectImageType(bytes: Uint8Array): ImageType | null {
   return null;
 }
 
+
+async function hashBytes(bytes: ArrayBuffer) {
+  const hash = new Uint8Array(await crypto.subtle.digest("SHA-256", bytes));
+  return Array.from(hash, (value) => value.toString(16).padStart(2, "0")).join("");
+}
+
 async function uploadOne(file: File, env: Env, ctx?: ExecutionContext): Promise<UploadedMedia> {
   if (!file.size || file.size > MAX_UPLOAD_BYTES) {
     throw new Response("Choose an image up to 3 MB", { status: 413 });
   }
-
-  const buffer = await file.arrayBuffer();
-  const bytes = new Uint8Array(buffer);
-  const imageType = detectImageType(bytes);
+  const source = await file.arrayBuffer();
+  const imageType = detectImageType(new Uint8Array(source));
   if (!imageType) {
     throw new Response("Unsupported or invalid image format", { status: 415 });
   }
 
-  const digest = new Uint8Array(await crypto.subtle.digest("SHA-256", buffer));
-  const checksum = Array.from(digest, (value) => value.toString(16).padStart(2, "0")).join("");
+  const sourceSha = await hashBytes(source);
+  const displayName = file.name.slice(0, 180).replace(/[\u0000-\u001f]/g, "");
+  // Content hash is the upload cache key. Changed bytes with the same name never
+  // collide, and byte-identical uploads with different names reuse one media ID.
+  const objectKey = "images/optimized-upload/" + sourceSha.slice(0, 2) +
+    "/" + sourceSha + "-webp86-v1.webp";
   const existing = await env.DB.prepare(
-    "SELECT id,object_key,mime_type FROM media_assets WHERE sha256=? AND is_public=1 LIMIT 1"
-  )
-    .bind(checksum)
-    .first<{ id: string; object_key: string; mime_type: string }>();
+    "SELECT id,object_key,mime_type FROM media_assets WHERE object_key=? AND is_public=1 LIMIT 1"
+  ).bind(objectKey).first<{ id: string; object_key: string; mime_type: string }>();
   if (existing) {
-    // A retry/duplicate still repairs missing variants, without creating a new media asset.
-    ctx?.waitUntil(
-      optimizeStoredMedia(env, existing).catch(() => undefined)
-    );
-    return {
-      id: existing.id,
-      path: `/media/${existing.id}`,
-      name: file.name.slice(0, 180).replace(/[\u0000-\u001f]/g, "")
-    };
+    ctx?.waitUntil(optimizeStoredMedia(env, existing).catch(() => undefined));
+    return { id: existing.id, path: "/media/" + existing.id, name: displayName };
+  }
+  // Existing WebP assets already registered under a different key are also reusable.
+  if (imageType.type === "image/webp") {
+    const shared = await env.DB.prepare(
+      "SELECT id,object_key,mime_type FROM media_assets WHERE sha256=? AND mime_type='image/webp' AND is_public=1 LIMIT 1"
+    ).bind(sourceSha).first<{ id: string; object_key: string; mime_type: string }>();
+    if (shared) {
+      ctx?.waitUntil(optimizeStoredMedia(env, shared).catch(() => undefined));
+      return { id: shared.id, path: "/media/" + shared.id, name: displayName };
+    }
   }
 
-  const objectKey = `images/${checksum.slice(0, 2)}/${checksum}.${imageType.extension}`;
-  const existed = Boolean(await env.MEDIA.head(objectKey));
-  if (!existed) {
-    await env.MEDIA.put(objectKey, buffer, {
-      httpMetadata: {
-        contentType: imageType.type,
-        cacheControl: "public,max-age=86400"
+  let saved = source;
+  const TWO_MB = 2 * 1024 * 1024;
+  if (imageType.type !== "image/webp" || source.byteLength > TWO_MB) {
+    const run = async (quality: number) => {
+      const response = (await env.IMAGES.input(new Blob([source]).stream())
+        .transform({ width: 2560, fit: "scale-down" })
+        .output({ format: "image/webp", quality, anim: true })).response();
+      if (!response.ok || !response.headers.get("content-type")?.startsWith("image/webp")) {
+        throw new Response("WebP conversion failed", { status: 502 });
       }
+      return response.arrayBuffer();
+    };
+    saved = await run(86);
+    if (saved.byteLength > TWO_MB) saved = await run(76);
+    if (saved.byteLength > TWO_MB) saved = await run(66);
+    if (saved.byteLength > TWO_MB) {
+      throw new Response("Optimized image still exceeds 2 MB", { status: 413 });
+    }
+  }
+  const checksum = await hashBytes(saved);
+  const existingWebp = await env.DB.prepare(
+    "SELECT id,object_key,mime_type FROM media_assets WHERE sha256=? AND mime_type='image/webp' AND is_public=1 LIMIT 1"
+  ).bind(checksum).first<{ id: string; object_key: string; mime_type: string }>();
+  if (existingWebp) {
+    ctx?.waitUntil(optimizeStoredMedia(env, existingWebp).catch(() => undefined));
+    return { id: existingWebp.id, path: "/media/" + existingWebp.id, name: displayName };
+  }
+  const alreadyStored = Boolean(await env.MEDIA.head(objectKey));
+  if (!alreadyStored) {
+    await env.MEDIA.put(objectKey, saved, {
+      httpMetadata: {
+        contentType: "image/webp",
+        cacheControl: "public, max-age=31536000, immutable"
+      },
+      customMetadata: { sha256: checksum, source_sha256: sourceSha, pipeline: "webp86-v1" }
     });
   }
-
   const id = crypto.randomUUID();
-  const displayName = file.name.slice(0, 180).replace(/[\u0000-\u001f]/g, "");
   try {
     await env.DB.prepare(
-      `INSERT INTO media_assets
-           (id,object_key,display_name,mime_type,bytes,sha256,is_public)
-         VALUES(?,?,?,?,?,?,1)`
-    )
-      .bind(id, objectKey, displayName, imageType.type, buffer.byteLength, checksum)
-      .run();
+      "INSERT INTO media_assets (id,object_key,display_name,mime_type,bytes,sha256,is_public) VALUES(?,?,?,'image/webp',?,?,1)"
+    ).bind(id, objectKey, displayName, saved.byteLength, checksum).run();
   } catch (error) {
-    if (!existed) await env.MEDIA.delete(objectKey).catch(() => undefined);
+    // Do not remove a content-addressed R2 key that another concurrent request may use.
+    const raced = await env.DB.prepare(
+      "SELECT id FROM media_assets WHERE object_key=? AND is_public=1 LIMIT 1"
+    ).bind(objectKey).first<{ id: string }>();
+    if (raced) return { id: raced.id, path: "/media/" + raced.id, name: displayName };
     throw error;
   }
-  // The uploaded original is durable before the optimized variants begin.
-  // waitUntil avoids blocking large multi-image uploads on GPU inference.
   ctx?.waitUntil(
-    optimizeStoredMedia(env, { id, object_key: objectKey, mime_type: imageType.type })
+    optimizeStoredMedia(env, { id, object_key: objectKey, mime_type: "image/webp" })
       .catch(() => undefined)
   );
-  return { id, path: `/media/${id}`, name: displayName };
+  return { id, path: "/media/" + id, name: displayName };
 }
 
 export async function uploadMedia(request: Request, env: Env, form: FormData, ctx?: ExecutionContext): Promise<string> {
