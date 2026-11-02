@@ -10,6 +10,9 @@ for (const directory of ["images", "uploads"]) {
   await rm(path.join(root, "public", directory), { recursive: true, force: true });
 }
 
+// Remove stale revision artifacts from incremental or cached local builds.
+await rm(path.join(root, "public", "migration-commit.txt"), { force: true });
+
 // Catalog images and uploads have been migrated to R2.
 // Only ordinary CSS/JS assets remain in the static build.
 const targets = {
