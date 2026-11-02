@@ -3,12 +3,12 @@ import { SITE } from "../config/site";
 import "./social-feeds.css";
 
 type MetaWindow = Window & {
-  FB?: { XFBML?: { parse: (root?: HTMLElement) => void } };
   instgrm?: { Embeds?: { process: () => void } };
 };
 
-// Meta does not publish a dedicated React SDK for these plugins. Load its
-// official browser scripts once, after the widgets approach the viewport.
+// Meta does not publish a dedicated React wrapper for Instagram embeds.
+// Facebook's Page Plugin uses its official iframe URL below, so it doesn't
+// inject Facebook's JavaScript SDK into our React document.
 const scriptLoads = new Map<string, Promise<void>>();
 
 function loadMetaScript(id: string, src: string): Promise<void> {
@@ -86,15 +86,15 @@ function SocialLink({ href, children }: { href: string; children: React.ReactNod
 
 function FacebookPage() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const widgetRef = useRef<HTMLDivElement>(null);
-  const near = useNearViewport(containerRef);
   const [width, setWidth] = useState(340);
-  const [failed, setFailed] = useState(false);
 
   useEffect(() => {
     const element = containerRef.current;
     if (!element) return;
-    const measure = () => setWidth(Math.max(180, Math.min(500, Math.floor(element.clientWidth))));
+    const measure = () => {
+      const nextWidth = Math.max(180, Math.min(500, Math.floor(element.clientWidth)));
+      setWidth((previous) => (previous === nextWidth ? previous : nextWidth));
+    };
     measure();
     if (!("ResizeObserver" in window)) return;
     const resize = new ResizeObserver(measure);
@@ -102,24 +102,16 @@ function FacebookPage() {
     return () => resize.disconnect();
   }, []);
 
-  useEffect(() => {
-    if (!near || failed) return;
-    let alive = true;
-    loadMetaScript(
-      "gocamp-facebook-sdk",
-      "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v25.0"
-    )
-      .then(() => {
-        if (!alive) return;
-        (window as MetaWindow).FB?.XFBML?.parse(widgetRef.current || undefined);
-      })
-      .catch(() => {
-        if (alive) setFailed(true);
-      });
-    return () => {
-      alive = false;
-    };
-  }, [near, width, failed]);
+  const facebookIframeUrl = `https://www.facebook.com/plugins/page.php?${new URLSearchParams({
+    href: SITE.social.facebook,
+    tabs: "timeline",
+    width: String(width),
+    height: "450",
+    small_header: "false",
+    adapt_container_width: "true",
+    hide_cover: "false",
+    show_facepile: "true"
+  }).toString()}`;
 
   return (
     <article className="social-feed-card">
@@ -133,32 +125,17 @@ function FacebookPage() {
         </div>
       </div>
       <div ref={containerRef} className="social-feed-embed" aria-label="Go Camp Facebook page">
-        {failed ? (
-          <p className="social-feed-fallback">
-            Facebook updates are not available to embed in this browser.
-          </p>
-        ) : near ? (
-          <div
-            key={width}
-            ref={widgetRef}
-            className="fb-page"
-            data-href={SITE.social.facebook}
-            data-tabs="timeline"
-            data-width={width}
-            data-height="450"
-            data-small-header="false"
-            data-adapt-container-width="true"
-            data-hide-cover="false"
-            data-show-facepile="true"
-            data-lazy="true"
-          >
-            <blockquote cite={SITE.social.facebook} className="fb-xfbml-parse-ignore">
-              <a href={SITE.social.facebook}>Go Camp International on Facebook</a>
-            </blockquote>
-          </div>
-        ) : (
-          <div className="social-feed-placeholder" aria-hidden="true" />
-        )}
+        <iframe
+          title="Go Camp International Facebook timeline"
+          src={facebookIframeUrl}
+          width={width}
+          height={450}
+          loading="lazy"
+          scrolling="no"
+          allow="encrypted-media"
+          referrerPolicy="strict-origin-when-cross-origin"
+          style={{ display: "block", width: "100%", maxWidth: 500, height: 450, border: 0 }}
+        />
       </div>
       <SocialLink href={SITE.social.facebook}>Visit our Facebook page</SocialLink>
     </article>
