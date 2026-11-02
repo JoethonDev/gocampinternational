@@ -3,7 +3,7 @@ import type { Route } from "./+types/destination";
 import { DestinationPage } from "../features/destination/DestinationPage";
 import { findDestination, listPrograms, loadDocument } from "../lib/catalog.server";
 import type { MemoriesDocument, ProgramRecord, SiteSettings } from "../lib/domain";
-import { originFrom, seoMeta } from "../lib/seo";
+import { originFrom, seoMeta, safeJsonLd } from "../lib/seo";
 
 export async function loader({ params, context }: Route.LoaderArgs) {
   const db = context.cloudflare.env.DB;
@@ -33,13 +33,25 @@ export function meta({ data, matches, location }: Route.MetaArgs) {
     origin: originFrom(matches),
     path: location.pathname,
     title,
-    description: String(destination?.tagline || "Discover Your Adventure").slice(0, 160)
+    description: String(destination?.tagline || "Discover Your Adventure").slice(0, 160),
+    image: String(destination?.banner || "/images/banner.webp"),
+    robots: destination?.status === "coming-soon" || destination?.status === "inactive" ? "noindex,follow" : undefined
   });
 }
 
 export default function Destination({ loaderData }: Route.ComponentProps) {
   const root = useRouteLoaderData("root") as { settings: SiteSettings } | undefined;
+  const base = (root as { origin?: string } | undefined)?.origin || "https://gocampinternational.net";
+  const destination = loaderData.destination;
   return (
+    <>
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd({
+      "@context": "https://schema.org", "@type": "CollectionPage",
+      name: destination.name, url: base + "/destinations/" + encodeURIComponent(destination.slug),
+      description: String(destination.tagline || "").replace(/<[^>]+>/g, ""),
+      primaryImageOfPage: new URL(destination.banner || "/images/banner.webp", base).href,
+      isPartOf: { "@id": base + "/#website" }
+    }) }} />
     <DestinationPage
       destination={loaderData.destination}
       programs={loaderData.related}
@@ -47,5 +59,6 @@ export default function Destination({ loaderData }: Route.ComponentProps) {
       settings={root?.settings || {}}
       memories={loaderData.memories}
     />
+    </>
   );
 }

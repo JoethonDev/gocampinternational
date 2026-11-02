@@ -1,3 +1,4 @@
+import { discoveryResponse } from "../app/lib/seo-discovery.server";
 import { getMediaObject, imageResponse, requestedWidth } from "../app/lib/responsive-media.server";
 import { backfillWebp } from "../app/lib/media-backfill.server";
 import { createRequestHandler } from "react-router";
@@ -72,6 +73,10 @@ export default {
     const started = performance.now();
     try {
       const pathname = new URL(request.url).pathname;
+      if (request.method === "GET" || request.method === "HEAD") {
+        const discovery = await discoveryResponse(new URL(request.url), env);
+        if (discovery) return applyResponseHeaders(discovery, env);
+      }
       if (
         (request.method === "GET" || request.method === "HEAD") &&
         (pathname.startsWith("/images/") || pathname.startsWith("/uploads/"))
