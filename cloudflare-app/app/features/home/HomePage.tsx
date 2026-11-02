@@ -107,7 +107,7 @@ function categoryIntro(value: unknown) {
 
 function FeaturedCategories({ categories }: { categories: CategoryRecord[] }) {
   return (
-    <section className="section-padding bg-light">
+    <section id="program-categories" className="section-padding bg-light">
       <div className="container">
         <div className="text-center mb-5">
           <h2 className="section-title">{HOME_COPY.categoriesTitle}</h2>
