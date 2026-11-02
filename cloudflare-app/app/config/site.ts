@@ -5,6 +5,7 @@ export const SITE = {
   directorTitle: "Managing Director",
   phone: "+20 122 171 9621",
   phoneHref: "tel:+201221719621",
+  whatsappHref: "https://wa.me/201221719621",
   email: "Zeinab@gocampinternational.net",
   emailHref: "mailto:Zeinab@gocampinternational.net",
   social: {
