@@ -108,7 +108,7 @@ export function AboutPage({ content }: { content: AboutPageContent }) {
               <div className="col-md">
                 <h2 id="about-director-title" className="h3 mb-2">{content.profile.name}</h2>
                 <p className="fw-semibold text-secondary">{content.profile.title}</p>
-                {content.profile.body.split("\\n\\n").map((paragraph, index) => (
+                {content.profile.body.split(/\n\s*\n/).map((paragraph, index) => (
                   <p className="fs-5 lh-lg text-secondary" key={index}>{paragraph}</p>
                 ))}
               </div>
