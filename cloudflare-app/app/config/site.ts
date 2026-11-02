@@ -66,7 +66,8 @@ export const ABOUT_SECTIONS: AboutSection[] = [
     title: "About Us",
     image: "/images/about_1.webp",
     body: [
-      "With over 15 years of experience in organizing international summer camps and short-term educational programs, we specialize in creating meaningful overseas experiences for children and young learners."
+      "With over 15 years of experience in organizing international summer camps and short-term educational programs, we specialize in creating meaningful overseas experiences for children and young learners.",
+      "Our work extends beyond summer camps to international language learning, sports and leadership opportunities, school educational travel, and academic guidance where programs are available. We help students and parents understand the options and choose an experience that fits their individual goals."
     ]
   },
   {
@@ -112,3 +113,18 @@ export const ABOUT_SECTIONS: AboutSection[] = [
     ]
   }
 ];
+
+export type AboutPageContent = {
+  profile: { name: string; title: string; body: string };
+  sections: AboutSection[];
+};
+
+export const ABOUT_PAGE_DEFAULT: AboutPageContent = {
+  profile: {
+    name: SITE.director,
+    title: SITE.directorTitle,
+    body:
+      "Families are supported in choosing an appropriate international educational experience, not simply booking a camp. Zeinab El Sokkary helps parents explore programs suited to each student's interests and development, with information about overseas education, sports, language learning and cultural opportunities. GO Camp International also works with schools, parents and international partners through presentations, orientation sessions and educational discussions."
+  },
+  sections: ABOUT_SECTIONS
+};
