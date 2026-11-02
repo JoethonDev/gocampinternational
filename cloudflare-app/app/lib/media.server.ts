@@ -42,56 +42,93 @@ function detectImageType(bytes: Uint8Array): ImageType | null {
   return null;
 }
 
+
+const WEBP_QUALITY = 86;
+const WEBP_PIPELINE = "webp-q86-v1";
+
+async function sha256(bytes: ArrayBuffer): Promise<string> {
+  const digest = new Uint8Array(await crypto.subtle.digest("SHA-256", bytes));
+  return Array.from(digest, (value) => value.toString(16).padStart(2, "0")).join("");
+}
+
+function safeDisplayName(filename: string) {
+  return filename.slice(0, 180).replace(/[\u0000-\u001f]/g, "");
+}
+
 async function uploadOne(file: File, env: Env): Promise<UploadedMedia> {
   if (!file.size || file.size > MAX_UPLOAD_BYTES) {
     throw new Response("Choose an image up to 3 MB", { status: 413 });
   }
-
   const buffer = await file.arrayBuffer();
-  const bytes = new Uint8Array(buffer);
-  const imageType = detectImageType(bytes);
-  if (!imageType) {
-    throw new Response("Unsupported or invalid image format", { status: 415 });
+  const detected = detectImageType(new Uint8Array(buffer));
+  if (!detected) throw new Response("Unsupported or invalid image format", { status: 415 });
+
+  const sourceSha = await sha256(buffer);
+  const displayName = safeDisplayName(file.name);
+
+  // Already-optimized WebP files can be reused without another lossy re-encode.
+  if (detected.type === "image/webp") {
+    const existing = await env.DB.prepare(
+      "SELECT id FROM media_assets WHERE sha256=? AND mime_type='image/webp' AND is_public=1 LIMIT 1"
+    ).bind(sourceSha).first<{ id: string }>();
+    if (existing) return { id: existing.id, path: `/media/${existing.id}`, name: displayName };
   }
 
-  const digest = new Uint8Array(await crypto.subtle.digest("SHA-256", buffer));
-  const checksum = Array.from(digest, (value) => value.toString(16).padStart(2, "0")).join("");
-  const existing = await env.DB.prepare(
-    "SELECT id FROM media_assets WHERE sha256=? AND is_public=1 LIMIT 1"
-  )
-    .bind(checksum)
-    .first<{ id: string }>();
-  if (existing) {
-    return {
-      id: existing.id,
-      path: `/media/${existing.id}`,
-      name: file.name.slice(0, 180).replace(/[\u0000-\u001f]/g, "")
-    };
+  // A content hash, not a filename, prevents a renamed duplicate upload and
+  // guarantees that replacing a file of the same name never serves stale pixels.
+  const objectKey = `images/optimized/${sourceSha.slice(0, 2)}/${sourceSha}-${WEBP_PIPELINE}.webp`;
+  const reuse = await env.DB.prepare(
+    "SELECT id FROM media_assets WHERE object_key=? AND is_public=1 LIMIT 1"
+  ).bind(objectKey).first<{ id: string }>();
+  if (reuse) return { id: reuse.id, path: `/media/${reuse.id}`, name: displayName };
+
+  const cached = await env.MEDIA.head(objectKey);
+  let output: ArrayBuffer | null = null;
+  let contentSha = cached?.customMetadata?.sha256 || "";
+  let byteSize = cached?.size || 0;
+  if (!cached || cached.httpMetadata?.contentType !== "image/webp" || !contentSha) {
+    // Transform once at upload time, not on every public image request.
+    const transformed = (
+      await env.IMAGES.input(new Blob([buffer]).stream())
+        .output({ format: "image/webp", quality: WEBP_QUALITY, anim: true })
+    ).response();
+    if (!transformed.ok || !transformed.headers.get("content-type")?.startsWith("image/webp")) {
+      throw new Response("Image optimization failed", { status: 502 });
+    }
+    output = await transformed.arrayBuffer();
+    if (!output.byteLength) throw new Response("Empty optimized image", { status: 502 });
+    contentSha = await sha256(output);
+    byteSize = output.byteLength;
   }
 
-  const objectKey = `images/${checksum.slice(0, 2)}/${checksum}.${imageType.extension}`;
-  const existed = Boolean(await env.MEDIA.head(objectKey));
-  if (!existed) {
-    await env.MEDIA.put(objectKey, buffer, {
+  // The encoder may produce the same bytes from two differently encoded sources.
+  // Reuse the existing registered object rather than storing another copy.
+  const sameBytes = await env.DB.prepare(
+    "SELECT id FROM media_assets WHERE sha256=? AND mime_type='image/webp' AND is_public=1 LIMIT 1"
+  ).bind(contentSha).first<{ id: string }>();
+  if (sameBytes) return { id: sameBytes.id, path: `/media/${sameBytes.id}`, name: displayName };
+
+  if (output) {
+    await env.MEDIA.put(objectKey, output, {
       httpMetadata: {
-        contentType: imageType.type,
-        cacheControl: "public,max-age=86400"
-      }
+        contentType: "image/webp",
+        cacheControl: "public, max-age=31536000, immutable"
+      },
+      customMetadata: { sha256: contentSha, source_sha256: sourceSha, pipeline: WEBP_PIPELINE }
     });
   }
 
   const id = crypto.randomUUID();
-  const displayName = file.name.slice(0, 180).replace(/[\u0000-\u001f]/g, "");
   try {
     await env.DB.prepare(
-      `INSERT INTO media_assets
-           (id,object_key,display_name,mime_type,bytes,sha256,is_public)
-         VALUES(?,?,?,?,?,?,1)`
-    )
-      .bind(id, objectKey, displayName, imageType.type, buffer.byteLength, checksum)
-      .run();
+      `INSERT INTO media_assets (id,object_key,display_name,mime_type,bytes,sha256,is_public) VALUES(?,?,?,'image/webp',?,?,1)`
+    ).bind(id, objectKey, displayName, byteSize, contentSha).run();
   } catch (error) {
-    if (!existed) await env.MEDIA.delete(objectKey).catch(() => undefined);
+    // Handle concurrent identical uploads. Do not delete their shared R2 object.
+    const raced = await env.DB.prepare(
+      "SELECT id FROM media_assets WHERE object_key=? AND is_public=1 LIMIT 1"
+    ).bind(objectKey).first<{ id: string }>();
+    if (raced) return { id: raced.id, path: `/media/${raced.id}`, name: displayName };
     throw error;
   }
   return { id, path: `/media/${id}`, name: displayName };

@@ -1,3 +1,4 @@
+import { backfillWebp } from "../app/lib/media-backfill.server";
 import { createRequestHandler } from "react-router";
 import { logEvent } from "../app/lib/logger.server";
 
@@ -41,14 +42,24 @@ async function serveR2Image(request: Request, env: Env): Promise<Response> {
   ) {
     return new Response("Not found", { status: 404 });
   }
-  const obj = request.method === "HEAD" ? await env.MEDIA.head(key) : await env.MEDIA.get(key);
+  let r2Key = key;
+  if (/\.(png|gif|jpe?g)$/i.test(key)) {
+    const registered = await env.DB.prepare(
+      "SELECT object_key,mime_type FROM media_assets WHERE legacy_path=? AND is_public=1 LIMIT 1"
+    ).bind("/" + key).first<{ object_key: string; mime_type: string }>();
+    if (registered?.mime_type === "image/webp") r2Key = registered.object_key;
+  }
+  const obj = request.method === "HEAD" ? await env.MEDIA.head(r2Key) : await env.MEDIA.get(r2Key);
   if (obj) {
     const headers = new Headers();
     obj.writeHttpMetadata(headers);
-    headers.set("Cache-Control", "public, max-age=86400");
+    headers.set("Cache-Control", r2Key === key ? "public, max-age=86400" : "public, max-age=3600");
     headers.set("X-Content-Type-Options", "nosniff");
     headers.set("ETag", obj.httpEtag);
     headers.set("X-GoCamp-Media-Source", "r2");
+    if (request.headers.get("If-None-Match") === obj.httpEtag) {
+      return new Response(null, { status: 304, headers });
+    }
     return new Response(request.method === "HEAD" ? null : (obj as R2ObjectBody).body, {
       status: 200,
       headers
@@ -95,5 +106,11 @@ export default {
         }
       });
     }
+  },
+  async scheduled(_event: ScheduledEvent, env: Env, ctx: ExecutionContext) {
+    if (env.GOCAMP_ENV !== "staging") return;
+    ctx.waitUntil(backfillWebp(env, 20).then((result) => {
+      logEvent("info", "webp backfill", result);
+    }));
   }
 } satisfies ExportedHandler<Env>;
