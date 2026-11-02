@@ -6,7 +6,8 @@ import { isVisible } from "../lib/visibility";
 function ageLabel(program: ProgramRecord) {
   const min = asNumber(program.ages?.min) || 0;
   const max = asNumber(program.ages?.max) || 0;
-  if (min <= 0) return "";
+  // 99 is a legacy open-ended sentinel, not a meaningful age range.
+  if (min <= 0 || min >= 99 || max >= 99) return "";
   return max > 0 ? `${min}-${max}` : `${min}+`;
 }
 
