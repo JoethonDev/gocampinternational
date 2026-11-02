@@ -99,6 +99,7 @@ function ContactForm() {
                 className="form-control"
                 rows={5}
                 maxLength={5000}
+                required
               />
             </div>
             <div className="col-12 text-end">
