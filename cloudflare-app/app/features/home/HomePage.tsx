@@ -125,12 +125,8 @@ function FeaturedCategories({ categories }: { categories: CategoryRecord[] }) {
                       loading="lazy"
                     />
                     <div className="category-card-scrim" />
-                    <div className="position-absolute bottom-0 start-0 w-100 p-4">
-                      <h3 className="text-white fw-bold mb-2 fs-3">{category.name}</h3>
-                      <div className="d-flex align-items-center text-white-50">
-                        <i className="bi bi-geo-alt-fill me-2" />
-                        <span className="fw-medium">Multiple Destinations</span>
-                      </div>
+                    <div className="position-absolute bottom-0 start-0 w-100 text-start p-3 category-card-caption">
+                      <h5 className="card-title text-white fw-bold m-0">{category.name}</h5>
                     </div>
                   </div>
                   <div className="card-body p-4 d-flex flex-column">
