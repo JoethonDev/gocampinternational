@@ -1,5 +1,5 @@
 import { responsiveSrcSet } from "../../lib/responsive-media";
-import { ABOUT_SECTIONS, SITE } from "../../config/site";
+import { SITE, type AboutPageContent, type AboutSection } from "../../config/site";
 import { PageBanner } from "../../components/ui/PageBanner";
 import { Breadcrumbs } from "../../components/ui/Breadcrumbs";
 
@@ -8,7 +8,7 @@ function AboutSection({
   isLast,
   index
 }: {
-  section: (typeof ABOUT_SECTIONS)[number];
+  section: AboutSection;
   isLast: boolean;
   index: number;
 }) {
@@ -82,7 +82,7 @@ function AboutSection({
   );
 }
 
-export function AboutPage() {
+export function AboutPage({ content }: { content: AboutPageContent }) {
   return (
     <>
       <PageBanner
@@ -93,13 +93,35 @@ export function AboutPage() {
       />
       <div className="container py-5">
         <Breadcrumbs items={[{ label: "HOME", to: "/" }, { label: "ABOUT US" }]} />
+        <section className="card shadow-sm border-0 mb-5" aria-labelledby="about-director-title">
+          <div className="card-body p-4 p-lg-5">
+            <div className="row g-4 align-items-center">
+              <div className="col-md-auto text-center">
+                <img
+                  src={SITE.images.profile}
+                  alt={content.profile.name}
+                  className="rounded-circle"
+                  style={{ width: 148, height: 148, objectFit: "cover" }}
+                  loading="lazy"
+                />
+              </div>
+              <div className="col-md">
+                <h2 id="about-director-title" className="h3 mb-2">{content.profile.name}</h2>
+                <p className="fw-semibold text-secondary">{content.profile.title}</p>
+                {content.profile.body.split("\\n\\n").map((paragraph, index) => (
+                  <p className="fs-5 lh-lg text-secondary" key={index}>{paragraph}</p>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
         <div className="row g-5">
           <div className="col-12">
-            {ABOUT_SECTIONS.map((section, index) => (
+            {content.sections.map((section, index) => (
               <AboutSection
                 key={section.title}
                 section={section}
-                isLast={index === ABOUT_SECTIONS.length - 1}
+                isLast={index === content.sections.length - 1}
                 index={index}
               />
             ))}
