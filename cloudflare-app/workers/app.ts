@@ -52,7 +52,7 @@ async function serveR2Image(request: Request, env: Env): Promise<Response> {
     request.method === "HEAD" ? env.MEDIA.head(candidate) : env.MEDIA.get(candidate);
   // Materialized R2 variants, not dynamic transformation and not a cache.
   // Legacy .png/.gif URLs keep working when D1 now points at WebP.
-  const registry = /\\.(?:jpe?g|png|gif)$/i.test(key)
+  const registry = /\.(?:jpe?g|png|gif)$/i.test(key)
     ? await env.DB.prepare(
       "SELECT object_key,mime_type FROM media_assets WHERE legacy_path=? AND is_public=1"
     ).bind("/" + key).first<{ object_key: string; mime_type: string }>()
