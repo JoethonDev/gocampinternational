@@ -40,7 +40,7 @@ export async function loader({ request, context }: Route.LoaderArgs) {
 export function meta({ data, matches }: Route.MetaArgs) {
   return seoMeta({
     origin: originFrom(matches),
-    path: location.pathname + location.search,
+    path: "/program/category?category=" + encodeURIComponent(data?.category.slug || ""),
     title: `Go Camp :: ${data?.category.name || "Programs"}`,
     description: String(data?.category.intro || "")
       .replace(/<[^>]*>/g, "")
