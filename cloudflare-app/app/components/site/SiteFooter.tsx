@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 import { FOOTER_LINKS, SITE } from "../../config/site";
+import type { CategoryRecord, DestinationRecord } from "../../lib/domain";
 
 function FooterLinks({
   title,
@@ -9,7 +10,7 @@ function FooterLinks({
   links: ReadonlyArray<{ label: string; to: string }>;
 }) {
   return (
-    <div className="col-lg-3 col-md-6">
+    <div className="col-lg col-md-6">
       <h5 className="fw-bold text-uppercase mb-3">{title}</h5>
       <ul className="list-unstyled">
         {links.map((link) => (
@@ -28,13 +29,28 @@ const SOCIAL_LINKS = [
   { href: SITE.social.linkedin, image: SITE.images.linkedinIcon, label: "LinkedIn" }
 ] as const;
 
-export function SiteFooter() {
+export function SiteFooter({
+  categories,
+  destinations
+}: {
+  categories: CategoryRecord[];
+  destinations: DestinationRecord[];
+}) {
+  const programLinks = categories.map((category) => ({
+    label: category.name,
+    to: `/program/category?category=${encodeURIComponent(category.slug)}`
+  }));
+  const destinationLinks = destinations.map((destination) => ({
+    label: destination.name,
+    to: `/destinations/${encodeURIComponent(destination.slug)}`
+  }));
   return (
     <footer className="footer text-white pt-5 pb-4">
       <div className="container">
         <div className="row gy-4">
           <FooterLinks title="About" links={FOOTER_LINKS.about} />
-          <FooterLinks title="Programs" links={FOOTER_LINKS.programs} />
+          <FooterLinks title="Programs" links={programLinks} />
+          <FooterLinks title="Destinations" links={destinationLinks} />
           <div className="col-lg-3 col-md-6">
             <h5 className="fw-bold text-uppercase mb-3">Get in Touch</h5>
             <p className="mb-2">
@@ -53,7 +69,7 @@ export function SiteFooter() {
               </a>
             </p>
           </div>
-          <div className="col-lg-3 col-md-6 text-center text-md-start">
+          <div className="col-lg col-md-6 text-center text-md-start">
             <h5 className="fw-bold text-uppercase mb-3">Follow Us</h5>
             <div className="social-icons mb-4">
               {SOCIAL_LINKS.map((link) => (
