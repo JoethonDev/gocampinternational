@@ -46,7 +46,7 @@ export const HOME_HERO_SLIDES = [
 export const HOME_COPY = {
   eyebrow: "Go Camp International",
   intro:
-    "Summer Camp is more than just fun and games. It's an opportunity for your kids to develop critical skills, learn about the world, and build international connections that last a lifetime.",
+    "GO Camp International helps families discover overseas educational experiences in language learning, sports, leadership and culture. Explore opportunities to learn, grow and build international connections.",
   destinationsTitle: "Our Destinations",
   categoriesTitle: "Explore Our Program Categories",
   categoriesIntro: "Choose your adventure from our diverse range of international camp experiences."
