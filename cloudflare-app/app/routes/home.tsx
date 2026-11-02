@@ -17,7 +17,7 @@ export function meta({ matches }: Route.MetaArgs) {
     path: "/",
     title: "Go Camp International | Unforgettable Summer Experiences",
     description:
-      "Discover life-changing international summer camps for teens. We offer language, arts, sports, and leadership programs in premier destinations."
+      "Explore international educational experiences with GO Camp International, including language learning, sports academies, cultural travel, leadership and academic programs."
   });
 }
 
