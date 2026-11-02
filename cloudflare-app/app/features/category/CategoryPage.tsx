@@ -1,3 +1,4 @@
+import { OptimizedImage } from "../../components/OptimizedImage";
 import { CampMemories } from "../../components/CampMemories";
 import { ProgramCard } from "../../components/ProgramCard";
 import { SafeRichText } from "../../components/SafeRichText";
@@ -14,12 +15,9 @@ import { isVisible } from "../../lib/visibility";
 function CategoryHero({ category }: { category: CategoryRecord }) {
   return (
     <section
-      className="hero-section"
-      aria-label={`${category.name} banner`}
-      style={{
-        backgroundImage: `url(${JSON.stringify(category.banner || SITE.images.placeholder)})`
-      }}
+      className="hero-section position-relative" aria-label={category.name + " banner"}
     >
+      <OptimizedImage src={category.banner || SITE.images.placeholder} alt={"Activities for " + category.name} priority sizes="100vw" className="position-absolute top-0 start-0 w-100 h-100 object-fit-cover" />
       <div className="container position-relative category-hero-caption">
         <h1>{category.name}</h1>
       </div>
@@ -43,7 +41,7 @@ function CategoryIntro({ category }: { category: CategoryRecord }) {
           </div>
           {category.intro_image && (
             <div className="col-lg-6">
-              <img
+              <OptimizedImage
                 src={category.intro_image}
                 alt={`${category.name} Introduction`}
                 className="img-fluid intro-image"
@@ -79,7 +77,7 @@ function CategorySections({ category }: { category: CategoryRecord }) {
               </div>
               {section.image && (
                 <div className={"col-lg-6" + (index % 2 ? " order-lg-1" : "")}>
-                  <img
+                  <OptimizedImage
                     src={section.image}
                     alt={section.title || ""}
                     className="img-fluid content-image"

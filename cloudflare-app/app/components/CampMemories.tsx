@@ -1,3 +1,4 @@
+import { OptimizedImage } from "./OptimizedImage";
 import { useEffect, useRef, useState } from "react";
 import { SITE } from "../config/site";
 import type { MemoriesDocument, MemoryItem } from "../lib/domain";
@@ -17,13 +18,14 @@ function MemoryCard({ item }: { item: MemoryItem }) {
         data-toggle="lightbox"
         aria-label={`View photo: ${item.caption}`}
       >
-        <img
+        <OptimizedImage
           src={memoryUrl(item.image)}
           alt={item.caption}
           loading="lazy"
           decoding="async"
           width={640}
           height={480}
+          sizes="(max-width: 768px) 90vw, 640px"
         />
       </a>
       <figcaption className="p-3 text-center">{item.caption}</figcaption>

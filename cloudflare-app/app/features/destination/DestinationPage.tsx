@@ -1,3 +1,4 @@
+import { OptimizedImage } from "../../components/OptimizedImage";
 import { Link } from "react-router";
 import { CampMemories } from "../../components/CampMemories";
 import { FaqAccordion } from "../../components/FaqAccordion";
@@ -40,15 +41,9 @@ function Hero({ destination }: { destination: DestinationRecord }) {
       <div className="container position-relative destination-hero-caption">
         <h1>{destination.name}</h1>
       </div>
-      <div
-        className="hero-background position-absolute top-0 start-0 w-100 h-100"
-        style={{
-          backgroundImage: `url(${JSON.stringify(destination.banner || SITE.images.placeholder)})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundAttachment: "fixed"
-        }}
-      />
+      <OptimizedImage src={destination.banner || SITE.images.placeholder}
+        alt={"Summer camp in " + destination.name} priority sizes="100vw"
+        className="hero-background position-absolute top-0 start-0 w-100 h-100 object-fit-cover" />
     </section>
   );
 }
@@ -90,7 +85,7 @@ function Introduction({ destination }: { destination: DestinationRecord }) {
           </div>
           {destination.intro_image && (
             <div className="col-lg-5">
-              <img
+              <OptimizedImage
                 className="img-fluid rounded-4 shadow-sm w-100"
                 src={destination.intro_image}
                 alt={destination.name}

@@ -1,3 +1,4 @@
+import { OptimizedImage } from "../../components/OptimizedImage";
 import { ABOUT_SECTIONS, SITE } from "../../config/site";
 import { PageBanner } from "../../components/ui/PageBanner";
 import { Breadcrumbs } from "../../components/ui/Breadcrumbs";
@@ -15,7 +16,7 @@ function AboutSection({
     <div className={"card shadow-sm border-0 overflow-hidden" + (isLast ? "" : " mb-5")}>
       <div className={"row g-0" + (section.reverse ? " flex-row-reverse" : "")}>
         <div className="col-lg-5">
-          <img
+          <OptimizedImage
             src={section.image}
             alt={section.title}
             className="img-fluid h-100"
@@ -57,7 +58,7 @@ function AboutSection({
           {section.gallery.map((photo) => (
             <div className="col-md-4" key={photo.image}>
               <figure className="h-100 mb-0">
-                <img
+                <OptimizedImage
                   src={photo.image}
                   alt={photo.alt}
                   className="w-100 rounded-3"
