@@ -9,6 +9,7 @@ export default [
   route("admin/catalog/:kind/:slug", "routes/admin-edit.tsx"),
   route("admin/program-quick-status", "routes/admin-program-quick-status.ts"),
   route("admin/documents/:key", "routes/admin-documents.tsx"),
+  route("admin/about", "routes/admin-about.tsx"),
   route("admin/inquiries", "routes/admin-inquiries.tsx"),
   route("admin/media", "routes/admin-media.tsx"),
   route("admin/media/import", "routes/admin-media-import.tsx"),
