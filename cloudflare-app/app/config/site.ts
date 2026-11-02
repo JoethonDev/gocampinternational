@@ -35,12 +35,7 @@ export const FOOTER_LINKS = {
     { label: "F.A.Q", to: "/faq" },
     { label: "Contact Us", to: "/contact" }
   ],
-  programs: [
-    { label: "Language & Activity", to: "/program/category?category=kids-camps" },
-    { label: "Adult Academic", to: "/program/category?category=adult-academic" },
-    { label: "Young Leader", to: "/program/category?category=young-leader-program" },
-    { label: "Soccer Camps", to: "/program/category?category=soccer-camps" }
-  ]
+  programs: []
 } as const;
 
 export const HOME_HERO_SLIDES = [
