@@ -33,7 +33,7 @@ export function meta({ data, matches, location }: Route.MetaArgs) {
     origin: originFrom(matches),
     path: location.pathname,
     title,
-    description: String(destination?.tagline || "Discover Your Adventure").slice(0, 160),
+    description: String(destination?.tagline || destination?.intro_text || `Explore international programs in ${name} with GO Camp International.`),
     image: String(destination?.banner || "/images/banner.webp"),
     robots: destination?.status === "coming-soon" || destination?.status === "inactive" ? "noindex,follow" : undefined
   });
