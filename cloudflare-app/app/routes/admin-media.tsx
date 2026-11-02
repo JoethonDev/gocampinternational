@@ -1,6 +1,7 @@
 import { redirect } from "react-router";
 import type { Route } from "./+types/admin-media";
-import { requireAdmin, requireSameOrigin } from "../lib/admin.server";
+import { requireAdmin, requireSameOrigin, verifyAdminPost } from "../lib/admin.server";
+import { backfillWebp } from "../lib/media-backfill.server";
 import {
   MAX_UPLOAD_BYTES,
   MAX_UPLOAD_FILES,
@@ -39,6 +40,17 @@ export async function action({ request, context }: Route.ActionArgs) {
   }
   const form = await request.formData();
   const operation = String(form.get("operation") || "");
+  if (operation === "backfill-webp") {
+    if (context.cloudflare.env.GOCAMP_ENV !== "staging") throw new Response("Not found", { status: 404 });
+    await verifyAdminPost(request, context.cloudflare.env.DB, form);
+    const result = await backfillWebp(context.cloudflare.env, 4);
+    const remaining = await context.cloudflare.env.DB.prepare(
+      "SELECT COUNT(*) AS n FROM media_assets WHERE mime_type != 'image/webp'"
+    ).first<{ n: number }>();
+    return Response.json({ ...result, remaining: remaining?.n || 0 }, {
+      headers: { "Cache-Control": "no-store" }
+    });
+  }
   if (operation === "upload") {
     const result = await uploadMediaFiles(request, context.cloudflare.env, form, context.cloudflare.ctx);
     const error = result.errors.map((item) => `${item.name}: ${item.message}`).join("; ");

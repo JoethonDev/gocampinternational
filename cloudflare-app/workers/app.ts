@@ -1,4 +1,3 @@
-import { backfillWebp } from "../app/lib/media-backfill.server";
 import { discoveryResponse } from "../app/lib/seo-discovery.server";
 import { createRequestHandler } from "react-router";
 import { logEvent } from "../app/lib/logger.server";
@@ -52,7 +51,14 @@ async function serveR2Image(request: Request, env: Env): Promise<Response> {
   const read = (candidate: string) =>
     request.method === "HEAD" ? env.MEDIA.head(candidate) : env.MEDIA.get(candidate);
   // Materialized R2 variants, not dynamic transformation and not a cache.
-  const obj = (optimizedKey && await read(optimizedKey)) || await read(key);
+  // Legacy .png/.gif URLs keep working when D1 now points at WebP.
+  const registry = /\\.(?:jpe?g|png|gif)$/i.test(key)
+    ? await env.DB.prepare(
+      "SELECT object_key,mime_type FROM media_assets WHERE legacy_path=? AND is_public=1"
+    ).bind("/" + key).first<{ object_key: string; mime_type: string }>()
+    : null;
+  const sourceKey = registry?.mime_type === "image/webp" ? registry.object_key : key;
+  const obj = (optimizedKey && await read(optimizedKey)) || await read(sourceKey);
   if (obj) {
     const headers = new Headers();
     obj.writeHttpMetadata(headers);
@@ -110,11 +116,5 @@ export default {
         }
       });
     }
-  },
-  async scheduled(_event: ScheduledEvent, env: Env, ctx: ExecutionContext) {
-    if (env.GOCAMP_ENV !== "staging") return;
-    ctx.waitUntil(backfillWebp(env, 17).then((result) => {
-      logEvent("info", "staging WebP backfill", result);
-    }));
   }
 } satisfies ExportedHandler<Env>;

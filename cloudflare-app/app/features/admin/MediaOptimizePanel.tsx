@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useFetcher } from "react-router";
 
+type BackfillResponse = { processed: number; converted: number; remaining: number; failures: string[] };
+
 type BatchResponse = {
   nextCursor: string;
   processed: number;
@@ -12,6 +14,11 @@ type BatchResponse = {
 
 export function MediaOptimizePanel({ csrf }: { csrf: string }) {
   const fetcher = useFetcher<BatchResponse>();
+  const webpFetcher = useFetcher<BackfillResponse>();
+  const [webpRunning, setWebpRunning] = useState(false);
+  const [webpConverted, setWebpConverted] = useState(0);
+  const [webpFailures, setWebpFailures] = useState<string[]>([]);
+  const handledWebp = useRef<BackfillResponse | undefined>(undefined);
   const [running, setRunning] = useState(false);
   const [processed, setProcessed] = useState(0);
   const [created, setCreated] = useState(0);
@@ -45,6 +52,37 @@ export function MediaOptimizePanel({ csrf }: { csrf: string }) {
     }
   }, [fetcher.data, fetcher.state, running]);
 
+  const nextWebpBatch = () => {
+    const form = new FormData();
+    form.set("csrf", csrf);
+    form.set("operation", "backfill-webp");
+    webpFetcher.submit(form, { method: "post", action: "/admin/media" });
+  };
+
+  useEffect(() => {
+    const result = webpFetcher.data;
+    if (!webpRunning || webpFetcher.state !== "idle" || !result || handledWebp.current === result) return;
+    handledWebp.current = result;
+    setWebpConverted((count) => count + result.converted);
+    if (result.failures?.length) setWebpFailures((previous) => [
+      ...previous, ...result.failures
+    ].slice(-20));
+    // Retry only while progress is made. Repeated failures need manual review.
+    if (result.remaining > 0 && result.converted > 0) {
+      nextWebpBatch();
+    } else {
+      setWebpRunning(false);
+    }
+  }, [webpFetcher.data, webpFetcher.state, webpRunning]);
+
+  const startWebp = () => {
+    handledWebp.current = undefined;
+    setWebpConverted(0);
+    setWebpFailures([]);
+    setWebpRunning(true);
+    nextWebpBatch();
+  };
+
   const start = () => {
     handled.current = undefined;
     cursor.current = "";
@@ -59,6 +97,25 @@ export function MediaOptimizePanel({ csrf }: { csrf: string }) {
     <section className="card border-0 shadow-sm mb-4" aria-label="Optimize staging images">
       <div className="card-body">
         <h2 className="h5">Optimize staging R2 images for all screens</h2>
+        <div className="border rounded p-3 mb-3">
+          <p className="mb-2 small">
+            Convert remaining JPEG, PNG and GIF originals to WebP in batches of four,
+            keeping existing media IDs and legacy URLs. Safe to resume.
+          </p>
+          <button type="button" className="btn btn-outline-primary btn-sm"
+            onClick={startWebp} disabled={webpRunning || webpFetcher.state !== "idle"}>
+            {webpRunning ? "Converting older images…" : "Convert remaining originals to WebP"}
+          </button>
+          {webpFetcher.data && (
+            <p className="small mt-2 mb-0" role="status">
+              {webpConverted} converted this run · {webpFetcher.data.remaining} non-WebP media left.
+            </p>
+          )}
+          {webpFailures.length > 0 && <details className="mt-2 small">
+            <summary>{webpFailures.length} conversion errors (originals retained)</summary>
+            <ul>{webpFailures.map((message, i) => <li key={i}>{message}</li>)}</ul>
+          </details>}
+        </div>
         <p className="small text-secondary mb-3">
           Generates persistent mobile (480px), tablet (960px), and desktop (1600px)
           WebP variants in R2, records them in D1, and preserves every original.
