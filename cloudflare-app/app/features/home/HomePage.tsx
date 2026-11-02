@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 import { CampMemories } from "../../components/CampMemories";
+import { SocialFeeds } from "../../components/SocialFeeds";
 import { HOME_COPY, HOME_HERO_SLIDES, SITE } from "../../config/site";
 import type {
   CategoryRecord,
@@ -181,6 +182,7 @@ export function HomePage({
       {isVisible("home", "family_testimonials", settings, settings) && (
         <TestimonialsSection data={testimonials} />
       )}
+      <SocialFeeds />
       {isVisible("home", "testimonials", settings, settings) && <CampMemories data={memories} />}
     </div>
   );
