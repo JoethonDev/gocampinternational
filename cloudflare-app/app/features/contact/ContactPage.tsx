@@ -132,6 +132,16 @@ function ContactCard() {
         <p className="text-white-50 fs-5 mb-4 text-uppercase fw-semibold">{SITE.directorTitle}</p>
         <div className="d-flex flex-column gap-3 w-100 px-md-3">
           <a
+            href={SITE.whatsappHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn btn-success py-3 px-4 d-flex align-items-center justify-content-start gap-3 rounded-3 contact-action"
+            aria-label="Contact Go Camp International on WhatsApp"
+          >
+            <i className="bi bi-whatsapp fs-4" aria-hidden="true" />
+            <span className="fs-5 fw-semibold">Chat with us on WhatsApp</span>
+          </a>
+          <a
             href={SITE.phoneHref}
             className="btn btn-outline-light border-0 py-3 px-4 d-flex align-items-center justify-content-start gap-3 rounded-3 contact-action"
           >
