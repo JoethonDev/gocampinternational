@@ -11,6 +11,7 @@ export default [
   route("admin/documents/:key", "routes/admin-documents.tsx"),
   route("admin/about", "routes/admin-about.tsx"),
   route("admin/inquiries", "routes/admin-inquiries.tsx"),
+  route("admin/inquiries/chunk", "routes/admin-inquiries-chunk.ts"),
   route("admin/media", "routes/admin-media.tsx"),
   route("admin/media/chunk", "routes/admin-media-chunk.ts"),
   route("admin/media/import", "routes/admin-media-import.tsx"),
