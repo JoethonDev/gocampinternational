@@ -35,11 +35,13 @@ export function MediaSelector({
   const [local, setLocal] = useState(initial);
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
+  const [displayCount, setDisplayCount] = useState(48);
   const [extraUploads, setExtraUploads] = useState<string[]>([]);
   const [uploadMessage, setUploadMessage] = useState("");
   const [queued, setQueued] = useState(0);
   const returnFocus = useRef<HTMLElement | null>(null);
   const searchInput = useRef<HTMLInputElement>(null);
+  const resultsContainer = useRef<HTMLDivElement>(null);
   const fileInput = useRef<HTMLInputElement>(null);
   const uploader = useFetcher<UploadResult>();
   const value = externalValue ?? local;
@@ -53,10 +55,34 @@ export function MediaSelector({
     () => [...new Set([...extraUploads, ...uploaded, ...STATIC_PATHS])],
     [extraUploads, uploaded]
   );
-  const choices = useMemo(
-    () => all.filter((path) => path.toLowerCase().includes(search.toLowerCase())).slice(0, 48),
+  const matching = useMemo(
+    () => all.filter((path) => path.toLowerCase().includes(search.trim().toLowerCase())),
     [all, search]
   );
+  const choices = useMemo(() => matching.slice(0, displayCount), [matching, displayCount]);
+
+  // The grid already has the complete image path list. Render it progressively as
+  // the user scrolls INSIDE the modal rather than displaying page controls.
+  useEffect(() => {
+    if (!open) return;
+    setDisplayCount(48);
+    if (resultsContainer.current) resultsContainer.current.scrollTop = 0;
+  }, [open, search]);
+
+  useEffect(() => {
+    if (!open || choices.length >= matching.length) return;
+    const container = resultsContainer.current;
+    if (container && container.scrollHeight <= container.clientHeight + 24) {
+      setDisplayCount((count) => Math.min(count + 48, matching.length));
+    }
+  }, [open, choices.length, matching.length]);
+
+  const loadOnScroll = () => {
+    const container = resultsContainer.current;
+    if (container && container.scrollTop + container.clientHeight >= container.scrollHeight - 140) {
+      setDisplayCount((count) => Math.min(count + 48, matching.length));
+    }
+  };
   const previewSrc =
     !value || value.startsWith("/") || /^https?:\/\//i.test(value)
       ? value
@@ -234,7 +260,7 @@ export function MediaSelector({
                     onChange={(event) => setSearch(event.target.value)}
                   />
                 </div>
-                <div className="media-selector-results">
+                <div className="media-selector-results" ref={resultsContainer} onScroll={loadOnScroll} aria-label="Image results">
                   <div className="media-selector-grid">
                     {choices.map((path) => (
                       <button
@@ -256,15 +282,14 @@ export function MediaSelector({
                       </button>
                     ))}
                   </div>
-                  {choices.length === 0 && (
+                  {matching.length === 0 && (
                     <p className="text-secondary small mb-0 p-3">No images match that search.</p>
                   )}
                 </div>
-                {all.length > choices.length && (
-                  <p className="small text-secondary mb-0 mt-2">
-                    Showing {choices.length} of {all.length} images. Search to refine.
-                  </p>
-                )}
+                <p className="small text-secondary mb-0 mt-2" role="status">
+                  Showing {choices.length} of {matching.length} matching images.
+                  {choices.length < matching.length ? " Scroll within the image grid for more." : ""}
+                </p>
               </div>
               <div className="card-footer media-selector-footer">
                 <a
