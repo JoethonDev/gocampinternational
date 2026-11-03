@@ -74,6 +74,7 @@ export default function AdminMedia({ loaderData }: Route.ComponentProps) {
   return (
     <AdminShell username={session.username} csrf={session.csrf}>
       <MediaLibraryPage
+        key={`${data.q}|${data.folder}`}
         data={data}
         csrf={session.csrf}
         uploaded={uploaded}
