@@ -5,6 +5,7 @@ import sourceMedia from "../legacy-media.json";
 
 const STATIC_PATHS = (sourceMedia as Array<{ path: string }>).map((item) => item.path);
 type UploadFile = { id: string; path: string; name: string };
+type NamedMedia = { path: string; name: string };
 type UploadResult = {
   success?: boolean;
   files?: UploadFile[];
@@ -37,6 +38,8 @@ export function MediaSelector({
   const [search, setSearch] = useState("");
   const [displayCount, setDisplayCount] = useState(48);
   const [extraUploads, setExtraUploads] = useState<string[]>([]);
+  const [namedMedia, setNamedMedia] = useState<NamedMedia[]>([]);
+  const [namesRefresh, setNamesRefresh] = useState(0);
   const [uploadMessage, setUploadMessage] = useState("");
   const [queued, setQueued] = useState(0);
   const returnFocus = useRef<HTMLElement | null>(null);
@@ -51,14 +54,40 @@ export function MediaSelector({
     onChange?.(next);
   };
 
+  const nameByPath = useMemo(
+    () => new Map(namedMedia.map((item) => [item.path, item.name])),
+    [namedMedia]
+  );
   const all = useMemo(
-    () => [...new Set([...extraUploads, ...uploaded, ...STATIC_PATHS])],
-    [extraUploads, uploaded]
+    () => [...new Set([...extraUploads, ...namedMedia.map((item) => item.path), ...uploaded, ...STATIC_PATHS])],
+    [extraUploads, namedMedia, uploaded]
   );
-  const matching = useMemo(
-    () => all.filter((path) => path.toLowerCase().includes(search.trim().toLowerCase())),
-    [all, search]
-  );
+  const matching = useMemo(() => {
+    const query = search.trim().toLowerCase();
+    return all.filter((path) =>
+      path.toLowerCase().includes(query) || (nameByPath.get(path) || "").toLowerCase().includes(query)
+    );
+  }, [all, search, nameByPath]);
+
+  useEffect(() => {
+    if (!open) return;
+    const controller = new AbortController();
+    // Media assets use /media/<uuid> URLs, so resolve their actual filenames
+    // through the authenticated D1 media registry for searching in this modal.
+    void fetch("/admin/media/names", {
+      credentials: "same-origin",
+      headers: { Accept: "application/json" },
+      signal: controller.signal
+    }).then(async (response) => {
+      if (!response.ok) throw new Error("Cannot retrieve media names");
+      return response.json() as Promise<{ items: NamedMedia[] }>;
+    }).then((result) => {
+      if (!controller.signal.aborted && Array.isArray(result.items)) setNamedMedia(result.items);
+    }).catch(() => {
+      // Legacy paths and images already passed from the editor remain usable.
+    });
+    return () => controller.abort();
+  }, [open, namesRefresh]);
   const choices = useMemo(() => matching.slice(0, displayCount), [matching, displayCount]);
 
   // The grid already has the complete image path list. Render it progressively as
@@ -113,6 +142,7 @@ export function MediaSelector({
     const files = uploader.data.files;
     const paths = files.map((file) => file.path);
     setExtraUploads((current) => [...paths, ...current.filter((item) => !paths.includes(item))]);
+    setNamesRefresh((count) => count + 1);
     setValue(paths[0]);
     setSearch("");
     setUploadMessage(
@@ -278,7 +308,7 @@ export function MediaSelector({
                         }}
                       >
                         <img src={path} alt="" loading="lazy" />
-                        <span>{path.split("/").at(-1)}</span>
+                        <span title={nameByPath.get(path) || path}>{nameByPath.get(path) || path.split("/").at(-1)}</span>
                       </button>
                     ))}
                   </div>
