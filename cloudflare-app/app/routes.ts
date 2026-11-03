@@ -12,6 +12,7 @@ export default [
   route("admin/about", "routes/admin-about.tsx"),
   route("admin/inquiries", "routes/admin-inquiries.tsx"),
   route("admin/media", "routes/admin-media.tsx"),
+  route("admin/media/chunk", "routes/admin-media-chunk.ts"),
   route("admin/media/import", "routes/admin-media-import.tsx"),
   route("admin/media/import/run", "routes/admin-media-import-run.ts"),
   route("admin/media/upload", "routes/admin-media-upload.ts"),
