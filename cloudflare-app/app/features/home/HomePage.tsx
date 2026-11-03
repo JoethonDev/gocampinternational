@@ -77,7 +77,7 @@ function DestinationsSection({ destinations }: { destinations: DestinationRecord
                   srcSet={responsiveSrcSet(destination.banner || SITE.images.placeholder)}
                   sizes="(max-width: 576px) 100vw, (max-width: 992px) 50vw, 33vw"
                   className="card-img"
-                  alt={destination.name}
+                  alt={destination.banner_alt || destination.name}
                   loading="lazy"
                 />
                 <div className="card-img-overlay d-flex align-items-end p-0">
