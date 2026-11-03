@@ -21,10 +21,10 @@ const photos = [
   },
   {
     slug: "switzerland",
-    filename: "switzerland-lauterbrunnen-alpine-village",
-    photoId: "photo-1681151510371-3f07fd29235a",
-    source: "https://unsplash.com/photos/a-village-in-the-mountains-with-a-church-in-the-foreground-HD7PbOyIXx4",
-    photographer: "Ilia Bronskiy"
+    filename: "switzerland-zermatt-matterhorn-snow-peak",
+    photoId: "photo-1707617535395-20858480a222",
+    source: "https://unsplash.com/photos/a-snow-covered-mountain-with-a-blue-sky-in-the-background-cWK4V8gIH0w",
+    photographer: "Jared Schwitzke"
   },
   {
     slug: "austria",
@@ -48,7 +48,7 @@ if (process.env.CI !== "true") {
 
 const directory = await mkdtemp(path.join(tmpdir(), "gocamp-free-destinations-"));
 try {
-  for (const photo of photos) {
+  for (const photo of photos.filter((item) => !process.env.GOCAMP_IMAGE_SLUG || item.slug === process.env.GOCAMP_IMAGE_SLUG)) {
     const mainKey = `images/destinations/${photo.slug}/${photo.filename}.webp`;
     for (const preset of presets) {
       const key = preset.name === "original"
