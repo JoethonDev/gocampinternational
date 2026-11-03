@@ -64,7 +64,7 @@ async function loadUsage(
   return usage;
 }
 
-export async function loadMediaLibrary(db: D1Database, url: URL) {
+export async function loadMediaLibrary(db: D1Database, url: URL, includeUploads = true) {
   const query = (url.searchParams.get("q") || "").trim();
   const requestedFolder = url.searchParams.get("folder") || "all";
   const folder = ["all", "images", "uploads"].includes(requestedFolder) ? requestedFolder : "all";
@@ -78,15 +78,15 @@ export async function loadMediaLibrary(db: D1Database, url: URL) {
   const items = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
   const [usage, mediaRows] = await Promise.all([
     loadUsage(db, items),
-    db
-      .prepare(
-        `SELECT id,display_name,mime_type,bytes,is_public,created_at
-       FROM media_assets
-       WHERE legacy_path IS NULL
-       ORDER BY created_at DESC
-       LIMIT 300`
-      )
-      .all<MediaAsset>()
+    includeUploads
+      ? db
+          .prepare(
+            `SELECT id,display_name,mime_type,bytes,is_public,created_at
+             FROM media_assets WHERE legacy_path IS NULL
+             ORDER BY created_at DESC LIMIT 300`
+          )
+          .all<MediaAsset>()
+      : Promise.resolve({ results: [] as MediaAsset[] })
   ]);
   return {
     rows: mediaRows.results,
