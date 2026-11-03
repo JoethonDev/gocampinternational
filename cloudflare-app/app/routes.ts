@@ -14,6 +14,7 @@ export default [
   route("admin/inquiries/chunk", "routes/admin-inquiries-chunk.ts"),
   route("admin/media", "routes/admin-media.tsx"),
   route("admin/media/chunk", "routes/admin-media-chunk.ts"),
+  route("admin/media/names", "routes/admin-media-names.ts"),
   route("admin/media/import", "routes/admin-media-import.tsx"),
   route("admin/media/import/run", "routes/admin-media-import-run.ts"),
   route("admin/media/upload", "routes/admin-media-upload.ts"),
