@@ -1,4 +1,5 @@
 import { Form, useNavigation } from "react-router";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { MediaOptimizePanel } from "./MediaOptimizePanel";
 import { AdminEmptyState } from "../../components/admin/AdminEmptyState";
 import { AdminFormSection } from "../../components/admin/AdminFormSection";
@@ -6,7 +7,6 @@ import { AdminPageHeader } from "../../components/admin/AdminPageHeader";
 import { AdminPanel } from "../../components/admin/AdminPanel";
 import { AdminRowActions } from "../../components/admin/AdminRowActions";
 import { AdminToolbar, AdminToolbarField } from "../../components/admin/AdminToolbar";
-import { Pagination } from "../../components/ui/Pagination";
 import type { MediaAsset } from "../../lib/domain";
 import type { MediaLibraryData, MediaUsage, StaticMedia } from "./media.server";
 
@@ -210,6 +210,57 @@ export function MediaLibraryPage({
   updated: boolean;
   staging: boolean;
 }) {
+  const [items, setItems] = useState(data.items);
+  const [usage, setUsage] = useState(data.usage);
+  const [loadedPage, setLoadedPage] = useState(data.page);
+  const [loading, setLoading] = useState(false);
+  const [loadError, setLoadError] = useState("");
+  const fetching = useRef(false);
+  const scrollEnd = useRef<HTMLDivElement>(null);
+
+  const loadMore = useCallback(async () => {
+    if (fetching.current || loadedPage >= data.totalPages) return;
+    fetching.current = true;
+    setLoading(true);
+    setLoadError("");
+    try {
+      const params = new URLSearchParams({ page: String(loadedPage + 1) });
+      if (data.q) params.set("q", data.q);
+      if (data.folder !== "all") params.set("folder", data.folder);
+      const response = await fetch(`/admin/media/chunk?${params}`, {
+        credentials: "same-origin", headers: { Accept: "application/json" }
+      });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const chunk = await response.json() as {
+        items: StaticMedia[];
+        usage: Record<string, MediaUsage>;
+        page: number;
+        totalPages: number;
+      };
+      if (chunk.page !== loadedPage + 1) throw new Error("Unexpected media offset");
+      setItems((previous) => {
+        const seen = new Set(previous.map((item) => item.path));
+        return [...previous, ...chunk.items.filter((item) => !seen.has(item.path))];
+      });
+      setUsage((previous) => ({ ...previous, ...chunk.usage }));
+      setLoadedPage(chunk.page);
+    } catch (error) {
+      setLoadError(error instanceof Error ? error.message : "Could not load images");
+    } finally {
+      fetching.current = false;
+      setLoading(false);
+    }
+  }, [loadedPage, data.totalPages, data.q, data.folder]);
+
+  useEffect(() => {
+    if (loadedPage >= data.totalPages || loadError || !scrollEnd.current) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry?.isIntersecting) void loadMore();
+    }, { rootMargin: "280px" });
+    observer.observe(scrollEnd.current);
+    return () => observer.disconnect();
+  }, [loadedPage, data.totalPages, loadMore, loadError]);
+
   return (
     <>
       <AdminPageHeader
@@ -250,7 +301,7 @@ export function MediaLibraryPage({
         title="R2-backed site images"
         description="Original image paths remain valid, but files are served from Cloudflare R2 rather than GitHub."
       >
-        {data.items.length === 0 ? (
+        {items.length === 0 ? (
           <AdminEmptyState
             icon="bi-images"
             title="No images match the current filters"
@@ -258,29 +309,25 @@ export function MediaLibraryPage({
           />
         ) : (
           <div className="row g-3">
-            {data.items.map((item) => (
+            {items.map((item) => (
               <StaticMediaCard
                 key={item.path}
                 item={item}
-                usage={data.usage[item.path] || { count: 0, refs: [] }}
+                usage={usage[item.path] || { count: 0, refs: [] }}
               />
             ))}
           </div>
         )}
       </AdminPanel>
-      <Pagination
-        page={data.page}
-        totalPages={data.totalPages}
-        ariaLabel="Image library pages"
-        summary={`Showing ${data.items.length} of ${data.total} · page ${data.page} of ${data.totalPages}`}
-        href={(page) => {
-          const params = new URLSearchParams();
-          if (data.q) params.set("q", data.q);
-          if (data.folder !== "all") params.set("folder", data.folder);
-          params.set("page", String(page));
-          return `/admin/media?${params.toString()}`;
-        }}
-      />
+      <div ref={scrollEnd} className="admin-pagination-summary my-3" role="status">
+        Showing {items.length} of {data.total} matching images.
+        {loading ? " Loading more images…" : items.length < data.total ? " Scroll down to load more." : ""}
+        {loadError && (
+          <button className="btn btn-sm btn-outline-primary ms-2" type="button" onClick={() => void loadMore()}>
+            Retry loading ({loadError})
+          </button>
+        )}
+      </div>
 
       <div className="mt-5" id="uploads">
         <AdminPanel
