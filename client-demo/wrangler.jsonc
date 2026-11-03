@@ -1,0 +1,22 @@
+{
+  "name": "gocamp-client-homepage-demo",
+  "main": "worker.js",
+  "compatibility_date": "2026-11-03",
+  "route": {
+    "pattern": "gocamp.joethon.dev",
+    "custom_domain": true
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "gocamp-staging-db",
+      "database_id": "87e579d7-4f7a-4673-a317-d62551858b3c"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "MEDIA",
+      "bucket_name": "gocamp-staging-media"
+    }
+  ]
+}
