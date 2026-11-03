@@ -26,6 +26,8 @@ const tests = [
   { path: "/program/category?category=kids-camps", status: 200, contains: "Kids Camps" },
   { path: "/admin/login", status: 200, contains: "Welcome back" },
   { path: "/admin", status: 302, location: "/admin/login" },
+  { path: "/admin/media/chunk?page=2", status: 302, location: "/admin/login" },
+  { path: "/admin/inquiries/chunk?page=2", status: 302, location: "/admin/login" },
   { path: "/programs", status: 404 },
   { path: "/gallery", status: 404 },
   { path: "/media/00000000-0000-0000-0000-000000000000", status: 404 },
