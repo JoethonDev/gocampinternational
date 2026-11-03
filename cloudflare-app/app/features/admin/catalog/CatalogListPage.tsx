@@ -1,12 +1,11 @@
 import { Form, Link, useNavigation } from "react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { AdminPageHeader } from "../../../components/admin/AdminPageHeader";
 import { AdminPanel } from "../../../components/admin/AdminPanel";
 import { AdminRowActions } from "../../../components/admin/AdminRowActions";
 import { AdminTable, type AdminTableColumn } from "../../../components/admin/AdminTable";
 import { AdminToolbar, AdminToolbarField } from "../../../components/admin/AdminToolbar";
 import { StatusBadge } from "../../../components/admin/StatusBadge";
-import { Pagination } from "../../../components/ui/Pagination";
 import { CATALOG_KIND_META, CATALOG_STATUS_OPTIONS } from "../../../config/catalog";
 import type { CategoryRecord, CatalogRecord, DestinationRecord } from "../../../lib/domain";
 
@@ -36,7 +35,8 @@ export function CatalogListPage({
   const [destinationFilter, setDestinationFilter] = useState("");
   const [selected, setSelected] = useState<string[]>([]);
   const [bulkStatus, setBulkStatus] = useState("");
-  const [page, setPage] = useState(1);
+  const [displayCount, setDisplayCount] = useState(15);
+  const scrollEnd = useRef<HTMLDivElement>(null);
   const pageSize = 15;
 
   const visible = useMemo(
@@ -62,9 +62,17 @@ export function CatalogListPage({
     [records, search, statusFilter, kind, categoryFilter, destinationFilter, destinations]
   );
 
-  const totalPages = Math.max(1, Math.ceil(visible.length / pageSize));
-  const safePage = Math.min(page, totalPages);
-  const paged = visible.slice((safePage - 1) * pageSize, safePage * pageSize);
+  const paged = visible.slice(0, displayCount);
+  useEffect(() => {
+    if (displayCount >= visible.length || !scrollEnd.current) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry?.isIntersecting) {
+        setDisplayCount((count) => Math.min(count + pageSize, visible.length));
+      }
+    }, { rootMargin: "260px" });
+    observer.observe(scrollEnd.current);
+    return () => observer.disconnect();
+  }, [displayCount, visible.length]);
   const hasFilters = Boolean(search || statusFilter || categoryFilter || destinationFilter);
   const clearFilters = () => {
     setSearch("");
@@ -72,7 +80,7 @@ export function CatalogListPage({
     setCategoryFilter("");
     setDestinationFilter("");
     setSelected([]);
-    setPage(1);
+    setDisplayCount(15);
   };
 
   const select = (slug: string, checked: boolean) =>
@@ -183,7 +191,7 @@ export function CatalogListPage({
             onChange={(event) => {
               setSearch(event.target.value);
               setSelected([]);
-              setPage(1);
+              setDisplayCount(15);
             }}
           />
         </AdminToolbarField>
@@ -195,7 +203,7 @@ export function CatalogListPage({
             onChange={(event) => {
               setStatusFilter(event.target.value);
               setSelected([]);
-              setPage(1);
+              setDisplayCount(15);
             }}
           >
             <option value="">All statuses</option>
@@ -216,7 +224,7 @@ export function CatalogListPage({
                 onChange={(event) => {
                   setCategoryFilter(event.target.value);
                   setSelected([]);
-                  setPage(1);
+                  setDisplayCount(15);
                 }}
               >
                 <option value="">All categories</option>
@@ -235,7 +243,7 @@ export function CatalogListPage({
                 onChange={(event) => {
                   setDestinationFilter(event.target.value);
                   setSelected([]);
-                  setPage(1);
+                  setDisplayCount(15);
                 }}
               >
                 <option value="">All destinations</option>
@@ -303,13 +311,10 @@ export function CatalogListPage({
             emptyDescription="Try a different search or filter, or create a new record."
             rowClassName={(item) => (item.status === "trash" ? "is-muted" : undefined)}
           />
-          <Pagination
-            page={safePage}
-            totalPages={totalPages}
-            onPageChange={setPage}
-            ariaLabel={`${meta.label} pages`}
-            summary={`Showing ${paged.length} of ${visible.length} · page ${safePage} of ${totalPages}`}
-          />
+          <div ref={scrollEnd} className="admin-pagination-summary mt-3" role="status">
+            Showing {paged.length} of {visible.length} matching items.
+            {paged.length < visible.length ? " Scroll to load more." : ""}
+          </div>
         </AdminPanel>
       </Form>
     </>
