@@ -52,6 +52,7 @@ export interface DestinationStat {
 }
 
 export interface DestinationRecord extends CatalogRecord {
+  banner_alt?: string;
   program_ids?: string[];
   highlights?: DestinationHighlight[];
   stats?: DestinationStat[];
