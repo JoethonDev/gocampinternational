@@ -1,5 +1,5 @@
 import { Form, redirect, useNavigation } from "react-router";
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { Route } from "./+types/admin-inquiries";
 import { requireAdmin, verifyAdminPost } from "../lib/admin.server";
 import { AdminShell } from "../components/admin/AdminShell";
@@ -8,7 +8,6 @@ import { AdminRowActions } from "../components/admin/AdminRowActions";
 import { AdminTable, type AdminTableColumn } from "../components/admin/AdminTable";
 import { AdminToolbar, AdminToolbarField } from "../components/admin/AdminToolbar";
 import { StatusBadge } from "../components/admin/StatusBadge";
-import { Pagination } from "../components/ui/Pagination";
 import type { InquiryRecord } from "../lib/domain";
 
 const PAGE_SIZE = 20;
@@ -33,7 +32,7 @@ export async function loader({ request, context }: Route.LoaderArgs) {
     .prepare(
       `SELECT id,kind,name,email,phone,status,content_json,created_at
      FROM inquiries
-     ORDER BY created_at DESC
+     ORDER BY created_at DESC, id DESC
      LIMIT ? OFFSET ?`
     )
     .bind(PAGE_SIZE, (page - 1) * PAGE_SIZE)
@@ -117,13 +116,58 @@ function InquiryDetails({ row }: { row: InquiryRecord }) {
 export default function Inquiries({ loaderData }: Route.ComponentProps) {
   const { session, rows, total, page, totalPages, updated, deleted } = loaderData;
   const navigation = useNavigation();
+  const [allRows, setAllRows] = useState(rows || []);
+  const [loadedPage, setLoadedPage] = useState(page);
+  const [loading, setLoading] = useState(false);
+  const [loadError, setLoadError] = useState("");
+  const loadingRef = useRef(false);
+  const scrollEnd = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setAllRows(rows || []);
+    setLoadedPage(page);
+  }, [rows, page]);
+
+  const loadMore = useCallback(async () => {
+    if (loadingRef.current || loadedPage >= totalPages) return;
+    loadingRef.current = true;
+    setLoading(true);
+    setLoadError("");
+    try {
+      const response = await fetch(`/admin/inquiries/chunk?page=${loadedPage + 1}`, {
+        credentials: "same-origin", headers: { Accept: "application/json" }
+      });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const chunk = await response.json() as { rows: InquiryRecord[]; page: number };
+      if (chunk.page !== loadedPage + 1) throw new Error("Unexpected inquiry cursor");
+      setAllRows((previous) => {
+        const ids = new Set(previous.map((item) => item.id));
+        return [...previous, ...chunk.rows.filter((item) => !ids.has(item.id))];
+      });
+      setLoadedPage(chunk.page);
+    } catch (error) {
+      setLoadError(error instanceof Error ? error.message : "Could not load inquiries");
+    } finally {
+      loadingRef.current = false;
+      setLoading(false);
+    }
+  }, [loadedPage, totalPages]);
+
+  useEffect(() => {
+    if (loadedPage >= totalPages || loadError || !scrollEnd.current) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry?.isIntersecting) void loadMore();
+    }, { rootMargin: "280px" });
+    observer.observe(scrollEnd.current);
+    return () => observer.disconnect();
+  }, [loadedPage, totalPages, loadMore, loadError]);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [kindFilter, setKindFilter] = useState("");
 
   const visible = useMemo(
     () =>
-      rows.filter((row) => {
+      allRows.filter((row) => {
         const query = search.toLowerCase();
         const matchesSearch =
           !query || `${row.name} ${row.email} ${row.phone} ${row.id}`.toLowerCase().includes(query);
@@ -133,7 +177,7 @@ export default function Inquiries({ loaderData }: Route.ComponentProps) {
           (!kindFilter || row.kind === kindFilter)
         );
       }),
-    [rows, search, statusFilter, kindFilter]
+    [allRows, search, statusFilter, kindFilter]
   );
   const hasFilters = Boolean(search || statusFilter || kindFilter);
   const clearFilters = () => {
@@ -237,7 +281,7 @@ export default function Inquiries({ loaderData }: Route.ComponentProps) {
           <div className="admin-toolbar-summary">
             <span className="admin-count-pill">
               <strong>{visible.length}</strong>
-              <span>of {rows.length}</span>
+              <span>of {allRows.length}</span>
             </span>
             {hasFilters && (
               <button type="button" className="admin-filter-clear" onClick={clearFilters}>
@@ -291,13 +335,15 @@ export default function Inquiries({ loaderData }: Route.ComponentProps) {
         emptyTitle="No matching inquiries"
         emptyDescription="Try a different search, status or type filter."
       />
-      <Pagination
-        page={page}
-        totalPages={totalPages}
-        ariaLabel="Inquiry pages"
-        summary={`Page ${page} of ${totalPages} · ${total} inquiries`}
-        href={(target) => `?page=${target}`}
-      />
+      <div className="admin-pagination-summary mt-3" ref={scrollEnd} role="status">
+        Showing {allRows.length} of {total} inquiries.
+        {loading ? " Loading more…" : loadedPage < totalPages ? " Scroll down for more." : ""}
+        {loadError && (
+          <button className="btn btn-sm btn-outline-primary ms-2" type="button" onClick={() => void loadMore()}>
+            Retry loading ({loadError})
+          </button>
+        )}
+      </div>
     </AdminShell>
   );
 }
