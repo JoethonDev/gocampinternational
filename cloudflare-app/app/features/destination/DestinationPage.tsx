@@ -43,7 +43,7 @@ function Hero({ destination }: { destination: DestinationRecord }) {
       </div>
       <img src={destination.banner || SITE.images.placeholder}
         srcSet={responsiveSrcSet(destination.banner || SITE.images.placeholder)} sizes="100vw"
-        alt={"Summer camp destination: " + destination.name} loading="eager"
+        alt={destination.banner_alt || "Summer camp destination: " + destination.name} loading="eager"
         fetchPriority="high" decoding="async"
         className="hero-background position-absolute top-0 start-0 w-100 h-100 object-fit-cover" />
     </section>
@@ -92,7 +92,7 @@ function Introduction({ destination }: { destination: DestinationRecord }) {
                 src={destination.intro_image}
                 srcSet={responsiveSrcSet(destination.intro_image)}
                 sizes="(max-width: 992px) 100vw, 42vw"
-                alt={destination.name}
+                alt={destination.intro_image === destination.banner ? destination.banner_alt || destination.name : destination.name}
                 loading="lazy"
               />
             </div>
