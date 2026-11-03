@@ -80,7 +80,7 @@ try {
       await writeFile(localFile, bytes);
       const upload = execFileSync("./node_modules/.bin/wrangler", [
         "r2", "object", "put", `${BUCKET}/${key}`, "--file", localFile,
-        "--content-type", "image/webp"
+        "--content-type", "image/webp", "--cache-control", "public,max-age=31536000,immutable", "--remote"
       ], { encoding: "utf8", maxBuffer: 2 * 1024 * 1024, timeout: 90000, env: { ...process.env, CI: "true" } });
       if (!/upload|create|success|complete/i.test(upload)) {
         throw new Error(`Cannot confirm R2 upload of ${key}: ${upload.slice(0, 300)}`);
