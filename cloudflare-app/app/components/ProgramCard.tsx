@@ -1,6 +1,6 @@
 import { responsiveSrcSet } from "../lib/responsive-media";
 import { SITE } from "../config/site";
-import { asStringArray, type ProgramRecord, type SiteSettings } from "../lib/domain";
+import { asNumber, asStringArray, type ProgramRecord, type SiteSettings } from "../lib/domain";
 import { isVisible } from "../lib/visibility";
 
 export function ProgramCard({
@@ -11,6 +11,9 @@ export function ProgramCard({
   settings: SiteSettings;
 }) {
   const highlights = asStringArray(program.highlights);
+  const minAge = asNumber(program.ages?.min);
+  const maxAge = asNumber(program.ages?.max);
+  const hasValidAgeRange = minAge !== null && minAge > 0 && maxAge !== null && maxAge >= minAge;
 
   return (
     <div className="program-card-modern position-relative h-100">
@@ -30,6 +33,11 @@ export function ProgramCard({
         )}
         <div className="card-body p-4 d-flex flex-column">
           <h3 className="card-title fw-bold mb-2 text-brand-dark fs-4">{program.name}</h3>
+          {hasValidAgeRange && (
+            <p className="small fw-semibold text-brand-primary mb-2">
+              Ages {minAge === maxAge ? minAge : `${minAge}–${maxAge}`}
+            </p>
+          )}
           {program.tagline && isVisible("program", "card_tagline", program, settings) && (
             <p className="card-text text-muted mb-3">{program.tagline}</p>
           )}
