@@ -7,7 +7,7 @@ const path = (v) => /^\/media\/[a-f0-9-]{36}$/.test(String(v||'')) ? v : '';
 const image = (src, alt, className, eager) => {
   const p=path(src);
   if(!p) return '<div class="image-fallback '+esc(className||'')+'">GO CAMP</div>';
-  return '<img class="'+esc(className||'')+'" src="'+p+'?preset=desktop" srcset="'+p+'?preset=mobile 480w, '+p+'?preset=tablet 960w, '+p+'?preset=desktop 1600w" sizes="(max-width:640px) 100vw, (max-width:1080px) 55vw, 33vw" alt="'+esc(alt)+'" loading="'+(eager?'eager':'lazy')+'" decoding="async">';
+  return '<img class="'+esc(className||'')+'" src="'+p+'?preset=desktop" srcset="'+p+'?preset=mobile 480w, '+p+'?preset=tablet 960w, '+p+'?preset=desktop 1600w" sizes="'+(eager?'100vw':'(max-width:720px) 100vw, (max-width:1080px) 60vw, 33vw')+'" alt="'+esc(alt)+'" loading="'+(eager?'eager':'lazy')+'" decoding="async">';
 };
 const CSS = [
 ':root{--cyan:#00a4c0;--cyanDeep:#086578;--lime:#85b92e;--yellow:#f9bb08;--ink:#213749;--muted:#637583;--cloud:#f4f9fa;--border:#deeaed;--white:#fff;--shadow:0 20px 65px rgba(10,59,76,.1)}',
