@@ -40,18 +40,25 @@ function AboutSection({
   return (
     <div className={"card shadow-sm border-0 overflow-hidden" + (isLast ? "" : " mb-5")}>
       {isIntro ? (
-        <div className="card-body p-4 p-lg-5 clearfix">
-          <img
-            src={section.image}
-            srcSet={responsiveSrcSet(section.image)}
-            sizes="(max-width: 992px) 100vw, 440px"
-            alt="Go Camp International students on an educational trip"
-            className="img-fluid d-block float-lg-start mx-auto mx-lg-0 me-lg-4 mb-4"
-            style={{ width: "auto", maxWidth: "min(100%, 440px)", height: "auto" }}
-            loading="lazy"
-          />
-          <h2 className="card-title mb-3">{section.title}</h2>
-          {paragraphs}
+        <div className="card-body p-4 p-lg-5">
+          <div className="row g-4 align-items-start">
+            <div className="col-lg-5 d-flex justify-content-center">
+              <img
+                src={section.image}
+                alt="Go Camp International students on an educational trip"
+                className="img-fluid d-block"
+                style={{ width: "auto", height: "auto", maxWidth: "100%", maxHeight: "500px", objectFit: "contain" }}
+                loading="lazy"
+              />
+            </div>
+            <div className="col-lg-7">
+              <h2 className="card-title mb-3">{section.title}</h2>
+              {paragraphs.slice(0, 2)}
+            </div>
+          </div>
+          {paragraphs.length > 2 && (
+            <div className="mt-4">{paragraphs.slice(2)}</div>
+          )}
         </div>
       ) : (
         <div className={"row g-0" + (section.reverse ? " flex-row-reverse" : "")}>
