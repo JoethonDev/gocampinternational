@@ -136,14 +136,14 @@ export function AboutPage({ content }: { content: AboutPageContent }) {
               <div className="row g-4 align-items-center">
                 <div className="col-md-auto text-center">
                   <div
-                    className="rounded-circle shadow-sm d-flex justify-content-center align-items-center mx-auto overflow-hidden"
-                    style={{ width: 180, height: 180, backgroundColor: "#f2ede7" }}
+                    className="rounded-circle shadow-sm mx-auto overflow-hidden"
+                    style={{ width: 180, height: 180 }}
                   >
                     <img
                       src={SITE.images.profile}
                       alt={content.profile.name}
-                      className="img-fluid d-block"
-                      style={{ width: "70%", height: "auto", maxHeight: "70%", objectFit: "contain" }}
+                      className="d-block"
+                      style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "43% 40%" }}
                       loading="lazy"
                     />
                   </div>
