@@ -89,28 +89,6 @@ export function AboutPage({ content }: { content: AboutPageContent }) {
       />
       <div className="container py-5">
         <Breadcrumbs items={[{ label: "HOME", to: "/" }, { label: "ABOUT US" }]} />
-        <section className="card shadow-sm border-0 mb-5" aria-labelledby="about-director-title">
-          <div className="card-body p-4 p-lg-5">
-            <div className="row g-4 align-items-center">
-              <div className="col-md-auto text-center">
-                <img
-                  src={SITE.images.profile}
-                  alt={content.profile.name}
-                  className="rounded-circle"
-                  style={{ width: 148, height: 148, objectFit: "cover" }}
-                  loading="lazy"
-                />
-              </div>
-              <div className="col-md">
-                <h2 id="about-director-title" className="h3 mb-2">{content.profile.name}</h2>
-                <p className="fw-semibold text-secondary">{content.profile.title}</p>
-                {content.profile.body.split(/\n\s*\n/).map((paragraph, index) => (
-                  <p className="fs-5 lh-lg text-secondary" key={index}>{paragraph}</p>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
         <div className="row g-5">
           <div className="col-12">
             {content.sections.map((section, index) => (
@@ -123,6 +101,31 @@ export function AboutPage({ content }: { content: AboutPageContent }) {
             ))}
           </div>
         </div>
+        <section className="mt-5" aria-labelledby="about-founder-title">
+          <h2 id="about-founder-title" className="h3 mb-4">Meet Our Founder</h2>
+          <section className="card shadow-sm border-0" aria-labelledby="about-director-title">
+            <div className="card-body p-4 p-lg-5">
+              <div className="row g-4 align-items-center">
+                <div className="col-md-auto text-center">
+                  <img
+                    src={SITE.images.profile}
+                    alt={content.profile.name}
+                    className="rounded-circle"
+                    style={{ width: 148, height: 148, objectFit: "cover" }}
+                    loading="lazy"
+                  />
+                </div>
+                <div className="col-md">
+                  <h3 id="about-director-title" className="h3 mb-2">{content.profile.name}</h3>
+                  <p className="fw-semibold text-secondary">{content.profile.title}</p>
+                  {content.profile.body.split(/\n\s*\n/).map((paragraph, index) => (
+                    <p className="fs-5 lh-lg text-secondary" key={index}>{paragraph}</p>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </section>
+        </section>
       </div>
     </>
   );
