@@ -20,7 +20,7 @@ export const SITE = {
     aboutBanner: "/images/about_banner.webp",
     faqBanner: "/images/faq_banner.webp",
     placeholder: "/images/placeholder.webp",
-    profile: "/images/profile.webp",
+    profile: "/media/910dd151-26f4-54f9-bc3d-c8cabc770e31",
     icef: "/images/icef_logo.webp",
     facebookIcon: "/images/facebook_icon.webp",
     instagramIcon: "/images/instagram_icon.webp",
