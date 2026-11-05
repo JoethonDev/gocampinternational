@@ -131,8 +131,8 @@ export function AboutPage({ content }: { content: AboutPageContent }) {
                   <img
                     src={SITE.images.profile}
                     alt={content.profile.name}
-                    className="rounded-circle"
-                    style={{ width: 148, height: 148, objectFit: "cover" }}
+                    className="rounded-3 shadow-sm img-fluid"
+                    style={{ width: "min(100%, 260px)", height: "auto", objectFit: "contain" }}
                     loading="lazy"
                   />
                 </div>
