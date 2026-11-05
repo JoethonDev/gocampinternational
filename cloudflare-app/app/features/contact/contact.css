@@ -26,25 +26,23 @@
   height: 40px;
   flex-shrink: 0;
 }
-/* A circular frame with a contained photo: all four image corners stay
-   inside the circle instead of being clipped by object-fit: cover. */
+/* Fill the circular avatar edge-to-edge. The photo is almost square; center
+   its face and retain the natural aspect ratio without distortion. */
 .contact-avatar {
   width: 180px;
   height: 180px;
   flex: 0 0 180px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: block;
   overflow: hidden;
-  background: #f2ede7;
-  border: 4px solid rgba(255, 255, 255, 0.35);
+  background: transparent;
+  border: 0;
 }
 .contact-avatar-photo {
   display: block;
-  width: 70%;
-  height: auto;
-  max-height: 70%;
-  object-fit: contain;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 43% 40%;
 }
 @media (prefers-reduced-motion: no-preference) {
   .contact-action.btn {
