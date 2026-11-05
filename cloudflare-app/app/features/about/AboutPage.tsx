@@ -15,14 +15,14 @@ function AboutSection({
   return (
     <div className={"card shadow-sm border-0 overflow-hidden" + (isLast ? "" : " mb-5")}>
       <div className={"row g-0" + (section.reverse ? " flex-row-reverse" : "")}>
-        <div className="col-lg-5">
+        <div className="col-lg-5 align-self-start">
           <img
             src={section.image}
             srcSet={responsiveSrcSet(section.image)}
             sizes="(max-width: 992px) 100vw, 42vw"
             alt={section.title}
-            className="img-fluid h-100"
-            style={{ objectFit: "cover", width: "100%" }}
+            className="img-fluid d-block w-100"
+            style={{ height: "auto", objectFit: "contain" }}
             loading="lazy"
           />
         </div>
