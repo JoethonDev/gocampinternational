@@ -9,8 +9,10 @@ const tests = [
   { path: "/", status: 200, contains: "/media/49c7cbd7-a00e-5970-9ed1-1e14e077e016" },
   { path: "/about", status: 200, contains: "About Us" },
   { path: "/about", status: 200, contains: "Zeinab El Sokkary" },
+  { path: "/about", status: 200, contains: "/media/910dd151-26f4-54f9-bc3d-c8cabc770e31" },
   { path: "/faq", status: 200, contains: "Are airport transfers arranged?" },
   { path: "/contact", status: 200, contains: "https://wa.me/201221719621" },
+  { path: "/contact", status: 200, contains: "/media/910dd151-26f4-54f9-bc3d-c8cabc770e31" },
   { path: "/robots.txt", status: 200, contains: "Disallow: /" },
   { path: "/sitemap.xml", status: 404 },
   { path: "/faq", status: 200 },
@@ -28,6 +30,8 @@ const tests = [
   { path: "/images/destinations/switzerland/switzerland-alpine-lakeside-panorama.webp", status: 200, method: "HEAD", source: "r2", contentType: "image/webp" },
   { path: "/media/178b5783-af42-5554-a323-2cd1e286abd5?variant=mobile", status: 200, method: "HEAD", contentType: "image/webp" },
   { path: "/program/category?category=adult-academic", status: 200 },
+  // Young Leader was deliberately deactivated; its category page must not remain public.
+  { path: "/program/category?category=young-leader-program", status: 404 },
   { path: "/program/category?category=kids-camps", status: 200, contains: "Kids Camps" },
   { path: "/admin/login", status: 200, contains: "Welcome back" },
   { path: "/admin", status: 302, location: "/admin/login" },
@@ -65,6 +69,7 @@ const tests = [
     method: "HEAD",
     contentType: "image/webp"
   },
+  { path: "/media/910dd151-26f4-54f9-bc3d-c8cabc770e31", status: 200, method: "HEAD", contentType: "image/webp" },
   { path: "/home", status: 301, location: "/" },
   { path: "/index.php", status: 301, location: "/" },
   { path: "/home.php", status: 301, location: "/" },
@@ -139,7 +144,7 @@ const seoPaths = [
   ...["italy", "switzerland", "germany", "uk", "austria"].map(
     (slug) => "/destinations/" + slug
   ),
-  ...["kids-camps", "adult-academic", "young-leader-program", "soccer-camps", "special-interests-camps", "tennis"].map(
+  ...["kids-camps", "adult-academic", "soccer-camps", "special-interests-camps", "tennis"].map(
     (slug) => "/program/category?category=" + slug
   ),
   "/landing"
