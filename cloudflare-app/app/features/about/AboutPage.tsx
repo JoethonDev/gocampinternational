@@ -135,13 +135,18 @@ export function AboutPage({ content }: { content: AboutPageContent }) {
             <div className="card-body p-4 p-lg-5">
               <div className="row g-4 align-items-center">
                 <div className="col-md-auto text-center">
-                  <img
-                    src={SITE.images.profile}
-                    alt={content.profile.name}
-                    className="rounded-3 shadow-sm img-fluid"
-                    style={{ width: "min(100%, 260px)", height: "auto", objectFit: "contain" }}
-                    loading="lazy"
-                  />
+                  <div
+                    className="rounded-circle shadow-sm d-flex justify-content-center align-items-center mx-auto overflow-hidden"
+                    style={{ width: 180, height: 180, backgroundColor: "#f2ede7" }}
+                  >
+                    <img
+                      src={SITE.images.profile}
+                      alt={content.profile.name}
+                      className="img-fluid d-block"
+                      style={{ width: "70%", height: "auto", maxHeight: "70%", objectFit: "contain" }}
+                      loading="lazy"
+                    />
+                  </div>
                 </div>
                 <div className="col-md">
                   <h3 id="about-director-title" className="h3 mb-2">{content.profile.name}</h3>
