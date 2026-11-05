@@ -126,7 +126,7 @@ function ContactCard() {
           <img
             src={SITE.images.profile}
             alt={SITE.director}
-            className="rounded-circle shadow-lg contact-avatar"
+            className="rounded-3 shadow-lg contact-avatar"
           />
         </div>
         <h3 className="fw-bold text-white mb-1">{SITE.director}</h3>
