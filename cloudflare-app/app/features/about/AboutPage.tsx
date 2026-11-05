@@ -12,49 +12,70 @@ function AboutSection({
   isLast: boolean;
   index: number;
 }) {
+  // Long editorial copy should flow around its photo rather than force
+  // the photo to match the full height of the text.
+  const isIntro = index === 0;
+  const paragraphs = section.body.map((paragraph, paragraphIndex) => (
+    <p
+      key={paragraphIndex}
+      className={
+        "fs-5 lh-lg text-secondary" +
+        (paragraphIndex === section.body.length - 1 ? " mb-0" : "")
+      }
+    >
+      {paragraph.split("\\n\\n").map((segment, segmentIndex) => (
+        <span key={segmentIndex}>
+          {segmentIndex > 0 && (
+            <>
+              <br />
+              <br />
+            </>
+          )}
+          {segment}
+        </span>
+      ))}
+    </p>
+  ));
+
   return (
     <div className={"card shadow-sm border-0 overflow-hidden" + (isLast ? "" : " mb-5")}>
-      <div className={"row g-0" + (section.reverse ? " flex-row-reverse" : "")}>
-        <div className="col-lg-5 align-self-start">
+      {isIntro ? (
+        <div className="card-body p-4 p-lg-5 clearfix">
           <img
             src={section.image}
             srcSet={responsiveSrcSet(section.image)}
-            sizes="(max-width: 992px) 100vw, 42vw"
-            alt={section.title}
-            className="img-fluid d-block w-100"
-            style={{ height: "auto", objectFit: "contain" }}
+            sizes="(max-width: 992px) 100vw, 440px"
+            alt="Go Camp International students on an educational trip"
+            className="img-fluid d-block float-lg-start mx-auto mx-lg-0 me-lg-4 mb-4"
+            style={{ width: "auto", maxWidth: "min(100%, 440px)", height: "auto" }}
             loading="lazy"
           />
+          <h2 className="card-title mb-3">{section.title}</h2>
+          {paragraphs}
         </div>
-        <div className="col-lg-7 d-flex align-items-center">
-          <div className="card-body p-5">
-            <h2 className="card-title mb-3">{section.title}</h2>
-            {section.body.map((paragraph, paragraphIndex) => (
-              <p
-                key={paragraphIndex}
-                className={
-                  "fs-5 lh-lg text-secondary" +
-                  (paragraphIndex === section.body.length - 1 && (index === 1 || index === 2)
-                    ? " mb-0"
-                    : "")
-                }
-              >
-                {paragraph.split("\n\n").map((segment, segmentIndex) => (
-                  <span key={segmentIndex}>
-                    {segmentIndex > 0 && (
-                      <>
-                        <br />
-                        <br />
-                      </>
-                    )}
-                    {segment}
-                  </span>
-                ))}
-              </p>
-            ))}
+      ) : (
+        <div className={"row g-0" + (section.reverse ? " flex-row-reverse" : "")}>
+          <div className="col-lg-5 align-self-start">
+            <div className="d-flex justify-content-center align-items-start p-3 p-lg-4">
+              <img
+                src={section.image}
+                srcSet={responsiveSrcSet(section.image)}
+                sizes="(max-width: 992px) 100vw, 42vw"
+                alt={section.title}
+                className="img-fluid d-block"
+                style={{ width: "auto", height: "auto", maxWidth: "100%", maxHeight: "620px" }}
+                loading="lazy"
+              />
+            </div>
+          </div>
+          <div className="col-lg-7 d-flex align-items-center">
+            <div className="card-body p-4 p-lg-5">
+              <h2 className="card-title mb-3">{section.title}</h2>
+              {paragraphs}
+            </div>
           </div>
         </div>
-      </div>
+      )}
       {section.gallery && section.gallery.length > 0 && (
         <div className="about-section-gallery">
           {section.gallery.map((photo) => (
