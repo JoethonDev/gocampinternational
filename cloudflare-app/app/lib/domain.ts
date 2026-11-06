@@ -1,6 +1,5 @@
 export type JsonObject = Record<string, unknown>;
 export type CatalogKind = "program" | "destination" | "category";
-export type CatalogStatus = "active" | "inactive" | "coming-soon" | "trash";
 export type VisibilityValue = boolean | "inherit" | "1" | "0";
 export type VisibilityMap = Record<string, VisibilityValue>;
 

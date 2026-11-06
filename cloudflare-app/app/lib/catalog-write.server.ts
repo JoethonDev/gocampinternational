@@ -1,4 +1,5 @@
 import { verifyAdminPost } from "./admin.server";
+import { checkedWrite, chunksOf, runAtomicBatch } from "./db.server";
 import type { DocumentKey } from "./documents";
 import {
   CATALOG_STATUSES,
@@ -34,6 +35,8 @@ export async function saveEntity(
     )
     .bind(kind, original)
     .first<{ content_json: string; revision: number; sort_order: number }>();
+  if (!originalSlug && row) throw new Response("ID already exists", { status: 409 });
+  if (originalSlug && !row) throw new Response("Record no longer exists", { status: 404 });
   const previous = row ? (JSON.parse(row.content_json) as Record<string, unknown>) : {};
   const data = readCatalogFields(form, kind, previous);
   if (kind === "program") data.id = slug;
@@ -62,17 +65,32 @@ export async function saveEntity(
     const ids = [...new Set((data.program_ids as string[]) || [])];
     data.program_ids = ids;
     const valid = ids.length
-      ? await db
-          .prepare(
-            "SELECT slug FROM catalog_entities WHERE kind='program' AND slug IN (" +
-              ids.map(() => "?").join(",") +
-              ")"
+      ? await db.batch<{ slug: string }>(
+          chunksOf(ids, 100).map((chunk) =>
+            db
+              .prepare(
+                "SELECT slug FROM catalog_entities WHERE kind='program' AND slug IN (" +
+                  chunk.map(() => "?").join(",") +
+                  ")"
+              )
+              .bind(...chunk)
           )
-          .bind(...ids)
-          .all<{ slug: string }>()
-      : { results: [] as Array<{ slug: string }> };
-    if (valid.results.length !== ids.length) {
+        )
+      : [];
+    if (valid.flatMap((result) => result.results).length !== ids.length) {
       throw new Response("Destination references an unknown program", { status: 400 });
+    }
+    // A program can be deleted between validation and the write transaction.
+    for (const chunk of chunksOf(ids, 100)) {
+      jobs.push(
+        db
+          .prepare(
+            `SELECT CASE WHEN
+        (SELECT COUNT(*) FROM catalog_entities WHERE kind='program' AND slug IN (${chunk.map(() => "?").join(",")}))
+        = ${chunk.length} THEN 1 ELSE abs(-9223372036854775808) END`
+          )
+          .bind(...chunk)
+      );
     }
   }
 
@@ -83,34 +101,40 @@ export async function saveEntity(
       });
     }
     jobs.push(
-      db
-        .prepare(
-          `UPDATE catalog_entities
+      ...checkedWrite(
+        db,
+        db
+          .prepare(
+            `UPDATE catalog_entities
            SET slug=?,name=?,status=?,category_slug=?,sort_order=?,content_json=?,
                revision=revision+1,updated_at=unixepoch()
            WHERE kind=? AND slug=? AND revision=?`
-        )
-        .bind(
-          slug,
-          data.name,
-          data.status,
-          category,
-          order,
-          JSON.stringify(data),
-          kind,
-          original,
-          revision
-        )
+          )
+          .bind(
+            slug,
+            data.name,
+            data.status,
+            category,
+            order,
+            JSON.stringify(data),
+            kind,
+            original,
+            revision
+          )
+      )
     );
   } else {
     jobs.push(
-      db
-        .prepare(
-          `INSERT INTO catalog_entities
+      ...checkedWrite(
+        db,
+        db
+          .prepare(
+            `INSERT INTO catalog_entities
              (kind,slug,name,status,category_slug,sort_order,content_json,revision)
            VALUES(?,?,?,?,?,?,?,0)`
-        )
-        .bind(kind, slug, data.name, data.status, category, order, JSON.stringify(data))
+          )
+          .bind(kind, slug, data.name, data.status, category, order, JSON.stringify(data))
+      )
     );
   }
 
@@ -157,15 +181,29 @@ export async function saveEntity(
       if (JSON.stringify(next) === JSON.stringify(payload.program_ids)) continue;
       payload.program_ids = next;
       jobs.push(
-        db
-          .prepare(
-            `UPDATE catalog_entities
+        ...checkedWrite(
+          db,
+          db
+            .prepare(
+              `UPDATE catalog_entities
              SET content_json=?,revision=revision+1,updated_at=unixepoch()
              WHERE kind='destination' AND slug=? AND revision=?`
-          )
-          .bind(JSON.stringify(payload), destination.slug, destination.revision)
+            )
+            .bind(JSON.stringify(payload), destination.slug, destination.revision)
+        )
       );
     }
+    // Include destinations linked by another editor after the snapshot was read.
+    jobs.push(
+      db
+        .prepare(
+          `SELECT CASE WHEN NOT EXISTS (
+      SELECT 1 FROM catalog_entities d, json_each(d.content_json,'$.program_ids') p
+      WHERE d.kind='destination' AND p.value IN (${[...oldIds].map(() => "?").join(",")}))
+      THEN 1 ELSE abs(-9223372036854775808) END`
+        )
+        .bind(...oldIds)
+    );
   }
 
   if (renamed && kind === "category") {
@@ -179,21 +217,30 @@ export async function saveEntity(
       const payload = JSON.parse(program.content_json) as Record<string, unknown>;
       payload.category_slug = slug;
       jobs.push(
-        db
-          .prepare(
-            `UPDATE catalog_entities
+        ...checkedWrite(
+          db,
+          db
+            .prepare(
+              `UPDATE catalog_entities
              SET category_slug=?,content_json=?,revision=revision+1,updated_at=unixepoch()
              WHERE kind='program' AND slug=? AND revision=?`
-          )
-          .bind(slug, JSON.stringify(payload), program.slug, program.revision)
+            )
+            .bind(slug, JSON.stringify(payload), program.slug, program.revision)
+        )
       );
     }
+    jobs.push(
+      db
+        .prepare(
+          `SELECT CASE WHEN NOT EXISTS (
+      SELECT 1 FROM catalog_entities WHERE kind='program' AND category_slug=?)
+      THEN 1 ELSE abs(-9223372036854775808) END`
+        )
+        .bind(original)
+    );
   }
 
-  const results = await db.batch(jobs);
-  if (results[0].meta.changes !== 1) {
-    throw new Response("Concurrent update or duplicate ID", { status: 409 });
-  }
+  await runAtomicBatch(db, jobs);
   return slug;
 }
 
@@ -222,14 +269,17 @@ export async function duplicateEntity(
     }>();
   if (!row) throw new Response("Record not found", { status: 404 });
 
+  // Reserve space for numeric suffixes even when the source ID is 160 characters.
+  const prefix = `${slug.slice(0, 140)}-copy`;
   const existing = await db
-    .prepare("SELECT slug FROM catalog_entities WHERE kind=? AND slug LIKE ?")
-    .bind(kind, `${slug}-copy%`)
+    .prepare("SELECT slug FROM catalog_entities WHERE kind=? AND substr(slug,1,length(?))=?")
+    .bind(kind, prefix, prefix)
     .all<{ slug: string }>();
   const used = new Set((existing.results || []).map((item) => item.slug));
-  let next = `${slug}-copy`;
+  let next = prefix;
   let suffix = 2;
-  while (used.has(next)) next = `${slug}-copy-${suffix++}`;
+  while (used.has(next)) next = `${prefix}-${suffix++}`;
+  if (!isValidCatalogId(next)) throw new Response("Copy ID is too long", { status: 409 });
 
   const data: Record<string, unknown> = {
     ...(JSON.parse(row.content_json) as Record<string, unknown>),
@@ -275,10 +325,7 @@ export async function duplicateEntity(
     );
   }
 
-  const results = await db.batch(jobs);
-  if (results[0].meta.changes !== 1) {
-    throw new Response("Could not duplicate this record", { status: 409 });
-  }
+  await runAtomicBatch(db, jobs);
   return next;
 }
 
@@ -301,32 +348,36 @@ export async function changeBulkStatus(
     throw new Response("Select 1 to 100 records", { status: 400 });
   }
   const unique = [...new Set(ids)];
-  const rows = await db
-    .prepare(
-      "SELECT slug,content_json,revision FROM catalog_entities WHERE kind=? AND slug IN (" +
-        unique.map(() => "?").join(",") +
-        ")"
+  const selections = await db.batch<{ slug: string; content_json: string; revision: number }>(
+    chunksOf(unique, 99).map((chunk) =>
+      db
+        .prepare(
+          "SELECT slug,content_json,revision FROM catalog_entities WHERE kind=? AND slug IN (" +
+            chunk.map(() => "?").join(",") +
+            ")"
+        )
+        .bind(kind, ...chunk)
     )
-    .bind(kind, ...unique)
-    .all<{ slug: string; content_json: string; revision: number }>();
-  if (rows.results.length !== unique.length) {
+  );
+  const rows = selections.flatMap((result) => result.results);
+  if (rows.length !== unique.length) {
     throw new Response("One or more records are unavailable", { status: 409 });
   }
-  const jobs = rows.results.map((row) => {
+  const jobs = rows.flatMap((row) => {
     const data = { ...(JSON.parse(row.content_json) as Record<string, unknown>), status };
-    return db
-      .prepare(
-        `UPDATE catalog_entities
+    return checkedWrite(
+      db,
+      db
+        .prepare(
+          `UPDATE catalog_entities
          SET status=?,content_json=?,revision=revision+1,updated_at=unixepoch()
          WHERE kind=? AND slug=? AND revision=?`
-      )
-      .bind(status, JSON.stringify(data), kind, row.slug, row.revision);
+        )
+        .bind(status, JSON.stringify(data), kind, row.slug, row.revision)
+    );
   });
-  const results = await db.batch(jobs);
-  if (results.some((result) => result.meta.changes !== 1)) {
-    throw new Response("Concurrent update detected", { status: 409 });
-  }
-  return results.length;
+  await runAtomicBatch(db, jobs);
+  return rows.length;
 }
 
 export async function saveDocument(

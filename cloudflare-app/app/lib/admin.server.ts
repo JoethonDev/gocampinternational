@@ -1,3 +1,4 @@
+import { consumeRateLimit } from "./rate-limit.server";
 import { redirect } from "react-router";
 import { constantTimeEqual, randomHex, sha256Hex } from "./crypto.server";
 
@@ -84,35 +85,11 @@ export async function verifyAdminPost(
   return session;
 }
 
-async function withinLoginRateLimit(request: Request, db: D1Database): Promise<boolean> {
-  const ip = request.headers.get("cf-connecting-ip") || "unknown";
-  const now = Math.floor(Date.now() / 1000);
-  const addressHash = await sha256Hex(`admin-login:${ip}`);
-  const row = await db
-    .prepare(
-      `INSERT INTO submission_limits(scope,address_hash,window_start,attempts)
-       VALUES('admin-login',?,?,1)
-       ON CONFLICT(scope,address_hash) DO UPDATE SET
-         attempts=CASE WHEN window_start <= ? THEN 1 ELSE attempts+1 END,
-         window_start=CASE WHEN window_start <= ? THEN ? ELSE window_start END
-       WHERE window_start <= ? OR attempts < 5
-       RETURNING attempts`
-    )
-    .bind(
-      addressHash,
-      now,
-      now - LOGIN_WINDOW_SECONDS,
-      now - LOGIN_WINDOW_SECONDS,
-      now,
-      now - LOGIN_WINDOW_SECONDS
-    )
-    .first<{ attempts: number }>();
-  return Boolean(row);
-}
-
 export async function login(request: Request, db: D1Database, env: AdminEnv, form: FormData) {
   requireSameOrigin(request);
-  if (!(await withinLoginRateLimit(request, db))) {
+  if (
+    !(await consumeRateLimit(db, request, "admin-login", LOGIN_WINDOW_SECONDS, LOGIN_MAX_ATTEMPTS))
+  ) {
     return { error: "Too many login attempts. Try again in 15 minutes.", status: 429 };
   }
 

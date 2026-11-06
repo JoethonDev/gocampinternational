@@ -1,3 +1,4 @@
+import { ReorderButtons } from "./ui/ReorderButtons";
 import { useState } from "react";
 import { moveItem, useDragReorder } from "../hooks/useDragReorder";
 import { DragHandle } from "./ui/DragHandle";
@@ -178,24 +179,11 @@ export function Repeater({
                 </div>
               ))}
             </div>
-            <div className="d-flex gap-2 mt-2">
-              <button
-                type="button"
-                className="btn btn-sm btn-outline-secondary"
-                disabled={index === 0}
-                onClick={() => move(index, -1)}
-              >
-                Move up
-              </button>
-              <button
-                type="button"
-                className="btn btn-sm btn-outline-secondary"
-                disabled={index === rows.length - 1}
-                onClick={() => move(index, 1)}
-              >
-                Move down
-              </button>
-            </div>
+            <ReorderButtons
+              index={index}
+              count={rows.length}
+              onMove={(step) => move(index, step)}
+            />
           </div>
         </div>
       ))}

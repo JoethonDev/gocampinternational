@@ -33,32 +33,47 @@ export function meta({ data, matches, location }: Route.MetaArgs) {
     origin: originFrom(matches),
     path: location.pathname,
     title,
-    description: String(destination?.tagline || destination?.intro_text || `Explore international programs in ${name} with GO Camp International.`),
+    description: String(
+      destination?.tagline ||
+        destination?.intro_text ||
+        `Explore international programs in ${name} with GO Camp International.`
+    ),
     image: String(destination?.banner || "/images/banner.webp"),
-    robots: destination?.status === "coming-soon" || destination?.status === "inactive" ? "noindex,follow" : undefined
+    robots:
+      destination?.status === "coming-soon" || destination?.status === "inactive"
+        ? "noindex,follow"
+        : undefined
   });
 }
 
 export default function Destination({ loaderData }: Route.ComponentProps) {
   const root = useRouteLoaderData("root") as { settings: SiteSettings } | undefined;
-  const base = (root as { origin?: string } | undefined)?.origin || "https://gocampinternational.net";
+  const base =
+    (root as { origin?: string } | undefined)?.origin || "https://gocampinternational.net";
   const destination = loaderData.destination;
   return (
     <>
-    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd({
-      "@context": "https://schema.org", "@type": "CollectionPage",
-      name: destination.name, url: base + "/destinations/" + encodeURIComponent(destination.slug),
-      description: String(destination.tagline || "").replace(/<[^>]+>/g, ""),
-      primaryImageOfPage: new URL(destination.banner || "/images/banner.webp", base).href,
-      isPartOf: { "@id": base + "/#website" }
-    }) }} />
-    <DestinationPage
-      destination={loaderData.destination}
-      programs={loaderData.related}
-      hasProgramIds={loaderData.hasProgramIds}
-      settings={root?.settings || {}}
-      memories={loaderData.memories}
-    />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: safeJsonLd({
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            name: destination.name,
+            url: base + "/destinations/" + encodeURIComponent(destination.slug),
+            description: String(destination.tagline || "").replace(/<[^>]+>/g, ""),
+            primaryImageOfPage: new URL(destination.banner || "/images/banner.webp", base).href,
+            isPartOf: { "@id": base + "/#website" }
+          })
+        }}
+      />
+      <DestinationPage
+        destination={loaderData.destination}
+        programs={loaderData.related}
+        hasProgramIds={loaderData.hasProgramIds}
+        settings={root?.settings || {}}
+        memories={loaderData.memories}
+      />
     </>
   );
 }

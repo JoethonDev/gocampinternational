@@ -4,7 +4,11 @@ const bytesToHex = (bytes: Uint8Array) =>
   Array.from(bytes, (value) => value.toString(16).padStart(2, "0")).join("");
 
 export async function sha256Hex(value: string): Promise<string> {
-  const digest = await crypto.subtle.digest("SHA-256", encoder.encode(value));
+  return sha256Bytes(encoder.encode(value));
+}
+
+export async function sha256Bytes(value: BufferSource): Promise<string> {
+  const digest = await crypto.subtle.digest("SHA-256", value);
   return bytesToHex(new Uint8Array(digest));
 }
 

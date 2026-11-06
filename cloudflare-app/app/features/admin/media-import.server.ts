@@ -15,10 +15,15 @@ export async function importLegacyImage(item: LegacyImage, _request: Request, en
   const originalKey = item.path.slice(1);
   const registered = await env.DB.prepare(
     "SELECT id,object_key,mime_type,bytes,sha256 FROM media_assets WHERE legacy_path=? LIMIT 1"
-  ).bind(item.path).first<{
-    id: string; object_key: string; mime_type: string;
-    bytes: number; sha256: string;
-  }>();
+  )
+    .bind(item.path)
+    .first<{
+      id: string;
+      object_key: string;
+      mime_type: string;
+      bytes: number;
+      sha256: string;
+    }>();
   if (!registered) throw new Error("Legacy path missing from D1");
   const [original, active] = await Promise.all([
     env.MEDIA.head(originalKey),

@@ -1,13 +1,14 @@
-name: Cloudflare migration checks
+name: Cloudflare application checks
 on:
   push:
-    branches: [migration/cloudflare-react-workers-pr40]
-    paths: ["cloudflare-app/**", "docs/cloudflare-migration/**", "migration/**", ".github/workflows/cloudflare-migration-check.yml"]
+    paths: ["cloudflare-app/**", ".github/workflows/cloudflare-migration-check.yml"]
+  pull_request:
+    paths: ["cloudflare-app/**", ".github/workflows/cloudflare-migration-check.yml"]
   workflow_dispatch:
 permissions:
   contents: read
 jobs:
-  build:
+  check:
     runs-on: ubuntu-latest
     timeout-minutes: 12
     defaults:
@@ -21,33 +22,12 @@ jobs:
           cache: npm
           cache-dependency-path: cloudflare-app/package-lock.json
       - run: npm ci
-      - name: Generate Cloudflare and React Router types
-        run: npm run cf-typegen
-      - name: Verify formatting
-        run: npm run format:check
-      - name: Typecheck and compile
-        run: npm run typecheck && npm run build
-      - name: Verify Wrangler output without deployment
-        run: npx wrangler deploy --dry-run
-      - name: Check PR40 source snapshot with PHP
-        run: php scripts/export-pr40.php --check
-      - name: Test and generate read-only D1 seed
+      - run: npm run cf-typegen
+      - run: npm run format:check
+      - run: npm run check
+      - name: Reject legacy sources and private data in public output
         run: |
-          node --test tests/*.test.mjs
-          php scripts/export-pr40.php --output build/imports/legacy-pr40.json
-          node scripts/make-d1-seed.mjs build/imports/legacy-pr40.json build/imports/seed-pr40.sql
-          test -s build/imports/seed-pr40.sql
-      - name: Inspect duplicate legacy paths and source leakage
-        run: |
-          test ! -e build/client/data/legacy
-          test ! -e build/client/admin/index.php
+          test -z "$(find .. -path '*/node_modules' -prune -o -path '*/.git' -prune -o -type f -name '*.php' -print)"
+          test ! -e build/client/data
+          test ! -e build/client/admin
           test ! -e build/client/.env
-      - name: Upload reproducible staging seed (never deployed by CI)
-        uses: actions/upload-artifact@v4
-        with:
-          name: gocamp-pr40-staging-seed
-          path: |
-            cloudflare-app/build/imports/legacy-pr40.json
-            cloudflare-app/build/imports/seed-pr40.sql
-          if-no-files-found: error
-          retention-days: 3

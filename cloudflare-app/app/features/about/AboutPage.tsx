@@ -19,8 +19,7 @@ function AboutSection({
     <p
       key={paragraphIndex}
       className={
-        "fs-5 lh-lg text-secondary" +
-        (paragraphIndex === section.body.length - 1 ? " mb-0" : "")
+        "fs-5 lh-lg text-secondary" + (paragraphIndex === section.body.length - 1 ? " mb-0" : "")
       }
     >
       {paragraph.split("\\n\\n").map((segment, segmentIndex) => (
@@ -47,7 +46,13 @@ function AboutSection({
                 src={section.image}
                 alt="Go Camp International students on an educational trip"
                 className="img-fluid d-block"
-                style={{ width: "auto", height: "auto", maxWidth: "100%", maxHeight: "500px", objectFit: "contain" }}
+                style={{
+                  width: "auto",
+                  height: "auto",
+                  maxWidth: "100%",
+                  maxHeight: "500px",
+                  objectFit: "contain"
+                }}
                 loading="lazy"
               />
             </div>
@@ -56,9 +61,7 @@ function AboutSection({
               {paragraphs.slice(0, 2)}
             </div>
           </div>
-          {paragraphs.length > 2 && (
-            <div className="mt-4">{paragraphs.slice(2)}</div>
-          )}
+          {paragraphs.length > 2 && <div className="mt-4">{paragraphs.slice(2)}</div>}
         </div>
       ) : (
         <div className={"row g-0" + (section.reverse ? " flex-row-reverse" : "")}>
@@ -95,9 +98,7 @@ function AboutSection({
                 loading="lazy"
                 decoding="async"
               />
-              <figcaption className="text-secondary small text-center">
-                {photo.caption}
-              </figcaption>
+              <figcaption className="text-secondary small text-center">{photo.caption}</figcaption>
             </figure>
           ))}
         </div>
@@ -130,7 +131,9 @@ export function AboutPage({ content }: { content: AboutPageContent }) {
           </div>
         </div>
         <section className="mt-5" aria-labelledby="about-founder-title">
-          <h2 id="about-founder-title" className="h3 mb-4">Meet Our Founder</h2>
+          <h2 id="about-founder-title" className="h3 mb-4">
+            Meet Our Founder
+          </h2>
           <section className="card shadow-sm border-0" aria-labelledby="about-director-title">
             <div className="card-body p-4 p-lg-5">
               <div className="row g-4 align-items-center">
@@ -143,16 +146,25 @@ export function AboutPage({ content }: { content: AboutPageContent }) {
                       src={SITE.images.profile}
                       alt={content.profile.name}
                       className="d-block"
-                      style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "43% 40%" }}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                        objectPosition: "43% 40%"
+                      }}
                       loading="lazy"
                     />
                   </div>
                 </div>
                 <div className="col-md">
-                  <h3 id="about-director-title" className="h3 mb-2">{content.profile.name}</h3>
+                  <h3 id="about-director-title" className="h3 mb-2">
+                    {content.profile.name}
+                  </h3>
                   <p className="fw-semibold text-secondary">{content.profile.title}</p>
                   {content.profile.body.split(/\n\s*\n/).map((paragraph, index) => (
-                    <p className="fs-5 lh-lg text-secondary" key={index}>{paragraph}</p>
+                    <p className="fs-5 lh-lg text-secondary" key={index}>
+                      {paragraph}
+                    </p>
                   ))}
                 </div>
               </div>

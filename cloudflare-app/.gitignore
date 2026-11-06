@@ -6,10 +6,8 @@ dist/
 .dev.vars*
 .env*
 public/images/
-public/css/
-public/js/
 public/uploads/
 worker-configuration.d.ts
 
 *.tsbuildinfo
-public/
+public/migration-commit.txt

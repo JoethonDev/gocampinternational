@@ -18,17 +18,69 @@ const tests = [
   { path: "/faq", status: 200 },
   { path: "/contact", status: 200 },
   { path: "/destinations/italy", status: 200, contains: "Italy" },
-  { path: "/destinations/italy", status: 200, contains: "/media/3c764b8a-72ca-5b4e-b239-892782b6c0c9" },
-  { path: "/destinations/switzerland", status: 200, contains: "/media/15968ef6-82dc-4ee4-b974-de12c5f0b514" },
-  { path: "/destinations/switzerland", status: 200, contains: "Illustrated Swiss Alpine lakeside town" },
-  { path: "/destinations/austria", status: 200, contains: "/media/178b5783-af42-5554-a323-2cd1e286abd5" },
-  { path: "/media/3c764b8a-72ca-5b4e-b239-892782b6c0c9?variant=desktop", status: 200, method: "HEAD", contentType: "image/webp" },
-  { path: "/media/15968ef6-82dc-4ee4-b974-de12c5f0b514?variant=mobile", status: 200, method: "HEAD", contentType: "image/webp" },
-  { path: "/media/15968ef6-82dc-4ee4-b974-de12c5f0b514?variant=tablet", status: 200, method: "HEAD", contentType: "image/webp" },
-  { path: "/media/15968ef6-82dc-4ee4-b974-de12c5f0b514?variant=desktop", status: 200, method: "HEAD", contentType: "image/webp" },
-  { path: "/media/15968ef6-82dc-4ee4-b974-de12c5f0b514", status: 200, method: "HEAD", contentType: "image/webp" },
-  { path: "/images/destinations/switzerland/switzerland-alpine-lakeside-panorama.webp", status: 200, method: "HEAD", source: "r2", contentType: "image/webp" },
-  { path: "/media/178b5783-af42-5554-a323-2cd1e286abd5?variant=mobile", status: 200, method: "HEAD", contentType: "image/webp" },
+  {
+    path: "/destinations/italy",
+    status: 200,
+    contains: "/media/3c764b8a-72ca-5b4e-b239-892782b6c0c9"
+  },
+  {
+    path: "/destinations/switzerland",
+    status: 200,
+    contains: "/media/15968ef6-82dc-4ee4-b974-de12c5f0b514"
+  },
+  {
+    path: "/destinations/switzerland",
+    status: 200,
+    contains: "Illustrated Swiss Alpine lakeside town"
+  },
+  {
+    path: "/destinations/austria",
+    status: 200,
+    contains: "/media/178b5783-af42-5554-a323-2cd1e286abd5"
+  },
+  {
+    path: "/media/3c764b8a-72ca-5b4e-b239-892782b6c0c9?variant=desktop",
+    status: 200,
+    method: "HEAD",
+    contentType: "image/webp"
+  },
+  {
+    path: "/media/15968ef6-82dc-4ee4-b974-de12c5f0b514?variant=mobile",
+    status: 200,
+    method: "HEAD",
+    contentType: "image/webp"
+  },
+  {
+    path: "/media/15968ef6-82dc-4ee4-b974-de12c5f0b514?variant=tablet",
+    status: 200,
+    method: "HEAD",
+    contentType: "image/webp"
+  },
+  {
+    path: "/media/15968ef6-82dc-4ee4-b974-de12c5f0b514?variant=desktop",
+    status: 200,
+    method: "HEAD",
+    contentType: "image/webp"
+  },
+  {
+    path: "/media/15968ef6-82dc-4ee4-b974-de12c5f0b514",
+    status: 200,
+    method: "HEAD",
+    contentType: "image/webp"
+  },
+  {
+    path: "/images/destinations/switzerland/switzerland-alpine-lakeside-panorama.webp",
+    status: 200,
+    method: "HEAD",
+    source: "r2",
+    contentType: "image/webp"
+  },
+  {
+    path: "/media/178b5783-af42-5554-a323-2cd1e286abd5?variant=mobile",
+    status: 200,
+    method: "HEAD",
+    contentType: "image/webp"
+  },
   { path: "/program/category?category=adult-academic", status: 200 },
   // Young Leader was deliberately deactivated; its category page must not remain public.
   { path: "/program/category?category=young-leader-program", status: 404 },
@@ -69,7 +121,12 @@ const tests = [
     method: "HEAD",
     contentType: "image/webp"
   },
-  { path: "/media/910dd151-26f4-54f9-bc3d-c8cabc770e31", status: 200, method: "HEAD", contentType: "image/webp" },
+  {
+    path: "/media/910dd151-26f4-54f9-bc3d-c8cabc770e31",
+    status: 200,
+    method: "HEAD",
+    contentType: "image/webp"
+  },
   { path: "/home", status: 301, location: "/" },
   { path: "/index.php", status: 301, location: "/" },
   { path: "/home.php", status: 301, location: "/" },
@@ -78,10 +135,22 @@ const tests = [
   { path: "/faq.php", status: 301, location: "/faq" },
   { path: "/programs.php", status: 301, location: "/#program-categories" },
   { path: "/kids_camp.php", status: 301, location: "/program/category?category=kids-camps" },
-  { path: "/adult_academic.php", status: 301, location: "/program/category?category=adult-academic" },
-  { path: "/young_leader_program.php", status: 301, location: "/program/category?category=young-leader-program" },
+  {
+    path: "/adult_academic.php",
+    status: 301,
+    location: "/program/category?category=adult-academic"
+  },
+  {
+    path: "/young_leader_program.php",
+    status: 301,
+    location: "/program/category?category=young-leader-program"
+  },
   { path: "/soccer_program.php", status: 301, location: "/program/category?category=soccer-camps" },
-  { path: "/language_and_activity_camps.php", status: 301, location: "/program/category?category=kids-camps" },
+  {
+    path: "/language_and_activity_camps.php",
+    status: 301,
+    location: "/program/category?category=kids-camps"
+  },
   { path: "/italy.php", status: 301, location: "/destinations/italy" },
   { path: "/switzerland.php", status: 301, location: "/destinations/switzerland" },
   { path: "/germany.php", status: 301, location: "/destinations/germany" },
@@ -140,10 +209,11 @@ for (const test of tests) {
 
 // Verify SSR metadata and staging indexing protection on every active catalog page.
 const seoPaths = [
-  "/", "/about", "/faq", "/contact",
-  ...["italy", "switzerland", "germany", "uk", "austria"].map(
-    (slug) => "/destinations/" + slug
-  ),
+  "/",
+  "/about",
+  "/faq",
+  "/contact",
+  ...["italy", "switzerland", "germany", "uk", "austria"].map((slug) => "/destinations/" + slug),
   ...["kids-camps", "adult-academic", "soccer-camps", "special-interests-camps", "tennis"].map(
     (slug) => "/program/category?category=" + slug
   ),
@@ -157,15 +227,37 @@ for (const path of seoPaths) {
     const title = /<title>[^<]+<\/title>/i.test(head);
     const description = /<meta\s+name="description"\s+content="[^"]+"/i.test(head);
     const og = /<meta\s+property="og:title"\s+content="[^"]+"/i.test(head);
-    const canonical = head.match(/<link\b(?=[^>]*\brel="canonical")(?=[^>]*\bhref="([^"]+)")[^>]*>/i)?.[1];
+    const canonical = head.match(
+      /<link\b(?=[^>]*\brel="canonical")(?=[^>]*\bhref="([^"]+)")[^>]*>/i
+    )?.[1];
     const expected = base + path;
     const noindex = (response.headers.get("x-robots-tag") || "").includes("noindex");
-    const landingNoindex = path !== "/landing" || /name="robots"\s+content="noindex,nofollow"/i.test(head);
-    const pass = response.status === 200 && title && description && og &&
-      canonical === expected && noindex && landingNoindex;
+    const landingNoindex =
+      path !== "/landing" || /name="robots"\s+content="noindex,nofollow"/i.test(head);
+    const pass =
+      response.status === 200 &&
+      title &&
+      description &&
+      og &&
+      canonical === expected &&
+      noindex &&
+      landingNoindex;
     if (!pass) {
       failed++;
-      console.error("FAIL SEO", path, JSON.stringify({status:response.status,title,description,og,canonical,expected,noindex,landingNoindex}));
+      console.error(
+        "FAIL SEO",
+        path,
+        JSON.stringify({
+          status: response.status,
+          title,
+          description,
+          og,
+          canonical,
+          expected,
+          noindex,
+          landingNoindex
+        })
+      );
     } else console.log("PASS SEO", path);
   } catch (error) {
     failed++;
@@ -177,7 +269,9 @@ try {
   const path = "/program/category?category=kids-camps&utm_source=seo-audit";
   const response = await fetch(base + path, { signal: AbortSignal.timeout(20000) });
   const head = (await response.text()).split(/<\/head>/i)[0];
-  const canonical = head.match(/<link\b(?=[^>]*\brel="canonical")(?=[^>]*\bhref="([^"]+)")[^>]*>/i)?.[1];
+  const canonical = head.match(
+    /<link\b(?=[^>]*\brel="canonical")(?=[^>]*\bhref="([^"]+)")[^>]*>/i
+  )?.[1];
   if (canonical !== base + "/program/category?category=kids-camps") {
     failed++;
     console.error("FAIL category canonical query normalization", canonical);
@@ -208,10 +302,12 @@ try {
   const mediaOriginal = await fetch(base + "/media/" + mediaId);
   const mediaVariant = await fetch(base + "/media/" + mediaId + "?variant=mobile");
   if (
-    mediaOriginal.status !== 200 || mediaVariant.status !== 200 ||
+    mediaOriginal.status !== 200 ||
+    mediaVariant.status !== 200 ||
     !mediaVariant.headers.get("content-type")?.includes("image/webp") ||
     mediaVariant.headers.get("etag") === mediaOriginal.headers.get("etag")
-  ) throw Error("/media ID did not resolve its R2 mobile variant");
+  )
+    throw Error("/media ID did not resolve its R2 mobile variant");
   await Promise.all([mediaOriginal.arrayBuffer(), mediaVariant.arrayBuffer()]);
   console.log("PASS responsive D1 /media ID");
 } catch (error) {

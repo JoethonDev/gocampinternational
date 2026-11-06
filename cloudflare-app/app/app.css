@@ -405,17 +405,14 @@ body {
   background-image: image-set(var(--gc-image-tablet) 1x, var(--gc-image-desktop) 2x) !important;
 }
 @media (min-width: 641px) {
-  .gc-responsive-hero { background-image: var(--gc-image-desktop) !important; }
+  .gc-responsive-hero {
+    background-image: var(--gc-image-desktop) !important;
+  }
 }
 
 /* Homepage category photo captions mirror destination title sizing and placement. */
 .category-card-modern .category-card-caption {
-  background: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 0.92),
-    rgba(0, 0, 0, 0.76) 60%,
-    transparent
-  );
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.92), rgba(0, 0, 0, 0.76) 60%, transparent);
   padding-top: 2.5rem !important;
 }
 .category-card-modern .category-card-caption .card-title {

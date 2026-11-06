@@ -1,12 +1,8 @@
 .env
+.env.*
 *.jsonl
 capture-*.webm
-*(*).jpg
-*(*).png
-uploads/*
-!uploads/.gitkeep
-data/inquiries/
-admin/migration-*.php
 .DS_Store
-
 .wrangler/
+uploads/
+data/inquiries/

@@ -1,3 +1,4 @@
+import { readLimitedForm } from "../lib/request.server";
 import { Form, Link, redirect, useActionData, useNavigation } from "react-router";
 import type { Route } from "./+types/admin-login";
 import { getAdmin, login } from "../lib/admin.server";
@@ -17,7 +18,7 @@ export async function loader({ request, context }: Route.LoaderArgs) {
 }
 
 export async function action({ request, context }: Route.ActionArgs) {
-  const form = await request.formData();
+  const form = await readLimitedForm(request, 16384);
   const result = await login(request, context.cloudflare.env.DB, context.cloudflare.env, form);
   if ("cookie" in result && result.cookie) {
     return redirect("/admin", {

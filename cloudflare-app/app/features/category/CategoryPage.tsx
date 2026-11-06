@@ -15,11 +15,16 @@ import { isVisible } from "../../lib/visibility";
 function CategoryHero({ category }: { category: CategoryRecord }) {
   return (
     <section className="hero-section position-relative" aria-label={category.name + " banner"}>
-      <img src={category.banner || SITE.images.placeholder}
-        srcSet={responsiveSrcSet(category.banner || SITE.images.placeholder)} sizes="100vw"
-        alt={"Summer camp program category: " + category.name} loading="eager"
-        fetchPriority="high" decoding="async"
-        className="position-absolute top-0 start-0 w-100 h-100 object-fit-cover" />
+      <img
+        src={category.banner || SITE.images.placeholder}
+        srcSet={responsiveSrcSet(category.banner || SITE.images.placeholder)}
+        sizes="100vw"
+        alt={"Summer camp program category: " + category.name}
+        loading="eager"
+        fetchPriority="high"
+        decoding="async"
+        className="position-absolute top-0 start-0 w-100 h-100 object-fit-cover"
+      />
       <div className="container position-relative category-hero-caption">
         <h1>{category.name}</h1>
       </div>

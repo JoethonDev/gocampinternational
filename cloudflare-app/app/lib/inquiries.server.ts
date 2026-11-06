@@ -1,4 +1,5 @@
-import { sha256Hex } from "./crypto.server";
+import { consumeRateLimit } from "./rate-limit.server";
+import { limitRequestBody } from "./request.server";
 
 export type InquiryKind = "contact" | "lead" | "newsletter";
 type FormValues = Record<string, unknown>;
@@ -76,32 +77,6 @@ function validateLanding(values: FormValues): { extra: Record<string, string> } 
   };
 }
 
-async function withinRateLimit(
-  db: D1Database,
-  request: Request,
-  kind: InquiryKind
-): Promise<boolean> {
-  const ip =
-    request.headers.get("cf-connecting-ip") || request.headers.get("x-real-ip") || "unknown";
-  const period = kind === "newsletter" ? 600 : 60;
-  const max = 5;
-  const now = Math.floor(Date.now() / 1000);
-  const addressHash = await sha256Hex(`${kind}:${ip}`);
-  const row = await db
-    .prepare(
-      `INSERT INTO submission_limits(scope,address_hash,window_start,attempts)
-       VALUES(?,?,?,1)
-       ON CONFLICT(scope,address_hash) DO UPDATE SET
-         attempts=CASE WHEN window_start <= ? THEN 1 ELSE attempts+1 END,
-         window_start=CASE WHEN window_start <= ? THEN ? ELSE window_start END
-       WHERE window_start <= ? OR attempts < ?
-       RETURNING attempts`
-    )
-    .bind(kind, addressHash, now, now - period, now - period, now, now - period, max)
-    .first<{ attempts: number }>();
-  return Boolean(row);
-}
-
 export async function submitInquiry(
   request: Request,
   db: D1Database,
@@ -114,8 +89,12 @@ export async function submitInquiry(
   if (origin && origin !== new URL(request.url).origin) {
     return fail("Invalid request origin", 403);
   }
-  const contentLength = Number(request.headers.get("content-length") || 0);
-  if (contentLength > 16384) return fail("Request too large", 413);
+  try {
+    request = await limitRequestBody(request, 16384);
+  } catch (error) {
+    if (error instanceof Response && error.status === 413) return fail("Request too large", 413);
+    throw error;
+  }
 
   const values = await readBody(request, kind, forceLanding);
   if (values instanceof Response) return values;
@@ -174,7 +153,7 @@ export async function submitInquiry(
   }
 
   if (phone.length > 30) return fail("Invalid phone");
-  if (!(await withinRateLimit(db, request, kind))) {
+  if (!(await consumeRateLimit(db, request, kind, kind === "newsletter" ? 600 : 60, 5))) {
     return fail("Too many requests, try again later", 429);
   }
 

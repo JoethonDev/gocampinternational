@@ -1,6 +1,6 @@
 {
-  "name": "gocamp-cloudflare-migration",
-  "description": "GoCamp International full-stack React migration (PR #40 source)",
+  "name": "gocamp-cloudflare-app",
+  "description": "GoCamp International React Router application on Cloudflare Workers",
   "cloudflare": {
     "label": "React Router Framework Starter",
     "products": [
@@ -14,24 +14,21 @@
     "publish": true
   },
   "dependencies": {
-    "isbot": "5.1.32",
-    "react": "19.2.1",
-    "react-dom": "19.2.1",
-    "react-router": "7.9.6"
+    "isbot": "5.2.2",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "react-router": "7.18.5"
   },
   "devDependencies": {
-    "@cloudflare/vite-plugin": "1.52.1",
-    "@react-router/dev": "7.9.6",
-    "@tailwindcss/vite": "4.1.17",
-    "@types/node": "24.10.1",
-    "@types/react": "19.2.7",
-    "@types/react-dom": "19.2.3",
-    "prettier": "3.9.6",
-    "tailwindcss": "4.1.17",
-    "typescript": "5.9.3",
-    "vite": "^7.0.0",
-    "vite-tsconfig-paths": "5.1.4",
-    "wrangler": "4.136.1"
+    "@cloudflare/vite-plugin": "1.67.0",
+    "@react-router/dev": "7.18.5",
+    "@types/node": "22.20.5",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "prettier": "3.9.10",
+    "typescript": "6.0.3",
+    "vite": "8.3.6",
+    "wrangler": "4.158.0"
   },
   "private": true,
   "scripts": {
@@ -40,12 +37,16 @@
     "build": "npm run assets:prepare && react-router build && node scripts/verify-no-static-media.mjs",
     "typegen": "react-router typegen",
     "typecheck": "react-router typegen && tsc -b",
-    "check": "npm run typecheck && npm run build && wrangler deploy --dry-run",
+    "check": "npm test && npm run typecheck && npm run build && wrangler deploy --dry-run",
     "deploy": "wrangler deploy",
     "cf-typegen": "wrangler types && react-router typegen",
     "smoke:staging": "node scripts/smoke-staging.mjs",
-    "format": "prettier --write \"app/**/*.{ts,tsx,css}\" \"workers/**/*.ts\" \"scripts/**/*.mjs\"",
-    "format:check": "prettier --check \"app/**/*.{ts,tsx,css}\" \"workers/**/*.ts\" \"scripts/**/*.mjs\""
+    "format": "prettier --write \"app/**/*.{ts,tsx,css}\" \"workers/**/*.ts\" \"scripts/**/*.mjs\" \"tests/*.mjs\" \"*.ts\"",
+    "format:check": "prettier --check \"app/**/*.{ts,tsx,css}\" \"workers/**/*.ts\" \"scripts/**/*.mjs\" \"tests/*.mjs\" \"*.ts\"",
+    "test": "node --experimental-strip-types --test tests/*.test.mjs"
   },
-  "type": "module"
+  "type": "module",
+  "engines": {
+    "node": ">=22.23.4 <23"
+  }
 }

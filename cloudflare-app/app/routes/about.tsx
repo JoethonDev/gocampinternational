@@ -18,7 +18,10 @@ export function meta({ matches }: Route.MetaArgs) {
 export async function loader({ context }: Route.LoaderArgs) {
   const settings = await loadDocument<SiteSettings>(context.cloudflare.env.DB, "site_settings");
   const current = settings?.about_page as AboutPageContent | undefined;
-  return { about: current && Array.isArray(current.sections) && current.profile ? current : ABOUT_PAGE_DEFAULT };
+  return {
+    about:
+      current && Array.isArray(current.sections) && current.profile ? current : ABOUT_PAGE_DEFAULT
+  };
 }
 
 export default function About({ loaderData }: Route.ComponentProps) {

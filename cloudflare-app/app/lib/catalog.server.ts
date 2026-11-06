@@ -55,9 +55,6 @@ export async function findCatalog<T extends CatalogRecord = CatalogRecord>(
   return row ? parseRow<T>(row) : null;
 }
 
-export const findProgram = (db: D1Database, slug: string) =>
-  findCatalog<ProgramRecord>(db, "program", slug);
-
 export const findDestination = (db: D1Database, slug: string) =>
   findCatalog<DestinationRecord>(db, "destination", slug);
 

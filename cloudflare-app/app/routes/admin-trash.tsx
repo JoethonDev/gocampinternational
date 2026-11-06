@@ -2,6 +2,7 @@ import { Form, redirect, useNavigation } from "react-router";
 import { useMemo, useState } from "react";
 import type { Route } from "./+types/admin-trash";
 import { requireAdmin, verifyAdminPost } from "../lib/admin.server";
+import { checkedWrite, runAtomicBatch } from "../lib/db.server";
 import { AdminShell } from "../components/admin/AdminShell";
 import { AdminPageHeader } from "../components/admin/AdminPageHeader";
 import { AdminRowActions } from "../components/admin/AdminRowActions";
@@ -66,23 +67,21 @@ export async function action({ request, context }: Route.ActionArgs) {
   }
 
   if (operation === "delete") {
-    const jobs = [
+    const jobs = checkedWrite(
+      db,
       db
         .prepare(
           "DELETE FROM catalog_entities WHERE kind=? AND slug=? AND revision=? AND status='trash'"
         )
         .bind(kind, slug, row.revision)
-    ];
+    );
     if (kind === "program") {
       jobs.push(db.prepare("DELETE FROM destination_programs WHERE program_slug=?").bind(slug));
     }
     if (kind === "destination") {
       jobs.push(db.prepare("DELETE FROM destination_programs WHERE destination_slug=?").bind(slug));
     }
-    const result = await db.batch(jobs);
-    if (result[0].meta.changes !== 1) {
-      throw new Response("Concurrent change detected", { status: 409 });
-    }
+    await runAtomicBatch(db, jobs);
   } else {
     const status = operation === "restore-active" ? "active" : "inactive";
     const value = {
@@ -145,7 +144,7 @@ export default function Trash({ loaderData }: Route.ComponentProps) {
         </>
       )
     },
-    { key: "status", label: "Status", render: (row) => <StatusBadge status="trash" /> },
+    { key: "status", label: "Status", render: () => <StatusBadge status="trash" /> },
     {
       key: "actions",
       label: "Actions",

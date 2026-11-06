@@ -6,6 +6,7 @@ import { AdminRowActions } from "../../../components/admin/AdminRowActions";
 import { AdminTable, type AdminTableColumn } from "../../../components/admin/AdminTable";
 import { AdminToolbar, AdminToolbarField } from "../../../components/admin/AdminToolbar";
 import { StatusBadge } from "../../../components/admin/StatusBadge";
+import { SelectedCatalogIds } from "../../../components/admin/SelectedCatalogIds";
 import { CATALOG_KIND_META, CATALOG_STATUS_OPTIONS } from "../../../config/catalog";
 import type { CategoryRecord, CatalogRecord, DestinationRecord } from "../../../lib/domain";
 
@@ -65,11 +66,14 @@ export function CatalogListPage({
   const paged = visible.slice(0, displayCount);
   useEffect(() => {
     if (displayCount >= visible.length || !scrollEnd.current) return;
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry?.isIntersecting) {
-        setDisplayCount((count) => Math.min(count + pageSize, visible.length));
-      }
-    }, { rootMargin: "260px" });
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) {
+          setDisplayCount((count) => Math.min(count + pageSize, visible.length));
+        }
+      },
+      { rootMargin: "260px" }
+    );
     observer.observe(scrollEnd.current);
     return () => observer.disconnect();
   }, [displayCount, visible.length]);
@@ -104,7 +108,6 @@ export function CatalogListPage({
         <input
           type="checkbox"
           className="form-check-input"
-          name="ids"
           value={item.slug}
           checked={selected.includes(item.slug)}
           onChange={(event) => select(item.slug, event.target.checked)}
@@ -259,6 +262,7 @@ export function CatalogListPage({
       </AdminToolbar>
       <Form method="post">
         <input type="hidden" name="csrf" value={csrf} />
+        <SelectedCatalogIds ids={selected} />
         <AdminPanel
           className="admin-list-panel"
           title={`${meta.label} library`}

@@ -1,32 +1,63 @@
-# GoCamp React Router migration
-Isolated React Router v7 + Cloudflare Vite plugin app. Authoritative source: PR #40 commit 80432a2a6fcb4b0de6f14710748e53781ddef58c.
+# GoCamp International
 
-## Architecture
-See [`docs/cloudflare-migration/CODE_STRUCTURE.md`](../docs/cloudflare-migration/CODE_STRUCTURE.md) for the route → feature → data-layer layout, server/client boundary, shared components, CMS extension rules and Cloudflare runtime conventions.
+React Router 7 and React 19 on Cloudflare Workers. D1 stores catalog, CMS, sessions
+and inquiries; R2 stores media. No PHP runtime, parent-directory assets, or external
+database gateway is required.
 
-## Local build
-```bash
-cd cloudflare-app
+## Development
+
+Use Node.js 22.23.4 (the current Node 22 LTS patch). From this directory:
+
+```sh
 npm ci
 npm run cf-typegen
+npm run dev
+```
+
+Use `.dev.vars` for local secrets; never commit it. `ADMIN_USERNAME` and
+`ADMIN_PASSWORD_SHA256` configure the existing admin login. Provision local D1 data
+before browsing content. Apply migrations only to the intended local database:
+
+```sh
+npx wrangler d1 migrations apply gocamp-staging-db --local
+```
+
+The reviewed initial seed and overlays in `migration/` remain available for recovery.
+They are historical snapshots, not a backup of current CMS edits. Review them before
+any import. Production data, credentials and resource changes require separate setup.
+
+## Checks
+
+```sh
+npm run cf-typegen
 npm run format:check
-npm run typecheck
-npm run build
-npx wrangler deploy --dry-run
+npm run check
 ```
 
-## Staging data setup
-```bash
-php scripts/export-pr40.php --check
-php scripts/export-pr40.php --output build/imports/legacy-pr40.json
-node scripts/make-d1-seed.mjs build/imports/legacy-pr40.json build/imports/seed-pr40.sql
-npx wrangler d1 migrations apply gocamp-staging-db --remote
-# REVIEW generated SQL and staging state before optional remote import
-npx wrangler d1 execute gocamp-staging-db --remote --file build/imports/seed-pr40.sql
-```
-No production import or deployment is automated. Browser preview is intentionally incomplete and noindex. Legacy public assets are copied from repository at build time; no PHP is packaged.
+`check` runs tests, type generation/checking, the build, and a deployment dry run.
+CI runs these on pushes and pull requests without deploying. `smoke:staging` is an
+explicit live HTTP check, separate from local validation. `deploy` publishes to the
+Worker selected in `wrangler.json`, currently staging.
 
-D1 uses **indexed typed summary columns plus lossless JSON content per entity**, not a row for every highlight. This simplification preserves every PR40 dynamic field with lower migration risk and fewer queries. PR40 PostgreSQL schema is a reference, not a D1 migration.
+## Structure
 
-## Deployment verification
-Cloudflare Builds uses the migration branch as the **production branch of the staging Worker only**. Its deploy command runs `npx wrangler deploy && npm run smoke:staging`, without staging credentials or changes to production. This verifies public HTTP routes after deployment and should not be confused with full UI or admin end-to-end validation.
+- `app/routes`: route loaders/actions, HTTP contracts and page composition.
+- `app/features`: page and CMS feature implementations.
+- `app/components`: shared UI; `ui` and `admin` contain reusable primitives.
+- `app/hooks`: shared client behavior and drag ordering.
+- `app/lib`: domain types and shared functions; `.server` modules own D1/R2/auth.
+- `workers/app.ts`: request dispatch, response policy and error handling.
+- `public/css`: committed site styles, independent of the removed PHP application.
+- `server/db/migrations`: ordered D1 schema changes.
+- `tests`: catalog concurrency, form/URL contracts, local D1 and HTTP regressions.
+- `docs/archive`: historical migration decisions; paths and commands may be retired.
+
+Keep business logic in the data layer, reuse existing components before adding new
+ones, and prefer small functions over new inheritance or service frameworks.
+Admin mutations require origin, session and CSRF validation. Keep SQL values bound,
+render CMS HTML through `SafeRichText`, and enforce byte limits before parsing uploads.
+Image variants are materialized in R2; public requests do not run image transformations.
+
+See [cleanup notes](docs/CLEANUP.md) for this refactor's scope and validation limits.
+
+Dependency versions and security checks: [dependency maintenance](docs/DEPENDENCIES.md).

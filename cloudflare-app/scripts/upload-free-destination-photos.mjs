@@ -23,7 +23,8 @@ const photos = [
     slug: "switzerland",
     filename: "switzerland-zermatt-matterhorn-snow-peak",
     photoId: "photo-1707617535395-20858480a222",
-    source: "https://unsplash.com/photos/a-snow-covered-mountain-with-a-blue-sky-in-the-background-cWK4V8gIH0w",
+    source:
+      "https://unsplash.com/photos/a-snow-covered-mountain-with-a-blue-sky-in-the-background-cWK4V8gIH0w",
     photographer: "Jared Schwitzke"
   },
   {
@@ -43,17 +44,19 @@ const presets = [
 ];
 
 if (process.env.CI !== "true") {
-  throw new Error("This staging maintenance importer must only run in Cloudflare Builds (CI=true).");
+  throw new Error(
+    "This staging maintenance importer must only run in Cloudflare Builds (CI=true)."
+  );
 }
 
 const directory = await mkdtemp(path.join(tmpdir(), "gocamp-free-destinations-"));
 try {
-  for (const photo of photos.filter((item) => !process.env.GOCAMP_IMAGE_SLUG || item.slug === process.env.GOCAMP_IMAGE_SLUG)) {
+  for (const photo of photos.filter(
+    (item) => !process.env.GOCAMP_IMAGE_SLUG || item.slug === process.env.GOCAMP_IMAGE_SLUG
+  )) {
     const mainKey = `images/destinations/${photo.slug}/${photo.filename}.webp`;
     for (const preset of presets) {
-      const key = preset.name === "original"
-        ? mainKey
-        : `optimized/${preset.name}/${mainKey}.webp`;
+      const key = preset.name === "original" ? mainKey : `optimized/${preset.name}/${mainKey}.webp`;
       const url = new URL(`https://images.unsplash.com/${photo.photoId}`);
       url.search = new URLSearchParams({
         fm: "webp",
@@ -64,12 +67,18 @@ try {
         q: String(preset.quality)
       }).toString();
 
-      const response = await fetch(url, { headers: { Accept: "image/webp" }, signal: AbortSignal.timeout(45000) });
-      if (!response.ok) throw new Error(`${photo.slug}/${preset.name} download returned HTTP ${response.status}`);
+      const response = await fetch(url, {
+        headers: { Accept: "image/webp" },
+        signal: AbortSignal.timeout(45000)
+      });
+      if (!response.ok)
+        throw new Error(`${photo.slug}/${preset.name} download returned HTTP ${response.status}`);
       const bytes = Buffer.from(await response.arrayBuffer());
-      if (response.headers.get("content-type")?.split(";")[0] !== "image/webp" ||
-          bytes.subarray(0, 4).toString("ascii") !== "RIFF" ||
-          bytes.subarray(8, 12).toString("ascii") !== "WEBP") {
+      if (
+        response.headers.get("content-type")?.split(";")[0] !== "image/webp" ||
+        bytes.subarray(0, 4).toString("ascii") !== "RIFF" ||
+        bytes.subarray(8, 12).toString("ascii") !== "WEBP"
+      ) {
         throw new Error(`${photo.slug}/${preset.name} was not a valid WebP file`);
       }
       if (bytes.byteLength < 1000 || bytes.byteLength > 2 * 1024 * 1024) {
@@ -78,19 +87,45 @@ try {
 
       const localFile = path.join(directory, `${photo.slug}-${preset.name}.webp`);
       await writeFile(localFile, bytes);
-      const upload = execFileSync("./node_modules/.bin/wrangler", [
-        "r2", "object", "put", `${BUCKET}/${key}`, "--file", localFile,
-        "--content-type", "image/webp", "--cache-control", "public,max-age=31536000,immutable", "--remote"
-      ], { encoding: "utf8", maxBuffer: 2 * 1024 * 1024, timeout: 90000, env: { ...process.env, CI: "true" } });
+      const upload = execFileSync(
+        "./node_modules/.bin/wrangler",
+        [
+          "r2",
+          "object",
+          "put",
+          `${BUCKET}/${key}`,
+          "--file",
+          localFile,
+          "--content-type",
+          "image/webp",
+          "--cache-control",
+          "public,max-age=31536000,immutable",
+          "--remote"
+        ],
+        {
+          encoding: "utf8",
+          maxBuffer: 2 * 1024 * 1024,
+          timeout: 90000,
+          env: { ...process.env, CI: "true" }
+        }
+      );
       if (!/upload|create|success|complete/i.test(upload)) {
         throw new Error(`Cannot confirm R2 upload of ${key}: ${upload.slice(0, 300)}`);
       }
-      console.log("DESTINATION_MEDIA_UPLOADED " + JSON.stringify({
-        slug: photo.slug, preset: preset.name, objectKey: key,
-        width: preset.width, height: preset.height, bytes: bytes.byteLength,
-        sha256: createHash("sha256").update(bytes).digest("hex"),
-        source: photo.source, photographer: photo.photographer
-      }));
+      console.log(
+        "DESTINATION_MEDIA_UPLOADED " +
+          JSON.stringify({
+            slug: photo.slug,
+            preset: preset.name,
+            objectKey: key,
+            width: preset.width,
+            height: preset.height,
+            bytes: bytes.byteLength,
+            sha256: createHash("sha256").update(bytes).digest("hex"),
+            source: photo.source,
+            photographer: photo.photographer
+          })
+      );
     }
   }
 } finally {

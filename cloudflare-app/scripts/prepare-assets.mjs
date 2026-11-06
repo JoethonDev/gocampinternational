@@ -1,4 +1,4 @@
-import { cp, mkdir, readdir, stat, readFile, writeFile, rm } from "node:fs/promises";
+import { mkdir, readFile, writeFile, rm } from "node:fs/promises";
 import { execFileSync } from "node:child_process";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -7,42 +7,12 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const source = path.resolve(root, "..");
 
 // Clean leftover media from older local/dev builds; these are served only by R2.
-for (const directory of ["images", "uploads"]) {
+for (const directory of ["images", "uploads", "js"]) {
   await rm(path.join(root, "public", directory), { recursive: true, force: true });
 }
 
-// Catalog images and uploads have been migrated to R2.
-// Only ordinary CSS/JS assets remain in the static build.
-const targets = {
-  css: new Set([".css"]),
-  js: new Set([".js"])
-};
-
-async function copySafe(from, to, allowed) {
-  for (const entry of await readdir(from, { withFileTypes: true })) {
-    if (entry.isSymbolicLink()) continue;
-    const origin = path.join(from, entry.name);
-    const dest = path.join(to, entry.name);
-    if (entry.isDirectory()) {
-      await mkdir(dest, { recursive: true });
-      await copySafe(origin, dest, allowed);
-    } else if (entry.isFile() && allowed.has(path.extname(entry.name).toLowerCase())) {
-      await mkdir(path.dirname(dest), { recursive: true });
-      await cp(origin, dest);
-    }
-  }
-}
-
-for (const [dir, allowed] of Object.entries(targets)) {
-  const from = path.join(source, dir);
-  try {
-    if ((await stat(from)).isDirectory()) {
-      await copySafe(from, path.join(root, "public", dir), allowed);
-    }
-  } catch (error) {
-    if (error.code !== "ENOENT") throw error;
-  }
-}
+// Stylesheets are committed in public/css; images and uploads live in R2.
+await mkdir(path.join(root, "public"), { recursive: true });
 
 // Keep the committed legacy media inventory, so editors can browse and
 // reference migrated R2 images even after Git binaries are removed.

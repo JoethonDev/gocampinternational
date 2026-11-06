@@ -123,11 +123,7 @@ function ContactCard() {
     <div className="card border-0 shadow-sm h-100 contact-card">
       <div className="card-body p-4 p-md-5 d-flex flex-column justify-content-center align-items-center text-center">
         <div className="mb-4 contact-avatar rounded-circle shadow-lg">
-          <img
-            src={SITE.images.profile}
-            alt={SITE.director}
-            className="contact-avatar-photo"
-          />
+          <img src={SITE.images.profile} alt={SITE.director} className="contact-avatar-photo" />
         </div>
         <h3 className="fw-bold text-white mb-1">{SITE.director}</h3>
         <p className="text-white-50 fs-5 mb-4 text-uppercase fw-semibold">{SITE.directorTitle}</p>

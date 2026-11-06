@@ -228,10 +228,11 @@ export function MediaLibraryPage({
       if (data.q) params.set("q", data.q);
       if (data.folder !== "all") params.set("folder", data.folder);
       const response = await fetch(`/admin/media/chunk?${params}`, {
-        credentials: "same-origin", headers: { Accept: "application/json" }
+        credentials: "same-origin",
+        headers: { Accept: "application/json" }
       });
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const chunk = await response.json() as {
+      const chunk = (await response.json()) as {
         items: StaticMedia[];
         usage: Record<string, MediaUsage>;
         page: number;
@@ -254,9 +255,12 @@ export function MediaLibraryPage({
 
   useEffect(() => {
     if (loadedPage >= data.totalPages || loadError || !scrollEnd.current) return;
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry?.isIntersecting) void loadMore();
-    }, { rootMargin: "280px" });
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) void loadMore();
+      },
+      { rootMargin: "280px" }
+    );
     observer.observe(scrollEnd.current);
     return () => observer.disconnect();
   }, [loadedPage, data.totalPages, loadMore, loadError]);
@@ -321,9 +325,17 @@ export function MediaLibraryPage({
       </AdminPanel>
       <div ref={scrollEnd} className="admin-pagination-summary my-3" role="status">
         Showing {items.length} of {data.total} matching images.
-        {loading ? " Loading more images…" : items.length < data.total ? " Scroll down to load more." : ""}
+        {loading
+          ? " Loading more images…"
+          : items.length < data.total
+            ? " Scroll down to load more."
+            : ""}
         {loadError && (
-          <button className="btn btn-sm btn-outline-primary ms-2" type="button" onClick={() => void loadMore()}>
+          <button
+            className="btn btn-sm btn-outline-primary ms-2"
+            type="button"
+            onClick={() => void loadMore()}
+          >
             Retry loading ({loadError})
           </button>
         )}

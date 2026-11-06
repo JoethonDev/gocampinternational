@@ -7,8 +7,8 @@ import { AdminPageHeader } from "../components/admin/AdminPageHeader";
 import { AdminRowActions } from "../components/admin/AdminRowActions";
 import { AdminTable, type AdminTableColumn } from "../components/admin/AdminTable";
 import { AdminToolbar, AdminToolbarField } from "../components/admin/AdminToolbar";
-import { StatusBadge } from "../components/admin/StatusBadge";
 import type { InquiryRecord } from "../lib/domain";
+import { readPage } from "../lib/pagination.server";
 
 const PAGE_SIZE = 20;
 const STATUSES = ["new", "read", "replied", "archived"] as const;
@@ -27,7 +27,7 @@ export async function loader({ request, context }: Route.LoaderArgs) {
     .first<{ count: number }>();
   const total = totalRow?.count || 0;
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
-  const page = Math.min(Math.max(1, Number(url.searchParams.get("page") || 1) || 1), totalPages);
+  const page = Math.min(readPage(url), totalPages);
   const rows = await db
     .prepare(
       `SELECT id,kind,name,email,phone,status,content_json,created_at
@@ -135,10 +135,11 @@ export default function Inquiries({ loaderData }: Route.ComponentProps) {
     setLoadError("");
     try {
       const response = await fetch(`/admin/inquiries/chunk?page=${loadedPage + 1}`, {
-        credentials: "same-origin", headers: { Accept: "application/json" }
+        credentials: "same-origin",
+        headers: { Accept: "application/json" }
       });
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const chunk = await response.json() as { rows: InquiryRecord[]; page: number };
+      const chunk = (await response.json()) as { rows: InquiryRecord[]; page: number };
       if (chunk.page !== loadedPage + 1) throw new Error("Unexpected inquiry cursor");
       setAllRows((previous) => {
         const ids = new Set(previous.map((item) => item.id));
@@ -155,9 +156,12 @@ export default function Inquiries({ loaderData }: Route.ComponentProps) {
 
   useEffect(() => {
     if (loadedPage >= totalPages || loadError || !scrollEnd.current) return;
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry?.isIntersecting) void loadMore();
-    }, { rootMargin: "280px" });
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) void loadMore();
+      },
+      { rootMargin: "280px" }
+    );
     observer.observe(scrollEnd.current);
     return () => observer.disconnect();
   }, [loadedPage, totalPages, loadMore, loadError]);
@@ -339,7 +343,11 @@ export default function Inquiries({ loaderData }: Route.ComponentProps) {
         Showing {allRows.length} of {total} inquiries.
         {loading ? " Loading more…" : loadedPage < totalPages ? " Scroll down for more." : ""}
         {loadError && (
-          <button className="btn btn-sm btn-outline-primary ms-2" type="button" onClick={() => void loadMore()}>
+          <button
+            className="btn btn-sm btn-outline-primary ms-2"
+            type="button"
+            onClick={() => void loadMore()}
+          >
             Retry loading ({loadError})
           </button>
         )}

@@ -25,7 +25,9 @@ export async function action({ request, context }: Route.ActionArgs) {
     `SELECT id,object_key,mime_type FROM media_assets
      WHERE object_key > ? AND mime_type IN ('image/jpeg','image/png','image/webp','image/avif')
      ORDER BY object_key LIMIT ?`
-  ).bind(cursor, BATCH).all<MediaAsset>();
+  )
+    .bind(cursor, BATCH)
+    .all<MediaAsset>();
 
   const results = [];
   for (const row of batch.results || []) {
@@ -37,10 +39,12 @@ export async function action({ request, context }: Route.ActionArgs) {
     processed: results.length,
     created: results.reduce((sum, item) => sum + item.created.length, 0),
     skipped: results.reduce((sum, item) => sum + item.skipped.length, 0),
-    failures: results.flatMap((item) => item.errors.map((message) => ({
-      mediaId: item.mediaId,
-      message
-    }))),
+    failures: results.flatMap((item) =>
+      item.errors.map((message) => ({
+        mediaId: item.mediaId,
+        message
+      }))
+    ),
     done: (batch.results?.length || 0) < BATCH
   });
 }

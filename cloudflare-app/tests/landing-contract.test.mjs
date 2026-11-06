@@ -1,17 +1,24 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-const read = path => readFileSync(new URL(path, import.meta.url), "utf8");
+const read = (path) => readFileSync(new URL(path, import.meta.url), "utf8");
 
 test("PR40 landing form fields and consent are preserved in React and server validation", () => {
-  const src = read("../../landing.php");
   const page = read("../app/features/landing/LandingPage.tsx");
   const route = read("../app/routes/landing.tsx");
   const server = read("../app/lib/inquiries.server.ts");
   const routes = read("../app/routes.ts");
 
-  for (const field of ["name", "age", "gender", "interests[]", "email", "phone", "privacyConsent", "website"]) {
-    assert.ok(src.includes('name="' + field + '"'), "Missing baseline field: " + field);
+  for (const field of [
+    "name",
+    "age",
+    "gender",
+    "interests[]",
+    "email",
+    "phone",
+    "privacyConsent",
+    "website"
+  ]) {
     assert.ok(page.includes('name="' + field + '"'), "Missing React field: " + field);
   }
   for (const value of ["Sports", "Language", "Leadership", "Academic"]) {

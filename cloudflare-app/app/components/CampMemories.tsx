@@ -86,7 +86,6 @@ export function CampMemories({ data }: { data: MemoriesDocument | null | undefin
     });
   };
 
-
   return (
     <section className="section-padding camp-memories" aria-labelledby="camp-memories-title">
       <div className="container">

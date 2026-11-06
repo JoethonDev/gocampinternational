@@ -19,14 +19,17 @@ export async function loader({ request, context }: Route.LoaderArgs) {
     listPrograms(db),
     listDestinations(db, false)
   ]);
+  const destinationByProgram = new Map<string, (typeof destinations)[number]>();
+  for (const destination of destinations) {
+    if (!Array.isArray(destination.program_ids)) continue;
+    for (const id of destination.program_ids) {
+      if (!destinationByProgram.has(id)) destinationByProgram.set(id, destination);
+    }
+  }
   const related = programs
     .filter((program) => program.category_slug === category.slug)
     .filter((program) => {
-      const linked = destinations.find(
-        (destination) =>
-          Array.isArray(destination.program_ids) &&
-          destination.program_ids.includes(program.id || program.slug)
-      );
+      const linked = destinationByProgram.get(program.id || program.slug);
       return !linked || linked.status !== "trash";
     })
     .sort(
@@ -51,24 +54,33 @@ export function meta({ data, matches }: Route.MetaArgs) {
 
 export default function Category({ loaderData }: Route.ComponentProps) {
   const root = useRouteLoaderData("root") as { settings: SiteSettings } | undefined;
-  const base = (root as { origin?: string } | undefined)?.origin || "https://gocampinternational.net";
+  const base =
+    (root as { origin?: string } | undefined)?.origin || "https://gocampinternational.net";
   const category = loaderData.category;
   return (
     <>
-    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd({
-      "@context": "https://schema.org", "@type": "CollectionPage",
-      name: category.name,
-      url: base + "/program/category?category=" + encodeURIComponent(category.slug),
-      description: String(category.intro || "").replace(/<[^>]+>/g, "").slice(0, 300),
-      primaryImageOfPage: new URL(category.banner || "/images/banner.webp", base).href,
-      isPartOf: { "@id": base + "/#website" }
-    }) }} />
-    <CategoryPage
-      category={loaderData.category}
-      programs={loaderData.related}
-      settings={root?.settings || {}}
-      memories={loaderData.memories}
-    />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: safeJsonLd({
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            name: category.name,
+            url: base + "/program/category?category=" + encodeURIComponent(category.slug),
+            description: String(category.intro || "")
+              .replace(/<[^>]+>/g, "")
+              .slice(0, 300),
+            primaryImageOfPage: new URL(category.banner || "/images/banner.webp", base).href,
+            isPartOf: { "@id": base + "/#website" }
+          })
+        }}
+      />
+      <CategoryPage
+        category={loaderData.category}
+        programs={loaderData.related}
+        settings={root?.settings || {}}
+        memories={loaderData.memories}
+      />
     </>
   );
 }

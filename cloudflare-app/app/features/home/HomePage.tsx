@@ -20,11 +20,17 @@ function HeroCarousel() {
         {HOME_HERO_SLIDES.map((slide, index) => (
           <div className={"carousel-item" + (index === 0 ? " active" : "")} key={slide.image}>
             <div className="hero-section position-relative d-flex align-items-center justify-content-center text-center">
-              <img src={slide.image} srcSet={responsiveSrcSet(slide.image)} sizes="100vw"
-                alt={slide.title} loading={index === 0 ? "eager" : "lazy"}
+              <img
+                src={slide.image}
+                srcSet={responsiveSrcSet(slide.image)}
+                sizes="100vw"
+                alt={slide.title}
+                loading={index === 0 ? "eager" : "lazy"}
                 fetchPriority={index === 0 ? "high" : undefined}
-                decoding="async" className="position-absolute w-100 h-100 object-fit-cover"
-                style={{ inset: 0 }} />
+                decoding="async"
+                className="position-absolute w-100 h-100 object-fit-cover"
+                style={{ inset: 0 }}
+              />
               <div className="hero-overlay" />
               <div className="container position-relative home-hero-caption d-flex flex-column align-items-center justify-content-end text-center">
                 {index === 0 ? (

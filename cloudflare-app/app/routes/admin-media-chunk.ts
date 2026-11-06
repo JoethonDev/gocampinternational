@@ -9,11 +9,14 @@ export function loader(_args: Route.LoaderArgs) {
 async function loadChunk({ request, context }: Route.LoaderArgs) {
   await requireAdmin(request, context.cloudflare.env.DB);
   const data = await loadMediaLibrary(context.cloudflare.env.DB, new URL(request.url), false);
-  return Response.json({
-    items: data.items,
-    usage: data.usage,
-    page: data.page,
-    totalPages: data.totalPages,
-    total: data.total
-  }, { headers: { "Cache-Control": "private, no-store" } });
+  return Response.json(
+    {
+      items: data.items,
+      usage: data.usage,
+      page: data.page,
+      totalPages: data.totalPages,
+      total: data.total
+    },
+    { headers: { "Cache-Control": "private, no-store" } }
+  );
 }

@@ -1,5 +1,7 @@
+import { requireAdmin, requireSameOrigin } from "../lib/admin.server";
+import { readLimitedForm } from "../lib/request.server";
 import type { Route } from "./+types/admin-media-upload";
-import { MAX_UPLOAD_FILES, uploadMediaFiles } from "../lib/media.server";
+import { MAX_UPLOAD_BODY_BYTES, MAX_UPLOAD_FILES, uploadMediaFiles } from "../lib/media.server";
 
 const noStore = { "cache-control": "no-store" };
 
@@ -9,8 +11,15 @@ export function loader() {
 
 export async function action({ request, context }: Route.ActionArgs) {
   try {
-    const form = await request.formData();
-    const result = await uploadMediaFiles(request, context.cloudflare.env, form, context.cloudflare.ctx);
+    requireSameOrigin(request);
+    await requireAdmin(request, context.cloudflare.env.DB);
+    const form = await readLimitedForm(request, MAX_UPLOAD_BODY_BYTES);
+    const result = await uploadMediaFiles(
+      request,
+      context.cloudflare.env,
+      form,
+      context.cloudflare.ctx
+    );
     return Response.json(
       {
         success: result.uploaded.length > 0,
@@ -27,6 +36,7 @@ export async function action({ request, context }: Route.ActionArgs) {
     );
   } catch (error) {
     if (error instanceof Response) {
+      if (error.status < 400) throw error;
       const message = await error.text().catch(() => "Upload failed");
       return Response.json(
         { success: false, error: message },

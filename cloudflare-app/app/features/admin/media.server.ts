@@ -1,5 +1,6 @@
 import sourceMedia from "../../legacy-media.json";
 import type { MediaAsset } from "../../lib/domain";
+import { readPage } from "../../lib/pagination.server";
 
 export type StaticMedia = { path: string; folder: string; bytes: number };
 export type MediaUsage = { count: number; refs: string[] };
@@ -74,7 +75,7 @@ export async function loadMediaLibrary(db: D1Database, url: URL, includeUploads 
       (!query || item.path.toLowerCase().includes(query.toLowerCase()))
   );
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
-  const page = Math.min(Math.max(1, Number(url.searchParams.get("page") || 1) || 1), totalPages);
+  const page = Math.min(readPage(url), totalPages);
   const items = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
   const [usage, mediaRows] = await Promise.all([
     loadUsage(db, items),
@@ -100,5 +101,3 @@ export async function loadMediaLibrary(db: D1Database, url: URL, includeUploads 
     folder
   };
 }
-
-export const MEDIA_PAGE_SIZE = PAGE_SIZE;

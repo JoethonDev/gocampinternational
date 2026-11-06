@@ -59,13 +59,22 @@ export function MediaSelector({
     [namedMedia]
   );
   const all = useMemo(
-    () => [...new Set([...extraUploads, ...namedMedia.map((item) => item.path), ...uploaded, ...STATIC_PATHS])],
+    () => [
+      ...new Set([
+        ...extraUploads,
+        ...namedMedia.map((item) => item.path),
+        ...uploaded,
+        ...STATIC_PATHS
+      ])
+    ],
     [extraUploads, namedMedia, uploaded]
   );
   const matching = useMemo(() => {
     const query = search.trim().toLowerCase();
-    return all.filter((path) =>
-      path.toLowerCase().includes(query) || (nameByPath.get(path) || "").toLowerCase().includes(query)
+    return all.filter(
+      (path) =>
+        path.toLowerCase().includes(query) ||
+        (nameByPath.get(path) || "").toLowerCase().includes(query)
     );
   }, [all, search, nameByPath]);
 
@@ -78,14 +87,17 @@ export function MediaSelector({
       credentials: "same-origin",
       headers: { Accept: "application/json" },
       signal: controller.signal
-    }).then(async (response) => {
-      if (!response.ok) throw new Error("Cannot retrieve media names");
-      return response.json() as Promise<{ items: NamedMedia[] }>;
-    }).then((result) => {
-      if (!controller.signal.aborted && Array.isArray(result.items)) setNamedMedia(result.items);
-    }).catch(() => {
-      // Legacy paths and images already passed from the editor remain usable.
-    });
+    })
+      .then(async (response) => {
+        if (!response.ok) throw new Error("Cannot retrieve media names");
+        return response.json() as Promise<{ items: NamedMedia[] }>;
+      })
+      .then((result) => {
+        if (!controller.signal.aborted && Array.isArray(result.items)) setNamedMedia(result.items);
+      })
+      .catch(() => {
+        // Legacy paths and images already passed from the editor remain usable.
+      });
     return () => controller.abort();
   }, [open, namesRefresh]);
   const choices = useMemo(() => matching.slice(0, displayCount), [matching, displayCount]);
@@ -290,7 +302,12 @@ export function MediaSelector({
                     onChange={(event) => setSearch(event.target.value)}
                   />
                 </div>
-                <div className="media-selector-results" ref={resultsContainer} onScroll={loadOnScroll} aria-label="Image results">
+                <div
+                  className="media-selector-results"
+                  ref={resultsContainer}
+                  onScroll={loadOnScroll}
+                  aria-label="Image results"
+                >
                   <div className="media-selector-grid">
                     {choices.map((path) => (
                       <button
@@ -308,7 +325,9 @@ export function MediaSelector({
                         }}
                       >
                         <img src={path} alt="" loading="lazy" />
-                        <span title={nameByPath.get(path) || path}>{nameByPath.get(path) || path.split("/").at(-1)}</span>
+                        <span title={nameByPath.get(path) || path}>
+                          {nameByPath.get(path) || path.split("/").at(-1)}
+                        </span>
                       </button>
                     ))}
                   </div>
@@ -318,7 +337,9 @@ export function MediaSelector({
                 </div>
                 <p className="small text-secondary mb-0 mt-2" role="status">
                   Showing {choices.length} of {matching.length} matching images.
-                  {choices.length < matching.length ? " Scroll within the image grid for more." : ""}
+                  {choices.length < matching.length
+                    ? " Scroll within the image grid for more."
+                    : ""}
                 </p>
               </div>
               <div className="card-footer media-selector-footer">

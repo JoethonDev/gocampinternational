@@ -39,7 +39,10 @@ async function makeVariant(
   sourceWidth: number
 ): Promise<{ data: ArrayBuffer; method: "ai" | "standard" }> {
   const ai = sourceWidth < preset.width && preset.width <= sourceWidth * 4;
-  const base = { width: preset.width, fit: (sourceWidth < preset.width ? "contain" : "scale-down") as "contain" | "scale-down" };
+  const base = {
+    width: preset.width,
+    fit: (sourceWidth < preset.width ? "contain" : "scale-down") as "contain" | "scale-down"
+  };
   const run = async (generated: boolean) => {
     // Transform options match Cloudflare's 2026 Images feature options.
     const options = generated ? { ...base, upscale: "generate" as const } : base;
@@ -63,7 +66,10 @@ async function makeVariant(
   return { data: await run(false), method: "standard" };
 }
 
-export async function optimizeStoredMedia(env: Env, asset: MediaSource): Promise<OptimizationResult> {
+export async function optimizeStoredMedia(
+  env: Env,
+  asset: MediaSource
+): Promise<OptimizationResult> {
   const result: OptimizationResult = { mediaId: asset.id, created: [], skipped: [], errors: [] };
   if (!supportedTypes.has(asset.mime_type)) {
     result.skipped.push("unsupported_or_animated");
@@ -82,15 +88,19 @@ export async function optimizeStoredMedia(env: Env, asset: MediaSource): Promise
   let info: { width: number; height: number };
   try {
     const raw = await env.IMAGES.info(new Blob([bytes]).stream());
-    if (!("width" in raw && "height" in raw) || !isValidDimension(raw.width) || !isValidDimension(raw.height)) {
+    if (
+      !("width" in raw && "height" in raw) ||
+      !isValidDimension(raw.width) ||
+      !isValidDimension(raw.height)
+    ) {
       throw new Error("Cloudflare returned invalid image dimensions");
     }
     info = { width: raw.width, height: raw.height };
     result.width = raw.width;
     result.height = raw.height;
-    await env.DB.prepare(
-      "UPDATE media_assets SET width=?,height=? WHERE id=?"
-    ).bind(info.width, info.height, asset.id).run();
+    await env.DB.prepare("UPDATE media_assets SET width=?,height=? WHERE id=?")
+      .bind(info.width, info.height, asset.id)
+      .run();
   } catch (error) {
     result.errors.push(`info: ${error instanceof Error ? error.message : String(error)}`);
     return result;
@@ -100,8 +110,10 @@ export async function optimizeStoredMedia(env: Env, asset: MediaSource): Promise
     const key = variantKey(asset.object_key, preset.name);
     const existing = await env.DB.prepare(
       "SELECT object_key FROM media_variants WHERE media_id=? AND preset=?"
-    ).bind(asset.id, preset.name).first<{ object_key: string }>();
-    if (existing && await env.MEDIA.head(existing.object_key)) {
+    )
+      .bind(asset.id, preset.name)
+      .first<{ object_key: string }>();
+    if (existing && (await env.MEDIA.head(existing.object_key))) {
       result.skipped.push(preset.name);
       continue;
     }
@@ -112,7 +124,11 @@ export async function optimizeStoredMedia(env: Env, asset: MediaSource): Promise
         continue;
       }
       const transformedInfo = await env.IMAGES.info(new Blob([optimized.data]).stream());
-      if (!("width" in transformedInfo && "height" in transformedInfo) || !isValidDimension(transformedInfo.width) || !isValidDimension(transformedInfo.height)) {
+      if (
+        !("width" in transformedInfo && "height" in transformedInfo) ||
+        !isValidDimension(transformedInfo.width) ||
+        !isValidDimension(transformedInfo.height)
+      ) {
         throw new Error("No valid output dimensions");
       }
       const previous = await env.MEDIA.head(key);
@@ -132,17 +148,26 @@ export async function optimizeStoredMedia(env: Env, asset: MediaSource): Promise
               width=excluded.width,
               height=excluded.height,
               method=excluded.method`
-        ).bind(
-          asset.id, preset.name, key, optimized.data.byteLength,
-          transformedInfo.width, transformedInfo.height, optimized.method
-        ).run();
+        )
+          .bind(
+            asset.id,
+            preset.name,
+            key,
+            optimized.data.byteLength,
+            transformedInfo.width,
+            transformedInfo.height,
+            optimized.method
+          )
+          .run();
       } catch (error) {
         if (!previous) await env.MEDIA.delete(key).catch(() => undefined);
         throw error;
       }
       result.created.push(preset.name);
     } catch (error) {
-      result.errors.push(`${preset.name}: ${error instanceof Error ? error.message : String(error)}`);
+      result.errors.push(
+        `${preset.name}: ${error instanceof Error ? error.message : String(error)}`
+      );
       // Keep the original accessible. Other variants may still succeed.
     }
   }

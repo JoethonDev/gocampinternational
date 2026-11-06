@@ -1,12 +1,26 @@
+import { isProduction } from "./environment.server";
 /** Production-only, server-rendered discovery for search engines and AI search crawlers. */
 const SITE = "https://gocampinternational.net";
 function escapeXml(value: string) {
-  return value.replace(/&/g, "&amp;").replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&apos;");
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
 }
-type Entity = { kind: string; slug: string; name: string; content_json: string; updated_at: number };
+type Entity = {
+  kind: string;
+  slug: string;
+  name: string;
+  content_json: string;
+  updated_at: number;
+};
 function clean(value: unknown) {
-  return String(value || "").replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+  return String(value || "")
+    .replace(/<[^>]*>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 function imageUrl(value: unknown): string | undefined {
   const path = String(value || "");
@@ -37,15 +51,20 @@ function response(body: string, type: string, ttl = 900) {
 export async function discoveryResponse(url: URL, env: Env): Promise<Response | null> {
   const path = url.pathname;
   if (!["/robots.txt", "/sitemap.xml", "/llms.txt"].includes(path)) return null;
-  if (env.GOCAMP_ENV !== "production") {
+  if (!isProduction(env)) {
     return path === "/robots.txt"
       ? response("User-agent: *\nDisallow: /\n", "text/plain; charset=utf-8", 300)
       : new Response("Not found", { status: 404, headers: { "x-robots-tag": "noindex,nofollow" } });
   }
   if (path === "/robots.txt") {
     // These generic rules allow Googlebot, OAI-SearchBot, Claude-SearchBot and Claude-User.
-    return response("User-agent: *\nAllow: /\nDisallow: /admin/\nDisallow: /api/\n\nSitemap: " +
-      SITE + "/sitemap.xml\n", "text/plain; charset=utf-8", 3600);
+    return response(
+      "User-agent: *\nAllow: /\nDisallow: /admin/\nDisallow: /api/\n\nSitemap: " +
+        SITE +
+        "/sitemap.xml\n",
+      "text/plain; charset=utf-8",
+      3600
+    );
   }
   const entities = await publicEntities(env);
   if (path === "/sitemap.xml") {
@@ -57,17 +76,30 @@ export async function discoveryResponse(url: URL, env: Env): Promise<Response | 
         return {
           url: entityUrl(entity),
           image: imageUrl(data.banner || data.image) || "",
-          date: entity.updated_at ? new Date(entity.updated_at * 1000).toISOString().slice(0, 10) : ""
+          date: entity.updated_at
+            ? new Date(entity.updated_at * 1000).toISOString().slice(0, 10)
+            : ""
         };
       })
     ];
-    const xml = '<?xml version="1.0" encoding="UTF-8"?>\n' +
+    const xml =
+      '<?xml version="1.0" encoding="UTF-8"?>\n' +
       '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" ' +
       'xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n' +
-      pages.map((page) => "  <url><loc>" + escapeXml(page.url) + "</loc>" +
-        (page.date ? "<lastmod>" + page.date + "</lastmod>" : "") +
-        (page.image ? "<image:image><image:loc>" + escapeXml(page.image) + "</image:loc></image:image>" : "") +
-        "</url>").join("\n") + "\n</urlset>";
+      pages
+        .map(
+          (page) =>
+            "  <url><loc>" +
+            escapeXml(page.url) +
+            "</loc>" +
+            (page.date ? "<lastmod>" + page.date + "</lastmod>" : "") +
+            (page.image
+              ? "<image:image><image:loc>" + escapeXml(page.image) + "</image:loc></image:image>"
+              : "") +
+            "</url>"
+        )
+        .join("\n") +
+      "\n</urlset>";
     return response(xml, "application/xml; charset=utf-8");
   }
   const lines = [
@@ -83,11 +115,20 @@ export async function discoveryResponse(url: URL, env: Env): Promise<Response | 
   ];
   for (const item of entities) {
     const data = JSON.parse(item.content_json || "{}") as { tagline?: string; intro?: string };
-    lines.push("- [" + clean(item.name) + "](" + entityUrl(item) + ")" +
-      (data.tagline || data.intro ? ": " + clean(data.tagline || data.intro).slice(0, 180) : ""));
+    lines.push(
+      "- [" +
+        clean(item.name) +
+        "](" +
+        entityUrl(item) +
+        ")" +
+        (data.tagline || data.intro ? ": " + clean(data.tagline || data.intro).slice(0, 180) : "")
+    );
   }
-  lines.push("", "## Content policy",
+  lines.push(
+    "",
+    "## Content policy",
     "Descriptions are provided by Go Camp International. Program availability and dates can change; verify on the official website.",
-    "Student photographs and testimonials are contextual, not individual student profiles.");
+    "Student photographs and testimonials are contextual, not individual student profiles."
+  );
   return response(lines.join("\n") + "\n", "text/plain; charset=utf-8");
 }

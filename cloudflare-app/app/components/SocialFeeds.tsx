@@ -61,7 +61,6 @@ function CampPhotoPreview({
           <p>See our latest camp adventures on {platform}.</p>
         </div>
       )}
-
     </div>
   );
 }
