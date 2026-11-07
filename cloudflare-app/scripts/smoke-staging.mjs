@@ -9,7 +9,8 @@ const tests = [
   { path: "/", status: 200, contains: "/media/49c7cbd7-a00e-5970-9ed1-1e14e077e016" },
   { path: "/about", status: 200, contains: "About Us" },
   { path: "/about", status: 200, contains: "Zeinab El Sokkary" },
-  { path: "/about", status: 200, contains: "/media/910dd151-26f4-54f9-bc3d-c8cabc770e31" },
+  { path: "/about", status: 200, contains: "about-founder-layout" },
+  { path: "/about", status: 200, contains: "/media/db67b319-afd4-5cb6-9f57-1d098e311223" },
   { path: "/faq", status: 200, contains: "Are airport transfers arranged?" },
   { path: "/contact", status: 200, contains: "https://wa.me/201221719621" },
   { path: "/contact", status: 200, contains: "/media/910dd151-26f4-54f9-bc3d-c8cabc770e31" },
@@ -70,6 +71,7 @@ const tests = [
     contentType: "image/webp"
   },
   { path: "/media/910dd151-26f4-54f9-bc3d-c8cabc770e31", status: 200, method: "HEAD", contentType: "image/webp" },
+  { path: "/media/db67b319-afd4-5cb6-9f57-1d098e311223", status: 200, method: "HEAD", contentType: "image/webp" },
   { path: "/home", status: 301, location: "/" },
   { path: "/index.php", status: 301, location: "/" },
   { path: "/home.php", status: 301, location: "/" },
