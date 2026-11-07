@@ -23,10 +23,7 @@ function applyResponseHeaders(response: Response, env: Env, request: Request): R
     headers.set("Cache-Control", "no-store");
     headers.set("X-Robots-Tag", "noindex, nofollow");
   }
-  if (
-    String(env.GOCAMP_ENV) === "staging" ||
-    !isSeoIndexingAllowed(new URL(request.url), env)
-  ) {
+  if (String(env.GOCAMP_ENV) === "staging" || !isSeoIndexingAllowed(new URL(request.url), env)) {
     headers.set("X-Robots-Tag", "noindex, nofollow");
   }
   return new Response(response.body, {
