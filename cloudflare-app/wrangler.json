@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
-  "name": "gocamp-migration-staging",
+  "name": "gocamp-migration-production",
   "main": "./workers/app.ts",
   "upload_source_maps": true,
   "compatibility_date": "2026-10-31",
@@ -10,30 +10,29 @@
   "observability": {
     "enabled": true,
     "logs": {
-      "head_sampling_rate": 1
+      "head_sampling_rate": 0.1
     },
     "traces": {
-      "enabled": true,
-      "head_sampling_rate": 0.01
+      "enabled": false,
+      "head_sampling_rate": 0.1
     }
   },
   "vars": {
-    "GOCAMP_ENV": "staging",
-    "MIGRATION_SOURCE_SHA": "80432a2a6fcb4b0de6f14710748e53781ddef58c"
+    "GOCAMP_ENV": "production"
   },
   "workers_dev": true,
   "d1_databases": [
     {
       "binding": "DB",
-      "database_name": "gocamp-staging-db",
-      "database_id": "87e579d7-4f7a-4673-a317-d62551858b3c",
+      "database_name": "gocamp-production-db",
+      "database_id": "84f3beb7-ed00-49eb-a25b-913b301ad1da",
       "migrations_dir": "server/db/migrations"
     }
   ],
   "r2_buckets": [
     {
       "binding": "MEDIA",
-      "bucket_name": "gocamp-staging-media"
+      "bucket_name": "gocamp-production-media"
     }
   ],
   "images": {
