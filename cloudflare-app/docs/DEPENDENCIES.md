@@ -11,14 +11,16 @@ are the version source of truth.
 | Vite                         | 8.3.6   |
 | Cloudflare Vite plugin       | 1.67.0  |
 | Wrangler                     | 4.158.0 |
-| TypeScript                   | 7.0.2   |
+| TypeScript                   | 6.0.3   |
 | Node declarations            | 22.20.5 |
 | Prettier                     | 3.9.10  |
 | isbot                        | 5.2.2   |
 
 Direct dependencies are pinned and the lockfile records transitive versions.
-TypeScript 7.0.2 is within the `@react-router/dev` 8.5.1 peer range. Node
-declarations stay on the Node 22 line used by the local toolchain and CI.
+TypeScript 6.0.3 is the current TypeScript 6 release and preserves the compiler
+API used by the test helper. The TypeScript 7 package entry point does not expose
+that API. Node declarations stay on the Node 22 line used by the local toolchain
+and CI.
 As of 2026-11-07, `npm audit` reports zero known vulnerabilities in the lockfile.
 
 The application uses Bootstrap and ordinary CSS. Unused Tailwind and path-alias
