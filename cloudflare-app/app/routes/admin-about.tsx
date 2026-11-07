@@ -1,3 +1,4 @@
+import { getCloudflare } from "../lib/cloudflare-context";
 import { Form, redirect, useNavigation } from "react-router";
 import { useState } from "react";
 import type { Route } from "./+types/admin-about";
@@ -21,7 +22,7 @@ function readAbout(settings: SiteSettings): AboutPageContent {
 }
 
 export async function loader({ request, context }: Route.LoaderArgs) {
-  const db = context.cloudflare.env.DB;
+  const db = getCloudflare(context).env.DB;
   const session = await requireAdmin(request, db);
   const row = await db
     .prepare("SELECT content_json,revision FROM site_documents WHERE key='site_settings'")
@@ -58,6 +59,7 @@ function validateAbout(value: unknown): value is AboutPageContent {
         validText(s.title, 180) &&
         validText(s.image, 1000) &&
         validImage(s.image) &&
+        (s.visible === undefined || typeof s.visible === "boolean") &&
         Array.isArray(s.body) &&
         s.body.length <= 12 &&
         s.body.every((paragraph) => validText(paragraph, 3500)) &&
@@ -77,7 +79,7 @@ function validateAbout(value: unknown): value is AboutPageContent {
 }
 
 export async function action({ request, context }: Route.ActionArgs) {
-  const db = context.cloudflare.env.DB;
+  const db = getCloudflare(context).env.DB;
   const form = await request.formData();
   await verifyAdminPost(request, db, form);
   const revision = Number(form.get("revision"));
@@ -230,6 +232,18 @@ export default function AdminAbout({ loaderData }: Route.ComponentProps) {
                   </button>
                 </div>
               </div>
+              <label
+                className="d-flex align-items-center gap-2 mb-3"
+                htmlFor={`about-visible-${index}`}
+              >
+                <input
+                  id={`about-visible-${index}`}
+                  type="checkbox"
+                  checked={section.visible !== false}
+                  onChange={(event) => setSection(index, { visible: event.target.checked })}
+                />
+                Show this section on the public page
+              </label>
               <label className="form-label" htmlFor={`about-title-${index}`}>
                 Title
               </label>

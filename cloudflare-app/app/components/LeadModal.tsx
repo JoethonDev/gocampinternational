@@ -1,17 +1,19 @@
+import { usePublicContent } from "../lib/public-content-react";
 import { useFetcher } from "react-router";
-import { SITE } from "../config/site";
+import { trackBusinessEvent } from "../lib/analytics.client";
 
 const PROGRAM_TYPES = [
-  "Language & Activity Camps",
-  "Adult Academic Programs",
-  "Young Leader Programs",
-  "Soccer Camps",
-  "Special Interests Camps"
+  { value: "Language & Activity Camps", label: "program-language-camps" },
+  { value: "Adult Academic Programs", label: "program-adult-academic" },
+  { value: "Young Leader Programs", label: "program-young-leader" },
+  { value: "Soccer Camps", label: "program-soccer" },
+  { value: "Special Interests Camps", label: "program-special-interests" }
 ] as const;
 
 type LeadResult = { success?: boolean; error?: string; message?: string };
 
 function LeadForm() {
+  const { text } = usePublicContent("booking");
   const fetcher = useFetcher<LeadResult>();
   return (
     <>
@@ -32,47 +34,47 @@ function LeadForm() {
         </div>
         <div className="mb-3">
           <label htmlFor="nameInput" className="form-label">
-            Full Name
+            {text("full-name")}
           </label>
           <input
             className="form-control"
             name="name"
             id="nameInput"
-            placeholder="e.g., Ahmed Hassan"
+            placeholder={text("placeholder-e-g-ahmed-hassan")}
             required
             maxLength={100}
           />
         </div>
         <div className="mb-3">
           <label htmlFor="emailInput" className="form-label">
-            Email Address
+            {text("email-address")}
           </label>
           <input
             className="form-control"
             type="email"
             name="email"
             id="emailInput"
-            placeholder="you@example.com"
+            placeholder={text("placeholder-you-example-com")}
             required
             maxLength={254}
           />
         </div>
         <div className="mb-3">
           <label htmlFor="phoneInput" className="form-label">
-            Phone Number
+            {text("phone-number")}
           </label>
           <input
             className="form-control"
             name="phone"
             id="phoneInput"
-            placeholder="+20 123 456 7890"
+            placeholder={text("placeholder-20-123-456-7890")}
             required
             maxLength={30}
           />
         </div>
         <div className="mb-3">
           <label htmlFor="interestSelect" className="form-label">
-            I'm interested in...
+            {text("i-m-interested-in")}
           </label>
           <select
             className="form-select"
@@ -82,10 +84,12 @@ function LeadForm() {
             defaultValue=""
           >
             <option value="" disabled>
-              Choose a program type
+              {text("choose-a-program-type")}
             </option>
             {PROGRAM_TYPES.map((type) => (
-              <option key={type}>{type}</option>
+              <option key={type.value} value={type.value}>
+                {text(type.label)}
+              </option>
             ))}
           </select>
         </div>
@@ -95,7 +99,7 @@ function LeadForm() {
             type="submit"
             className="btn btn-warning btn-lg fw-bold"
           >
-            {fetcher.state !== "idle" ? "Sending..." : "Book a Free Call"}
+            {fetcher.state !== "idle" ? text("sending") : text("book-a-free-call")}
           </button>
         </div>
       </fetcher.Form>
@@ -104,6 +108,7 @@ function LeadForm() {
 }
 
 export function LeadModal() {
+  const { text, site: SITE } = usePublicContent("booking");
   return (
     <>
       <div
@@ -117,7 +122,7 @@ export function LeadModal() {
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title fw-bold" id="ctaModalLabel">
-                Ready for an Adventure?
+                {text("ready-for-an-adventure")}
               </h5>
               <button
                 type="button"
@@ -128,7 +133,7 @@ export function LeadModal() {
             </div>
             <div className="modal-body">
               <p className="text-muted mb-4">
-                Leave your details below, and one of our camp experts will contact you shortly.
+                {text("leave-your-details-below-and-one-of-our-camp-experts-will-contact-you-")}
               </p>
               <LeadForm />
             </div>
@@ -136,16 +141,21 @@ export function LeadModal() {
         </div>
       </div>
       <div id="mobileCtaBar" className="d-lg-none">
-        <a href={SITE.phoneHref} className="btn btn-outline-light flex-fill fw-bold">
-          Call
+        <a
+          href={SITE.phoneHref}
+          className="btn btn-outline-light flex-fill fw-bold"
+          onClick={() => trackBusinessEvent("contact_cta_click", "mobile_phone", SITE.phoneHref)}
+        >
+          {text("call")}
         </a>
         <button
           type="button"
           className="btn btn-warning flex-fill fw-bold"
           data-bs-toggle="modal"
           data-bs-target="#ctaModal"
+          onClick={() => trackBusinessEvent("lead_form_open", "mobile_book_now")}
         >
-          Book a Free Call
+          {text("book-a-free-call")}
         </button>
       </div>
     </>

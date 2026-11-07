@@ -1,3 +1,4 @@
+import { getCloudflare } from "../lib/cloudflare-context";
 import { redirect } from "react-router";
 import type { Route } from "./+types/admin-edit";
 import { requireAdmin } from "../lib/admin.server";
@@ -12,7 +13,7 @@ export function meta() {
 }
 
 export async function loader({ request, context, params }: Route.LoaderArgs) {
-  const db = context.cloudflare.env.DB;
+  const db = getCloudflare(context).env.DB;
   const session = await requireAdmin(request, db);
   const kind = ensureKind(params.kind || "");
   const slug = params.slug || "";
@@ -59,12 +60,12 @@ export async function action({ request, context, params }: Route.ActionArgs) {
     if (slug === "new") {
       throw new Response("Save the new record before duplicating it", { status: 400 });
     }
-    const copy = await duplicateEntity(request, context.cloudflare.env.DB, kind, form, slug);
+    const copy = await duplicateEntity(request, getCloudflare(context).env.DB, kind, form, slug);
     return redirect(`/admin/catalog/${kind}/${copy}?saved=1`);
   }
   const value = await saveEntity(
     request,
-    context.cloudflare.env.DB,
+    getCloudflare(context).env.DB,
     kind,
     form,
     slug === "new" ? undefined : slug

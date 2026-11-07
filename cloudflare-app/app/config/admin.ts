@@ -27,7 +27,7 @@ export const ADMIN_NAV_GROUPS: AdminNavGroup[] = [
     label: "Experience",
     items: [
       { href: "/admin/about", label: "About Us", icon: "bi-person-badge" },
-      { href: "/admin/documents/site_settings", label: "Visibility", icon: "bi-toggles" },
+      { href: "/admin/documents/site_settings", label: "Public Content", icon: "bi-toggles" },
       { href: "/admin/documents/faq", label: "FAQs", icon: "bi-question-circle" },
       {
         href: "/admin/documents/testimonials",
@@ -41,6 +41,7 @@ export const ADMIN_NAV_GROUPS: AdminNavGroup[] = [
     label: "Engagement",
     items: [
       { href: "/admin/inquiries", label: "Inquiries", icon: "bi-inbox-fill" },
+      { href: "/admin/analytics", label: "Analytics", icon: "bi-graph-up" },
       { href: "/admin/trash", label: "Trash", icon: "bi-trash3" }
     ]
   }

@@ -12,8 +12,8 @@ import { asDocument, asDocumentArray } from "./shared";
 
 const TITLES: Record<DocumentKey, { title: string; description: string }> = {
   site_settings: {
-    title: "Visibility & Settings",
-    description: "Control global section visibility and per-record inheritance defaults."
+    title: "Public Content & Visibility",
+    description: "Edit public page content, shared images and links, and section visibility."
   },
   faq: {
     title: "Global FAQs",
@@ -123,10 +123,15 @@ export function DocumentEditorPage({
           </AdminPanel>
         ) : documentKey === "site_settings" ? (
           <AdminPanel
-            title="Global visibility"
+            title="Content & visibility"
             description="These are defaults; individual records can override them."
           >
-            <SiteSettingsEditor value={value} onChange={update} />
+            <SiteSettingsEditor
+              value={value}
+              onChange={update}
+              csrf={csrf}
+              uploadedMedia={uploadedMedia}
+            />
           </AdminPanel>
         ) : documentKey === "faq" ? (
           <AdminPanel title="Questions" description="Drag-free ordering with move controls.">

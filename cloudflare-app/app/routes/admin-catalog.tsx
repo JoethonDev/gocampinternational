@@ -1,3 +1,4 @@
+import { getCloudflare } from "../lib/cloudflare-context";
 import { redirect } from "react-router";
 import type { Route } from "./+types/admin-catalog";
 import { requireAdmin } from "../lib/admin.server";
@@ -11,7 +12,7 @@ export function meta() {
 }
 
 export async function loader({ request, context, params }: Route.LoaderArgs) {
-  const db = context.cloudflare.env.DB;
+  const db = getCloudflare(context).env.DB;
   const session = await requireAdmin(request, db);
   const kind = ensureKind(params.kind || "");
   const [records, categories, destinations] = await Promise.all([
@@ -37,7 +38,7 @@ export async function action({ request, context, params }: Route.ActionArgs) {
   const kind = ensureKind(params.kind || "");
   const updated = await changeBulkStatus(
     request,
-    context.cloudflare.env.DB,
+    getCloudflare(context).env.DB,
     kind,
     await request.formData()
   );

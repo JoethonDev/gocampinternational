@@ -1,3 +1,4 @@
+import { getCloudflare } from "../lib/cloudflare-context";
 import { readLimitedForm } from "../lib/request.server";
 import { Form, Link, redirect, useActionData, useNavigation } from "react-router";
 import type { Route } from "./+types/admin-login";
@@ -11,7 +12,7 @@ export function meta() {
 }
 
 export async function loader({ request, context }: Route.LoaderArgs) {
-  if (await getAdmin(request, context.cloudflare.env.DB)) {
+  if (await getAdmin(request, getCloudflare(context).env.DB)) {
     throw redirect("/admin");
   }
   return null;
@@ -19,7 +20,12 @@ export async function loader({ request, context }: Route.LoaderArgs) {
 
 export async function action({ request, context }: Route.ActionArgs) {
   const form = await readLimitedForm(request, 16384);
-  const result = await login(request, context.cloudflare.env.DB, context.cloudflare.env, form);
+  const result = await login(
+    request,
+    getCloudflare(context).env.DB,
+    getCloudflare(context).env,
+    form
+  );
   if ("cookie" in result && result.cookie) {
     return redirect("/admin", {
       headers: { "Set-Cookie": result.cookie, "Cache-Control": "no-store" }

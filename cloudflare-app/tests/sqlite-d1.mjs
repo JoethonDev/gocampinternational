@@ -13,7 +13,8 @@ export class SqliteD1 {
       "0001_catalog",
       "0002_submission_limits",
       "0004_testimonials",
-      "0005_media_variants"
+      "0005_media_variants",
+      "0006_analytics_rollups"
     ]) {
       this.sql.exec(
         readFileSync(new URL(`../server/db/migrations/${migration}.sql`, import.meta.url), "utf8")
@@ -37,7 +38,7 @@ export class SqliteD1 {
       },
       execute() {
         const statement = db.sql.prepare(sql);
-        if (/^\s*(SELECT|PRAGMA)\b/i.test(sql)) {
+        if (/^\s*(SELECT|PRAGMA)\b/i.test(sql) || /\bRETURNING\b/i.test(sql)) {
           return {
             results: statement.all(...this.values).map((row) => ({ ...row })),
             meta: { changes: 0 }

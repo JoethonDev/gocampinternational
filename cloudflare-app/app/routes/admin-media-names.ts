@@ -1,8 +1,9 @@
+import { getCloudflare } from "../lib/cloudflare-context";
 import type { Route } from "./+types/admin-media-names";
 import { requireAdmin } from "../lib/admin.server";
 
 export async function loader({ request, context }: Route.LoaderArgs) {
-  const db = context.cloudflare.env.DB;
+  const db = getCloudflare(context).env.DB;
   await requireAdmin(request, db);
   const rows = await db
     .prepare(

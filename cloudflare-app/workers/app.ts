@@ -1,13 +1,8 @@
 import { serveR2Image } from "../app/lib/legacy-media.server";
-import { discoveryResponse } from "../app/lib/seo-discovery.server";
+import { discoveryResponse, isSeoIndexingAllowed } from "../app/lib/seo-discovery.server";
 import { createRequestHandler } from "react-router";
+import { createCloudflareContext } from "../app/lib/cloudflare-context";
 import { logEvent } from "../app/lib/logger.server";
-
-declare module "react-router" {
-  export interface AppLoadContext {
-    cloudflare: { env: Env; ctx: ExecutionContext };
-  }
-}
 
 const handle = createRequestHandler(
   () => import("virtual:react-router/server-build"),
@@ -28,10 +23,7 @@ function applyResponseHeaders(response: Response, env: Env, request: Request): R
     headers.set("Cache-Control", "no-store");
     headers.set("X-Robots-Tag", "noindex, nofollow");
   }
-  if (
-    String(env.GOCAMP_ENV) === "staging" ||
-    new URL(request.url).hostname.endsWith(".workers.dev")
-  ) {
+  if (String(env.GOCAMP_ENV) === "staging" || !isSeoIndexingAllowed(new URL(request.url), env)) {
     headers.set("X-Robots-Tag", "noindex, nofollow");
   }
   return new Response(response.body, {
@@ -56,7 +48,7 @@ export default {
       ) {
         return applyResponseHeaders(await serveR2Image(request, env), env, request);
       }
-      const response = await handle(request, { cloudflare: { env, ctx } });
+      const response = await handle(request, createCloudflareContext(env, ctx));
       const headers = new Headers(response.headers);
       headers.set("Server-Timing", `app;dur=${(performance.now() - started).toFixed(1)}`);
       return applyResponseHeaders(

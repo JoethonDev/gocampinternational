@@ -1,9 +1,9 @@
+import { usePublicContent } from "../../lib/public-content-react";
 import { responsiveSrcSet } from "../../lib/responsive-media";
 import { CampMemories } from "../../components/CampMemories";
 import { ProgramCard } from "../../components/ProgramCard";
 import { SafeRichText } from "../../components/SafeRichText";
 import { Breadcrumbs } from "../../components/ui/Breadcrumbs";
-import { SITE } from "../../config/site";
 import type {
   CategoryRecord,
   MemoriesDocument,
@@ -13,6 +13,7 @@ import type {
 import { isVisible } from "../../lib/visibility";
 
 function CategoryHero({ category }: { category: CategoryRecord }) {
+  const { site: SITE } = usePublicContent("category");
   return (
     <section className="hero-section position-relative" aria-label={category.name + " banner"}>
       <img
@@ -33,6 +34,7 @@ function CategoryHero({ category }: { category: CategoryRecord }) {
 }
 
 function CategoryIntro({ category }: { category: CategoryRecord }) {
+  const { text } = usePublicContent("category");
   if (!category.intro) return null;
   return (
     <section className="intro-section">
@@ -40,7 +42,10 @@ function CategoryIntro({ category }: { category: CategoryRecord }) {
         <div className="row align-items-center g-5">
           <div className="col-lg-6">
             <div className="intro-card">
-              <h2 className="mb-4">Discover {category.name}</h2>
+              <h2 className="mb-4">
+                {text("discover")}
+                {category.name}
+              </h2>
               <div className="lead">
                 <SafeRichText html={category.intro} />
               </div>
@@ -138,6 +143,7 @@ export function CategoryPage({
   settings: SiteSettings;
   memories: MemoriesDocument | null;
 }) {
+  const { text } = usePublicContent("category");
   return (
     <div className="page-content">
       {isVisible("category", "hero", category, settings) && <CategoryHero category={category} />}
@@ -145,7 +151,7 @@ export function CategoryPage({
         <div className="container py-2">
           <Breadcrumbs
             className="mb-0"
-            items={[{ label: "HOME", to: "/" }, { label: category.name.toUpperCase() }]}
+            items={[{ label: text("home"), to: "/" }, { label: category.name.toUpperCase() }]}
           />
         </div>
       </div>

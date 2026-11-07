@@ -1,6 +1,7 @@
 import { verifyAdminPost } from "./admin.server";
 import { checkedWrite, chunksOf, runAtomicBatch } from "./db.server";
 import type { DocumentKey } from "./documents";
+import { publicContentMediaIds, validatePublicContent } from "./public-content";
 import {
   CATALOG_STATUSES,
   ensureCatalogKind,
@@ -13,6 +14,22 @@ import {
 export type Kind = CatalogFormKind;
 
 export const ensureKind = ensureCatalogKind;
+
+export async function ensurePublicContentMediaIsPublic(
+  db: D1Database,
+  content: unknown
+): Promise<void> {
+  const mediaIds = publicContentMediaIds(content);
+  if (!mediaIds.length) return;
+  const placeholders = mediaIds.map(() => "?").join(",");
+  const media = await db
+    .prepare(`SELECT id FROM media_assets WHERE is_public=1 AND id IN (${placeholders})`)
+    .bind(...mediaIds)
+    .all<{ id: string }>();
+  if (new Set((media.results || []).map((row) => row.id)).size !== mediaIds.length) {
+    throw new Response("Choose public images from the media library", { status: 400 });
+  }
+}
 
 export async function saveEntity(
   request: Request,
@@ -42,6 +59,17 @@ export async function saveEntity(
   if (kind === "program") data.id = slug;
   if (kind === "destination") data.slug = slug;
   if (kind === "category") data.slug = slug;
+
+  const seo = data.seo as Record<string, unknown> | undefined;
+  if (kind !== "program" && typeof seo?.og_image_id === "string") {
+    const image = await db
+      .prepare("SELECT 1 AS found FROM media_assets WHERE id=? AND is_public=1")
+      .bind(seo.og_image_id)
+      .first<{ found: number }>();
+    if (!image) {
+      throw new Response("Choose a public image from the media library", { status: 400 });
+    }
+  }
 
   const revision = Number(form.get("revision") || 0);
   const category = kind === "program" ? String(data.category_slug || "") : null;
@@ -397,6 +425,7 @@ export async function saveDocument(
   } catch {
     throw new Response("Invalid JSON", { status: 400 });
   }
+  let publicMediaIds: string[] = [];
   if (key === "faq") {
     if (
       !Array.isArray(value) ||
@@ -421,6 +450,13 @@ export async function saveDocument(
   if (key === "site_settings") {
     if (!value || typeof value !== "object" || Array.isArray(value)) {
       throw new Response("Invalid settings data", { status: 400 });
+    }
+    const content = (value as Record<string, unknown>).public_content;
+    if (content !== undefined) {
+      const error = validatePublicContent(content);
+      if (error) throw new Response(error, { status: 400 });
+      await ensurePublicContentMediaIsPublic(db, content);
+      publicMediaIds = publicContentMediaIds(content);
     }
   }
   if (key === "testimonials") {
@@ -448,11 +484,16 @@ export async function saveDocument(
     }
   }
   const revision = Number(form.get("revision") || 0);
+  const mediaGuard = publicMediaIds.length
+    ? ` AND (SELECT COUNT(*) FROM media_assets WHERE is_public=1 AND id IN (${publicMediaIds.map(() => "?").join(",")}))=?`
+    : "";
+  const updateBindings: (string | number)[] = [JSON.stringify(value), key, revision];
+  if (publicMediaIds.length) updateBindings.push(...publicMediaIds, publicMediaIds.length);
   const result = await db
     .prepare(
-      "UPDATE site_documents SET content_json=?,revision=revision+1,updated_at=unixepoch() WHERE key=? AND revision=?"
+      `UPDATE site_documents SET content_json=?,revision=revision+1,updated_at=unixepoch() WHERE key=? AND revision=?${mediaGuard}`
     )
-    .bind(JSON.stringify(value), key, revision)
+    .bind(...updateBindings)
     .run();
   if (result.meta.changes !== 1) {
     throw new Response("Document changed; reload to avoid overwriting", { status: 409 });

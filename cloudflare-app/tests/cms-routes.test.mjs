@@ -7,6 +7,7 @@ import { loadTypeScript } from "./load-typescript.mjs";
 import { SqliteD1, entity, admin, statusIs } from "./sqlite-d1.mjs";
 
 const { readPage } = await loadTypeScript("../app/lib/pagination.server.ts");
+const { createCloudflareContext } = await loadTypeScript("../app/lib/cloudflare-context.ts");
 const { loader: inquiries } = await loadTypeScript("../app/routes/admin-inquiries-chunk.ts");
 const { SelectedCatalogIds } = await loadTypeScript(
   "../app/components/admin/SelectedCatalogIds.tsx"
@@ -14,6 +15,8 @@ const { SelectedCatalogIds } = await loadTypeScript(
 const { action: trash } = await loadTypeScript("../app/routes/admin-trash.tsx");
 const { action: libraryUpload } = await loadTypeScript("../app/routes/admin-media.tsx");
 const { action: selectorUpload } = await loadTypeScript("../app/routes/admin-media-upload.ts");
+
+const workerContext = (db) => createCloudflareContext({ DB: db }, {});
 
 test("inquiry scrolling loads the second page", async () => {
   const db = new SqliteD1();
@@ -26,7 +29,7 @@ test("inquiry scrolling loads the second page", async () => {
   const { headers } = await admin(db);
   const response = await inquiries({
     request: new Request("https://example.test/admin/inquiries/chunk?page=2", { headers }),
-    context: { cloudflare: { env: { DB: db } } }
+    context: workerContext(db)
   });
   const result = await response.json();
   assert.equal(result.page, 2);
@@ -73,7 +76,7 @@ test("a concurrently restored trash item keeps its relationships", async () => {
         headers,
         body: form
       }),
-      context: { cloudflare: { env: { DB: db } } }
+      context: workerContext(db)
     }),
     statusIs(409)
   );
@@ -101,7 +104,7 @@ test("both upload entrypoints reject headerless oversized bodies before multipar
       body,
       headers: { ...headers, "Content-Type": "multipart/form-data; boundary=test" }
     });
-    const context = { cloudflare: { env: { DB: db } } };
+    const context = workerContext(db);
     if (action === libraryUpload) await assert.rejects(action({ request, context }), statusIs(413));
     else assert.equal((await action({ request, context })).status, 413);
     assert.equal(cancelled, true);

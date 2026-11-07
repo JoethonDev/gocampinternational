@@ -1,17 +1,18 @@
+import { getCloudflare } from "../lib/cloudflare-context";
 import type { Route } from "./+types/landing";
 import { submitInquiry } from "../lib/inquiries.server";
 import { originFrom, seoMeta } from "../lib/seo";
 import { LandingPage } from "../features/landing/LandingPage";
 import "../landing.css";
+import { publicSeo } from "../lib/public-content";
 
 export function meta({ matches }: Route.MetaArgs) {
+  const seo = publicSeo(matches, "landing");
   return seoMeta({
     origin: originFrom(matches),
     path: "/landing",
-    robots: "noindex,nofollow",
-    title: "Transform Your Teen's Future - International Summer Programs | Go Camp",
-    description:
-      "Elite international summer camps for ambitious teens. Sports academies, language immersion, leadership programs."
+    ...seo,
+    robots: "noindex,nofollow"
   });
 }
 
@@ -23,7 +24,7 @@ export const links: Route.LinksFunction = () => [
 ];
 
 export function action({ request, context }: Route.ActionArgs) {
-  return submitInquiry(request, context.cloudflare.env.DB, "lead", true);
+  return submitInquiry(request, getCloudflare(context).env.DB, "lead", true);
 }
 
 export default function Landing() {

@@ -26,7 +26,7 @@ test("PR40 landing form fields and consent are preserved in React and server val
   }
   assert.match(server, /values\.source === "Landing Page"/);
   assert.match(server, /if \(forceLanding\) values\.source = "Landing Page"/);
-  assert.match(route, /submitInquiry\(request, context\.cloudflare\.env\.DB, "lead", true\)/);
+  assert.match(route, /submitInquiry\(request, getCloudflare\(context\)\.env\.DB, "lead", true\)/);
   assert.match(server, /privacyConsent: "yes"/);
   assert.match(route, /noindex,nofollow/);
   assert.match(routes, /route\(\s*"landing"\s*,\s*"routes\/landing\.tsx"\s*\)/);

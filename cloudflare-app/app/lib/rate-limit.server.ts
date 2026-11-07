@@ -1,5 +1,13 @@
 import { sha256Hex } from "./crypto.server";
 
+export const RATE_LIMIT_RETENTION_SECONDS = 24 * 60 * 60;
+
+/** Remove expired address hashes; current scopes use fixed windows of at most 15 minutes. */
+export async function pruneExpiredRateLimits(db: D1Database, now = Date.now()) {
+  const cutoff = Math.floor(now / 1000) - RATE_LIMIT_RETENTION_SECONDS;
+  return db.prepare("DELETE FROM submission_limits WHERE window_start < ?").bind(cutoff).run();
+}
+
 /** Atomically consumes an attempt without extending an existing fixed window. */
 export async function consumeRateLimit(
   db: D1Database,

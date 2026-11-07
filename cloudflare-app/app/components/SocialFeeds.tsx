@@ -1,5 +1,5 @@
+import { usePublicContent } from "../lib/public-content-react";
 import { useEffect, useRef, useState } from "react";
-import { SITE } from "../config/site";
 import type { MemoriesDocument, MemoryItem } from "../lib/domain";
 import { responsiveSrcSet } from "../lib/responsive-media";
 import "./social-feeds.css";
@@ -26,6 +26,7 @@ function CampPhotoPreview({
   photos: MemoryItem[];
   platform: "Facebook" | "Instagram";
 }) {
+  const { text } = usePublicContent("social");
   return (
     <div className="social-feed-preview">
       {photos.length > 0 ? (
@@ -38,7 +39,7 @@ function CampPhotoPreview({
                 href={url}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label={`View camp photo: ${photo.caption || photo.country || "Go Camp"}`}
+                aria-label={`View camp photo: ${photo.caption || photo.country || text("go-camp")}`}
               >
                 <img
                   src={url}
@@ -46,7 +47,7 @@ function CampPhotoPreview({
                   sizes="(max-width: 600px) 45vw, 230px"
                   loading="lazy"
                   decoding="async"
-                  alt={photo.caption || photo.country || "Go Camp camp memory"}
+                  alt={photo.caption || photo.country || text("go-camp-camp-memory")}
                 />
               </a>
             );
@@ -58,7 +59,9 @@ function CampPhotoPreview({
             className={platform === "Facebook" ? "bi bi-facebook" : "bi bi-instagram"}
             aria-hidden="true"
           />
-          <p>See our latest camp adventures on {platform}.</p>
+          <p>
+            {text("see-our-latest-camp-adventures-on")} {platform}.
+          </p>
         </div>
       )}
     </div>
@@ -66,6 +69,7 @@ function CampPhotoPreview({
 }
 
 function FacebookPage({ photos }: { photos: MemoryItem[] }) {
+  const { text, site: SITE } = usePublicContent("social");
   const containerRef = useRef<HTMLDivElement>(null);
   const widthRef = useRef(340);
   const [width, setWidth] = useState(340);
@@ -109,8 +113,8 @@ function FacebookPage({ photos }: { photos: MemoryItem[] }) {
           <i className="bi bi-facebook" />
         </span>
         <div>
-          <h3>Facebook</h3>
-          <p>News and updates from Go Camp</p>
+          <h3>{text("facebook")}</h3>
+          <p>{text("news-and-updates-from-go-camp")}</p>
         </div>
       </div>
       <div
@@ -122,7 +126,7 @@ function FacebookPage({ photos }: { photos: MemoryItem[] }) {
         {!failed && (
           <iframe
             key={width}
-            title="Go Camp International Facebook timeline"
+            title={text("title-go-camp-international-facebook-timeline")}
             src={facebookIframeUrl}
             width={width}
             height={450}
@@ -138,12 +142,13 @@ function FacebookPage({ photos }: { photos: MemoryItem[] }) {
           />
         )}
       </div>
-      <SocialLink href={SITE.social.facebook}>Visit our Facebook page</SocialLink>
+      <SocialLink href={SITE.social.facebook}>{text("visit-our-facebook-page")}</SocialLink>
     </article>
   );
 }
 
 function InstagramProfile({ photos }: { photos: MemoryItem[] }) {
+  const { text, site: SITE } = usePublicContent("social");
   return (
     <article className="social-feed-card">
       <div className="social-feed-heading">
@@ -151,19 +156,22 @@ function InstagramProfile({ photos }: { photos: MemoryItem[] }) {
           <i className="bi bi-instagram" />
         </span>
         <div>
-          <h3>Instagram</h3>
-          <p>Photos and moments from our adventures</p>
+          <h3>{text("instagram")}</h3>
+          <p>{text("photos-and-moments-from-our-adventures")}</p>
         </div>
       </div>
       <div className="social-feed-content">
         <CampPhotoPreview photos={photos} platform="Instagram" />
       </div>
-      <SocialLink href={SITE.social.instagram}>See the latest posts @gocampgo</SocialLink>
+      <SocialLink href={SITE.social.instagram}>{text("see-the-latest-posts-gocampgo")}</SocialLink>
     </article>
   );
 }
 
 export function SocialFeeds({ memories }: { memories: MemoriesDocument | null }) {
+  const { text, visible, site: SITE } = usePublicContent("social");
+  if (!visible("show-social-feed")) return null;
+
   const seen = new Set<string>();
   const photos = (memories?.items || [])
     .filter((item) => {
@@ -181,19 +189,23 @@ export function SocialFeeds({ memories }: { memories: MemoriesDocument | null })
       <div className="container">
         <div className="text-center mb-4">
           <h2 id="social-feeds-title" className="section-title">
-            Follow Our Adventures
+            {text("follow-our-adventures")}
           </h2>
           <p className="lead text-muted">
-            Explore our camp highlights and follow Go Camp International for new posts.
+            {text("explore-our-camp-highlights-and-follow-go-camp-international-for-new-p")}
           </p>
         </div>
         <div className="row g-4 justify-content-center">
-          <div className="col-12 col-lg-6 d-flex">
-            <FacebookPage photos={facebookPhotos} />
-          </div>
-          <div className="col-12 col-lg-6 d-flex">
-            <InstagramProfile photos={instagramPhotos} />
-          </div>
+          {visible("show-facebook") && SITE.social.facebook && (
+            <div className="col-12 col-lg-6 d-flex">
+              <FacebookPage photos={facebookPhotos} />
+            </div>
+          )}
+          {visible("show-instagram") && SITE.social.instagram && (
+            <div className="col-12 col-lg-6 d-flex">
+              <InstagramProfile photos={instagramPhotos} />
+            </div>
+          )}
         </div>
       </div>
     </section>

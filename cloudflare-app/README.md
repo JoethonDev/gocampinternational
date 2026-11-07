@@ -1,6 +1,6 @@
 # GoCamp International
 
-React Router 7 and React 19 on Cloudflare Workers. D1 stores catalog, CMS, sessions
+React Router 8 and React 19 on Cloudflare Workers. D1 stores catalog, CMS, sessions
 and inquiries; R2 stores media. No PHP runtime, parent-directory assets, or external
 database gateway is required.
 
@@ -61,3 +61,6 @@ Image variants are materialized in R2; public requests do not run image transfor
 See [cleanup notes](docs/CLEANUP.md) for this refactor's scope and validation limits.
 
 Dependency versions and security checks: [dependency maintenance](docs/DEPENDENCIES.md).
+
+Public page copy, shared images, links, SEO previews and section visibility are edited
+in D1. See [public content editing](docs/PUBLIC_CONTENT.md) for the admin workflow.

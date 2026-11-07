@@ -1,3 +1,4 @@
+import { getCloudflare } from "../lib/cloudflare-context";
 import { r2Response } from "../lib/r2-response.server";
 import { isImagePreset } from "../lib/responsive-media";
 import type { Route } from "./+types/public-media";
@@ -5,7 +6,7 @@ import type { Route } from "./+types/public-media";
 export async function loader({ context, params, request }: Route.LoaderArgs) {
   const id = params.id || "";
   if (!/^[a-f0-9-]{36}$/i.test(id)) throw new Response("Not found", { status: 404 });
-  const env = context.cloudflare.env;
+  const env = getCloudflare(context).env;
   const requested = new URL(request.url).searchParams.get("variant");
   const preset = isImagePreset(requested) ? requested : null;
   const row = await env.DB.prepare(
