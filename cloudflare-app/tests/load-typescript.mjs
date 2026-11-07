@@ -1,7 +1,5 @@
 import { existsSync, readFileSync } from "node:fs";
-import typescript from "typescript";
-
-const { transpileModule, ModuleKind, ScriptTarget, JsxEmit } = typescript;
+import { transpileModule, ModuleKind, ScriptTarget, JsxEmit } from "typescript";
 
 // Compile dependency-free server helpers without starting Vite or a Worker.
 const compiled = new Map();
