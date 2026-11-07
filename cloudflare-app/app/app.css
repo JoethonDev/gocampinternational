@@ -460,3 +460,100 @@ body {
     row-gap: 1.75rem;
   }
 }
+
+/* About Us founder: real responsive markup, not an embedded image composition. */
+.about-founder {
+  padding: clamp(1.5rem, 4vw, 3.75rem);
+  background: linear-gradient(155deg, #fff 45%, #faf8f1 100%);
+  border: 1px solid #ecebe4;
+  border-radius: 20px;
+  overflow: hidden;
+}
+.about-founder-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.88fr) minmax(0, 1.2fr);
+  gap: clamp(1.75rem, 4vw, 4rem);
+  align-items: start;
+}
+.about-founder-portrait {
+  margin: 0;
+  min-width: 0;
+}
+.about-founder-portrait > img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  height: auto;
+  object-fit: cover;
+  object-position: center 38%;
+  border-radius: 12px;
+  box-shadow: 0 12px 36px rgb(0 0 0 / 10%);
+}
+.about-founder-caption {
+  padding: 1.25rem 0 0;
+}
+.about-founder-name {
+  margin: 0 0 0.45rem;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.4rem, 2.3vw, 2rem);
+  line-height: 1.25;
+  color: var(--brand-primary, #174254);
+}
+.about-founder-role {
+  padding-left: 0.9rem;
+  border-left: 3px solid #d9a124;
+  margin: 0;
+  font-size: 1rem;
+  color: #5c6673;
+}
+.about-founder-copy {
+  min-width: 0;
+}
+.about-founder-eyebrow {
+  margin: 0 0 0.8rem;
+  color: #ab7824;
+  font-weight: 700;
+  font-size: 0.84rem;
+  letter-spacing: 0.23em;
+  text-transform: uppercase;
+}
+.about-founder-heading {
+  margin: 0;
+  font-family: "Montserrat", sans-serif;
+  font-size: clamp(2.2rem, 4vw, 3.7rem);
+  font-weight: 700;
+  line-height: 1.12;
+  color: var(--brand-primary, #174254);
+}
+.about-founder-divider {
+  display: block;
+  width: 88px;
+  height: 4px;
+  margin: 1.6rem 0 1.8rem;
+  border-radius: 4px;
+  background: #d9a124;
+}
+.about-founder-description p {
+  margin: 0 0 1.4rem;
+  color: #394756;
+  font-size: clamp(1rem, 1.45vw, 1.15rem);
+  line-height: 1.85;
+}
+.about-founder-description p:last-child {
+  margin-bottom: 0;
+}
+@media (max-width: 767.98px) {
+  .about-founder-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2.25rem;
+  }
+  .about-founder-portrait {
+    width: 100%;
+    max-width: 440px;
+    margin-inline: auto;
+  }
+  .about-founder-copy {
+    max-width: 720px;
+  }
+}
