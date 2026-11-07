@@ -114,7 +114,7 @@ export const ABOUT_SECTIONS: AboutSection[] = [
 ];
 
 export type AboutPageContent = {
-  profile: { name: string; title: string; body: string };
+  profile: { name: string; title: string; body: string; image?: string };
   sections: AboutSection[];
 };
 
