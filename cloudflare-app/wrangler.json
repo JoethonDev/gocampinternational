@@ -18,7 +18,8 @@
     }
   },
   "vars": {
-    "GOCAMP_ENV": "production"
+    "GOCAMP_ENV": "production",
+    "MIGRATION_SOURCE_SHA": "a60979165e236d4113b625d3166cef21919d7337"
   },
   "workers_dev": true,
   "d1_databases": [
