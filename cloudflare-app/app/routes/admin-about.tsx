@@ -42,6 +42,7 @@ function validateAbout(value: unknown): value is AboutPageContent {
   const validText = (text: unknown, max: number) => typeof text === "string" && text.length <= max;
   return Boolean(
     p && validText(p.name, 160) && validText(p.title, 160) && validText(p.body, 5000) &&
+    (p.image === undefined || (validText(p.image, 1000) && validImage(p.image))) &&
     Array.isArray(page.sections) && page.sections.length > 0 && page.sections.length <= 12 &&
     page.sections.every((s) =>
       s && validText(s.title, 180) && validText(s.image, 1000) && validImage(s.image) &&
@@ -122,6 +123,10 @@ export default function AdminAbout({ loaderData }: Route.ComponentProps) {
             <label className="form-label" htmlFor="about-profile-title">Position</label>
             <input className="form-control mb-3" id="about-profile-title" value={about.profile.title}
               onChange={(event) => setProfile("title", event.target.value)} maxLength={160} required />
+            <label className="form-label" htmlFor="about-profile-image">Founder portrait (R2 /media/… or /images/…)</label>
+            <input className="form-control mb-3" id="about-profile-image" type="text"
+              value={about.profile.image || ""}
+              onChange={(event) => setProfile("image", event.target.value)} maxLength={1000} />
             <label className="form-label" htmlFor="about-profile-body">Professional introduction</label>
             <textarea className="form-control" id="about-profile-body" rows={5}
               value={about.profile.body} onChange={(event) => setProfile("body", event.target.value)} maxLength={5000} />
