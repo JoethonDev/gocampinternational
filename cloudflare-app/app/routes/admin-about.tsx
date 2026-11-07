@@ -5,7 +5,9 @@ import type { Route } from "./+types/admin-about";
 import { requireAdmin, verifyAdminPost } from "../lib/admin.server";
 import { AdminShell } from "../components/admin/AdminShell";
 import { AdminPageHeader } from "../components/admin/AdminPageHeader";
+import { AdminFormSection } from "../components/admin/AdminFormSection";
 import { AdminFormActions } from "../components/admin/AdminFormActions";
+import { MediaSelector } from "../components/MediaSelector";
 import { ABOUT_PAGE_DEFAULT, SITE, type AboutPageContent, type AboutSection } from "../config/site";
 import type { SiteSettings } from "../lib/domain";
 
@@ -78,6 +80,33 @@ function validateAbout(value: unknown): value is AboutPageContent {
   );
 }
 
+function AboutImageField({
+  id,
+  label,
+  value,
+  csrf,
+  onChange
+}: {
+  id: string;
+  label: string;
+  value: string;
+  csrf: string;
+  onChange: (value: string) => void;
+}) {
+  return (
+    <div className="col-12">
+      <MediaSelector
+        id={id}
+        label={label}
+        initial={value}
+        externalValue={value}
+        onChange={onChange}
+        csrf={csrf}
+      />
+    </div>
+  );
+}
+
 export async function action({ request, context }: Route.ActionArgs) {
   const db = getCloudflare(context).env.DB;
   const form = await request.formData();
@@ -146,42 +175,49 @@ export default function AdminAbout({ loaderData }: Route.ComponentProps) {
     <AdminShell username={session.username} csrf={session.csrf}>
       <AdminPageHeader
         title="About Us"
-        description="Edit the director profile, company sections, images and gallery. Changes are stored in staging D1."
+        description="Edit the director profile, company sections, images and gallery. Changes are saved to the site content database."
       />
       {saved && (
         <div className="alert alert-success" role="status">
           About Us content saved.
         </div>
       )}
-      <Form method="post">
+      <Form method="post" className="admin-about-form">
         <input type="hidden" name="csrf" value={session.csrf} />
         <input type="hidden" name="revision" value={revision} />
         <input type="hidden" name="content" value={JSON.stringify(about)} />
-        <section className="card mb-4">
-          <div className="card-body">
-            <h2 className="h4">Director profile</h2>
+        <AdminFormSection
+          title="Director profile"
+          description="The introduction shown on the public About page."
+          className="admin-about-section"
+        >
+          <div className="col-md-6">
             <label className="form-label" htmlFor="about-profile-name">
               Name
             </label>
             <input
-              className="form-control mb-3"
+              className="form-control"
               id="about-profile-name"
               value={about.profile.name}
               onChange={(event) => setProfile("name", event.target.value)}
               maxLength={160}
               required
             />
+          </div>
+          <div className="col-md-6">
             <label className="form-label" htmlFor="about-profile-title">
               Position
             </label>
             <input
-              className="form-control mb-3"
+              className="form-control"
               id="about-profile-title"
               value={about.profile.title}
               onChange={(event) => setProfile("title", event.target.value)}
               maxLength={160}
               required
             />
+          </div>
+          <div className="col-12">
             <label className="form-label" htmlFor="about-profile-body">
               Professional introduction
             </label>
@@ -194,81 +230,91 @@ export default function AdminAbout({ loaderData }: Route.ComponentProps) {
               maxLength={5000}
             />
           </div>
-        </section>
+        </AdminFormSection>
         {about.sections.map((section, index) => (
-          <section className="card mb-4" key={index}>
-            <div className="card-body">
-              <div className="d-flex justify-content-between flex-wrap gap-2 align-items-center mb-3">
-                <h2 className="h4 m-0">Section {index + 1}</h2>
-                <div className="d-flex gap-2">
-                  <button
-                    className="btn btn-sm btn-outline-secondary"
-                    type="button"
-                    disabled={index === 0}
-                    onClick={() => shift(index, -1)}
-                  >
-                    Move up
-                  </button>
-                  <button
-                    className="btn btn-sm btn-outline-secondary"
-                    type="button"
-                    disabled={index === about.sections.length - 1}
-                    onClick={() => shift(index, 1)}
-                  >
-                    Move down
-                  </button>
-                  <button
-                    className="btn btn-sm btn-outline-danger"
-                    type="button"
-                    disabled={about.sections.length === 1}
-                    onClick={() =>
-                      setAbout((prev) => ({
-                        ...prev,
-                        sections: prev.sections.filter((_, i) => i !== index)
-                      }))
-                    }
-                  >
-                    Remove
-                  </button>
-                </div>
+          <AdminFormSection
+            key={index}
+            title={`Section ${index + 1}`}
+            description="Edit this public section or change its order."
+            className="admin-about-section"
+            action={
+              <div className="admin-row-actions">
+                <button
+                  className="btn btn-sm btn-outline-secondary"
+                  type="button"
+                  disabled={index === 0}
+                  aria-label={`Move section ${index + 1} up`}
+                  onClick={() => shift(index, -1)}
+                >
+                  <i className="bi bi-arrow-up" aria-hidden="true" /> <span>Up</span>
+                </button>
+                <button
+                  className="btn btn-sm btn-outline-secondary"
+                  type="button"
+                  disabled={index === about.sections.length - 1}
+                  aria-label={`Move section ${index + 1} down`}
+                  onClick={() => shift(index, 1)}
+                >
+                  <i className="bi bi-arrow-down" aria-hidden="true" /> <span>Down</span>
+                </button>
+                <button
+                  className="btn btn-sm btn-outline-danger"
+                  type="button"
+                  disabled={about.sections.length === 1}
+                  aria-label={`Remove section ${index + 1}`}
+                  onClick={() =>
+                    setAbout((prev) => ({
+                      ...prev,
+                      sections: prev.sections.filter((_, i) => i !== index)
+                    }))
+                  }
+                >
+                  Remove
+                </button>
               </div>
+            }
+          >
+            <div className="col-12">
               <label
-                className="d-flex align-items-center gap-2 mb-3"
+                className="form-check admin-about-visibility"
                 htmlFor={`about-visible-${index}`}
               >
                 <input
                   id={`about-visible-${index}`}
+                  className="form-check-input"
                   type="checkbox"
                   checked={section.visible !== false}
                   onChange={(event) => setSection(index, { visible: event.target.checked })}
                 />
-                Show this section on the public page
+                <span className="form-check-label">Show this section on the public page</span>
               </label>
+            </div>
+            <div className="col-12">
               <label className="form-label" htmlFor={`about-title-${index}`}>
                 Title
               </label>
               <input
-                className="form-control mb-3"
+                className="form-control"
                 id={`about-title-${index}`}
                 required
                 maxLength={180}
                 value={section.title}
                 onChange={(event) => setSection(index, { title: event.target.value })}
               />
-              <label className="form-label" htmlFor={`about-image-${index}`}>
-                Image path (R2 /media/… or /images/…)
-              </label>
-              <input
-                className="form-control mb-3"
-                id={`about-image-${index}`}
-                value={section.image}
-                onChange={(event) => setSection(index, { image: event.target.value })}
-              />
+            </div>
+            <AboutImageField
+              id={`about-image-${index}`}
+              label={`Section ${index + 1}`}
+              value={section.image}
+              csrf={session.csrf}
+              onChange={(image) => setSection(index, { image })}
+            />
+            <div className="col-12">
               <label className="form-label" htmlFor={`about-body-${index}`}>
                 Paragraphs (separate with a blank line)
               </label>
               <textarea
-                className="form-control mb-3"
+                className="form-control"
                 id={`about-body-${index}`}
                 rows={6}
                 value={section.body.join("\n\n")}
@@ -276,45 +322,87 @@ export default function AdminAbout({ loaderData }: Route.ComponentProps) {
                   setSection(index, { body: event.target.value.split(/\n\s*\n/).filter(Boolean) })
                 }
               />
-              <label className="d-flex align-items-center gap-2 mb-3">
+            </div>
+            <div className="col-12">
+              <label className="form-check admin-about-visibility">
                 <input
+                  className="form-check-input"
                   type="checkbox"
                   checked={Boolean(section.reverse)}
                   onChange={(event) => setSection(index, { reverse: event.target.checked })}
-                />{" "}
-                Reverse image and text
+                />
+                <span className="form-check-label">Reverse image and text</span>
               </label>
-              {section.gallery?.map((photo, photoIndex) => (
-                <div className="border rounded p-3 mb-2" key={photoIndex}>
-                  <div className="d-flex justify-content-between align-items-center mb-2">
-                    <strong>Gallery image {photoIndex + 1}</strong>
-                    <button
-                      type="button"
-                      className="btn btn-sm btn-outline-danger"
-                      onClick={() =>
-                        setSection(index, {
-                          gallery: section.gallery?.filter((_, i) => i !== photoIndex)
-                        })
-                      }
-                    >
-                      Remove image
-                    </button>
-                  </div>
-                  {(["image", "caption", "alt"] as const).map((field) => (
-                    <label key={field} className="form-label d-block text-capitalize">
-                      {field}
-                      <input
-                        className="form-control mb-2"
-                        value={photo[field]}
-                        onChange={(event) => setPhoto(index, photoIndex, field, event.target.value)}
+            </div>
+            {section.gallery?.length ? (
+              <div className="col-12">
+                <h3 className="h6 mb-3">Gallery images</h3>
+                <div className="admin-about-gallery">
+                  {section.gallery?.map((photo, photoIndex) => (
+                    <section className="admin-about-gallery-item" key={photoIndex}>
+                      <div className="admin-about-gallery-heading">
+                        <strong>Image {photoIndex + 1}</strong>
+                        <button
+                          type="button"
+                          className="btn btn-sm btn-outline-danger"
+                          aria-label={`Remove gallery image ${photoIndex + 1} from section ${index + 1}`}
+                          onClick={() =>
+                            setSection(index, {
+                              gallery: section.gallery?.filter((_, i) => i !== photoIndex)
+                            })
+                          }
+                        >
+                          Remove image
+                        </button>
+                      </div>
+                      <AboutImageField
+                        id={`about-gallery-${index}-${photoIndex}`}
+                        label={`Gallery ${photoIndex + 1}`}
+                        value={photo.image}
+                        csrf={session.csrf}
+                        onChange={(image) => setPhoto(index, photoIndex, "image", image)}
                       />
-                    </label>
+                      <label
+                        className="form-label"
+                        htmlFor={`about-gallery-caption-${index}-${photoIndex}`}
+                      >
+                        Caption
+                        <input
+                          id={`about-gallery-caption-${index}-${photoIndex}`}
+                          className="form-control mt-1"
+                          value={photo.caption}
+                          onChange={(event) =>
+                            setPhoto(index, photoIndex, "caption", event.target.value)
+                          }
+                          maxLength={300}
+                        />
+                      </label>
+                      <label
+                        className="form-label"
+                        htmlFor={`about-gallery-alt-${index}-${photoIndex}`}
+                      >
+                        Alt text
+                        <input
+                          id={`about-gallery-alt-${index}-${photoIndex}`}
+                          className="form-control mt-1"
+                          value={photo.alt}
+                          onChange={(event) =>
+                            setPhoto(index, photoIndex, "alt", event.target.value)
+                          }
+                          maxLength={300}
+                        />
+                      </label>
+                    </section>
                   ))}
                 </div>
-              ))}
+              </div>
+            ) : null}
+            <div className="col-12">
               <button
                 type="button"
                 className="btn btn-sm btn-outline-primary"
+                disabled={(section.gallery?.length || 0) >= 20}
+                aria-label={`Add image to section ${index + 1} gallery`}
                 onClick={() =>
                   setSection(index, {
                     gallery: [
@@ -327,11 +415,11 @@ export default function AdminAbout({ loaderData }: Route.ComponentProps) {
                 Add gallery image
               </button>
             </div>
-          </section>
+          </AdminFormSection>
         ))}
         <button
           type="button"
-          className="btn btn-outline-primary mb-4"
+          className="btn btn-outline-primary admin-about-add-section"
           disabled={about.sections.length >= 12}
           onClick={() =>
             setAbout((prev) => ({
@@ -343,7 +431,7 @@ export default function AdminAbout({ loaderData }: Route.ComponentProps) {
             }))
           }
         >
-          Add About section
+          <i className="bi bi-plus-lg me-1" aria-hidden="true" /> Add About section
         </button>
         <AdminFormActions>
           <button className="btn btn-primary" type="submit" disabled={navigation.state !== "idle"}>

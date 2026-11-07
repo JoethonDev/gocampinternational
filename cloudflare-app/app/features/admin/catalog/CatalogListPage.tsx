@@ -1,6 +1,7 @@
 import { Form, Link, useNavigation } from "react-router";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import { AdminPageHeader } from "../../../components/admin/AdminPageHeader";
+import { AdminLoadMore } from "../../../components/admin/AdminLoadMore";
 import { AdminPanel } from "../../../components/admin/AdminPanel";
 import { AdminRowActions } from "../../../components/admin/AdminRowActions";
 import { AdminTable, type AdminTableColumn } from "../../../components/admin/AdminTable";
@@ -37,8 +38,18 @@ export function CatalogListPage({
   const [selected, setSelected] = useState<string[]>([]);
   const [bulkStatus, setBulkStatus] = useState("");
   const [displayCount, setDisplayCount] = useState(15);
-  const scrollEnd = useRef<HTMLDivElement>(null);
   const pageSize = 15;
+  const categoryNames = useMemo(
+    () => new Map(categories.map((category) => [category.slug, category.name])),
+    [categories]
+  );
+  const programsByDestination = useMemo(() => {
+    const result = new Map<string, Set<string>>();
+    for (const destination of destinations) {
+      result.set(destination.slug, new Set((destination.program_ids || []).map(String)));
+    }
+    return result;
+  }, [destinations]);
 
   const visible = useMemo(
     () =>
@@ -50,33 +61,15 @@ export function CatalogListPage({
         if (kind === "program" && categoryFilter && item.category_slug !== categoryFilter)
           return false;
         if (kind === "program" && destinationFilter) {
-          const linked = destinations.some(
-            (destination) =>
-              destination.slug === destinationFilter &&
-              Array.isArray(destination.program_ids) &&
-              destination.program_ids.includes(String(item.id || item.slug))
-          );
-          if (!linked) return false;
+          const linkedPrograms = programsByDestination.get(destinationFilter);
+          if (!linkedPrograms?.has(String(item.id || item.slug))) return false;
         }
         return true;
       }),
-    [records, search, statusFilter, kind, categoryFilter, destinationFilter, destinations]
+    [records, search, statusFilter, kind, categoryFilter, destinationFilter, programsByDestination]
   );
 
   const paged = visible.slice(0, displayCount);
-  useEffect(() => {
-    if (displayCount >= visible.length || !scrollEnd.current) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry?.isIntersecting) {
-          setDisplayCount((count) => Math.min(count + pageSize, visible.length));
-        }
-      },
-      { rootMargin: "260px" }
-    );
-    observer.observe(scrollEnd.current);
-    return () => observer.disconnect();
-  }, [displayCount, visible.length]);
   const hasFilters = Boolean(search || statusFilter || categoryFilter || destinationFilter);
   const clearFilters = () => {
     setSearch("");
@@ -128,8 +121,7 @@ export function CatalogListPage({
             <span className="admin-table-slug">
               {kind === "program" && item.category_slug && (
                 <span>
-                  {categories.find((category) => category.slug === item.category_slug)?.name ||
-                    item.category_slug}
+                  {categoryNames.get(item.category_slug) || item.category_slug}
                   <span aria-hidden="true"> · </span>
                 </span>
               )}
@@ -189,6 +181,7 @@ export function CatalogListPage({
           <input
             id="catalog-search"
             className="form-control"
+            type="search"
             placeholder="Name, ID or category"
             value={search}
             onChange={(event) => {
@@ -315,10 +308,14 @@ export function CatalogListPage({
             emptyDescription="Try a different search or filter, or create a new record."
             rowClassName={(item) => (item.status === "trash" ? "is-muted" : undefined)}
           />
-          <div ref={scrollEnd} className="admin-pagination-summary mt-3" role="status">
-            Showing {paged.length} of {visible.length} matching items.
-            {paged.length < visible.length ? " Scroll to load more." : ""}
-          </div>
+          <AdminLoadMore
+            shown={paged.length}
+            total={visible.length}
+            itemLabel="matching items"
+            onLoadMore={() =>
+              setDisplayCount((count) => Math.min(count + pageSize, visible.length))
+            }
+          />
         </AdminPanel>
       </Form>
     </>

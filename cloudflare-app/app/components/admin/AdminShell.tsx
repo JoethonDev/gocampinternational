@@ -4,6 +4,7 @@ import { ADMIN_NAV, ADMIN_NAV_GROUPS } from "../../config/admin";
 import { useAdminTheme } from "../../hooks/useAdminTheme";
 import "../../admin.css";
 import "../../features/admin/content-studio.css";
+import "./admin-components.css";
 
 function isActivePath(pathname: string, href: string) {
   if (href === "/admin") return pathname === "/admin";
@@ -28,11 +29,26 @@ export function AdminShell({
   const location = useLocation();
   const { theme, toggleTheme } = useAdminTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [navSearch, setNavSearch] = useState("");
   const section = currentSection(location.pathname);
+  const query = navSearch.trim().toLocaleLowerCase();
+  const visibleGroups = ADMIN_NAV_GROUPS.map((group) => ({
+    ...group,
+    items: group.items.filter((item) => item.label.toLocaleLowerCase().includes(query))
+  })).filter((group) => group.items.length > 0);
 
   useEffect(() => {
     setMobileOpen(false);
   }, [location.pathname]);
+
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setMobileOpen(false);
+    };
+    document.addEventListener("keydown", closeOnEscape);
+    return () => document.removeEventListener("keydown", closeOnEscape);
+  }, [mobileOpen]);
 
   return (
     <div data-bs-theme={theme} className="admin-workspace">
@@ -58,8 +74,19 @@ export function AdminShell({
             <div className="admin-brand-subtitle">Content studio</div>
           </div>
         </div>
+        <label className="admin-nav-search">
+          <i className="bi bi-search" aria-hidden="true" />
+          <span className="visually-hidden">Search admin pages</span>
+          <input
+            type="search"
+            aria-label="Search admin pages"
+            placeholder="Find a page"
+            value={navSearch}
+            onChange={(event) => setNavSearch(event.target.value)}
+          />
+        </label>
         <nav className="admin-sidebar-nav" aria-label="Admin navigation">
-          {ADMIN_NAV_GROUPS.map((group) => (
+          {visibleGroups.map((group) => (
             <div className="admin-nav-group" key={group.label}>
               <div className="admin-nav-label">{group.label}</div>
               {group.items.map((item) => {
@@ -78,6 +105,11 @@ export function AdminShell({
               })}
             </div>
           ))}
+          {visibleGroups.length === 0 && (
+            <p className="admin-nav-empty" role="status">
+              No pages match “{navSearch}”.
+            </p>
+          )}
         </nav>
         <div className="admin-sidebar-footer">
           <div className="admin-user-chip">
@@ -108,10 +140,7 @@ export function AdminShell({
             >
               <i className="bi bi-list" />
             </button>
-            <div>
-              <div className="admin-breadcrumb">Admin / {section?.label || "Dashboard"}</div>
-              <div className="admin-topbar-title">{section?.label || "Dashboard"}</div>
-            </div>
+            <div className="admin-breadcrumb">Admin / {section?.label || "Dashboard"}</div>
           </div>
           <div className="d-flex align-items-center gap-2">
             <Link
@@ -133,7 +162,9 @@ export function AdminShell({
             </button>
           </div>
         </header>
-        <div className="admin-main">{children}</div>
+        <main className="admin-main">
+          <div className="admin-page">{children}</div>
+        </main>
       </div>
     </div>
   );

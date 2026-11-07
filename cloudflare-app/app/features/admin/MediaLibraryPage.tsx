@@ -3,6 +3,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { MediaOptimizePanel } from "./MediaOptimizePanel";
 import { AdminEmptyState } from "../../components/admin/AdminEmptyState";
 import { AdminFormSection } from "../../components/admin/AdminFormSection";
+import { AdminLoadMore } from "../../components/admin/AdminLoadMore";
 import { AdminPageHeader } from "../../components/admin/AdminPageHeader";
 import { AdminPanel } from "../../components/admin/AdminPanel";
 import { AdminRowActions } from "../../components/admin/AdminRowActions";
@@ -216,20 +217,23 @@ export function MediaLibraryPage({
   const [loading, setLoading] = useState(false);
   const [loadError, setLoadError] = useState("");
   const fetching = useRef(false);
-  const scrollEnd = useRef<HTMLDivElement>(null);
+  const loadRequest = useRef<AbortController | null>(null);
 
   const loadMore = useCallback(async () => {
     if (fetching.current || loadedPage >= data.totalPages) return;
     fetching.current = true;
     setLoading(true);
     setLoadError("");
+    const controller = new AbortController();
+    loadRequest.current = controller;
     try {
       const params = new URLSearchParams({ page: String(loadedPage + 1) });
       if (data.q) params.set("q", data.q);
       if (data.folder !== "all") params.set("folder", data.folder);
       const response = await fetch(`/admin/media/chunk?${params}`, {
         credentials: "same-origin",
-        headers: { Accept: "application/json" }
+        headers: { Accept: "application/json" },
+        signal: controller.signal
       });
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const chunk = (await response.json()) as {
@@ -239,6 +243,7 @@ export function MediaLibraryPage({
         totalPages: number;
       };
       if (chunk.page !== loadedPage + 1) throw new Error("Unexpected media offset");
+      if (controller.signal.aborted) return;
       setItems((previous) => {
         const seen = new Set(previous.map((item) => item.path));
         return [...previous, ...chunk.items.filter((item) => !seen.has(item.path))];
@@ -246,33 +251,32 @@ export function MediaLibraryPage({
       setUsage((previous) => ({ ...previous, ...chunk.usage }));
       setLoadedPage(chunk.page);
     } catch (error) {
-      setLoadError(error instanceof Error ? error.message : "Could not load images");
+      if (!controller.signal.aborted) {
+        setLoadError("Could not load more images. Check your connection and retry.");
+      }
     } finally {
-      fetching.current = false;
-      setLoading(false);
+      if (loadRequest.current === controller) {
+        loadRequest.current = null;
+        fetching.current = false;
+        setLoading(false);
+      }
     }
   }, [loadedPage, data.totalPages, data.q, data.folder]);
 
-  useEffect(() => {
-    if (loadedPage >= data.totalPages || loadError || !scrollEnd.current) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry?.isIntersecting) void loadMore();
-      },
-      { rootMargin: "280px" }
-    );
-    observer.observe(scrollEnd.current);
-    return () => observer.disconnect();
-  }, [loadedPage, data.totalPages, loadMore, loadError]);
+  useEffect(
+    () => () => {
+      loadRequest.current?.abort();
+      loadRequest.current = null;
+    },
+    []
+  );
 
   return (
     <>
       <AdminPageHeader
         title="Media Library"
         description={`Browse ${data.totalStatic} R2-backed legacy images and uploaded media. Search, inspect references and reuse paths in any editor.`}
-        aside={
-          <span className="badge bg-secondary rounded-pill fs-6">{data.total} matching images</span>
-        }
+        aside={<span className="admin-badge-soft">{data.total} matching images</span>}
       />
       {staging && <MediaOptimizePanel csrf={csrf} />}
       {uploaded > 0 && (
@@ -323,25 +327,17 @@ export function MediaLibraryPage({
           </div>
         )}
       </AdminPanel>
-      <div ref={scrollEnd} className="admin-pagination-summary my-3" role="status">
-        Showing {items.length} of {data.total} matching images.
-        {loading
-          ? " Loading more images…"
-          : items.length < data.total
-            ? " Scroll down to load more."
-            : ""}
-        {loadError && (
-          <button
-            className="btn btn-sm btn-outline-primary ms-2"
-            type="button"
-            onClick={() => void loadMore()}
-          >
-            Retry loading ({loadError})
-          </button>
-        )}
-      </div>
+      <AdminLoadMore
+        shown={items.length}
+        total={data.total}
+        itemLabel="matching images"
+        hasMore={loadedPage < data.totalPages}
+        loading={loading}
+        error={loadError}
+        onLoadMore={() => void loadMore()}
+      />
 
-      <div className="mt-5" id="uploads">
+      <div id="uploads">
         <AdminPanel
           title="New R2 uploads"
           description="New images are stored privately in R2. Only published media is served by its immutable ID."

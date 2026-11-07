@@ -1,19 +1,28 @@
+import { Link } from "react-router";
+
 export function AdminPageHeader({
   title,
   description,
-  aside
+  aside,
+  backLink
 }: {
   title: string;
   description?: string;
   aside?: React.ReactNode;
+  backLink?: { to: string; label: string };
 }) {
   return (
-    <div className="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
-      <div>
-        <h1 className="h3 mb-1">{title}</h1>
-        {description && <p className="text-secondary mb-0">{description}</p>}
+    <header className="admin-page-header">
+      <div className="admin-page-heading">
+        {backLink && (
+          <Link to={backLink.to} className="admin-back-link">
+            <i className="bi bi-arrow-left" aria-hidden="true" /> {backLink.label}
+          </Link>
+        )}
+        <h1 className="admin-page-title">{title}</h1>
+        {description && <p className="admin-page-description">{description}</p>}
       </div>
-      {aside}
-    </div>
+      {aside && <div className="admin-page-actions">{aside}</div>}
+    </header>
   );
 }

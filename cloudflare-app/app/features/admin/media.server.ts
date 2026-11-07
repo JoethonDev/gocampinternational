@@ -16,28 +16,43 @@ async function loadUsage(
   items: StaticMedia[]
 ): Promise<Record<string, MediaUsage>> {
   if (items.length === 0) return {};
-  const [catalog, documents, registered] = await Promise.all([
+  const registered = await db
+    .prepare(
+      "SELECT legacy_path,id FROM media_assets WHERE legacy_path IN (" +
+        items.map(() => "?").join(",") +
+        ")"
+    )
+    .bind(...items.map((item) => item.path))
+    .all<{ legacy_path: string; id: string }>();
+  const ids = new Map((registered.results || []).map((row) => [row.legacy_path, row.id]));
+  const pathsByItem = new Map(
+    items.map((item) => [
+      item.path,
+      [item.path, ids.has(item.path) ? `/media/${ids.get(item.path)}` : null].filter(
+        (path): path is string => Boolean(path)
+      )
+    ])
+  );
+  const needles = [...new Set([...pathsByItem.values()].flat())];
+  if (needles.length === 0) {
+    return Object.fromEntries(items.map((item) => [item.path, { count: 0, refs: [] }]));
+  }
+  const candidates = needles.map(() => "instr(content_json,?) > 0").join(" OR ");
+  const [catalog, documents] = await Promise.all([
     db
-      .prepare("SELECT kind,slug,content_json FROM catalog_entities")
+      .prepare(`SELECT kind,slug,content_json FROM catalog_entities WHERE ${candidates}`)
+      .bind(...needles)
       .all<{ kind: string; slug: string; content_json: string }>(),
     db
-      .prepare("SELECT key,content_json FROM site_documents")
-      .all<{ key: string; content_json: string }>(),
-    db
-      .prepare(
-        "SELECT legacy_path,id FROM media_assets WHERE legacy_path IN (" +
-          items.map(() => "?").join(",") +
-          ")"
-      )
-      .bind(...items.map((item) => item.path))
-      .all<{ legacy_path: string; id: string }>()
+      .prepare(`SELECT key,content_json FROM site_documents WHERE ${candidates}`)
+      .bind(...needles)
+      .all<{ key: string; content_json: string }>()
   ]);
   const usage: Record<string, MediaUsage> = {};
-  const ids = new Map((registered.results || []).map((row) => [row.legacy_path, row.id]));
   for (const item of items) {
-    const patterns = [item.path, ids.has(item.path) ? `/media/${ids.get(item.path)}` : null]
-      .filter((path): path is string => Boolean(path))
-      .map((path) => new RegExp(`${escapeRegExp(path)}(?![a-zA-Z0-9_.-])`, "g"));
+    const patterns = (pathsByItem.get(item.path) || []).map(
+      (path) => new RegExp(`${escapeRegExp(path)}(?![a-zA-Z0-9_.-])`, "g")
+    );
     const refs: string[] = [];
     let count = 0;
     for (const row of catalog.results || []) {
