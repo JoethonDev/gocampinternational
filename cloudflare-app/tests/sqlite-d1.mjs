@@ -38,7 +38,7 @@ export class SqliteD1 {
       },
       execute() {
         const statement = db.sql.prepare(sql);
-        if (/^\s*(SELECT|PRAGMA)\b/i.test(sql)) {
+        if (/^\s*(SELECT|PRAGMA)\b/i.test(sql) || /\bRETURNING\b/i.test(sql)) {
           return {
             results: statement.all(...this.values).map((row) => ({ ...row })),
             meta: { changes: 0 }
