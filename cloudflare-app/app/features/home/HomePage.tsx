@@ -1,8 +1,8 @@
+import { usePublicContent } from "../../lib/public-content-react";
 import { responsiveSrcSet } from "../../lib/responsive-media";
 import { Link } from "react-router";
 import { CampMemories } from "../../components/CampMemories";
 import { SocialFeeds } from "../../components/SocialFeeds";
-import { HOME_COPY, HOME_HERO_SLIDES, SITE } from "../../config/site";
 import type {
   CategoryRecord,
   DestinationRecord,
@@ -14,6 +14,7 @@ import { isVisible } from "../../lib/visibility";
 import { TestimonialsSection } from "./TestimonialsSection";
 
 function HeroCarousel() {
+  const { text, slides: HOME_HERO_SLIDES } = usePublicContent("home");
   return (
     <header id="home-hero-slider" className="carousel slide" data-bs-ride="carousel">
       <div className="carousel-inner">
@@ -38,10 +39,7 @@ function HeroCarousel() {
                 ) : (
                   <h2 className="display-3 fw-bold mb-3 text-white">{slide.title}</h2>
                 )}
-                <p className="lead mb-0 text-white">
-                  International camps are a life-changing opportunity to learn, grow, and make
-                  global friends.
-                </p>
+                <p className="lead mb-0 text-white">{text("hero-subtitle")}</p>
               </div>
             </div>
           </div>
@@ -52,6 +50,7 @@ function HeroCarousel() {
 }
 
 function IntroSection() {
+  const { home: HOME_COPY } = usePublicContent("home");
   return (
     <section className="section-padding">
       <div className="container">
@@ -67,6 +66,7 @@ function IntroSection() {
 }
 
 function DestinationsSection({ destinations }: { destinations: DestinationRecord[] }) {
+  const { text, site: SITE, home: HOME_COPY } = usePublicContent("home");
   return (
     <section id="destinations" className="section-padding bg-light">
       <div className="container">
@@ -95,7 +95,7 @@ function DestinationsSection({ destinations }: { destinations: DestinationRecord
             </div>
           ))}
           {destinations.length === 0 && (
-            <p className="text-center">Destinations will be listed here soon!</p>
+            <p className="text-center">{text("destinations-will-be-listed-here-soon")}</p>
           )}
         </div>
       </div>
@@ -103,15 +103,13 @@ function DestinationsSection({ destinations }: { destinations: DestinationRecord
   );
 }
 
-function categoryIntro(value: unknown) {
-  const plain = String(value || "Discover amazing programs in this category.").replace(
-    /<[^>]+>/g,
-    ""
-  );
+function categoryIntro(value: unknown, fallback: string) {
+  const plain = String(value || fallback).replace(/<[^>]+>/g, "");
   return plain.length > 120 ? `${plain.slice(0, 120)}...` : plain;
 }
 
 function FeaturedCategories({ categories }: { categories: CategoryRecord[] }) {
+  const { site: SITE, home: HOME_COPY, text } = usePublicContent("home");
   return (
     <section id="program-categories" className="section-padding bg-light">
       <div className="container">
@@ -140,7 +138,7 @@ function FeaturedCategories({ categories }: { categories: CategoryRecord[] }) {
                   </div>
                   <div className="card-body p-4 d-flex flex-column">
                     <p className="card-text text-muted mb-4 flex-grow-1 lh-lg">
-                      {categoryIntro(category.intro)}
+                      {categoryIntro(category.intro, text("default-category-intro"))}
                     </p>
                     <div className="mt-auto">
                       <Link
@@ -175,6 +173,7 @@ export function HomePage({
   memories: MemoriesDocument | null;
   testimonials: TestimonialsDocument | null;
 }) {
+  const { visible } = usePublicContent("home");
   const featuredCategories = categories
     .filter((category) => eligible.includes(category.slug))
     .slice(0, 3);
@@ -192,7 +191,7 @@ export function HomePage({
         <TestimonialsSection data={testimonials} />
       )}
       {isVisible("home", "testimonials", settings, settings) && <CampMemories data={memories} />}
-      <SocialFeeds memories={memories} />
+      {visible("show-social") && <SocialFeeds memories={memories} />}
     </div>
   );
 }

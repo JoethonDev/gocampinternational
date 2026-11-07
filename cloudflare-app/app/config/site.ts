@@ -56,6 +56,7 @@ export type AboutSection = {
   title: string;
   image: string;
   reverse?: boolean;
+  visible?: boolean;
   body: string[];
   gallery?: { image: string; caption: string; alt: string }[];
 };

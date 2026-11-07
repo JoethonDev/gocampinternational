@@ -1,3 +1,4 @@
+import { getCloudflare } from "../lib/cloudflare-context";
 import { useRouteLoaderData } from "react-router";
 import type { Route } from "./+types/category";
 import { CategoryPage } from "../features/category/CategoryPage";
@@ -6,7 +7,7 @@ import type { MemoriesDocument, SiteSettings } from "../lib/domain";
 import { originFrom, seoMeta, safeJsonLd } from "../lib/seo";
 
 export async function loader({ request, context }: Route.LoaderArgs) {
-  const db = context.cloudflare.env.DB;
+  const db = getCloudflare(context).env.DB;
   const slug = new URL(request.url).searchParams.get("category") || "";
   const [category, memories] = await Promise.all([
     findCategory(db, slug),
@@ -40,15 +41,15 @@ export async function loader({ request, context }: Route.LoaderArgs) {
   return { category, related, memories };
 }
 
-export function meta({ data, matches }: Route.MetaArgs) {
+export function meta({ loaderData, matches }: Route.MetaArgs) {
   return seoMeta({
     origin: originFrom(matches),
-    path: "/program/category?category=" + encodeURIComponent(data?.category.slug || ""),
-    title: `Go Camp :: ${data?.category.name || "Programs"}`,
-    description: String(data?.category.intro || "")
+    path: "/program/category?category=" + encodeURIComponent(loaderData?.category.slug || ""),
+    title: `Go Camp :: ${loaderData?.category.name || "Programs"}`,
+    description: String(loaderData?.category.intro || "")
       .replace(/<[^>]*>/g, "")
       .slice(0, 160),
-    image: String(data?.category.banner || "/images/banner.webp")
+    image: String(loaderData?.category.banner || "/images/banner.webp")
   });
 }
 

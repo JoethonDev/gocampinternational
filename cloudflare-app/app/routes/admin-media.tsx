@@ -1,3 +1,4 @@
+import { getCloudflare } from "../lib/cloudflare-context";
 import { redirect } from "react-router";
 import type { Route } from "./+types/admin-media";
 import { requireAdmin, requireSameOrigin, verifyAdminPost } from "../lib/admin.server";
@@ -13,7 +14,7 @@ export function meta() {
 }
 
 export async function loader({ request, context }: Route.LoaderArgs) {
-  const db = context.cloudflare.env.DB;
+  const db = getCloudflare(context).env.DB;
   const session = await requireAdmin(request, db);
   const url = new URL(request.url);
   const data = await loadMediaLibrary(db, url);
@@ -23,23 +24,23 @@ export async function loader({ request, context }: Route.LoaderArgs) {
     uploaded: Number(url.searchParams.get("uploaded") || 0),
     uploadError: url.searchParams.get("uploadError"),
     updated: url.searchParams.has("updated"),
-    staging: context.cloudflare.env.GOCAMP_ENV === "staging"
+    staging: getCloudflare(context).env.GOCAMP_ENV === "staging"
   };
 }
 
 export async function action({ request, context }: Route.ActionArgs) {
   requireSameOrigin(request);
-  await requireAdmin(request, context.cloudflare.env.DB);
+  await requireAdmin(request, getCloudflare(context).env.DB);
   const form = await readLimitedForm(request, MAX_UPLOAD_BODY_BYTES);
   const operation = String(form.get("operation") || "");
   if (operation === "backfill-webp") {
-    if (context.cloudflare.env.GOCAMP_ENV !== "staging")
+    if (getCloudflare(context).env.GOCAMP_ENV !== "staging")
       throw new Response("Not found", { status: 404 });
-    await verifyAdminPost(request, context.cloudflare.env.DB, form);
-    const result = await backfillWebp(context.cloudflare.env, 4);
-    const remaining = await context.cloudflare.env.DB.prepare(
-      "SELECT COUNT(*) AS n FROM media_assets WHERE mime_type != 'image/webp'"
-    ).first<{ n: number }>();
+    await verifyAdminPost(request, getCloudflare(context).env.DB, form);
+    const result = await backfillWebp(getCloudflare(context).env, 4);
+    const remaining = await getCloudflare(context)
+      .env.DB.prepare("SELECT COUNT(*) AS n FROM media_assets WHERE mime_type != 'image/webp'")
+      .first<{ n: number }>();
     return Response.json(
       { ...result, remaining: remaining?.n || 0 },
       {
@@ -50,9 +51,9 @@ export async function action({ request, context }: Route.ActionArgs) {
   if (operation === "upload") {
     const result = await uploadMediaFiles(
       request,
-      context.cloudflare.env,
+      getCloudflare(context).env,
       form,
-      context.cloudflare.ctx
+      getCloudflare(context).ctx
     );
     const error = result.errors.map((item) => `${item.name}: ${item.message}`).join("; ");
     if (!result.uploaded.length) {
@@ -66,7 +67,7 @@ export async function action({ request, context }: Route.ActionArgs) {
       }#uploads`
     );
   }
-  await mutateMedia(request, context.cloudflare.env, form);
+  await mutateMedia(request, getCloudflare(context).env, form);
   return redirect("/admin/media?updated=1#uploads");
 }
 

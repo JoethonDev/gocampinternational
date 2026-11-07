@@ -1,3 +1,4 @@
+import { getCloudflare } from "../lib/cloudflare-context";
 import { Form, redirect, useNavigation } from "react-router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { Route } from "./+types/admin-inquiries";
@@ -19,7 +20,7 @@ export function meta() {
 }
 
 export async function loader({ request, context }: Route.LoaderArgs) {
-  const db = context.cloudflare.env.DB;
+  const db = getCloudflare(context).env.DB;
   const session = await requireAdmin(request, db);
   const url = new URL(request.url);
   const totalRow = await db
@@ -49,7 +50,7 @@ export async function loader({ request, context }: Route.LoaderArgs) {
 }
 
 export async function action({ request, context }: Route.ActionArgs) {
-  const db = context.cloudflare.env.DB;
+  const db = getCloudflare(context).env.DB;
   const form = await request.formData();
   await verifyAdminPost(request, db, form);
   const id = String(form.get("id") || "");

@@ -1,3 +1,4 @@
+import { getCloudflare } from "../lib/cloudflare-context";
 import { useRouteLoaderData } from "react-router";
 import type { Route } from "./+types/destination";
 import { DestinationPage } from "../features/destination/DestinationPage";
@@ -6,7 +7,7 @@ import type { MemoriesDocument, ProgramRecord, SiteSettings } from "../lib/domai
 import { originFrom, seoMeta, safeJsonLd } from "../lib/seo";
 
 export async function loader({ params, context }: Route.LoaderArgs) {
-  const db = context.cloudflare.env.DB;
+  const db = getCloudflare(context).env.DB;
   const slug = params.slug || "";
   const [destination, memories] = await Promise.all([
     findDestination(db, slug),
@@ -24,8 +25,8 @@ export async function loader({ params, context }: Route.LoaderArgs) {
   return { destination, related, hasProgramIds: programIds.length > 0, memories };
 }
 
-export function meta({ data, matches, location }: Route.MetaArgs) {
-  const destination = data?.destination;
+export function meta({ loaderData, matches, location }: Route.MetaArgs) {
+  const destination = loaderData?.destination;
   const name = destination?.name || "Destination";
   const title =
     destination?.status === "coming-soon" ? `Coming Soon: ${name}` : `Go Camp :: ${name}`;

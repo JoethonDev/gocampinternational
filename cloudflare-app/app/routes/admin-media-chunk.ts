@@ -1,3 +1,4 @@
+import { getCloudflare } from "../lib/cloudflare-context";
 import type { Route } from "./+types/admin-media-chunk";
 import { requireAdmin } from "../lib/admin.server";
 import { loadMediaLibrary } from "../features/admin/media.server";
@@ -7,8 +8,8 @@ export function loader(_args: Route.LoaderArgs) {
 }
 
 async function loadChunk({ request, context }: Route.LoaderArgs) {
-  await requireAdmin(request, context.cloudflare.env.DB);
-  const data = await loadMediaLibrary(context.cloudflare.env.DB, new URL(request.url), false);
+  await requireAdmin(request, getCloudflare(context).env.DB);
+  const data = await loadMediaLibrary(getCloudflare(context).env.DB, new URL(request.url), false);
   return Response.json(
     {
       items: data.items,

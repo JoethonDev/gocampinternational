@@ -1,14 +1,14 @@
 import type { Route } from "./+types/contact";
 import { ContactPage } from "../features/contact/ContactPage";
 import { originFrom, seoMeta } from "../lib/seo";
+import { publicSeo } from "../lib/public-content";
 
 export function meta({ matches }: Route.MetaArgs) {
+  const seo = publicSeo(matches, "contact");
   return seoMeta({
     origin: originFrom(matches),
     path: "/contact",
-    title: "Go Camp :: Contact Us",
-    description:
-      "Get in touch with Go Camp. Contact us via phone, email, or our online form for any inquiries about our programs."
+    ...seo
   });
 }
 

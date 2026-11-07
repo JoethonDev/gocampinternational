@@ -1,17 +1,18 @@
+import { usePublicContent } from "../../lib/public-content-react";
 import { useFetcher } from "react-router";
 import { PageBanner } from "../../components/ui/PageBanner";
 import { Breadcrumbs } from "../../components/ui/Breadcrumbs";
-import { SITE } from "../../config/site";
 import "./contact.css";
 
 type ContactResult = { success?: boolean; error?: string; message?: string };
 
 function ContactForm() {
+  const { text } = usePublicContent("contact");
   const fetcher = useFetcher<ContactResult>();
   return (
     <div className="card border-0 shadow-sm">
       <div className="card-body p-4 p-md-5">
-        <h3 className="card-title mb-4">Send Us a Message</h3>
+        <h3 className="card-title mb-4">{text("send-us-a-message")}</h3>
         <fetcher.Form method="post" action="/api/submit-contact.php" id="contactForm">
           <div className="hp-field" aria-hidden="true">
             <label>
@@ -29,7 +30,7 @@ function ContactForm() {
           <div className="row g-3">
             <div className="col-md-6">
               <label htmlFor="contact-name" className="form-label">
-                Name *
+                {text("name")}
               </label>
               <input
                 type="text"
@@ -42,7 +43,7 @@ function ContactForm() {
             </div>
             <div className="col-md-6">
               <label htmlFor="contact-email" className="form-label">
-                Email *
+                {text("email")}
               </label>
               <input
                 type="email"
@@ -55,7 +56,7 @@ function ContactForm() {
             </div>
             <div className="col-md-6">
               <label htmlFor="contact-phone" className="form-label">
-                Phone
+                {text("phone")}
               </label>
               <input
                 type="tel"
@@ -67,7 +68,7 @@ function ContactForm() {
             </div>
             <div className="col-md-6">
               <label htmlFor="contact-country" className="form-label">
-                Country
+                {text("country")}
               </label>
               <input
                 type="text"
@@ -79,7 +80,7 @@ function ContactForm() {
             </div>
             <div className="col-12">
               <label htmlFor="contact-subject" className="form-label">
-                Subject
+                {text("subject")}
               </label>
               <input
                 type="text"
@@ -91,7 +92,7 @@ function ContactForm() {
             </div>
             <div className="col-12">
               <label htmlFor="contact-message" className="form-label">
-                Message *
+                {text("message")}
               </label>
               <textarea
                 id="contact-message"
@@ -108,7 +109,7 @@ function ContactForm() {
                 disabled={fetcher.state !== "idle"}
                 className="btn btn-warning btn-lg"
               >
-                {fetcher.state !== "idle" ? "Sending..." : "Send Message"}
+                {fetcher.state !== "idle" ? text("sending") : text("send-message")}
               </button>
             </div>
           </div>
@@ -119,6 +120,7 @@ function ContactForm() {
 }
 
 function ContactCard() {
+  const { text, site: SITE } = usePublicContent("contact");
   return (
     <div className="card border-0 shadow-sm h-100 contact-card">
       <div className="card-body p-4 p-md-5 d-flex flex-column justify-content-center align-items-center text-center">
@@ -128,34 +130,40 @@ function ContactCard() {
         <h3 className="fw-bold text-white mb-1">{SITE.director}</h3>
         <p className="text-white-50 fs-5 mb-4 text-uppercase fw-semibold">{SITE.directorTitle}</p>
         <div className="d-flex flex-column gap-3 w-100 px-md-3">
-          <a
-            href={SITE.whatsappHref}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn btn-success py-3 px-4 d-flex align-items-center justify-content-start gap-3 rounded-3 contact-action"
-            aria-label="Contact Go Camp International on WhatsApp"
-          >
-            <i className="bi bi-whatsapp fs-4" aria-hidden="true" />
-            <span className="fs-5 fw-semibold">Chat with us on WhatsApp</span>
-          </a>
-          <a
-            href={SITE.phoneHref}
-            className="btn btn-outline-light border-0 py-3 px-4 d-flex align-items-center justify-content-start gap-3 rounded-3 contact-action"
-          >
-            <div className="bg-white text-primary rounded-circle d-flex align-items-center justify-content-center contact-action-icon">
-              <i className="bi bi-telephone-fill" />
-            </div>
-            <span className="fs-5 fw-semibold">{SITE.phone}</span>
-          </a>
-          <a
-            href={SITE.emailHref}
-            className="btn btn-outline-light border-0 py-3 px-4 d-flex align-items-center justify-content-start gap-3 rounded-3 contact-action"
-          >
-            <div className="bg-white text-primary rounded-circle d-flex align-items-center justify-content-center contact-action-icon">
-              <i className="bi bi-envelope-fill" />
-            </div>
-            <span className="fs-5 fw-semibold text-truncate w-100 text-start">{SITE.email}</span>
-          </a>
+          {SITE.whatsappHref && (
+            <a
+              href={SITE.whatsappHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-success py-3 px-4 d-flex align-items-center justify-content-start gap-3 rounded-3 contact-action"
+              aria-label="Contact Go Camp International on WhatsApp"
+            >
+              <i className="bi bi-whatsapp fs-4" aria-hidden="true" />
+              <span className="fs-5 fw-semibold">{text("chat-with-us-on-whatsapp")}</span>
+            </a>
+          )}
+          {SITE.phoneHref && (
+            <a
+              href={SITE.phoneHref}
+              className="btn btn-outline-light border-0 py-3 px-4 d-flex align-items-center justify-content-start gap-3 rounded-3 contact-action"
+            >
+              <div className="bg-white text-primary rounded-circle d-flex align-items-center justify-content-center contact-action-icon">
+                <i className="bi bi-telephone-fill" />
+              </div>
+              <span className="fs-5 fw-semibold">{SITE.phone}</span>
+            </a>
+          )}
+          {SITE.emailHref && (
+            <a
+              href={SITE.emailHref}
+              className="btn btn-outline-light border-0 py-3 px-4 d-flex align-items-center justify-content-start gap-3 rounded-3 contact-action"
+            >
+              <div className="bg-white text-primary rounded-circle d-flex align-items-center justify-content-center contact-action-icon">
+                <i className="bi bi-envelope-fill" />
+              </div>
+              <span className="fs-5 fw-semibold text-truncate w-100 text-start">{SITE.email}</span>
+            </a>
+          )}
         </div>
       </div>
     </div>
@@ -163,26 +171,33 @@ function ContactCard() {
 }
 
 export function ContactPage() {
+  const { text, site: SITE, visible } = usePublicContent("contact");
   return (
     <>
-      <PageBanner
-        image={SITE.images.contactBanner}
-        alt="Contact Us Banner"
-        title="Contact Us"
-        hiddenTitle
-      />
+      {visible("show-banner") && (
+        <PageBanner
+          image={SITE.images.contactBanner}
+          alt={text("alt-contact-us-banner")}
+          title={text("title-contact-us")}
+          hiddenTitle
+        />
+      )}
       <div className="container py-5">
-        <Breadcrumbs items={[{ label: "HOME", to: "/" }, { label: "CONTACT US" }]} />
-        <div className="text-center mb-5">
-          <h2 className="section-title">Get in touch! We'd love to hear from you.</h2>
+        <Breadcrumbs items={[{ label: text("home"), to: "/" }, { label: text("contact-us") }]} />
+        <div hidden={!visible("show-intro")} className="text-center mb-5">
+          <h2 className="section-title">{text("get-in-touch-we-d-love-to-hear-from-you")}</h2>
         </div>
         <div className="row g-4">
-          <div className="col-lg-7">
-            <ContactForm />
-          </div>
-          <div className="col-lg-5">
-            <ContactCard />
-          </div>
+          {visible("show-form") && (
+            <div className="col-lg-7">
+              <ContactForm />
+            </div>
+          )}
+          {visible("show-contact-card") && (
+            <div className="col-lg-5">
+              <ContactCard />
+            </div>
+          )}
         </div>
       </div>
     </>

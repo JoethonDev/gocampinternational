@@ -1,6 +1,7 @@
 import { verifyAdminPost } from "./admin.server";
 import { checkedWrite, chunksOf, runAtomicBatch } from "./db.server";
 import type { DocumentKey } from "./documents";
+import { validatePublicContent } from "./public-content";
 import {
   CATALOG_STATUSES,
   ensureCatalogKind,
@@ -421,6 +422,11 @@ export async function saveDocument(
   if (key === "site_settings") {
     if (!value || typeof value !== "object" || Array.isArray(value)) {
       throw new Response("Invalid settings data", { status: 400 });
+    }
+    const content = (value as Record<string, unknown>).public_content;
+    if (content !== undefined) {
+      const error = validatePublicContent(content);
+      if (error) throw new Response(error, { status: 400 });
     }
   }
   if (key === "testimonials") {

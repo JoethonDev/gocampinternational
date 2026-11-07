@@ -1,18 +1,18 @@
 import { Link } from "react-router";
+import { usePublicContent } from "../../lib/public-content-react";
 
 export function NotFoundPage() {
+  const { text } = usePublicContent("errors");
   return (
     <div className="page-content">
-      <title>Page Not Found (404)</title>
+      <title>{text("not-found-title")}</title>
       <div className="container text-center py-5 my-5">
         <h1 className="display-1 fw-bold text-brand-primary">404</h1>
-        <h2 className="mb-4">Page Not Found</h2>
-        <p className="lead text-muted mb-4">
-          Sorry, the page you are looking for does not exist or has been moved.
-        </p>
+        <h2 className="mb-4">{text("page-not-found")}</h2>
+        <p className="lead text-muted mb-4">{text("not-found-description")}</p>
         <Link to="/" className="btn btn-primary btn-lg">
           <i className="bi bi-house-door-fill me-2" />
-          Go to Homepage
+          {text("go-to-homepage")}
         </Link>
       </div>
     </div>
@@ -20,14 +20,15 @@ export function NotFoundPage() {
 }
 
 export function ServiceErrorPage() {
+  const { text } = usePublicContent("errors");
   return (
     <div className="page-content">
-      <title>Page unavailable | GoCamp</title>
+      <title>{text("service-error-title")}</title>
       <div className="container text-center py-5 my-5">
-        <h1 className="display-4 fw-bold">Page unavailable</h1>
-        <p className="lead text-muted mb-4">The page could not be loaded. Please try again.</p>
+        <h1 className="display-4 fw-bold">{text("page-unavailable")}</h1>
+        <p className="lead text-muted mb-4">{text("service-error-description")}</p>
         <Link to="/" className="btn btn-primary btn-lg">
-          Go to Homepage
+          {text("go-to-homepage")}
         </Link>
       </div>
     </div>

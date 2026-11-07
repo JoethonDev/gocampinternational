@@ -1,6 +1,6 @@
-type MatchLike = { id?: string; data?: unknown };
+type MatchLike = { id?: string; loaderData?: unknown };
 export function originFrom(matches: readonly (MatchLike | undefined)[] | undefined) {
-  const data = matches?.find((match) => match?.id === "root")?.data as
+  const data = matches?.find((match) => match?.id === "root")?.loaderData as
     { origin?: string } | undefined;
   return data?.origin || "";
 }
@@ -13,7 +13,8 @@ export function seoMeta({
   path,
   origin,
   image = "/images/banner.webp",
-  robots
+  robots,
+  siteName = "Go Camp International"
 }: {
   title: string;
   description: string;
@@ -21,6 +22,7 @@ export function seoMeta({
   origin: string;
   image?: string;
   robots?: string;
+  siteName?: string;
 }) {
   const canonical = new URL(path, origin || "https://gocampinternational.net").href;
   const imageUrl = new URL(image, origin || "https://gocampinternational.net").href;
@@ -39,7 +41,7 @@ export function seoMeta({
     { property: "og:image:alt", content: title },
     { property: "og:url", content: canonical },
     { property: "og:type", content: "website" },
-    { property: "og:site_name", content: "Go Camp International" },
+    { property: "og:site_name", content: siteName },
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:image", content: imageUrl },
     { name: "twitter:title", content: title },

@@ -1,3 +1,4 @@
+import { getCloudflare } from "../lib/cloudflare-context";
 import { Form, redirect, useNavigation } from "react-router";
 import { useMemo, useState } from "react";
 import type { Route } from "./+types/admin-trash";
@@ -24,7 +25,7 @@ export function meta() {
 }
 
 export async function loader({ request, context }: Route.LoaderArgs) {
-  const db = context.cloudflare.env.DB;
+  const db = getCloudflare(context).env.DB;
   const session = await requireAdmin(request, db);
   const rows = await db
     .prepare(
@@ -39,7 +40,7 @@ export async function loader({ request, context }: Route.LoaderArgs) {
 }
 
 export async function action({ request, context }: Route.ActionArgs) {
-  const db = context.cloudflare.env.DB;
+  const db = getCloudflare(context).env.DB;
   const form = await request.formData();
   await verifyAdminPost(request, db, form);
   const kind = String(form.get("kind") || "");
