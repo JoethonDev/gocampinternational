@@ -18,7 +18,12 @@ const checks = [
   { path: "/admin", status: 302, location: "/admin/login" },
   { path: "/robots.txt", status: 200, contains: "Disallow: /" },
   { path: "/sitemap.xml", status: 404 },
-  { path: "/media/49c7cbd7-a00e-5970-9ed1-1e14e077e016", status: 200, method: "HEAD", type: "image/webp" },
+  {
+    path: "/media/49c7cbd7-a00e-5970-9ed1-1e14e077e016",
+    status: 200,
+    method: "HEAD",
+    type: "image/webp"
+  },
   { path: "/images/logo-transparent.webp", status: 200, method: "HEAD", type: "image/webp" },
   { path: "/uploads/1_1761381038.webp", status: 200, method: "HEAD", type: "image/webp" }
 ];
