@@ -6,7 +6,7 @@ export const LEGACY_IMAGES = (legacy as LegacyImage[]).filter(
   (item) => item.path.startsWith("/images/") || item.path.startsWith("/uploads/")
 );
 export function requireStaging(env: Env) {
-  if (env.GOCAMP_ENV !== "staging") throw new Response("Not found", { status: 404 });
+  if (String(env.GOCAMP_ENV) !== "staging") throw new Response("Not found", { status: 404 });
 }
 
 // Read-only check. Optimized legacy URLs still resolve by their original path,
