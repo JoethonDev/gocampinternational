@@ -14,3 +14,7 @@ Do not point the DNS record directly at `*.workers.dev`, or change live DNS unti
 Cloudflare Pages manages the browser-facing TLS certificate after the custom domain is attached and validated.
 
 No staging or production D1/R2 data is copied or accessed directly by this bridge; only the bound Worker receives requests.
+
+## Build and deployment
+
+The Pages project builds automatically from changes within `cloudflare-pages-bridge/**` on `production`. Its `GOCAMP_WORKER` Service Binding invokes the independently deployed production React Router Worker. The Worker itself remains deployed from `cloudflare-app/**` through Workers Builds.
