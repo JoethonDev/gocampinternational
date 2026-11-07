@@ -129,35 +129,35 @@ export function AboutPage({ content }: { content: AboutPageContent }) {
             ))}
           </div>
         </div>
-        <section className="mt-5" aria-labelledby="about-founder-title">
-          <h2 id="about-founder-title" className="h3 mb-4">Meet Our Founder</h2>
-          <section className="card shadow-sm border-0" aria-labelledby="about-director-title">
-            <div className="card-body p-4 p-lg-5">
-              <div className="row g-4 align-items-center">
-                <div className="col-md-auto text-center">
-                  <div
-                    className="rounded-circle shadow-sm mx-auto overflow-hidden"
-                    style={{ width: 180, height: 180 }}
-                  >
-                    <img
-                      src={SITE.images.profile}
-                      alt={content.profile.name}
-                      className="d-block"
-                      style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "43% 40%" }}
-                      loading="lazy"
-                    />
-                  </div>
-                </div>
-                <div className="col-md">
-                  <h3 id="about-director-title" className="h3 mb-2">{content.profile.name}</h3>
-                  <p className="fw-semibold text-secondary">{content.profile.title}</p>
-                  {content.profile.body.split(/\n\s*\n/).map((paragraph, index) => (
-                    <p className="fs-5 lh-lg text-secondary" key={index}>{paragraph}</p>
-                  ))}
-                </div>
+        <section className="about-founder mt-5" aria-labelledby="about-founder-title">
+          <div className="about-founder-layout">
+            <figure className="about-founder-portrait">
+              <img
+                src={content.profile.image || SITE.images.profile}
+                srcSet={responsiveSrcSet(content.profile.image || SITE.images.profile)}
+                sizes="(max-width: 767px) calc(100vw - 3rem), 37vw"
+                alt={`Portrait of ${content.profile.name}, ${content.profile.title}`}
+                loading="lazy"
+                decoding="async"
+                width={1536}
+                height={1404}
+              />
+              <figcaption className="about-founder-caption">
+                <h3 className="about-founder-name">{content.profile.name}</h3>
+                <p className="about-founder-role">{content.profile.title}</p>
+              </figcaption>
+            </figure>
+            <div className="about-founder-copy">
+              <p className="about-founder-eyebrow">About Us</p>
+              <h2 className="about-founder-heading" id="about-founder-title">Our Founder</h2>
+              <span className="about-founder-divider" aria-hidden="true" />
+              <div className="about-founder-description">
+                {content.profile.body.split(/\n\s*\n/).filter(Boolean).map((paragraph, index) => (
+                  <p key={index}>{paragraph}</p>
+                ))}
               </div>
             </div>
-          </section>
+          </div>
         </section>
       </div>
     </>
