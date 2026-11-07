@@ -1,3 +1,4 @@
+import { getCloudflare } from "../lib/cloudflare-context";
 import { redirect } from "react-router";
 import type { Route } from "./+types/admin-documents";
 import { requireAdmin } from "../lib/admin.server";
@@ -17,7 +18,7 @@ export function meta() {
 }
 
 export async function loader({ request, context, params }: Route.LoaderArgs) {
-  const db = context.cloudflare.env.DB;
+  const db = getCloudflare(context).env.DB;
   const session = await requireAdmin(request, db);
   const key = parseKey(params.key || "");
   const row = await db
@@ -26,7 +27,7 @@ export async function loader({ request, context, params }: Route.LoaderArgs) {
     .first<{ content_json: string; revision: number }>();
   if (!row) throw new Response("Document not found", { status: 404 });
   const media =
-    key === "camp_memories"
+    key === "camp_memories" || key === "site_settings"
       ? await db
           .prepare(
             "SELECT id FROM media_assets WHERE is_public=1 ORDER BY created_at DESC LIMIT 300"
@@ -45,7 +46,7 @@ export async function loader({ request, context, params }: Route.LoaderArgs) {
 
 export async function action({ request, context, params }: Route.ActionArgs) {
   const key = parseKey(params.key || "");
-  await saveDocument(request, context.cloudflare.env.DB, key, await request.formData());
+  await saveDocument(request, getCloudflare(context).env.DB, key, await request.formData());
   return redirect(`/admin/documents/${key}?saved=1`);
 }
 

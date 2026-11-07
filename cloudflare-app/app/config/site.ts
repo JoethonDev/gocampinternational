@@ -28,34 +28,11 @@ export const SITE = {
   }
 } as const;
 
-export const FOOTER_LINKS = {
-  about: [
-    { label: "Home", to: "/" },
-    { label: "About Us", to: "/about" },
-    { label: "F.A.Q", to: "/faq" },
-    { label: "Contact Us", to: "/contact" }
-  ]
-} as const;
-
-export const HOME_HERO_SLIDES = [
-  { image: "/images/banner.webp", title: "Unforgettable Summers Start Here" },
-  { image: "/images/hero.webp", title: "Discover Your Passion Abroad" },
-  { image: "/images/about_img_3.webp", title: "Build Lifelong Friendships" }
-] as const;
-
-export const HOME_COPY = {
-  eyebrow: "Go Camp International",
-  intro:
-    "GO Camp International helps families discover overseas educational experiences in language learning, sports, leadership and culture. Explore opportunities to learn, grow and build international connections.",
-  destinationsTitle: "Our Destinations",
-  categoriesTitle: "Explore Our Program Categories",
-  categoriesIntro: "Choose your adventure from our diverse range of international camp experiences."
-} as const;
-
 export type AboutSection = {
   title: string;
   image: string;
   reverse?: boolean;
+  visible?: boolean;
   body: string[];
   gallery?: { image: string; caption: string; alt: string }[];
 };

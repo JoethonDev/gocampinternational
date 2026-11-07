@@ -1,22 +1,41 @@
+import { getCloudflare } from "../lib/cloudflare-context";
 import { useRouteLoaderData } from "react-router";
 import type { Route } from "./+types/destination";
-import { DestinationPage } from "../features/destination/DestinationPage";
-import { findDestination, listPrograms, loadDocument } from "../lib/catalog.server";
+import {
+  ComingSoonDestinationPage,
+  DestinationPage
+} from "../features/destination/DestinationPage";
+import {
+  findDestination,
+  listPrograms,
+  loadDocument,
+  publicDestination
+} from "../lib/catalog.server";
 import type { MemoriesDocument, ProgramRecord, SiteSettings } from "../lib/domain";
-import { originFrom, seoMeta, safeJsonLd } from "../lib/seo";
+import {
+  cleanSeoText,
+  originFrom,
+  resolveCatalogSeo,
+  robotsFromMatches,
+  safeJsonLd,
+  seoMeta,
+  truncateSeoDescription
+} from "../lib/seo";
 
 export async function loader({ params, context }: Route.LoaderArgs) {
-  const db = context.cloudflare.env.DB;
+  const db = getCloudflare(context).env.DB;
   const slug = params.slug || "";
-  const [destination, memories] = await Promise.all([
-    findDestination(db, slug),
-    loadDocument<MemoriesDocument>(db, "camp_memories")
-  ]);
-  if (!destination || destination.status === "trash") {
-    throw new Response("Not found", { status: 404 });
+  const destination = publicDestination(await findDestination(db, slug));
+  if (!destination) throw new Response("Not found", { status: 404 });
+  if (destination.status === "coming-soon") {
+    return { destination, related: [], hasProgramIds: false, memories: null };
   }
+
+  const [memories, programs] = await Promise.all([
+    loadDocument<MemoriesDocument>(db, "camp_memories"),
+    listPrograms(db)
+  ]);
   const programIds = destination.program_ids || [];
-  const programs = destination.status === "coming-soon" ? [] : await listPrograms(db);
   const byId = new Map(programs.map((program) => [program.id || program.slug, program]));
   const related = programIds
     .map((id) => byId.get(id))
@@ -24,25 +43,21 @@ export async function loader({ params, context }: Route.LoaderArgs) {
   return { destination, related, hasProgramIds: programIds.length > 0, memories };
 }
 
-export function meta({ data, matches, location }: Route.MetaArgs) {
-  const destination = data?.destination;
-  const name = destination?.name || "Destination";
-  const title =
-    destination?.status === "coming-soon" ? `Coming Soon: ${name}` : `Go Camp :: ${name}`;
+export function meta({ loaderData, matches, location }: Route.MetaArgs) {
+  const destination = loaderData?.destination;
+  const active = destination?.status === "active" ? destination : null;
+  const seo = resolveCatalogSeo(
+    "destination",
+    active?.name || destination?.name,
+    active?.tagline || active?.intro_text,
+    active?.banner || active?.image,
+    active?.seo
+  );
   return seoMeta({
     origin: originFrom(matches),
     path: location.pathname,
-    title,
-    description: String(
-      destination?.tagline ||
-        destination?.intro_text ||
-        `Explore international programs in ${name} with GO Camp International.`
-    ),
-    image: String(destination?.banner || "/images/banner.webp"),
-    robots:
-      destination?.status === "coming-soon" || destination?.status === "inactive"
-        ? "noindex,follow"
-        : undefined
+    ...seo,
+    robots: robotsFromMatches(matches, seo.noindex || !active)
   });
 }
 
@@ -51,24 +66,53 @@ export default function Destination({ loaderData }: Route.ComponentProps) {
   const base =
     (root as { origin?: string } | undefined)?.origin || "https://gocampinternational.net";
   const destination = loaderData.destination;
+  if (destination.status === "coming-soon") {
+    return <ComingSoonDestinationPage name={destination.name} />;
+  }
+  const seo = resolveCatalogSeo(
+    "destination",
+    destination.name,
+    destination.tagline || destination.intro_text,
+    destination.banner || destination.image,
+    destination.seo
+  );
+  const canonical = new URL(`/destinations/${encodeURIComponent(destination.slug)}`, base).href;
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: safeJsonLd({
-            "@context": "https://schema.org",
-            "@type": "CollectionPage",
-            name: destination.name,
-            url: base + "/destinations/" + encodeURIComponent(destination.slug),
-            description: String(destination.tagline || "").replace(/<[^>]+>/g, ""),
-            primaryImageOfPage: new URL(destination.banner || "/images/banner.webp", base).href,
-            isPartOf: { "@id": base + "/#website" }
-          })
-        }}
-      />
+      {destination.status === "active" && seo.structuredDataEnabled && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: safeJsonLd({
+              "@context": "https://schema.org",
+              "@graph": [
+                {
+                  "@type": "CollectionPage",
+                  name: destination.name,
+                  url: canonical,
+                  description: truncateSeoDescription(seo.description, 300),
+                  primaryImageOfPage: new URL(seo.image, base).href,
+                  isPartOf: { "@id": base + "/#website" }
+                },
+                {
+                  "@type": "BreadcrumbList",
+                  itemListElement: [
+                    { "@type": "ListItem", position: 1, name: "Home", item: base + "/" },
+                    {
+                      "@type": "ListItem",
+                      position: 2,
+                      name: cleanSeoText(destination.name),
+                      item: canonical
+                    }
+                  ]
+                }
+              ]
+            })
+          }}
+        />
+      )}
       <DestinationPage
-        destination={loaderData.destination}
+        destination={destination}
         programs={loaderData.related}
         hasProgramIds={loaderData.hasProgramIds}
         settings={root?.settings || {}}

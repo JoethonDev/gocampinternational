@@ -1,13 +1,9 @@
 import { serveR2Image } from "../app/lib/legacy-media.server";
-import { discoveryResponse } from "../app/lib/seo-discovery.server";
+import { discoveryResponse, isSeoIndexingAllowed } from "../app/lib/seo-discovery.server";
 import { createRequestHandler } from "react-router";
+import { createCloudflareContext } from "../app/lib/cloudflare-context";
 import { logEvent } from "../app/lib/logger.server";
-
-declare module "react-router" {
-  export interface AppLoadContext {
-    cloudflare: { env: Env; ctx: ExecutionContext };
-  }
-}
+import { pruneExpiredRateLimits } from "../app/lib/rate-limit.server";
 
 const handle = createRequestHandler(
   () => import("virtual:react-router/server-build"),
@@ -28,7 +24,7 @@ function applyResponseHeaders(response: Response, env: Env, request: Request): R
     headers.set("Cache-Control", "no-store");
     headers.set("X-Robots-Tag", "noindex, nofollow");
   }
-  if (env.GOCAMP_ENV === "staging") {
+  if (env.GOCAMP_ENV === "staging" || !isSeoIndexingAllowed(new URL(request.url), env)) {
     headers.set("X-Robots-Tag", "noindex, nofollow");
   }
   return new Response(response.body, {
@@ -53,7 +49,7 @@ export default {
       ) {
         return applyResponseHeaders(await serveR2Image(request, env), env, request);
       }
-      const response = await handle(request, { cloudflare: { env, ctx } });
+      const response = await handle(request, createCloudflareContext(env, ctx));
       const headers = new Headers(response.headers);
       headers.set("Server-Timing", `app;dur=${(performance.now() - started).toFixed(1)}`);
       return applyResponseHeaders(
@@ -83,6 +79,13 @@ export default {
         env,
         request
       );
+    }
+  },
+
+  async scheduled(_controller: ScheduledController, env: Env): Promise<void> {
+    const result = await pruneExpiredRateLimits(env.DB);
+    if (result.meta.changes > 0) {
+      logEvent("info", "expired rate-limit rows removed", { deletedRows: result.meta.changes });
     }
   }
 } satisfies ExportedHandler<Env>;

@@ -1,5 +1,6 @@
-import { Link } from "react-router";
-import { SITE } from "../../config/site";
+import { usePublicContent } from "../../lib/public-content-react";
+import { trackBusinessEvent } from "../../lib/analytics.client";
+import { SiteLink } from "./SiteLink";
 import type { CategoryRecord, DestinationRecord } from "../../lib/domain";
 
 function Dropdown({
@@ -26,9 +27,9 @@ function Dropdown({
       <ul className="dropdown-menu" aria-labelledby={id}>
         {items.map((item) => (
           <li key={item.to}>
-            <Link className="dropdown-item" to={item.to}>
+            <SiteLink className="dropdown-item" to={item.to}>
               {item.label}
-            </Link>
+            </SiteLink>
           </li>
         ))}
       </ul>
@@ -43,15 +44,18 @@ export function SiteHeader({
   categories: CategoryRecord[];
   destinations: DestinationRecord[];
 }) {
+  const { text, site: SITE, visible } = usePublicContent("header");
+  const booking = usePublicContent("booking");
   return (
     <nav
+      hidden={!visible("show-navigation")}
       className="navbar navbar-expand-xl navbar-dark fixed-top gc-site-navbar"
       aria-label="Main navigation"
     >
       <div className="container">
-        <Link className="navbar-brand" to="/">
+        <SiteLink className="navbar-brand" to={text("to-")}>
           <img src={SITE.images.logo} alt={`${SITE.name} logo`} />
-        </Link>
+        </SiteLink>
         <button
           className="navbar-toggler"
           type="button"
@@ -66,18 +70,18 @@ export function SiteHeader({
         <div className="collapse navbar-collapse" id="mainNavbar">
           <ul className="navbar-nav ms-auto mb-2 mb-xl-0 align-items-xl-center">
             <li className="nav-item">
-              <Link className="nav-link" to="/">
-                Home
-              </Link>
+              <SiteLink className="nav-link" to={text("to-")}>
+                {text("home")}
+              </SiteLink>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/about">
-                About Us
-              </Link>
+              <SiteLink className="nav-link" to={text("to-about")}>
+                {text("about-us")}
+              </SiteLink>
             </li>
             <Dropdown
               id="programsDropdown"
-              label="Programs"
+              label={text("label-programs")}
               items={categories.map((category) => ({
                 label: category.name,
                 to: `/program/category?category=${encodeURIComponent(category.slug)}`
@@ -85,31 +89,34 @@ export function SiteHeader({
             />
             <Dropdown
               id="destinationsDropdown"
-              label="Destinations"
+              label={text("label-destinations")}
               items={destinations.map((destination) => ({
                 label: destination.name,
                 to: `/destinations/${encodeURIComponent(destination.slug)}`
               }))}
             />
             <li className="nav-item">
-              <Link className="nav-link" to="/faq">
-                FAQ
-              </Link>
+              <SiteLink className="nav-link" to={text("to-faq")}>
+                {text("faq")}
+              </SiteLink>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/contact">
-                Contact
-              </Link>
+              <SiteLink className="nav-link" to={text("to-contact")}>
+                {text("contact")}
+              </SiteLink>
             </li>
           </ul>
-          <button
-            type="button"
-            className="btn btn-warning ms-xl-3"
-            data-bs-toggle="modal"
-            data-bs-target="#ctaModal"
-          >
-            Book Now
-          </button>
+          {booking.visible("show-booking") && (
+            <button
+              type="button"
+              className="btn btn-warning ms-xl-3"
+              data-bs-toggle="modal"
+              data-bs-target="#ctaModal"
+              onClick={() => trackBusinessEvent("lead_form_open", "header_book_now")}
+            >
+              {text("book-now")}
+            </button>
+          )}
         </div>
       </div>
     </nav>

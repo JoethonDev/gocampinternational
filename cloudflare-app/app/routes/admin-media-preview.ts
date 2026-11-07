@@ -1,3 +1,4 @@
+import { getCloudflare } from "../lib/cloudflare-context";
 import type { Route } from "./+types/admin-media-preview";
 import { getAdmin } from "../lib/admin.server";
 
@@ -5,7 +6,7 @@ import { getAdmin } from "../lib/admin.server";
  * The public /media/:id route deliberately rejects unpublished media.
  */
 export async function loader({ request, context, params }: Route.LoaderArgs) {
-  const env = context.cloudflare.env;
+  const env = getCloudflare(context).env;
   const id = params.id || "";
   if (!/^[a-f0-9-]{36}$/i.test(id)) throw new Response("Not found", { status: 404 });
   // Return 404 rather than exposing media existence to unauthenticated callers.

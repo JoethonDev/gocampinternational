@@ -1,3 +1,4 @@
+import { getCloudflare } from "../lib/cloudflare-context";
 import { useState } from "react";
 import { Link } from "react-router";
 import type { Route } from "./+types/admin-media-import";
@@ -16,7 +17,7 @@ export function meta() {
 }
 
 export async function loader({ request, context }: Route.LoaderArgs) {
-  const env = context.cloudflare.env;
+  const env = getCloudflare(context).env;
   requireStaging(env);
   const session = await requireAdmin(request, env.DB);
   return {

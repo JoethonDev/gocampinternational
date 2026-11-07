@@ -1,3 +1,4 @@
+import { getCloudflare } from "../lib/cloudflare-context";
 import type { Route } from "./+types/admin-dashboard";
 import { requireAdmin } from "../lib/admin.server";
 import { AdminShell } from "../components/admin/AdminShell";
@@ -9,9 +10,9 @@ export function meta() {
 }
 
 export async function loader({ request, context }: Route.LoaderArgs) {
-  const db = context.cloudflare.env.DB;
+  const db = getCloudflare(context).env.DB;
   const session = await requireAdmin(request, db);
-  const data = await loadDashboard(db, context.cloudflare.env);
+  const data = await loadDashboard(db, getCloudflare(context).env);
   return { session, ...data };
 }
 

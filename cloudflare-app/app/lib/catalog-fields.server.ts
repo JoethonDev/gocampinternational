@@ -61,6 +61,52 @@ export function readCatalogFields(
   const data: Record<string, unknown> = { ...previous, name, status };
   // Price is retired from the GoCamp catalog; never persist legacy form values.
   if (kind === "program") delete data.price;
+
+  if (kind !== "program") {
+    const previousSeo =
+      previous.seo && typeof previous.seo === "object" && !Array.isArray(previous.seo)
+        ? (previous.seo as Record<string, unknown>)
+        : {};
+    const seo: Record<string, unknown> = { ...previousSeo };
+    const readSeoText = (field: string, maxLength: number, key: string) => {
+      const raw = form.get(field);
+      if (raw === null) return;
+      if (typeof raw !== "string" || raw.length > maxLength || /[<>]/.test(raw)) {
+        throw new Response("Invalid SEO text", { status: 400 });
+      }
+      const value = raw.trim().replace(/\s+/g, " ");
+      if (value) seo[key] = value;
+      else delete seo[key];
+    };
+
+    readSeoText("seoTitle", 160, "title");
+    readSeoText("seoDescription", 320, "description");
+    readSeoText("seoOgImageAlt", 200, "og_image_alt");
+
+    const image = form.get("seoOgImage");
+    if (image !== null) {
+      if (typeof image !== "string" || image.length > 2048) {
+        throw new Response("Invalid SEO image", { status: 400 });
+      }
+      const imageId = image.trim().match(/^\/media\/([a-zA-Z0-9_-]{1,160})$/)?.[1];
+      if (image.trim() && !imageId) {
+        throw new Response("Choose a public image from the media library", { status: 400 });
+      }
+      if (imageId) seo.og_image_id = imageId;
+      else delete seo.og_image_id;
+    }
+
+    if (form.getAll("seoNoindex").includes("true")) seo.noindex = true;
+    else delete seo.noindex;
+    if (form.getAll("seoDisableStructuredData").includes("true")) {
+      seo.structured_data_enabled = false;
+    } else {
+      delete seo.structured_data_enabled;
+    }
+    if (Object.keys(seo).length > 0) data.seo = seo;
+    else delete data.seo;
+  }
+
   for (const [field, maxLength] of TEXT_FIELDS[kind]) {
     const value = formText(form.get(field), maxLength);
     if (value.length > maxLength) {

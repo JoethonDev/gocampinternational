@@ -1,10 +1,10 @@
+import { usePublicContent } from "../../lib/public-content-react";
 import { responsiveSrcSet } from "../../lib/responsive-media";
 import { Link } from "react-router";
 import { CampMemories } from "../../components/CampMemories";
 import { FaqAccordion } from "../../components/FaqAccordion";
 import { ProgramCard } from "../../components/ProgramCard";
 import { SafeRichText } from "../../components/SafeRichText";
-import { SITE } from "../../config/site";
 import type {
   DestinationRecord,
   FaqItem,
@@ -14,24 +14,32 @@ import type {
 } from "../../lib/domain";
 import { isVisible } from "../../lib/visibility";
 
-function ComingSoon({ destination }: { destination: DestinationRecord }) {
+function ComingSoon({ name }: { name: string }) {
+  const { text } = usePublicContent("destination");
   return (
     <div className="page-content coming-soon-page">
       <div className="container text-center py-5 my-5">
-        <h1 className="display-3 fw-bold text-brand-primary mb-4">Coming Soon</h1>
-        <h2 className="mb-3">{destination.name} is not available yet.</h2>
+        <h1 className="display-3 fw-bold text-brand-primary mb-4">{text("coming-soon")}</h1>
+        <h2 className="mb-3">
+          {name} {text("is-not-available-yet")}
+        </h2>
         <p className="lead text-muted mb-4">
-          Please check back later for updates on this destination.
+          {text("please-check-back-later-for-updates-on-this-destination")}
         </p>
-        <Link to="/" className="btn btn-primary btn-lg">
-          Go to Homepage
+        <Link to={text("to-")} className="btn btn-primary btn-lg">
+          {text("go-to-homepage")}
         </Link>
       </div>
     </div>
   );
 }
 
+export function ComingSoonDestinationPage({ name }: { name: string }) {
+  return <ComingSoon name={name} />;
+}
+
 function Hero({ destination }: { destination: DestinationRecord }) {
+  const { site: SITE } = usePublicContent("destination");
   return (
     <section
       className="destination-hero position-relative overflow-hidden"
@@ -56,12 +64,15 @@ function Hero({ destination }: { destination: DestinationRecord }) {
 }
 
 function Stats({ destination }: { destination: DestinationRecord }) {
+  const { text } = usePublicContent("destination");
   const stats = destination.stats || [];
   if (stats.length === 0) return null;
   return (
     <section className="section-padding">
       <div className="container">
-        <h2 className="section-title text-center">{destination.name} By The Numbers</h2>
+        <h2 className="section-title text-center">
+          {destination.name} {text("by-the-numbers")}
+        </h2>
         <div className="row g-4 justify-content-center">
           {stats.map((stat, index) => (
             <div key={index} className="col-sm-6 col-lg-3 text-center">
@@ -79,13 +90,17 @@ function Stats({ destination }: { destination: DestinationRecord }) {
 }
 
 function Introduction({ destination }: { destination: DestinationRecord }) {
+  const { text } = usePublicContent("destination");
   if (!destination.intro_text) return null;
   return (
     <section className="section-padding bg-white" id="destination-intro">
       <div className="container">
         <div className="row align-items-center g-4">
           <div className={destination.intro_image ? "col-lg-7" : "col-12"}>
-            <h2 className="section-title">Discover {destination.name}</h2>
+            <h2 className="section-title">
+              {text("discover")}
+              {destination.name}
+            </h2>
             <div className="lead">
               <SafeRichText html={destination.intro_text} />
             </div>
@@ -121,6 +136,7 @@ function Programs({
   hasProgramIds: boolean;
   settings: SiteSettings;
 }) {
+  const { text } = usePublicContent("destination");
   return (
     <section className="section-padding bg-light" id="programs">
       <div className="container">
@@ -132,7 +148,7 @@ function Programs({
           ))}
           {!hasProgramIds && (
             <p className="text-center">
-              No programs are currently available for this destination. Please check back soon!
+              {text("no-programs-are-currently-available-for-this-destination-please-check-")}
             </p>
           )}
         </div>
@@ -154,9 +170,6 @@ export function DestinationPage({
   settings: SiteSettings;
   memories: MemoriesDocument | null;
 }) {
-  if (destination.status === "coming-soon") {
-    return <ComingSoon destination={destination} />;
-  }
   const faq = (destination.faq || []) as FaqItem[];
   return (
     <div className="page-content">

@@ -195,10 +195,41 @@ export async function mutateMedia(request: Request, env: Env, form: FormData): P
   }
 
   if (operation === "hide" || operation === "show") {
-    const result = await env.DB.prepare("UPDATE media_assets SET is_public=? WHERE id=?")
-      .bind(operation === "show" ? 1 : 0, id)
+    if (operation === "show") {
+      const result = await env.DB.prepare("UPDATE media_assets SET is_public=1 WHERE id=?")
+        .bind(id)
+        .run();
+      if (result.meta.changes !== 1) throw new Response("Media not found", { status: 404 });
+      return;
+    }
+
+    const row = await env.DB.prepare("SELECT object_key,legacy_path FROM media_assets WHERE id=?")
+      .bind(id)
+      .first<{ object_key: string; legacy_path: string | null }>();
+    if (!row) throw new Response("Media not found", { status: 404 });
+    const references = [
+      ...new Set(
+        [id, `/media/${id}`, `/${row.object_key}`, row.legacy_path].filter((path): path is string =>
+          Boolean(path)
+        )
+      )
+    ];
+    const referenced = references.map(() => "instr(content_json,?)>0").join(" OR ");
+    const result = await env.DB.prepare(
+      `UPDATE media_assets SET is_public=0 WHERE id=?
+      AND NOT EXISTS (SELECT 1 FROM catalog_entities WHERE ${referenced})
+      AND NOT EXISTS (SELECT 1 FROM site_documents WHERE ${referenced})`
+    )
+      .bind(id, ...references, ...references)
       .run();
-    if (result.meta.changes !== 1) throw new Response("Media not found", { status: 404 });
+    if (result.meta.changes !== 1) {
+      throw new Response(
+        "Image is referenced by public content. Replace references before hiding it.",
+        {
+          status: 409
+        }
+      );
+    }
     return;
   }
 
@@ -210,7 +241,7 @@ export async function mutateMedia(request: Request, env: Env, form: FormData): P
 
     const references = [
       ...new Set(
-        [`/media/${id}`, `/${row.object_key}`, row.legacy_path].filter((path): path is string =>
+        [id, `/media/${id}`, `/${row.object_key}`, row.legacy_path].filter((path): path is string =>
           Boolean(path)
         )
       )

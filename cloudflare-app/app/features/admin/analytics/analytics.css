@@ -1,0 +1,68 @@
+.admin-analytics {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.admin-analytics-range,
+.admin-analytics-custom-range {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 0.65rem;
+}
+
+.admin-analytics-custom-range label {
+  display: grid;
+  gap: 0.25rem;
+  color: var(--admin-muted);
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.admin-analytics-custom-range input {
+  min-width: 145px;
+}
+
+.admin-analytics-status {
+  display: grid;
+  gap: 0.55rem;
+  margin: 0;
+  padding-left: 1.25rem;
+  color: var(--admin-muted);
+}
+
+.admin-analytics-columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(280px, 1fr);
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.admin-analytics-definition-list {
+  display: grid;
+  gap: 0.7rem;
+  margin: 0;
+}
+
+.admin-analytics-definition-list > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.admin-analytics-definition-list dt {
+  color: var(--admin-muted);
+  font-weight: 600;
+}
+
+.admin-analytics-definition-list dd {
+  margin: 0;
+  color: var(--admin-text);
+  font-weight: 700;
+}
+
+@media (max-width: 767.98px) {
+  .admin-analytics-columns {
+    grid-template-columns: 1fr;
+  }
+}

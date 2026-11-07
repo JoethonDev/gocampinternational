@@ -19,6 +19,7 @@ export function MediaSelector({
   label,
   name,
   initial,
+  includeStaticPaths = true,
   uploaded = [],
   externalValue,
   onChange,
@@ -28,6 +29,7 @@ export function MediaSelector({
   label: string;
   name?: string;
   initial: string;
+  includeStaticPaths?: boolean;
   uploaded?: string[];
   externalValue?: string;
   onChange?: (value: string) => void;
@@ -64,10 +66,10 @@ export function MediaSelector({
         ...extraUploads,
         ...namedMedia.map((item) => item.path),
         ...uploaded,
-        ...STATIC_PATHS
+        ...(includeStaticPaths ? STATIC_PATHS : [])
       ])
     ],
-    [extraUploads, namedMedia, uploaded]
+    [extraUploads, includeStaticPaths, namedMedia, uploaded]
   );
   const matching = useMemo(() => {
     const query = search.trim().toLowerCase();

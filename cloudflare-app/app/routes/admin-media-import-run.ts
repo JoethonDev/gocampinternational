@@ -1,3 +1,4 @@
+import { getCloudflare } from "../lib/cloudflare-context";
 import type { Route } from "./+types/admin-media-import-run";
 import { verifyAdminPost } from "../lib/admin.server";
 import {
@@ -14,7 +15,7 @@ export function loader() {
 }
 
 export async function action({ request, context }: Route.ActionArgs) {
-  const env = context.cloudflare.env;
+  const env = getCloudflare(context).env;
   requireStaging(env);
   if (request.method !== "POST") {
     throw new Response("Method not allowed", { status: 405 });
