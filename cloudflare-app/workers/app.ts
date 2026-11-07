@@ -1,5 +1,5 @@
 import { serveR2Image } from "../app/lib/legacy-media.server";
-import { discoveryResponse } from "../app/lib/seo-discovery.server";
+import { discoveryResponse, isSeoIndexingAllowed } from "../app/lib/seo-discovery.server";
 import { createRequestHandler } from "react-router";
 import { createCloudflareContext } from "../app/lib/cloudflare-context";
 import { logEvent } from "../app/lib/logger.server";
@@ -23,7 +23,7 @@ function applyResponseHeaders(response: Response, env: Env, request: Request): R
     headers.set("Cache-Control", "no-store");
     headers.set("X-Robots-Tag", "noindex, nofollow");
   }
-  if (env.GOCAMP_ENV === "staging") {
+  if (env.GOCAMP_ENV === "staging" || !isSeoIndexingAllowed(new URL(request.url), env)) {
     headers.set("X-Robots-Tag", "noindex, nofollow");
   }
   return new Response(response.body, {

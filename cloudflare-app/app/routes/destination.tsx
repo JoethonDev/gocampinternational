@@ -4,7 +4,15 @@ import type { Route } from "./+types/destination";
 import { DestinationPage } from "../features/destination/DestinationPage";
 import { findDestination, listPrograms, loadDocument } from "../lib/catalog.server";
 import type { MemoriesDocument, ProgramRecord, SiteSettings } from "../lib/domain";
-import { originFrom, seoMeta, safeJsonLd } from "../lib/seo";
+import {
+  cleanSeoText,
+  originFrom,
+  resolveCatalogSeo,
+  robotsFromMatches,
+  safeJsonLd,
+  seoMeta,
+  truncateSeoDescription
+} from "../lib/seo";
 
 export async function loader({ params, context }: Route.LoaderArgs) {
   const db = getCloudflare(context).env.DB;
@@ -27,23 +35,18 @@ export async function loader({ params, context }: Route.LoaderArgs) {
 
 export function meta({ loaderData, matches, location }: Route.MetaArgs) {
   const destination = loaderData?.destination;
-  const name = destination?.name || "Destination";
-  const title =
-    destination?.status === "coming-soon" ? `Coming Soon: ${name}` : `Go Camp :: ${name}`;
+  const seo = resolveCatalogSeo(
+    "destination",
+    destination?.name,
+    destination?.tagline || destination?.intro_text,
+    destination?.banner || destination?.image,
+    destination?.seo
+  );
   return seoMeta({
     origin: originFrom(matches),
     path: location.pathname,
-    title,
-    description: String(
-      destination?.tagline ||
-        destination?.intro_text ||
-        `Explore international programs in ${name} with GO Camp International.`
-    ),
-    image: String(destination?.banner || "/images/banner.webp"),
-    robots:
-      destination?.status === "coming-soon" || destination?.status === "inactive"
-        ? "noindex,follow"
-        : undefined
+    ...seo,
+    robots: robotsFromMatches(matches, seo.noindex || destination?.status !== "active")
   });
 }
 
@@ -52,22 +55,48 @@ export default function Destination({ loaderData }: Route.ComponentProps) {
   const base =
     (root as { origin?: string } | undefined)?.origin || "https://gocampinternational.net";
   const destination = loaderData.destination;
+  const seo = resolveCatalogSeo(
+    "destination",
+    destination.name,
+    destination.tagline || destination.intro_text,
+    destination.banner || destination.image,
+    destination.seo
+  );
+  const canonical = new URL(`/destinations/${encodeURIComponent(destination.slug)}`, base).href;
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: safeJsonLd({
-            "@context": "https://schema.org",
-            "@type": "CollectionPage",
-            name: destination.name,
-            url: base + "/destinations/" + encodeURIComponent(destination.slug),
-            description: String(destination.tagline || "").replace(/<[^>]+>/g, ""),
-            primaryImageOfPage: new URL(destination.banner || "/images/banner.webp", base).href,
-            isPartOf: { "@id": base + "/#website" }
-          })
-        }}
-      />
+      {seo.structuredDataEnabled && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: safeJsonLd({
+              "@context": "https://schema.org",
+              "@graph": [
+                {
+                  "@type": "CollectionPage",
+                  name: destination.name,
+                  url: canonical,
+                  description: truncateSeoDescription(seo.description, 300),
+                  primaryImageOfPage: new URL(seo.image, base).href,
+                  isPartOf: { "@id": base + "/#website" }
+                },
+                {
+                  "@type": "BreadcrumbList",
+                  itemListElement: [
+                    { "@type": "ListItem", position: 1, name: "Home", item: base + "/" },
+                    {
+                      "@type": "ListItem",
+                      position: 2,
+                      name: cleanSeoText(destination.name),
+                      item: canonical
+                    }
+                  ]
+                }
+              ]
+            })
+          }}
+        />
+      )}
       <DestinationPage
         destination={loaderData.destination}
         programs={loaderData.related}

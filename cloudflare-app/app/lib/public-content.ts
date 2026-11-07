@@ -1,5 +1,6 @@
 import { PUBLIC_CONTENT_FIELDS } from "../config/public-content-fields";
 import { SITE, HOME_COPY, HOME_HERO_SLIDES } from "../config/site";
+import { robotsFromMatches } from "./seo";
 
 export type PublicContent = Record<string, Record<string, string | boolean>>;
 export type PublicSite = {
@@ -38,9 +39,18 @@ function validHttpsUrl(value: string) {
   }
 }
 
-function valid(value: unknown, field: { kind: string; value: string | boolean }): boolean {
+function valid(
+  value: unknown,
+  field: { kind: string; value: string | boolean },
+  group?: string,
+  key?: string
+): boolean {
   if (field.kind === "visibility") return typeof value === "boolean";
   if (typeof value !== "string" || value.length > 5000) return false;
+  if (group === "seo" && field.kind === "text") {
+    const limit = key?.endsWith("-title") ? 160 : 320;
+    if (value.length > limit || /[<>]/.test(value)) return false;
+  }
   if (!value) return field.kind !== "image";
   return (
     field.kind === "text" || isContentUrl(value, field.kind === "image", field.kind === "external")
@@ -58,7 +68,7 @@ export function readPublicContent(value: unknown): PublicContent {
         Object.fromEntries(
           Object.entries(fields).map(([key, field]) => [
             key,
-            valid(overrides[key], field) ? overrides[key] : field.value
+            valid(overrides[key], field, group, key) ? overrides[key] : field.value
           ])
         )
       ];
@@ -80,7 +90,7 @@ export function validatePublicContent(value: unknown): string | null {
       return `Invalid content group: ${group}`;
     }
     for (const [key, entry] of Object.entries(record(entries))) {
-      if (!Object.hasOwn(fields, key) || !valid(entry, fields[key]))
+      if (!Object.hasOwn(fields, key) || !valid(entry, fields[key], group, key))
         return `Invalid content field: ${group}.${key}`;
     }
   }
@@ -133,10 +143,18 @@ export function publicSeo(
   page: string
 ) {
   const content = publicContentFromMatches(matches);
+  const titleKey = `${page}-title`;
+  const descriptionKey = `${page}-description`;
+  const imageKey = `${page}-image`;
+  const defaults = PUBLIC_CONTENT_FIELDS.seo;
+  const title = contentText(content, "seo", titleKey).trim();
+  const description = contentText(content, "seo", descriptionKey).trim();
+  const image = contentText(content, "seo", imageKey).trim();
   return {
-    title: contentText(content, "seo", `${page}-title`),
-    description: contentText(content, "seo", `${page}-description`),
-    image: contentText(content, "seo", `${page}-image`) || "/images/banner.webp",
-    siteName: publicSite(content).name
+    title: title || String(defaults?.[titleKey]?.value || "Go Camp International"),
+    description: description || String(defaults?.[descriptionKey]?.value || ""),
+    image: image || String(defaults?.[imageKey]?.value || "/images/banner.webp"),
+    siteName: publicSite(content).name,
+    robots: robotsFromMatches(matches)
   };
 }

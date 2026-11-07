@@ -23,6 +23,7 @@ import {
   type PublicContent
 } from "./lib/public-content";
 import { safeJsonLd } from "./lib/seo";
+import { isSeoIndexingAllowed } from "./lib/seo-discovery.server";
 import { LeadModal } from "./components/LeadModal";
 import { SiteInteractions } from "./components/SiteInteractions";
 import { NotFoundPage, ServiceErrorPage } from "./components/ui/ErrorPages";
@@ -30,10 +31,11 @@ import "./app.css";
 import "./styles/motion.css";
 
 export async function loader({ request, context }: Route.LoaderArgs) {
-  const environment = getCloudflare(context).env.GOCAMP_ENV;
-  const origin = isProduction(getCloudflare(context).env)
-    ? "https://gocampinternational.net"
-    : new URL(request.url).origin;
+  const env = getCloudflare(context).env;
+  const environment = env.GOCAMP_ENV;
+  const requestUrl = new URL(request.url);
+  const seoIndexingAllowed = isSeoIndexingAllowed(requestUrl, env);
+  const origin = isProduction(env) ? "https://gocampinternational.net" : requestUrl.origin;
   if (new URL(request.url).pathname.startsWith("/admin")) {
     return {
       destinations: [],
@@ -41,6 +43,7 @@ export async function loader({ request, context }: Route.LoaderArgs) {
       settings: {},
       environment,
       origin,
+      seoIndexingAllowed: false,
       publicContent: DEFAULT_PUBLIC_CONTENT
     };
   }
@@ -58,7 +61,8 @@ export async function loader({ request, context }: Route.LoaderArgs) {
     settings: pageSettings,
     publicContent: readPublicContent(savedSettings.public_content),
     environment,
-    origin
+    origin,
+    seoIndexingAllowed
   };
 }
 

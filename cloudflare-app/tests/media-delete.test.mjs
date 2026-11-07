@@ -17,6 +17,7 @@ function asset(db) {
 
 test("media deletion protects ID, current object path, legacy URL and bare memory filenames", async () => {
   for (const reference of [
+    id,
     `/media/${id}`,
     `/${objectKey}?variant=mobile`,
     legacyPath,
@@ -39,6 +40,25 @@ test("media deletion protects ID, current object path, legacy URL and bare memor
       assert.equal(db.sql.prepare("SELECT COUNT(*) AS n FROM media_assets").get().n, 1);
       assert.deepEqual(deleted, []);
     }
+  }
+});
+
+test("referenced SEO images cannot be hidden or deleted", async () => {
+  for (const operation of ["hide", "delete"]) {
+    const db = new SqliteD1();
+    asset(db);
+    entity(db, "category", "kids-camps", { seo: { og_image_id: id } });
+    const { request, form } = await admin(db, { id, operation });
+    const deleted = [];
+    await assert.rejects(
+      mutateMedia(request, { DB: db, MEDIA: { delete: async (key) => deleted.push(key) } }, form),
+      statusIs(409)
+    );
+    assert.equal(
+      db.sql.prepare("SELECT is_public FROM media_assets WHERE id=?").get(id).is_public,
+      1
+    );
+    assert.deepEqual(deleted, []);
   }
 });
 

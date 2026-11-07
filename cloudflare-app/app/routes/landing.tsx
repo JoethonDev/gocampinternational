@@ -11,8 +11,8 @@ export function meta({ matches }: Route.MetaArgs) {
   return seoMeta({
     origin: originFrom(matches),
     path: "/landing",
-    robots: "noindex,nofollow",
-    ...seo
+    ...seo,
+    robots: "noindex,nofollow"
   });
 }
 

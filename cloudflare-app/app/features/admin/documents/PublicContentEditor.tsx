@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router";
 import { MediaSelector } from "../../../components/MediaSelector";
 import { PUBLIC_CONTENT_FIELDS } from "../../../config/public-content-fields";
+import { truncateSeoDescription } from "../../../lib/seo";
 import { asDocument } from "./shared";
 
 const GROUP_LABELS: Record<string, string> = {
@@ -36,6 +37,7 @@ export function PublicContentEditor({
   uploadedMedia: string[];
 }) {
   const [group, setGroup] = useState("home");
+  const [seoPage, setSeoPage] = useState("home");
   const document = asDocument(value);
   const content = asDocument(document.public_content);
   const overrides = asDocument(content[group]);
@@ -155,6 +157,47 @@ export function PublicContentEditor({
           );
         })}
       </div>
+      {group === "seo" && (
+        <div className="border rounded-3 bg-light p-3 mt-4" aria-live="polite">
+          <label className="form-label" htmlFor="seo-preview-page">
+            Preview page
+          </label>
+          <select
+            id="seo-preview-page"
+            className="form-select mb-3"
+            value={seoPage}
+            onChange={(event) => setSeoPage(event.target.value)}
+          >
+            {["home", "about", "contact", "faq", "landing"].map((page) => (
+              <option key={page} value={page}>
+                {page.charAt(0).toUpperCase() + page.slice(1)}
+              </option>
+            ))}
+          </select>
+          <div className="small text-success text-truncate">
+            gocampinternational.net{seoPage === "home" ? "/" : `/${seoPage}`}
+          </div>
+          <div className="fw-semibold text-primary mt-1">
+            {String(
+              overrides[`${seoPage}-title`] ??
+                PUBLIC_CONTENT_FIELDS.seo[`${seoPage}-title`]?.value ??
+                "Go Camp International"
+            )}
+          </div>
+          <div className="small text-secondary mt-1">
+            {truncateSeoDescription(
+              overrides[`${seoPage}-description`] ??
+                PUBLIC_CONTENT_FIELDS.seo[`${seoPage}-description`]?.value ??
+                ""
+            )}
+          </div>
+          {seoPage === "landing" && (
+            <div className="small text-warning-emphasis mt-2">
+              Landing pages remain noindex by default.
+            </div>
+          )}
+        </div>
+      )}
     </section>
   );
 }

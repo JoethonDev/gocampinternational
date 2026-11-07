@@ -4,7 +4,15 @@ import type { Route } from "./+types/category";
 import { CategoryPage } from "../features/category/CategoryPage";
 import { findCategory, listDestinations, listPrograms, loadDocument } from "../lib/catalog.server";
 import type { MemoriesDocument, SiteSettings } from "../lib/domain";
-import { originFrom, seoMeta, safeJsonLd } from "../lib/seo";
+import {
+  cleanSeoText,
+  originFrom,
+  resolveCatalogSeo,
+  robotsFromMatches,
+  safeJsonLd,
+  seoMeta,
+  truncateSeoDescription
+} from "../lib/seo";
 
 export async function loader({ request, context }: Route.LoaderArgs) {
   const db = getCloudflare(context).env.DB;
@@ -42,14 +50,19 @@ export async function loader({ request, context }: Route.LoaderArgs) {
 }
 
 export function meta({ loaderData, matches }: Route.MetaArgs) {
+  const category = loaderData?.category;
+  const seo = resolveCatalogSeo(
+    "category",
+    category?.name,
+    category?.intro,
+    category?.banner || category?.image,
+    category?.seo
+  );
   return seoMeta({
     origin: originFrom(matches),
-    path: "/program/category?category=" + encodeURIComponent(loaderData?.category.slug || ""),
-    title: `Go Camp :: ${loaderData?.category.name || "Programs"}`,
-    description: String(loaderData?.category.intro || "")
-      .replace(/<[^>]*>/g, "")
-      .slice(0, 160),
-    image: String(loaderData?.category.banner || "/images/banner.webp")
+    path: "/program/category?category=" + encodeURIComponent(category?.slug || ""),
+    ...seo,
+    robots: robotsFromMatches(matches, seo.noindex || category?.status !== "active")
   });
 }
 
@@ -58,24 +71,48 @@ export default function Category({ loaderData }: Route.ComponentProps) {
   const base =
     (root as { origin?: string } | undefined)?.origin || "https://gocampinternational.net";
   const category = loaderData.category;
+  const seo = resolveCatalogSeo(
+    "category",
+    category.name,
+    category.intro,
+    category.banner || category.image,
+    category.seo
+  );
+  const canonical = base + "/program/category?category=" + encodeURIComponent(category.slug);
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: safeJsonLd({
-            "@context": "https://schema.org",
-            "@type": "CollectionPage",
-            name: category.name,
-            url: base + "/program/category?category=" + encodeURIComponent(category.slug),
-            description: String(category.intro || "")
-              .replace(/<[^>]+>/g, "")
-              .slice(0, 300),
-            primaryImageOfPage: new URL(category.banner || "/images/banner.webp", base).href,
-            isPartOf: { "@id": base + "/#website" }
-          })
-        }}
-      />
+      {seo.structuredDataEnabled && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: safeJsonLd({
+              "@context": "https://schema.org",
+              "@graph": [
+                {
+                  "@type": "CollectionPage",
+                  name: category.name,
+                  url: canonical,
+                  description: truncateSeoDescription(seo.description, 300),
+                  primaryImageOfPage: new URL(seo.image, base).href,
+                  isPartOf: { "@id": base + "/#website" }
+                },
+                {
+                  "@type": "BreadcrumbList",
+                  itemListElement: [
+                    { "@type": "ListItem", position: 1, name: "Home", item: base + "/" },
+                    {
+                      "@type": "ListItem",
+                      position: 2,
+                      name: cleanSeoText(category.name),
+                      item: canonical
+                    }
+                  ]
+                }
+              ]
+            })
+          }}
+        />
+      )}
       <CategoryPage
         category={loaderData.category}
         programs={loaderData.related}
