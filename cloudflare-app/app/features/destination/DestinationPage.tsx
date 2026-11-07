@@ -14,14 +14,14 @@ import type {
 } from "../../lib/domain";
 import { isVisible } from "../../lib/visibility";
 
-function ComingSoon({ destination }: { destination: DestinationRecord }) {
+function ComingSoon({ name }: { name: string }) {
   const { text } = usePublicContent("destination");
   return (
     <div className="page-content coming-soon-page">
       <div className="container text-center py-5 my-5">
         <h1 className="display-3 fw-bold text-brand-primary mb-4">{text("coming-soon")}</h1>
         <h2 className="mb-3">
-          {destination.name} {text("is-not-available-yet")}
+          {name} {text("is-not-available-yet")}
         </h2>
         <p className="lead text-muted mb-4">
           {text("please-check-back-later-for-updates-on-this-destination")}
@@ -32,6 +32,10 @@ function ComingSoon({ destination }: { destination: DestinationRecord }) {
       </div>
     </div>
   );
+}
+
+export function ComingSoonDestinationPage({ name }: { name: string }) {
+  return <ComingSoon name={name} />;
 }
 
 function Hero({ destination }: { destination: DestinationRecord }) {
@@ -166,9 +170,6 @@ export function DestinationPage({
   settings: SiteSettings;
   memories: MemoriesDocument | null;
 }) {
-  if (destination.status === "coming-soon") {
-    return <ComingSoon destination={destination} />;
-  }
   const faq = (destination.faq || []) as FaqItem[];
   return (
     <div className="page-content">

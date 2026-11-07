@@ -3,17 +3,24 @@ import {
   configuredWebAnalyticsSiteTag,
   isAnalyticsCollectionEnabled
 } from "../../../lib/analytics";
-import type { AnalyticsEventName, AnalyticsPageType } from "../../../lib/analytics";
+import type { AnalyticsEventName } from "../../../lib/analytics";
 import { isSeoIndexingAllowed } from "../../../lib/seo-discovery.server";
 
-type RollupRow = {
+type DailyClickRow = {
   day: string;
+  count: number;
+  latest_at: number;
+};
+
+type MetricClickRow = {
   metric: AnalyticsEventName;
-  page_type: AnalyticsPageType;
+  count: number;
+};
+
+type ContentActionRow = {
   entity_kind: string;
   entity_slug: string;
   count: number;
-  updated_at: number;
 };
 
 type InquiryDailyRow = {
@@ -116,17 +123,42 @@ export async function loadAnalyticsReport(
       .first<{ ready: number }>()
   ]);
 
+  const emptyRollups = {
+    daily: { results: [] as DailyClickRow[] },
+    metrics: { results: [] as MetricClickRow[] },
+    content: { results: [] as ContentActionRow[] }
+  };
   const [rollups, catalog] = await Promise.all([
     schema
-      ? db
-          .prepare(
-            `SELECT day,metric,page_type,entity_kind,entity_slug,count,updated_at
-             FROM analytics_daily_rollups WHERE day>=? AND day<=?
-             ORDER BY day,metric,page_type LIMIT 1000`
-          )
-          .bind(from, to)
-          .all<RollupRow>()
-      : Promise.resolve({ results: [] as RollupRow[] }),
+      ? Promise.all([
+          db
+            .prepare(
+              `SELECT day,SUM(count) AS count,MAX(updated_at) AS latest_at
+               FROM analytics_daily_rollups WHERE day>=? AND day<=?
+               GROUP BY day ORDER BY day`
+            )
+            .bind(from, to)
+            .all<DailyClickRow>(),
+          db
+            .prepare(
+              `SELECT metric,SUM(count) AS count
+               FROM analytics_daily_rollups WHERE day>=? AND day<=?
+               GROUP BY metric ORDER BY metric`
+            )
+            .bind(from, to)
+            .all<MetricClickRow>(),
+          db
+            .prepare(
+              `SELECT entity_kind,entity_slug,SUM(count) AS count
+               FROM analytics_daily_rollups
+               WHERE day>=? AND day<=? AND entity_kind<>''
+               GROUP BY entity_kind,entity_slug
+               ORDER BY count DESC,entity_kind,entity_slug LIMIT 10`
+            )
+            .bind(from, to)
+            .all<ContentActionRow>()
+        ]).then(([daily, metrics, content]) => ({ daily, metrics, content }))
+      : Promise.resolve(emptyRollups),
     db
       .prepare(
         `SELECT kind,slug,name,content_json FROM catalog_entities
@@ -149,27 +181,13 @@ export async function loadAnalyticsReport(
     contact_cta_click: 0
   };
   const clicksByDay = new Map<string, number>();
-  const contentActions = new Map<
-    string,
-    { entityKind: string; entitySlug: string; count: number }
-  >();
+  for (const row of rollups.daily.results) clicksByDay.set(row.day, row.count);
   const latestActivity = [
     ...inquiryResult.results.map((row) => row.latest_at),
-    ...rollups.results.map((row) => row.updated_at)
+    ...rollups.daily.results.map((row) => row.latest_at)
   ];
-  for (const row of rollups.results) {
-    clicksByMetric[row.metric] += row.count;
-    clicksByDay.set(row.day, (clicksByDay.get(row.day) || 0) + row.count);
-    if (row.entity_kind && row.entity_slug) {
-      const key = `${row.entity_kind}:${row.entity_slug}`;
-      const item = contentActions.get(key) || {
-        entityKind: row.entity_kind,
-        entitySlug: row.entity_slug,
-        count: 0
-      };
-      item.count += row.count;
-      contentActions.set(key, item);
-    }
+  for (const row of rollups.metrics.results) {
+    clicksByMetric[row.metric] = row.count;
   }
 
   const activeEntities = catalog.results.map((row) => ({
@@ -202,7 +220,11 @@ export async function loadAnalyticsReport(
     clicksByMetric,
     clickTotal: Object.values(clicksByMetric).reduce((sum, count) => sum + count, 0),
     daily,
-    topContentActions: [...contentActions.values()].sort((a, b) => b.count - a.count).slice(0, 10),
+    topContentActions: rollups.content.results.map((row) => ({
+      entityKind: row.entity_kind,
+      entitySlug: row.entity_slug,
+      count: row.count
+    })),
     rollupsAvailable: Boolean(schema),
     collectionEnabled: isAnalyticsCollectionEnabled(env, url),
     webAnalyticsConfigured: Boolean(configuredWebAnalyticsSiteTag(env)),

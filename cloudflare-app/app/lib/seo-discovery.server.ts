@@ -1,4 +1,5 @@
 import { isProduction } from "./environment.server";
+import { cleanSeoText } from "./seo";
 
 /** Canonical origin used only when production indexing has been explicitly enabled. */
 const SITE = "https://gocampinternational.net";
@@ -30,14 +31,6 @@ function escapeXml(value: string) {
     .replace(/'/g, "&apos;");
 }
 
-function clean(value: unknown) {
-  return String(value ?? "")
-    .replace(/<[^>]*>/g, " ")
-    .replace(/[\u0000-\u001f\u007f]/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-}
-
 function parseContent(value: string): EntityContent | null {
   try {
     const parsed: unknown = JSON.parse(value || "{}");
@@ -53,7 +46,7 @@ function isPublicEntity(entity: Entity) {
   return (
     content !== null &&
     /^[a-z0-9][a-z0-9_-]{0,159}$/i.test(entity.slug) &&
-    clean(entity.name).length > 0 &&
+    cleanSeoText(entity.name).length > 0 &&
     content.seo?.noindex !== true
   );
 }
@@ -109,6 +102,8 @@ export function isSeoIndexingAllowed(
   return (
     isProduction(env) &&
     env.SEO_INDEXING_ENABLED === "true" &&
+    url.protocol === "https:" &&
+    !url.port &&
     url.hostname.toLowerCase() === CANONICAL_HOST
   );
 }

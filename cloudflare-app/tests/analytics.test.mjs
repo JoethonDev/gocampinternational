@@ -104,6 +104,13 @@ test("analytics page context keeps only known routes and bounded catalog slugs",
     entityKind: "category",
     entitySlug: "language-camps"
   });
+  assert.equal(
+    analyticsPageContext("/destinations/camp_egypt_2030", "").entitySlug,
+    "camp_egypt_2030"
+  );
+  const longSlug = `camp-${"a".repeat(155)}`;
+  assert.equal(analyticsPageContext(`/destinations/${longSlug}`, "").entitySlug, longSlug);
+  assert.equal(analyticsPageContext(`/destinations/${longSlug}a`, ""), null);
   assert.equal(analyticsPageContext("/program/category", "?category=hello%40mail.test"), null);
   assert.equal(analyticsPageContext("/admin/inquiries", ""), null);
   assert.equal(analyticsPageContext("https://attacker.example/", ""), null);
@@ -216,6 +223,29 @@ test("event ingestion drops obvious crawlers before writing aggregates", async (
   );
 });
 
+test("event ingestion accepts the full catalog slug contract", async () => {
+  const db = new SqliteD1();
+  const slug = `c_${"a".repeat(158)}`;
+  entity(db, "destination", slug);
+  const result = await ingestAnalyticsEvents(
+    request([
+      event({
+        pagePath: `/destinations/${slug}`,
+        pageType: "destination",
+        entityKind: "destination",
+        entitySlug: slug
+      })
+    ]),
+    { DB: db, ...enabledEnv }
+  );
+
+  assert.equal(result.status, 204);
+  assert.equal(
+    db.sql.prepare("SELECT entity_slug FROM analytics_daily_rollups").get().entity_slug,
+    slug
+  );
+});
+
 test("event ingestion bounds request size and per-address event rate", async () => {
   const db = new SqliteD1();
   entity(db, "category", "language-camps");
@@ -268,4 +298,33 @@ test("admin analytics reports aggregate counts without returning inquiry details
   assert.equal(report.webAnalyticsConfigured, false);
   assert.equal(JSON.stringify(report).includes("private@example.test"), false);
   assert.equal(JSON.stringify(report).includes("Private parent"), false);
+});
+
+test("analytics report aggregates beyond one thousand raw rollup dimensions", async () => {
+  const db = new SqliteD1();
+  const now = new Date();
+  const insert = db.sql.prepare(
+    `INSERT INTO analytics_daily_rollups(day,metric,page_type,entity_kind,entity_slug,count,updated_at)
+     VALUES(?,'whatsapp_click','destination','destination',?,1,?)`
+  );
+  for (let dayOffset = 0; dayOffset < 90; dayOffset++) {
+    const day = new Date(now);
+    day.setUTCDate(day.getUTCDate() - dayOffset);
+    const dayKey = day.toISOString().slice(0, 10);
+    for (let entityIndex = 0; entityIndex < 12; entityIndex++) {
+      insert.run(dayKey, `destination-${entityIndex}`, Math.floor(day.getTime() / 1000));
+    }
+  }
+
+  const report = await loadAnalyticsReport(
+    db,
+    "https://gocampinternational.net/admin/analytics?range=90d",
+    { GOCAMP_ENV: "production" },
+    now
+  );
+  assert.equal(report.clickTotal, 1080);
+  assert.equal(report.daily.length, 90);
+  assert.equal(report.daily.at(-1).clicks, 12);
+  assert.equal(report.topContentActions.length, 10);
+  assert.equal(report.topContentActions[0].count, 90);
 });

@@ -47,6 +47,8 @@ test("SEO defaults, overrides, text cleanup, and safe canonical/image URLs", () 
 test("robots metadata only permits indexing on the explicitly enabled canonical host", () => {
   const env = { GOCAMP_ENV: "production", SEO_INDEXING_ENABLED: "true" };
   assert.equal(isSeoIndexingAllowed(new URL("https://gocampinternational.net/"), env), true);
+  assert.equal(isSeoIndexingAllowed(new URL("http://gocampinternational.net/"), env), false);
+  assert.equal(isSeoIndexingAllowed(new URL("https://gocampinternational.net:444/"), env), false);
   assert.equal(isSeoIndexingAllowed(new URL("https://new.gocampinternational.net/"), env), false);
   assert.equal(isSeoIndexingAllowed(new URL("https://app.workers.dev/"), env), false);
   assert.equal(

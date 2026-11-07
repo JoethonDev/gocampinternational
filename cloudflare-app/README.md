@@ -1,6 +1,6 @@
 # GoCamp International
 
-React Router 7 and React 19 on Cloudflare Workers. D1 stores catalog, CMS, sessions
+React Router 8 and React 19 on Cloudflare Workers. D1 stores catalog, CMS, sessions
 and inquiries; R2 stores media. No PHP runtime, parent-directory assets, or external
 database gateway is required.
 

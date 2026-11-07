@@ -18,8 +18,8 @@ import { SiteHeader } from "./components/site/SiteHeader";
 import { SiteFooter } from "./components/site/SiteFooter";
 import {
   readPublicContent,
-  DEFAULT_PUBLIC_CONTENT,
   publicSite,
+  publicContentGroupsForPath,
   type PublicContent
 } from "./lib/public-content";
 import { safeJsonLd } from "./lib/seo";
@@ -47,7 +47,7 @@ export async function loader({ request, context }: Route.LoaderArgs) {
       seoIndexingAllowed: false,
       analyticsEnabled: false,
       webAnalyticsSiteTag: undefined,
-      publicContent: DEFAULT_PUBLIC_CONTENT
+      publicContent: {}
     };
   }
   const db = getCloudflare(context).env.DB;
@@ -62,7 +62,10 @@ export async function loader({ request, context }: Route.LoaderArgs) {
     destinations,
     categories,
     settings: pageSettings,
-    publicContent: readPublicContent(savedSettings.public_content),
+    publicContent: readPublicContent(
+      savedSettings.public_content,
+      publicContentGroupsForPath(requestUrl.pathname)
+    ),
     environment,
     origin,
     seoIndexingAllowed,

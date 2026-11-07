@@ -1,41 +1,26 @@
-# Dependency maintenance — 2026-11-06
+# Dependency maintenance — 2026-11-07
 
-Versions were checked against the npm registry and framework peer requirements.
-React Router remains on its maintained v7 line (7.18.5), including fixes for the
-published manifest-endpoint denial-of-service advisories. Moving to v8 changes
-loader/action context and SSR APIs; it requires a separate migration and validation.
-TypeScript 6.0.3 is the newest compiler line supported by this React Router release.
+The application uses React Router 8.5.1 with React 19 on Cloudflare Workers. The
+framework and installed packages use the v8 APIs; the package manifest and README
+are the version source of truth.
 
-| Package | Version |
-| --- | --- |
-| React / React DOM | 19.3.1 |
-| React Router / framework CLI | 7.18.5 |
-| Vite | 8.3.6 |
-| Cloudflare Vite plugin | 1.67.0 |
-| Wrangler | 4.158.0 |
-| TypeScript | 6.0.3 |
-| Prettier | 3.9.10 |
-| isbot | 5.2.2 |
+| Package                      | Version |
+| ---------------------------- | ------- |
+| React / React DOM            | 19.3.1  |
+| React Router / framework CLI | 8.5.1   |
+| Vite                         | 8.3.6   |
+| Cloudflare Vite plugin       | 1.67.0  |
+| Wrangler                     | 4.158.0 |
+| TypeScript                   | 7.0.2   |
+| Node declarations            | 22.20.5 |
+| Prettier                     | 3.9.10  |
+| isbot                        | 5.2.2   |
 
-The local toolchain and CI use Node 22; 22.23.4 is the current patched release of
-that LTS line. Node declarations track Node 22 rather than a newer runtime's API.
 Direct dependencies are pinned and the lockfile records transitive versions.
+TypeScript 7.0.2 is within the `@react-router/dev` 8.5.1 peer range. Node
+declarations stay on the Node 22 line used by the local toolchain and CI.
+As of 2026-11-07, `npm audit` reports zero known vulnerabilities in the lockfile.
 
-Unused Tailwind and path-alias plugins were removed. The app has no Tailwind
-stylesheet or alias imports; public styling uses Bootstrap and ordinary CSS.
-The obsolete Vite Environment API flag was replaced with its supported v7 name,
-and unused TypeScript base URL/path configuration was removed.
-
-The regenerated lockfile reports zero known npm audit vulnerabilities, including
-development dependencies. This describes the advisory database at review time;
-it does not guarantee the absence of undisclosed defects. The application findings are tracked in [review fixes](REVIEW_FIXES.md).
-
-References: [React Router upgrade guide](https://reactrouter.com/upgrading/v7),
-[manifest endpoint advisory](https://github.com/remix-run/react-router/security/advisories/GHSA-chx6-hx7r-mcp5),
-[Vite migration guide](https://vite.dev/guide/migration).
-
-Validation passed in an isolated Node 22.23.4 Linux container: type generation,
-formatting, all 35 tests, full typechecking, production client/server builds,
-static-asset checks and Wrangler deployment dry run. No remote resources were
-accessed during validation. An upstream React Router v7/Vite `envFile`
-deprecation warning remains; it does not fail the checks.
+The application uses Bootstrap and ordinary CSS. Unused Tailwind and path-alias
+plugins are not installed. The lockfile is checked with `npm audit`, and CI runs
+the project test, typecheck, build, and Wrangler dry-run checks.

@@ -170,6 +170,8 @@ function InstagramProfile({ photos }: { photos: MemoryItem[] }) {
 
 export function SocialFeeds({ memories }: { memories: MemoriesDocument | null }) {
   const { text, visible, site: SITE } = usePublicContent("social");
+  if (!visible("show-social-feed")) return null;
+
   const seen = new Set<string>();
   const photos = (memories?.items || [])
     .filter((item) => {
@@ -183,11 +185,7 @@ export function SocialFeeds({ memories }: { memories: MemoriesDocument | null })
   const instagramPhotos = photos.length > 3 ? photos.slice(3, 6) : facebookPhotos;
 
   return (
-    <section
-      hidden={!visible("show-social-feed")}
-      className="section-padding social-feeds-section"
-      aria-labelledby="social-feeds-title"
-    >
+    <section className="section-padding social-feeds-section" aria-labelledby="social-feeds-title">
       <div className="container">
         <div className="text-center mb-4">
           <h2 id="social-feeds-title" className="section-title">

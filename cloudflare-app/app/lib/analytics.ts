@@ -27,7 +27,7 @@ export type AnalyticsEventV1 = AnalyticsPageContext & {
   elementId: string;
 };
 
-const SAFE_SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const SAFE_SLUG = /^[a-z0-9][a-z0-9_-]{0,159}$/;
 const EVENT_ID = /^[a-f\d]{8}-[a-f\d]{4}-4[a-f\d]{3}-[89ab][a-f\d]{3}-[a-f\d]{12}$/i;
 const EVENT_ELEMENTS: Record<AnalyticsEventName, readonly string[]> = {
   lead_form_open: ["header_book_now", "mobile_book_now"],
@@ -65,7 +65,7 @@ export function configuredWebAnalyticsSiteTag(env: AnalyticsEnvironment): string
 }
 
 function validSlug(value: unknown): value is string {
-  return typeof value === "string" && value.length <= 80 && SAFE_SLUG.test(value);
+  return typeof value === "string" && SAFE_SLUG.test(value);
 }
 
 function decodedPath(path: string): string | null {

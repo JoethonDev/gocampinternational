@@ -3,6 +3,7 @@ import { discoveryResponse, isSeoIndexingAllowed } from "../app/lib/seo-discover
 import { createRequestHandler } from "react-router";
 import { createCloudflareContext } from "../app/lib/cloudflare-context";
 import { logEvent } from "../app/lib/logger.server";
+import { pruneExpiredRateLimits } from "../app/lib/rate-limit.server";
 
 const handle = createRequestHandler(
   () => import("virtual:react-router/server-build"),
@@ -78,6 +79,13 @@ export default {
         env,
         request
       );
+    }
+  },
+
+  async scheduled(_controller: ScheduledController, env: Env): Promise<void> {
+    const result = await pruneExpiredRateLimits(env.DB);
+    if (result.meta.changes > 0) {
+      logEvent("info", "expired rate-limit rows removed", { deletedRows: result.meta.changes });
     }
   }
 } satisfies ExportedHandler<Env>;
