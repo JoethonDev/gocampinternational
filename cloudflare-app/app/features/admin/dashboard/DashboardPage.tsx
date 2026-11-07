@@ -28,7 +28,9 @@ export function DashboardPage({
         description="A working overview of catalog health, inquiries and recent content changes."
         aside={
           <div className="d-flex align-items-center gap-2">
-            <span className="badge bg-warning text-dark">{data.environment === "production" ? "Production" : "Staging"}</span>
+            <span className="badge bg-warning text-dark">
+              {data.environment === "production" ? "Production" : "Staging"}
+            </span>
             <Link
               to="/"
               target="_blank"
