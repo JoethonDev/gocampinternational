@@ -1,8 +1,10 @@
+import { usePublicContent } from "../../lib/public-content-react";
 import { TestimonialCard } from "../../components/TestimonialCard";
 import type { TestimonialsDocument } from "../../lib/domain";
 import "./testimonials.css";
 
 export function TestimonialsSection({ data }: { data: TestimonialsDocument | null | undefined }) {
+  const { text } = usePublicContent("testimonials");
   const items = (data?.items || []).filter(
     (item) => item?.is_active !== false && item?.name && item?.quote
   );
@@ -12,9 +14,9 @@ export function TestimonialsSection({ data }: { data: TestimonialsDocument | nul
       <div className="container-fluid testimonials-heading-wrap">
         <div className="testimonials-heading">
           <h2 id="testimonials-title" className="section-title mb-2">
-            {data?.title || "What Families Say"}
+            {data?.title || text("what-families-say")}
           </h2>
-          <span className="testimonials-kicker">Families who travelled with us</span>
+          <span className="testimonials-kicker">{text("families-who-travelled-with-us")}</span>
           {data?.intro && <p className="testimonials-intro">{data.intro}</p>}
         </div>
       </div>

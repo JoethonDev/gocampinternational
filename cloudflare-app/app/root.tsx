@@ -1,3 +1,4 @@
+import { getCloudflare } from "./lib/cloudflare-context";
 import { isProduction } from "./lib/environment.server";
 import {
   isRouteErrorResponse,
@@ -15,7 +16,12 @@ import { listCategories, listDestinations, loadDocument } from "./lib/catalog.se
 import type { CategoryRecord, DestinationRecord, SiteSettings } from "./lib/domain";
 import { SiteHeader } from "./components/site/SiteHeader";
 import { SiteFooter } from "./components/site/SiteFooter";
-import { SITE } from "./config/site";
+import {
+  readPublicContent,
+  DEFAULT_PUBLIC_CONTENT,
+  publicSite,
+  type PublicContent
+} from "./lib/public-content";
 import { safeJsonLd } from "./lib/seo";
 import { LeadModal } from "./components/LeadModal";
 import { SiteInteractions } from "./components/SiteInteractions";
@@ -24,23 +30,33 @@ import "./app.css";
 import "./styles/motion.css";
 
 export async function loader({ request, context }: Route.LoaderArgs) {
-  const environment = context.cloudflare.env.GOCAMP_ENV;
-  const origin = isProduction(context.cloudflare.env)
+  const environment = getCloudflare(context).env.GOCAMP_ENV;
+  const origin = isProduction(getCloudflare(context).env)
     ? "https://gocampinternational.net"
     : new URL(request.url).origin;
   if (new URL(request.url).pathname.startsWith("/admin")) {
-    return { destinations: [], categories: [], settings: {}, environment, origin };
+    return {
+      destinations: [],
+      categories: [],
+      settings: {},
+      environment,
+      origin,
+      publicContent: DEFAULT_PUBLIC_CONTENT
+    };
   }
-  const db = context.cloudflare.env.DB;
+  const db = getCloudflare(context).env.DB;
   const [destinations, categories, settings] = await Promise.all([
     listDestinations(db),
     listCategories(db),
     loadDocument<SiteSettings>(db, "site_settings")
   ]);
+  const savedSettings = settings || {};
+  const { public_content: _publicContent, ...pageSettings } = savedSettings;
   return {
     destinations,
     categories,
-    settings: settings || {},
+    settings: pageSettings,
+    publicContent: readPublicContent(savedSettings.public_content),
     environment,
     origin
   };
@@ -73,7 +89,15 @@ export const links: Route.LinksFunction = () => [
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const data = useRouteLoaderData("root") as
-    { destinations: DestinationRecord[]; categories: CategoryRecord[]; origin: string } | undefined;
+    | {
+        destinations: DestinationRecord[];
+        categories: CategoryRecord[];
+        origin: string;
+        publicContent: PublicContent;
+      }
+    | undefined;
+  const content = data?.publicContent || DEFAULT_PUBLIC_CONTENT;
+  const SITE = publicSite(content);
   const location = useLocation();
   const navigation = useNavigation();
   const isAdmin = location.pathname.startsWith("/admin");
@@ -96,10 +120,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
                     "@id": base + "/#organization",
                     name: SITE.name,
                     url: base + "/",
-                    logo: base + SITE.images.logo,
-                    email: SITE.email,
-                    telephone: SITE.phone,
-                    sameAs: [SITE.social.facebook, SITE.social.instagram, SITE.social.linkedin]
+                    logo: new URL(SITE.images.logo, base).href,
+                    email: SITE.email || undefined,
+                    telephone: SITE.phone || undefined,
+                    sameAs: [
+                      SITE.social.facebook,
+                      SITE.social.instagram,
+                      SITE.social.linkedin
+                    ].filter(Boolean)
                   },
                   {
                     "@type": "WebSite",
@@ -125,7 +153,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <a className="visually-hidden-focusable" href="#main-content">
           Skip to main content
         </a>
-        {!isAdmin && (
+        {!isAdmin && content.header?.["show-navigation"] !== false && (
           <SiteHeader categories={data?.categories || []} destinations={data?.destinations || []} />
         )}
         <main id="main-content" key={location.key} className="gc-route-view">
@@ -133,11 +161,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
         </main>
         {!isAdmin && (
           <>
-            <SiteFooter
-              categories={data?.categories || []}
-              destinations={data?.destinations || []}
-            />
-            <LeadModal />
+            {content.footer?.["show-footer"] !== false && (
+              <SiteFooter
+                categories={data?.categories || []}
+                destinations={data?.destinations || []}
+              />
+            )}
+            {content.booking?.["show-booking"] !== false && <LeadModal />}
             <SiteInteractions />
           </>
         )}

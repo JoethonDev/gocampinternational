@@ -1,5 +1,6 @@
 import type { DocumentItem } from "./shared";
 import { asDocument, asVisibleBoolean } from "./shared";
+import { PublicContentEditor } from "./PublicContentEditor";
 
 const SECTIONS: Record<string, string[]> = {
   home: [
@@ -80,10 +81,14 @@ const DEFAULTS: Record<string, Record<string, boolean>> = {
 
 export function SiteSettingsEditor({
   value,
-  onChange
+  onChange,
+  csrf,
+  uploadedMedia
 }: {
   value: unknown;
   onChange: (next: unknown) => void;
+  csrf: string;
+  uploadedMedia: string[];
 }) {
   const document = asDocument(value);
   const globals = asDocument(document.global_visibility);
@@ -109,6 +114,12 @@ export function SiteSettingsEditor({
 
   return (
     <>
+      <PublicContentEditor
+        value={value}
+        onChange={onChange}
+        csrf={csrf}
+        uploadedMedia={uploadedMedia}
+      />
       <p className="small text-secondary">
         Global toggles affect every matching page unless that record has an explicit override.
         Hidden gallery sections remain disabled by the migration's site policy.

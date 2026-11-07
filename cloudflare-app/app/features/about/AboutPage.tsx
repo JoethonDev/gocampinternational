@@ -1,5 +1,6 @@
+import { usePublicContent } from "../../lib/public-content-react";
 import { responsiveSrcSet } from "../../lib/responsive-media";
-import { SITE, type AboutPageContent, type AboutSection } from "../../config/site";
+import { type AboutPageContent, type AboutSection } from "../../config/site";
 import { PageBanner } from "../../components/ui/PageBanner";
 import { Breadcrumbs } from "../../components/ui/Breadcrumbs";
 
@@ -12,6 +13,7 @@ function AboutSection({
   isLast: boolean;
   index: number;
 }) {
+  const { text } = usePublicContent("about");
   // Long editorial copy should flow around its photo rather than force
   // the photo to match the full height of the text.
   const isIntro = index === 0;
@@ -44,7 +46,7 @@ function AboutSection({
             <div className="col-lg-5 d-flex justify-content-center">
               <img
                 src={section.image}
-                alt="Go Camp International students on an educational trip"
+                alt={text("alt-go-camp-international-students-on-an-educational-trip")}
                 className="img-fluid d-block"
                 style={{
                   width: "auto",
@@ -108,69 +110,79 @@ function AboutSection({
 }
 
 export function AboutPage({ content }: { content: AboutPageContent }) {
+  const { text, site: SITE, visible } = usePublicContent("about");
+  const sections = content.sections
+    .map((section, index) => ({ section, index }))
+    .filter(({ section }) => section.visible !== false);
   return (
     <>
-      <PageBanner
-        image={SITE.images.aboutBanner}
-        alt="Students sitting on grass"
-        title="About Us"
-        hiddenTitle
-      />
+      {visible("show-banner") && (
+        <PageBanner
+          image={SITE.images.aboutBanner}
+          alt={text("alt-students-sitting-on-grass")}
+          title={text("title-about-us")}
+          hiddenTitle
+        />
+      )}
       <div className="container py-5">
-        <Breadcrumbs items={[{ label: "HOME", to: "/" }, { label: "ABOUT US" }]} />
-        <div className="row g-5">
-          <div className="col-12">
-            {content.sections.map((section, index) => (
-              <AboutSection
-                key={section.title}
-                section={section}
-                isLast={index === content.sections.length - 1}
-                index={index}
-              />
-            ))}
+        <Breadcrumbs items={[{ label: text("home"), to: "/" }, { label: text("about-us") }]} />
+        {visible("show-content") && sections.length > 0 && (
+          <div className="row g-5">
+            <div className="col-12">
+              {sections.map(({ section, index }, visibleIndex) => (
+                <AboutSection
+                  key={`${section.title}-${index}`}
+                  section={section}
+                  isLast={visibleIndex === sections.length - 1}
+                  index={index}
+                />
+              ))}
+            </div>
           </div>
-        </div>
-        <section className="mt-5" aria-labelledby="about-founder-title">
-          <h2 id="about-founder-title" className="h3 mb-4">
-            Meet Our Founder
-          </h2>
-          <section className="card shadow-sm border-0" aria-labelledby="about-director-title">
-            <div className="card-body p-4 p-lg-5">
-              <div className="row g-4 align-items-center">
-                <div className="col-md-auto text-center">
-                  <div
-                    className="rounded-circle shadow-sm mx-auto overflow-hidden"
-                    style={{ width: 180, height: 180 }}
-                  >
-                    <img
-                      src={SITE.images.profile}
-                      alt={content.profile.name}
-                      className="d-block"
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                        objectPosition: "43% 40%"
-                      }}
-                      loading="lazy"
-                    />
+        )}
+        {visible("show-founder") && (
+          <section className="mt-5" aria-labelledby="about-founder-title">
+            <h2 id="about-founder-title" className="h3 mb-4">
+              {text("meet-our-founder")}
+            </h2>
+            <section className="card shadow-sm border-0" aria-labelledby="about-director-title">
+              <div className="card-body p-4 p-lg-5">
+                <div className="row g-4 align-items-center">
+                  <div className="col-md-auto text-center">
+                    <div
+                      className="rounded-circle shadow-sm mx-auto overflow-hidden"
+                      style={{ width: 180, height: 180 }}
+                    >
+                      <img
+                        src={SITE.images.profile}
+                        alt={content.profile.name}
+                        className="d-block"
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                          objectPosition: "43% 40%"
+                        }}
+                        loading="lazy"
+                      />
+                    </div>
+                  </div>
+                  <div className="col-md">
+                    <h3 id="about-director-title" className="h3 mb-2">
+                      {content.profile.name}
+                    </h3>
+                    <p className="fw-semibold text-secondary">{content.profile.title}</p>
+                    {content.profile.body.split(/\n\s*\n/).map((paragraph, index) => (
+                      <p className="fs-5 lh-lg text-secondary" key={index}>
+                        {paragraph}
+                      </p>
+                    ))}
                   </div>
                 </div>
-                <div className="col-md">
-                  <h3 id="about-director-title" className="h3 mb-2">
-                    {content.profile.name}
-                  </h3>
-                  <p className="fw-semibold text-secondary">{content.profile.title}</p>
-                  {content.profile.body.split(/\n\s*\n/).map((paragraph, index) => (
-                    <p className="fs-5 lh-lg text-secondary" key={index}>
-                      {paragraph}
-                    </p>
-                  ))}
-                </div>
               </div>
-            </div>
+            </section>
           </section>
-        </section>
+        )}
       </div>
     </>
   );

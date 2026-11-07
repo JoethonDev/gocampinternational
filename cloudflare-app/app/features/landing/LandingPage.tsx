@@ -1,62 +1,35 @@
+import { usePublicContent } from "../../lib/public-content-react";
 import { useFetcher } from "react-router";
 
 const INTERESTS = [
-  { value: "Sports", icon: "fa-futbol" },
-  { value: "Language", icon: "fa-language" },
-  { value: "Leadership", icon: "fa-users" },
-  { value: "Academic", icon: "fa-graduation-cap" }
-] as const;
-
-const BENEFITS = [
-  {
-    icon: "fa-shield-alt",
-    title: "Safety You Can Trust",
-    description:
-      "24/7 supervision by certified staff, comprehensive insurance, and real-time parent updates."
-  },
-  {
-    icon: "fa-chart-line",
-    title: "Proven Academic Results",
-    description:
-      "95% of students improve language skills by 2+ levels and report better academic performance."
-  },
-  {
-    icon: "fa-globe-americas",
-    title: "Global Network",
-    description:
-      "Build lifelong friendships with teens from 50+ countries and access top universities."
-  }
-] as const;
-
-const STATS = [
-  ["20+", "Years Experience"],
-  ["25+", "Countries"],
-  ["98%", "Satisfaction"]
-] as const;
-
-const USPS = [
-  ["Safe & Supervised:", " 24/7 care with certified staff"],
-  ["Proven Results:", " 95% boost in confidence & language skills"],
-  ["Premium Experience:", " Top facilities across 25+ countries"]
+  { value: "Sports", label: "interest-sports", icon: "fa-futbol" },
+  { value: "Language", label: "interest-language", icon: "fa-language" },
+  { value: "Leadership", label: "interest-leadership", icon: "fa-users" },
+  { value: "Academic", label: "interest-academic", icon: "fa-graduation-cap" }
 ] as const;
 
 function LeadForm() {
+  const { text, visible } = usePublicContent("landing");
   const fetcher = useFetcher<{ success?: boolean; error?: string }>();
   return (
     <div className="lead-form-card">
       <div className="form-header">
         <h2 className="form-title">
-          <i className="fas fa-gift" /> Get Your Free Consultation
+          <i className="fas fa-gift" /> {text("get-your-free-consultation")}
         </h2>
-        <p className="form-subtitle">Discover the perfect program for your teen in 60 seconds</p>
+        <p className="form-subtitle">
+          {text("discover-the-perfect-program-for-your-teen-in-60-seconds")}
+        </p>
       </div>
-      <div className="urgency-banner">
-        <i className="fas fa-clock" /> <span>⚡ Limited Spots for Summer 2025!</span>
-      </div>
+      {visible("show-urgency") && (
+        <div className="urgency-banner">
+          <i className="fas fa-clock" /> <span>{text("limited-spots-for-summer-2025")}</span>
+        </div>
+      )}
       <div role="status" aria-live="polite">
         {fetcher.data?.success && (
           <div className="alert alert-success">
-            Your request was saved. Our team can review it in the inquiries inbox.
+            {text("your-request-was-saved-our-team-can-review-it-in-the-inquiries-inbox")}
           </div>
         )}
         {fetcher.data?.error && <div className="alert alert-danger">{fetcher.data.error}</div>}
@@ -71,7 +44,8 @@ function LeadForm() {
         </div>
         <div className="form-group">
           <label className="form-label" htmlFor="landing-name">
-            Child's Full Name <span className="required">*</span>
+            {text("child-s-full-name")}
+            <span className="required">*</span>
           </label>
           <div className="input-icon">
             <i className="fas fa-user" />
@@ -80,7 +54,7 @@ function LeadForm() {
               type="text"
               name="name"
               className="form-control"
-              placeholder="e.g., Ahmed Mohamed"
+              placeholder={text("placeholder-e-g-ahmed-mohamed")}
               required
               maxLength={100}
             />
@@ -90,13 +64,14 @@ function LeadForm() {
           <div className="col-md-6">
             <div className="form-group">
               <label htmlFor="landing-age" className="form-label">
-                Child's Age <span className="required">*</span>
+                {text("child-s-age")}
+                <span className="required">*</span>
               </label>
               <select id="landing-age" name="age" className="form-select" defaultValue="" required>
-                <option value="">Select age</option>
+                <option value="">{text("select-age")}</option>
                 {Array.from({ length: 12 }, (_, index) => index + 7).map((age) => (
                   <option key={age} value={age}>
-                    {age} years old
+                    {age} {text("years-old")}
                   </option>
                 ))}
               </select>
@@ -105,7 +80,8 @@ function LeadForm() {
           <div className="col-md-6">
             <div className="form-group">
               <label htmlFor="landing-gender" className="form-label">
-                Gender <span className="required">*</span>
+                {text("gender")}
+                <span className="required">*</span>
               </label>
               <select
                 id="landing-gender"
@@ -114,16 +90,17 @@ function LeadForm() {
                 defaultValue=""
                 required
               >
-                <option value="">Select gender</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
+                <option value="">{text("select-gender")}</option>
+                <option value="Male">{text("male")}</option>
+                <option value="Female">{text("female")}</option>
               </select>
             </div>
           </div>
         </div>
         <div className="form-group">
           <p className="form-label">
-            What interests your child? <small>(Select all that apply)</small>
+            {text("what-interests-your-child")}
+            <small>{text("select-all-that-apply")}</small>
           </p>
           <div className="interest-grid">
             {INTERESTS.map((interest) => (
@@ -139,7 +116,7 @@ function LeadForm() {
                   htmlFor={`landing-${interest.value.toLowerCase()}`}
                 >
                   <i className={`fas ${interest.icon}`} />
-                  <span>{interest.value}</span>
+                  <span>{text(interest.label)}</span>
                 </label>
               </div>
             ))}
@@ -147,7 +124,8 @@ function LeadForm() {
         </div>
         <div className="form-group">
           <label htmlFor="landing-email" className="form-label">
-            Parent's Email <span className="required">*</span>
+            {text("parent-s-email")}
+            <span className="required">*</span>
           </label>
           <div className="input-icon">
             <i className="fas fa-envelope" />
@@ -156,7 +134,7 @@ function LeadForm() {
               type="email"
               name="email"
               className="form-control"
-              placeholder="parent@example.com"
+              placeholder={text("placeholder-parent-example-com")}
               required
               maxLength={254}
             />
@@ -164,7 +142,8 @@ function LeadForm() {
         </div>
         <div className="form-group">
           <label htmlFor="landing-phone" className="form-label">
-            Parent's Phone (WhatsApp) <span className="required">*</span>
+            {text("parent-s-phone-whatsapp")}
+            <span className="required">*</span>
           </label>
           <div className="input-icon">
             <i className="fab fa-whatsapp" />
@@ -173,7 +152,7 @@ function LeadForm() {
               type="tel"
               name="phone"
               className="form-control"
-              placeholder="+20 123 456 7890"
+              placeholder={text("placeholder-20-123-456-7890")}
               required
               maxLength={30}
             />
@@ -189,7 +168,7 @@ function LeadForm() {
               required
             />
             <label className="form-check-label" htmlFor="landing-consent">
-              I agree to receive personalized program recommendations.
+              {text("i-agree-to-receive-personalized-program-recommendations")}
             </label>
           </div>
         </div>
@@ -200,18 +179,18 @@ function LeadForm() {
             className="btn btn-warning btn-lg btn-submit-landing"
           >
             <i className="fas fa-rocket" />{" "}
-            {fetcher.state !== "idle" ? "Submitting..." : "Get My Free Consultation"}
+            {fetcher.state !== "idle" ? text("submitting") : text("get-my-free-consultation")}
           </button>
         </div>
       </fetcher.Form>
       <div className="form-trust">
         <div className="trust-item">
           <i className="fas fa-shield-alt" />
-          <span>100% Secure</span>
+          <span>{text("100-secure")}</span>
         </div>
         <div className="trust-item">
           <i className="fas fa-clock" />
-          <span>Reply in 2 Hours</span>
+          <span>{text("reply-in-2-hours")}</span>
         </div>
       </div>
     </div>
@@ -219,52 +198,87 @@ function LeadForm() {
 }
 
 export function LandingPage() {
+  const { text, visible } = usePublicContent("landing");
+  const BENEFITS = [
+    {
+      icon: "fa-shield-alt",
+      title: text("benefits.safety-you-can-trust"),
+      description: text("benefits.safety-description")
+    },
+    {
+      icon: "fa-chart-line",
+      title: text("benefits.proven-academic-results"),
+      description: text("benefits.results-description")
+    },
+    {
+      icon: "fa-globe-americas",
+      title: text("benefits.global-network"),
+      description: text("benefits.network-description")
+    }
+  ];
+  const STATS = [
+    [text("stats.20"), text("stats.years-experience")],
+    [text("stats.25"), text("stats.countries")],
+    [text("stats.98"), text("stats.satisfaction")]
+  ];
+  const USPS = [
+    [text("usps.safe-supervised"), text("usps.24-7-care-with-certified-staff")],
+    [text("usps.proven-results"), text("usps.95-boost-in-confidence-language-skills")],
+    [text("usps.premium-experience"), text("usps.top-facilities-across-25-countries")]
+  ];
   return (
     <div className="page-content landing-page">
-      <section className="hero-landing">
-        <div className="container">
-          <div className="row align-items-center">
-            <div className="col-lg-6 mb-5 mb-lg-0">
-              <h1 className="hero-headline">
-                Transform Your Teen's Future with{" "}
-                <span className="highlight">Global Adventures</span>
-              </h1>
-              <p className="hero-subheadline">
-                Elite international programs combining language mastery, leadership skills, and
-                lifelong friendships. Give your child the competitive edge.
-              </p>
-              <ul className="hero-usp-list">
-                {USPS.map(([title, description]) => (
-                  <li key={title}>
-                    <i className="fas fa-check-circle" />
-                    <strong>{title}</strong>
-                    {description}
-                  </li>
-                ))}
-              </ul>
-              <div className="hero-stats">
-                <div className="row">
-                  {STATS.map(([number, label]) => (
-                    <div className="col-4 stat-item" key={label}>
-                      <span className="stat-number">{number}</span>
-                      <span className="stat-label">{label}</span>
-                    </div>
+      {visible("show-hero") && (
+        <section className="hero-landing">
+          <div className="container">
+            <div className="row align-items-center">
+              <div
+                className={visible("show-form") ? "col-lg-6 mb-5 mb-lg-0" : "col-12 mb-5 mb-lg-0"}
+              >
+                <h1 className="hero-headline">
+                  {text("transform-your-teen-s-future-with")}{" "}
+                  <span className="highlight">{text("global-adventures")}</span>
+                </h1>
+                <p className="hero-subheadline">
+                  {text("elite-international-programs-combining-language-mastery-leadership-ski")}
+                </p>
+                <ul className="hero-usp-list">
+                  {USPS.map(([title, description]) => (
+                    <li key={title}>
+                      <i className="fas fa-check-circle" />
+                      <strong>{title}</strong>
+                      {description}
+                    </li>
                   ))}
-                </div>
+                </ul>
+                {visible("show-stats") && (
+                  <div className="hero-stats">
+                    <div className="row">
+                      {STATS.map(([number, label]) => (
+                        <div className="col-4 stat-item" key={label}>
+                          <span className="stat-number">{number}</span>
+                          <span className="stat-label">{label}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
-            </div>
-            <div className="col-lg-6 form-container">
-              <LeadForm />
+              {visible("show-form") && (
+                <div className="col-lg-6 form-container">
+                  <LeadForm />
+                </div>
+              )}
             </div>
           </div>
-        </div>
-      </section>
-      <section className="why-section">
+        </section>
+      )}
+      <section hidden={!visible("show-benefits")} className="why-section">
         <div className="container">
           <div className="section-header">
-            <h2 className="section-title">Why 10,000+ Parents Trust Us</h2>
+            <h2 className="section-title">{text("why-10-000-parents-trust-us")}</h2>
             <p className="section-subtitle">
-              More than just a summer camp - it's a life-changing experience
+              {text("more-than-just-a-summer-camp-it-s-a-life-changing-experience")}
             </p>
           </div>
           <div className="row g-4">
@@ -282,15 +296,14 @@ export function LandingPage() {
           </div>
         </div>
       </section>
-      <section className="guarantee-section">
+      <section hidden={!visible("show-guarantee")} className="guarantee-section">
         <div className="container">
           <div className="guarantee-badge">
             <i className="fas fa-award" />
           </div>
-          <h2 className="guarantee-title">Our 100% Satisfaction Guarantee</h2>
+          <h2 className="guarantee-title">{text("our-100-satisfaction-guarantee")}</h2>
           <p className="guarantee-text">
-            Your satisfaction and your child's safety are our top priorities. We stand by our
-            programs with a comprehensive guarantee.
+            {text("your-satisfaction-and-your-child-s-safety-are-our-top-priorities-we-st")}
           </p>
         </div>
       </section>

@@ -1,3 +1,4 @@
+import { getCloudflare } from "../lib/cloudflare-context";
 import { requireAdmin, requireSameOrigin } from "../lib/admin.server";
 import { readLimitedForm } from "../lib/request.server";
 import type { Route } from "./+types/admin-media-upload";
@@ -12,13 +13,13 @@ export function loader() {
 export async function action({ request, context }: Route.ActionArgs) {
   try {
     requireSameOrigin(request);
-    await requireAdmin(request, context.cloudflare.env.DB);
+    await requireAdmin(request, getCloudflare(context).env.DB);
     const form = await readLimitedForm(request, MAX_UPLOAD_BODY_BYTES);
     const result = await uploadMediaFiles(
       request,
-      context.cloudflare.env,
+      getCloudflare(context).env,
       form,
-      context.cloudflare.ctx
+      getCloudflare(context).ctx
     );
     return Response.json(
       {

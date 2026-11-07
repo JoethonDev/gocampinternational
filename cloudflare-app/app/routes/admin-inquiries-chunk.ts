@@ -1,3 +1,4 @@
+import { getCloudflare } from "../lib/cloudflare-context";
 import type { Route } from "./+types/admin-inquiries-chunk";
 import { requireAdmin } from "../lib/admin.server";
 import type { InquiryRecord } from "../lib/domain";
@@ -6,7 +7,7 @@ import { readPage } from "../lib/pagination.server";
 const PAGE_SIZE = 20;
 
 export async function loader({ request, context }: Route.LoaderArgs) {
-  const db = context.cloudflare.env.DB;
+  const db = getCloudflare(context).env.DB;
   await requireAdmin(request, db);
   const requestedPage = readPage(new URL(request.url));
   const total =

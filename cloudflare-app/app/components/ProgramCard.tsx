@@ -1,5 +1,5 @@
+import { usePublicContent } from "../lib/public-content-react";
 import { responsiveSrcSet } from "../lib/responsive-media";
-import { SITE } from "../config/site";
 import { asNumber, asStringArray, type ProgramRecord, type SiteSettings } from "../lib/domain";
 import { isVisible } from "../lib/visibility";
 
@@ -10,6 +10,7 @@ export function ProgramCard({
   program: ProgramRecord;
   settings: SiteSettings;
 }) {
+  const { text, site: SITE } = usePublicContent("program");
   const highlights = asStringArray(program.highlights);
   const minAge = asNumber(program.ages?.min);
   const maxAge = asNumber(program.ages?.max);
@@ -35,7 +36,8 @@ export function ProgramCard({
           <h3 className="card-title fw-bold mb-2 text-brand-dark fs-4">{program.name}</h3>
           {hasValidAgeRange && (
             <p className="small fw-semibold text-brand-primary mb-2">
-              Ages {minAge === maxAge ? minAge : `${minAge}–${maxAge}`}
+              {text("ages")}
+              {minAge === maxAge ? minAge : `${minAge}–${maxAge}`}
             </p>
           )}
           {program.tagline && isVisible("program", "card_tagline", program, settings) && (

@@ -1,3 +1,4 @@
+import { getCloudflare } from "../lib/cloudflare-context";
 import type { Route } from "./+types/admin-media-optimize-run";
 import { verifyAdminPost } from "../lib/admin.server";
 import { optimizeStoredMedia } from "../lib/media-optimization.server";
@@ -11,7 +12,7 @@ export function loader() {
 }
 
 export async function action({ request, context }: Route.ActionArgs) {
-  const env = context.cloudflare.env;
+  const env = getCloudflare(context).env;
   requireStaging(env);
   if (request.method !== "POST") throw new Response("Method Not Allowed", { status: 405 });
   const form = await request.formData();

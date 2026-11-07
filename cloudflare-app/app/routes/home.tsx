@@ -1,3 +1,4 @@
+import { getCloudflare } from "../lib/cloudflare-context";
 import { useRouteLoaderData } from "react-router";
 import type { Route } from "./+types/home";
 import { HomePage } from "../features/home/HomePage";
@@ -10,19 +11,19 @@ import type {
   TestimonialsDocument
 } from "../lib/domain";
 import { originFrom, seoMeta } from "../lib/seo";
+import { publicSeo } from "../lib/public-content";
 
 export function meta({ matches }: Route.MetaArgs) {
+  const seo = publicSeo(matches, "home");
   return seoMeta({
     origin: originFrom(matches),
     path: "/",
-    title: "Go Camp International | Unforgettable Summer Experiences",
-    description:
-      "Explore international educational experiences with GO Camp International, including language learning, sports academies, cultural travel, leadership and academic programs."
+    ...seo
   });
 }
 
 export async function loader({ context }: Route.LoaderArgs) {
-  const db = context.cloudflare.env.DB;
+  const db = getCloudflare(context).env.DB;
   const [memories, testimonials, rows] = await Promise.all([
     loadDocument<MemoriesDocument>(db, "camp_memories"),
     loadDocument<TestimonialsDocument>(db, "testimonials"),

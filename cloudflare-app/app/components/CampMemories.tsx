@@ -1,3 +1,4 @@
+import { usePublicContent } from "../lib/public-content-react";
 import { responsiveSrcSet } from "../lib/responsive-media";
 import { useEffect, useRef, useState } from "react";
 import type { MemoriesDocument, MemoryItem } from "../lib/domain";
@@ -34,6 +35,7 @@ function MemoryCard({ item }: { item: MemoryItem }) {
 }
 
 export function CampMemories({ data }: { data: MemoriesDocument | null | undefined }) {
+  const { text } = usePublicContent("memories");
   const track = useRef<HTMLDivElement>(null);
   const [controls, setControls] = useState({ visible: false, prev: false, next: false });
   const items = (data?.items || []).filter(
@@ -90,7 +92,7 @@ export function CampMemories({ data }: { data: MemoriesDocument | null | undefin
     <section className="section-padding camp-memories" aria-labelledby="camp-memories-title">
       <div className="container">
         <h2 id="camp-memories-title" className="section-title text-center text-lg-start mb-5">
-          {data?.title || "Go Campers Memories"}
+          {data?.title || text("go-campers-memories")}
         </h2>
         <div className="row gx-lg-5 align-items-start">
           <div className="col-12 mb-0">
