@@ -49,5 +49,6 @@
       "/sitemap.xml",
       "/llms.txt"
     ]
-  }
+  },
+  "preview_urls": false
 }

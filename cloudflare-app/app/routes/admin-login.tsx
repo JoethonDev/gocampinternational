@@ -51,7 +51,7 @@ export default function AdminLogin() {
           </p>
           <ul>
             <li>
-              <i className="bi bi-shield-check" /> Staging-only access
+              <i className="bi bi-shield-check" /> Production-only access
             </li>
             <li>
               <i className="bi bi-layers" /> Visual catalog editing
