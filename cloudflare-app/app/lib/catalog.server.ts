@@ -59,13 +59,13 @@ export const findDestination = (db: D1Database, slug: string) =>
   findCatalog<DestinationRecord>(db, "destination", slug);
 
 export type PublicDestination =
-  | (Omit<DestinationRecord, "status"> & { status: "active" })
+  | (DestinationRecord & { status: "active" })
   | (Pick<DestinationRecord, "slug" | "name"> & { status: "coming-soon" });
 
 /** Return only fields intended for public destination routes. */
 export function publicDestination(destination: DestinationRecord | null): PublicDestination | null {
   if (!destination) return null;
-  if (destination.status === "active") return { ...destination, status: "active" };
+  if (destination.status === "active") return { ...destination, status: "active" as const };
   if (destination.status === "coming-soon") {
     return { slug: destination.slug, name: destination.name, status: "coming-soon" };
   }

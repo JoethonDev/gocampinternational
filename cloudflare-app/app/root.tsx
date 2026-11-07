@@ -18,6 +18,7 @@ import { SiteHeader } from "./components/site/SiteHeader";
 import { SiteFooter } from "./components/site/SiteFooter";
 import {
   readPublicContent,
+  DEFAULT_PUBLIC_CONTENT,
   publicSite,
   publicContentGroupsForPath,
   type PublicContent

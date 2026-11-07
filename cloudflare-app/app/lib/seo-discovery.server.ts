@@ -187,10 +187,10 @@ export async function discoveryResponse(url: URL, env: Env): Promise<Response | 
   ];
   for (const item of entities) {
     const data = parseContent(item.content_json) || {};
-    const summary = clean(data.tagline || data.intro_text || data.intro);
+    const summary = cleanSeoText(data.tagline || data.intro_text || data.intro);
     lines.push(
       "- [" +
-        clean(item.name) +
+        cleanSeoText(item.name) +
         "](" +
         entityUrl(item) +
         ")" +
