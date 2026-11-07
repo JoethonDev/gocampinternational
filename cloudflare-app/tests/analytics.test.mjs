@@ -8,8 +8,7 @@ const {
   isAnalyticsCollectionEnabled,
   validateAnalyticsEvent,
   webAnalyticsSiteTag
-} =
-  await loadTypeScript("../app/lib/analytics.ts");
+} = await loadTypeScript("../app/lib/analytics.ts");
 const { ingestAnalyticsEvents } = await loadTypeScript("../app/lib/analytics.server.ts");
 const { loadAnalyticsReport } = await loadTypeScript(
   "../app/features/admin/analytics/analytics.server.ts"
@@ -115,10 +114,7 @@ test("event schema rejects PII, forged conversions, invalid routes and stale tim
   assert.equal(validateAnalyticsEvent(event({ email: "parent@example.test" })), null);
   assert.equal(validateAnalyticsEvent(event({ eventName: "lead_form_success" })), null);
   assert.equal(validateAnalyticsEvent(event({ pagePath: "/admin/inquiries" })), null);
-  assert.equal(
-    validateAnalyticsEvent(event({ occurredAt: "2020-01-01T00:00:00.000Z" })),
-    null
-  );
+  assert.equal(validateAnalyticsEvent(event({ occurredAt: "2020-01-01T00:00:00.000Z" })), null);
   assert.equal(
     validateAnalyticsEvent(event({ eventName: "whatsapp_click", elementId: "contact_whatsapp" })),
     null
@@ -134,7 +130,10 @@ test("event ingestion is disabled by default and stores only bounded daily aggre
     ANALYTICS_PRIVACY_NOTICE_PUBLISHED: "true"
   });
   assert.equal(disabled.status, 204);
-  assert.equal(db.sql.prepare("SELECT COUNT(*) AS count FROM analytics_daily_rollups").get().count, 0);
+  assert.equal(
+    db.sql.prepare("SELECT COUNT(*) AS count FROM analytics_daily_rollups").get().count,
+    0
+  );
 
   entity(db, "category", "language-camps");
   const oldDay = new Date(Date.now() - 401 * 86400000).toISOString().slice(0, 10);
@@ -148,7 +147,10 @@ test("event ingestion is disabled by default and stores only bounded daily aggre
       .count,
     0
   );
-  const accepted = await ingestAnalyticsEvents(request([event(), event()]), { DB: db, ...enabledEnv });
+  const accepted = await ingestAnalyticsEvents(request([event(), event()]), {
+    DB: db,
+    ...enabledEnv
+  });
   assert.equal(accepted.status, 204);
   assert.equal(
     db.sql.prepare("SELECT COUNT(*) AS count FROM analytics_daily_rollups WHERE day=?").get(oldDay)
@@ -156,7 +158,9 @@ test("event ingestion is disabled by default and stores only bounded daily aggre
     0
   );
   const row = db.sql
-    .prepare("SELECT day,metric,page_type,entity_kind,entity_slug,count FROM analytics_daily_rollups")
+    .prepare(
+      "SELECT day,metric,page_type,entity_kind,entity_slug,count FROM analytics_daily_rollups"
+    )
     .get();
   assert.equal(row.day, new Date().toISOString().slice(0, 10));
   assert.equal(row.metric, "lead_form_open");
@@ -168,33 +172,48 @@ test("event ingestion is disabled by default and stores only bounded daily aggre
     .prepare("PRAGMA table_info(analytics_daily_rollups)")
     .all()
     .map((column) => column.name);
-  assert.equal(columns.some((column) => /email|phone|name|session|ip/i.test(column)), false);
+  assert.equal(
+    columns.some((column) => /email|phone|name|session|ip/i.test(column)),
+    false
+  );
 });
 
 test("event ingestion rejects cross-origin and unknown payload fields before persistence", async () => {
   const db = new SqliteD1();
   entity(db, "category", "language-camps");
-  const crossOrigin = await ingestAnalyticsEvents(request([event()], { origin: "https://other.test" }), {
-    DB: db,
-    ...enabledEnv
-  });
+  const crossOrigin = await ingestAnalyticsEvents(
+    request([event()], { origin: "https://other.test" }),
+    {
+      DB: db,
+      ...enabledEnv
+    }
+  );
   const privatePayload = await ingestAnalyticsEvents(
     request([{ ...event(), email: "parent@example.test" }]),
     { DB: db, ...enabledEnv }
   );
   assert.equal(crossOrigin.status, 403);
   assert.equal(privatePayload.status, 400);
-  assert.equal(db.sql.prepare("SELECT COUNT(*) AS count FROM analytics_daily_rollups").get().count, 0);
+  assert.equal(
+    db.sql.prepare("SELECT COUNT(*) AS count FROM analytics_daily_rollups").get().count,
+    0
+  );
 });
 
 test("event ingestion drops obvious crawlers before writing aggregates", async () => {
   const db = new SqliteD1();
-  const crawler = await ingestAnalyticsEvents(request([event()], { "user-agent": "ExampleBot/1.0" }), {
-    DB: db,
-    ...enabledEnv
-  });
+  const crawler = await ingestAnalyticsEvents(
+    request([event()], { "user-agent": "ExampleBot/1.0" }),
+    {
+      DB: db,
+      ...enabledEnv
+    }
+  );
   assert.equal(crawler.status, 204);
-  assert.equal(db.sql.prepare("SELECT COUNT(*) AS count FROM analytics_daily_rollups").get().count, 0);
+  assert.equal(
+    db.sql.prepare("SELECT COUNT(*) AS count FROM analytics_daily_rollups").get().count,
+    0
+  );
 });
 
 test("event ingestion bounds request size and per-address event rate", async () => {
@@ -208,11 +227,12 @@ test("event ingestion bounds request size and per-address event rate", async () 
 
   const results = [];
   for (let index = 0; index < 11; index++) {
-    results.push(
-      await ingestAnalyticsEvents(request([event()]), { DB: db, ...enabledEnv })
-    );
+    results.push(await ingestAnalyticsEvents(request([event()]), { DB: db, ...enabledEnv }));
   }
-  assert.equal(results.slice(0, 10).every((result) => result.status === 204), true);
+  assert.equal(
+    results.slice(0, 10).every((result) => result.status === 204),
+    true
+  );
   assert.equal(results[10].status, 429);
 });
 
@@ -226,7 +246,14 @@ test("admin analytics reports aggregate counts without returning inquiry details
     .prepare(
       "INSERT INTO inquiries(id,kind,name,email,phone,status,content_json,created_at) VALUES(?,?,?,?,?,'new','{}',?)"
     )
-    .run(id, "lead", "Private parent", "private@example.test", "+2012345678", Math.floor(Date.now() / 1000));
+    .run(
+      id,
+      "lead",
+      "Private parent",
+      "private@example.test",
+      "+2012345678",
+      Math.floor(Date.now() / 1000)
+    );
 
   const report = await loadAnalyticsReport(
     db,

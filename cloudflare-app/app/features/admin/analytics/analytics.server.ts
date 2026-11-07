@@ -57,7 +57,8 @@ function rangeFor(url: URL, now: Date) {
     if (!from || !to || from > to || to > today) {
       throw new Response("Choose a valid date range", { status: 400 });
     }
-    const days = (Date.parse(`${to}T00:00:00.000Z`) - Date.parse(`${from}T00:00:00.000Z`)) / 86400000;
+    const days =
+      (Date.parse(`${to}T00:00:00.000Z`) - Date.parse(`${from}T00:00:00.000Z`)) / 86400000;
     if (days > 365) throw new Response("Date range cannot exceed 366 days", { status: 400 });
     return { range: "custom", from, to };
   }
@@ -71,12 +72,14 @@ function rangeFor(url: URL, now: Date) {
 function descriptionFrom(row: CatalogRow) {
   try {
     const content = JSON.parse(row.content_json) as Record<string, unknown>;
-    const seo = content.seo && typeof content.seo === "object"
-      ? (content.seo as Record<string, unknown>)
-      : {};
-    const fallback = row.kind === "destination"
-      ? content.tagline || content.intro_text || content.intro
-      : content.intro || content.tagline;
+    const seo =
+      content.seo && typeof content.seo === "object"
+        ? (content.seo as Record<string, unknown>)
+        : {};
+    const fallback =
+      row.kind === "destination"
+        ? content.tagline || content.intro_text || content.intro
+        : content.intro || content.tagline;
     return (
       (typeof seo.description === "string" && cleanSeoText(seo.description)) ||
       (typeof fallback === "string" && cleanSeoText(fallback)) ||
@@ -146,7 +149,10 @@ export async function loadAnalyticsReport(
     contact_cta_click: 0
   };
   const clicksByDay = new Map<string, number>();
-  const contentActions = new Map<string, { entityKind: string; entitySlug: string; count: number }>();
+  const contentActions = new Map<
+    string,
+    { entityKind: string; entitySlug: string; count: number }
+  >();
   const latestActivity = [
     ...inquiryResult.results.map((row) => row.latest_at),
     ...rollups.results.map((row) => row.updated_at)
@@ -179,13 +185,11 @@ export async function loadAnalyticsReport(
     })()
   }));
   const dayKeys = new Set([...inquiriesByDay.keys(), ...clicksByDay.keys()]);
-  const daily = [...dayKeys]
-    .sort()
-    .map((day) => ({
-      day,
-      clicks: clicksByDay.get(day) || 0,
-      inquiries: inquiriesByDay.get(day) || 0
-    }));
+  const daily = [...dayKeys].sort().map((day) => ({
+    day,
+    clicks: clicksByDay.get(day) || 0,
+    inquiries: inquiriesByDay.get(day) || 0
+  }));
 
   return {
     range,
@@ -211,6 +215,8 @@ export async function loadAnalyticsReport(
       ).length,
       noindexOverrides: activeEntities.filter((row) => row.noindex).length
     },
-    entityNames: Object.fromEntries(activeEntities.map((row) => [`${row.kind}:${row.slug}`, row.name]))
+    entityNames: Object.fromEntries(
+      activeEntities.map((row) => [`${row.kind}:${row.slug}`, row.name])
+    )
   };
 }

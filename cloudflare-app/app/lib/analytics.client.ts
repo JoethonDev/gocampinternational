@@ -1,13 +1,6 @@
-import {
-  analyticsPageContext,
-  type AnalyticsEventName,
-  type AnalyticsEventV1
-} from "./analytics";
+import { analyticsPageContext, type AnalyticsEventName, type AnalyticsEventV1 } from "./analytics";
 
-function createEvent(
-  eventName: AnalyticsEventName,
-  elementId: string
-): AnalyticsEventV1 | null {
+function createEvent(eventName: AnalyticsEventName, elementId: string): AnalyticsEventV1 | null {
   const context = analyticsPageContext(window.location.pathname, window.location.search);
   if (!context) return null;
   return {

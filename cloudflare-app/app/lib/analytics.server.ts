@@ -20,17 +20,16 @@ const noStore = {
 
 const response = (status: number) => new Response(null, { status, headers: noStore });
 
-export async function ingestAnalyticsEvents(request: Request, env: AnalyticsEnv): Promise<Response> {
+export async function ingestAnalyticsEvents(
+  request: Request,
+  env: AnalyticsEnv
+): Promise<Response> {
   if (request.method !== "POST") return response(405);
   const url = new URL(request.url);
   if (!isAnalyticsCollectionEnabled(env, url)) return response(204);
 
   const origin = request.headers.get("origin");
-  if (
-    !origin ||
-    origin !== url.origin ||
-    request.headers.get("sec-fetch-site") === "cross-site"
-  ) {
+  if (!origin || origin !== url.origin || request.headers.get("sec-fetch-site") === "cross-site") {
     return response(403);
   }
   if (/(?:bot|crawler|spider|headless|lighthouse)/i.test(request.headers.get("user-agent") || "")) {
@@ -117,21 +116,19 @@ export async function ingestAnalyticsEvents(request: Request, env: AnalyticsEnv)
   try {
     await env.DB.batch(
       [...aggregates.values()].map((aggregate) =>
-        env.DB
-          .prepare(
-            `INSERT INTO analytics_daily_rollups(day,metric,page_type,entity_kind,entity_slug,count,updated_at)
+        env.DB.prepare(
+          `INSERT INTO analytics_daily_rollups(day,metric,page_type,entity_kind,entity_slug,count,updated_at)
              VALUES(?,?,?,?,?,?,unixepoch())
              ON CONFLICT(day,metric,page_type,entity_kind,entity_slug) DO UPDATE SET
                count=count+excluded.count,updated_at=unixepoch()`
-          )
-          .bind(
-            day,
-            aggregate.metric,
-            aggregate.pageType,
-            aggregate.entityKind,
-            aggregate.entitySlug,
-            aggregate.count
-          )
+        ).bind(
+          day,
+          aggregate.metric,
+          aggregate.pageType,
+          aggregate.entityKind,
+          aggregate.entitySlug,
+          aggregate.count
+        )
       )
     );
   } catch {

@@ -9,10 +9,7 @@ export const ANALYTICS_PAGE_TYPES = [
 ] as const;
 
 export type AnalyticsPageType = (typeof ANALYTICS_PAGE_TYPES)[number];
-export type AnalyticsEventName =
-  | "lead_form_open"
-  | "whatsapp_click"
-  | "contact_cta_click";
+export type AnalyticsEventName = "lead_form_open" | "whatsapp_click" | "contact_cta_click";
 export type AnalyticsEntityKind = "destination" | "category";
 
 export type AnalyticsPageContext = {
@@ -46,10 +43,7 @@ type AnalyticsEnvironment = {
 };
 
 /** Collection is deliberately closed by default and limited to the canonical production host. */
-export function isAnalyticsCollectionEnabled(
-  env: AnalyticsEnvironment,
-  url: URL
-): boolean {
+export function isAnalyticsCollectionEnabled(env: AnalyticsEnvironment, url: URL): boolean {
   return (
     env.GOCAMP_ENV === "production" &&
     env.ANALYTICS_ENABLED === "true" &&
@@ -60,17 +54,12 @@ export function isAnalyticsCollectionEnabled(
   );
 }
 
-export function webAnalyticsSiteTag(
-  env: AnalyticsEnvironment,
-  url: URL
-): string | undefined {
+export function webAnalyticsSiteTag(env: AnalyticsEnvironment, url: URL): string | undefined {
   if (!isAnalyticsCollectionEnabled(env, url)) return undefined;
   return configuredWebAnalyticsSiteTag(env);
 }
 
-export function configuredWebAnalyticsSiteTag(
-  env: AnalyticsEnvironment
-): string | undefined {
+export function configuredWebAnalyticsSiteTag(env: AnalyticsEnvironment): string | undefined {
   const tag = env.WEB_ANALYTICS_SITE_TAG;
   return tag && /^[a-zA-Z0-9_-]{16,128}$/.test(tag) ? tag : undefined;
 }
@@ -91,10 +80,7 @@ function decodedPath(path: string): string | null {
 }
 
 /** Converts a browser location into bounded route context without retaining query strings. */
-export function analyticsPageContext(
-  pathname: string,
-  search = ""
-): AnalyticsPageContext | null {
+export function analyticsPageContext(pathname: string, search = ""): AnalyticsPageContext | null {
   const path = decodedPath(pathname);
   if (path === null) return null;
   if (path === "/") return { pagePath: "/", pageType: "home" };
@@ -183,10 +169,7 @@ function validEventPageContext(
 }
 
 /** Strictly accepts the small Tier-C event subset; free text and unknown fields are rejected. */
-export function validateAnalyticsEvent(
-  value: unknown,
-  now = Date.now()
-): AnalyticsEventV1 | null {
+export function validateAnalyticsEvent(value: unknown, now = Date.now()): AnalyticsEventV1 | null {
   if (value === null || typeof value !== "object" || Array.isArray(value)) return null;
   const input = value as Record<string, unknown>;
   const allowedKeys = new Set([
@@ -221,10 +204,7 @@ export function validateAnalyticsEvent(
   ) {
     return null;
   }
-  if (
-    typeof input.elementId !== "string" ||
-    !EVENT_ELEMENTS[eventName].includes(input.elementId)
-  ) {
+  if (typeof input.elementId !== "string" || !EVENT_ELEMENTS[eventName].includes(input.elementId)) {
     return null;
   }
   const context = validEventPageContext(

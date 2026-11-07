@@ -150,7 +150,9 @@ function ContactCard() {
             <a
               href={SITE.phoneHref}
               className="btn btn-outline-light border-0 py-3 px-4 d-flex align-items-center justify-content-start gap-3 rounded-3 contact-action"
-              onClick={() => trackBusinessEvent("contact_cta_click", "contact_phone", SITE.phoneHref)}
+              onClick={() =>
+                trackBusinessEvent("contact_cta_click", "contact_phone", SITE.phoneHref)
+              }
             >
               <div className="bg-white text-primary rounded-circle d-flex align-items-center justify-content-center contact-action-icon">
                 <i className="bi bi-telephone-fill" />
