@@ -24,7 +24,7 @@ export async function loader({ request, context }: Route.LoaderArgs) {
     uploaded: Number(url.searchParams.get("uploaded") || 0),
     uploadError: url.searchParams.get("uploadError"),
     updated: url.searchParams.has("updated"),
-    staging: getCloudflare(context).env.GOCAMP_ENV === "staging"
+    staging: String(getCloudflare(context).env.GOCAMP_ENV) === "staging"
   };
 }
 
@@ -34,7 +34,7 @@ export async function action({ request, context }: Route.ActionArgs) {
   const form = await readLimitedForm(request, MAX_UPLOAD_BODY_BYTES);
   const operation = String(form.get("operation") || "");
   if (operation === "backfill-webp") {
-    if (getCloudflare(context).env.GOCAMP_ENV !== "staging")
+    if (String(getCloudflare(context).env.GOCAMP_ENV) !== "staging")
       throw new Response("Not found", { status: 404 });
     await verifyAdminPost(request, getCloudflare(context).env.DB, form);
     const result = await backfillWebp(getCloudflare(context).env, 4);

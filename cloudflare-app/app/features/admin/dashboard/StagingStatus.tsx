@@ -12,7 +12,10 @@ export function StagingStatus({
   media: DashboardMedia;
 }) {
   return (
-    <AdminPanel title="Staging status" className="admin-staging-panel">
+    <AdminPanel
+      title={environment === "production" ? "Production status" : "Staging status"}
+      className="admin-staging-panel"
+    >
       <dl className="admin-status-list mb-0">
         <div>
           <dt>Environment</dt>
@@ -22,7 +25,7 @@ export function StagingStatus({
         </div>
         <div>
           <dt>Indexing</dt>
-          <dd>Noindex, nofollow</dd>
+          <dd>{environment === "production" ? "Noindex on workers.dev" : "Noindex, nofollow"}</dd>
         </div>
         <div>
           <dt>Source commit</dt>
