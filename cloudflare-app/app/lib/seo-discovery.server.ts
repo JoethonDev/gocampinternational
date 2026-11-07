@@ -102,11 +102,13 @@ function response(body: string, type: string, ttl = 300) {
   });
 }
 
-export function isSeoIndexingAllowed(url: URL, env: Env) {
-  const settings = env as Env & { SEO_INDEXING_ENABLED?: string };
+export function isSeoIndexingAllowed(
+  url: URL,
+  env: { GOCAMP_ENV: string; SEO_INDEXING_ENABLED?: string }
+) {
   return (
     isProduction(env) &&
-    settings.SEO_INDEXING_ENABLED === "true" &&
+    env.SEO_INDEXING_ENABLED === "true" &&
     url.hostname.toLowerCase() === CANONICAL_HOST
   );
 }
