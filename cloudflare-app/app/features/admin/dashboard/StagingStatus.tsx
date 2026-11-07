@@ -25,9 +25,7 @@ export function StagingStatus({
         </div>
         <div>
           <dt>Indexing</dt>
-          <dd>
-            {environment === "production" ? "Noindex on workers.dev" : "Noindex, nofollow"}
-          </dd>
+          <dd>{environment === "production" ? "Noindex on workers.dev" : "Noindex, nofollow"}</dd>
         </div>
         <div>
           <dt>Source commit</dt>
