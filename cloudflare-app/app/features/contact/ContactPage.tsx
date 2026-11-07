@@ -2,6 +2,7 @@ import { usePublicContent } from "../../lib/public-content-react";
 import { useFetcher } from "react-router";
 import { PageBanner } from "../../components/ui/PageBanner";
 import { Breadcrumbs } from "../../components/ui/Breadcrumbs";
+import { trackBusinessEvent } from "../../lib/analytics.client";
 import "./contact.css";
 
 type ContactResult = { success?: boolean; error?: string; message?: string };
@@ -137,6 +138,9 @@ function ContactCard() {
               rel="noopener noreferrer"
               className="btn btn-success py-3 px-4 d-flex align-items-center justify-content-start gap-3 rounded-3 contact-action"
               aria-label="Contact Go Camp International on WhatsApp"
+              onClick={() =>
+                trackBusinessEvent("whatsapp_click", "contact_whatsapp", SITE.whatsappHref)
+              }
             >
               <i className="bi bi-whatsapp fs-4" aria-hidden="true" />
               <span className="fs-5 fw-semibold">{text("chat-with-us-on-whatsapp")}</span>
@@ -146,6 +150,7 @@ function ContactCard() {
             <a
               href={SITE.phoneHref}
               className="btn btn-outline-light border-0 py-3 px-4 d-flex align-items-center justify-content-start gap-3 rounded-3 contact-action"
+              onClick={() => trackBusinessEvent("contact_cta_click", "contact_phone", SITE.phoneHref)}
             >
               <div className="bg-white text-primary rounded-circle d-flex align-items-center justify-content-center contact-action-icon">
                 <i className="bi bi-telephone-fill" />

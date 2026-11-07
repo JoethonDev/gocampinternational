@@ -41,6 +41,7 @@ export const ADMIN_NAV_GROUPS: AdminNavGroup[] = [
     label: "Engagement",
     items: [
       { href: "/admin/inquiries", label: "Inquiries", icon: "bi-inbox-fill" },
+      { href: "/admin/analytics", label: "Analytics", icon: "bi-graph-up" },
       { href: "/admin/trash", label: "Trash", icon: "bi-trash3" }
     ]
   }

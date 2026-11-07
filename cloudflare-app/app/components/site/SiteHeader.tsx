@@ -1,4 +1,5 @@
 import { usePublicContent } from "../../lib/public-content-react";
+import { trackBusinessEvent } from "../../lib/analytics.client";
 import { SiteLink } from "./SiteLink";
 import type { CategoryRecord, DestinationRecord } from "../../lib/domain";
 
@@ -111,6 +112,7 @@ export function SiteHeader({
               className="btn btn-warning ms-xl-3"
               data-bs-toggle="modal"
               data-bs-target="#ctaModal"
+              onClick={() => trackBusinessEvent("lead_form_open", "header_book_now")}
             >
               {text("book-now")}
             </button>

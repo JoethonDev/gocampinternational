@@ -1,5 +1,6 @@
 import { usePublicContent } from "../lib/public-content-react";
 import { useFetcher } from "react-router";
+import { trackBusinessEvent } from "../lib/analytics.client";
 
 const PROGRAM_TYPES = [
   { value: "Language & Activity Camps", label: "program-language-camps" },
@@ -140,7 +141,11 @@ export function LeadModal() {
         </div>
       </div>
       <div id="mobileCtaBar" className="d-lg-none">
-        <a href={SITE.phoneHref} className="btn btn-outline-light flex-fill fw-bold">
+        <a
+          href={SITE.phoneHref}
+          className="btn btn-outline-light flex-fill fw-bold"
+          onClick={() => trackBusinessEvent("contact_cta_click", "mobile_phone", SITE.phoneHref)}
+        >
           {text("call")}
         </a>
         <button
@@ -148,6 +153,7 @@ export function LeadModal() {
           className="btn btn-warning flex-fill fw-bold"
           data-bs-toggle="modal"
           data-bs-target="#ctaModal"
+          onClick={() => trackBusinessEvent("lead_form_open", "mobile_book_now")}
         >
           {text("book-a-free-call")}
         </button>

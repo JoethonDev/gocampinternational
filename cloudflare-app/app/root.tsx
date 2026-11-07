@@ -24,6 +24,7 @@ import {
 } from "./lib/public-content";
 import { safeJsonLd } from "./lib/seo";
 import { isSeoIndexingAllowed } from "./lib/seo-discovery.server";
+import { isAnalyticsCollectionEnabled, webAnalyticsSiteTag } from "./lib/analytics";
 import { LeadModal } from "./components/LeadModal";
 import { SiteInteractions } from "./components/SiteInteractions";
 import { NotFoundPage, ServiceErrorPage } from "./components/ui/ErrorPages";
@@ -44,6 +45,8 @@ export async function loader({ request, context }: Route.LoaderArgs) {
       environment,
       origin,
       seoIndexingAllowed: false,
+      analyticsEnabled: false,
+      webAnalyticsSiteTag: undefined,
       publicContent: DEFAULT_PUBLIC_CONTENT
     };
   }
@@ -62,7 +65,9 @@ export async function loader({ request, context }: Route.LoaderArgs) {
     publicContent: readPublicContent(savedSettings.public_content),
     environment,
     origin,
-    seoIndexingAllowed
+    seoIndexingAllowed,
+    analyticsEnabled: isAnalyticsCollectionEnabled(env, requestUrl),
+    webAnalyticsSiteTag: webAnalyticsSiteTag(env, requestUrl)
   };
 }
 
@@ -98,6 +103,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
         categories: CategoryRecord[];
         origin: string;
         publicContent: PublicContent;
+        analyticsEnabled?: boolean;
+        webAnalyticsSiteTag?: string;
       }
     | undefined;
   const content = data?.publicContent || DEFAULT_PUBLIC_CONTENT;
@@ -107,7 +114,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const isAdmin = location.pathname.startsWith("/admin");
   const base = data?.origin || "https://gocampinternational.net";
   return (
-    <html lang="en">
+    <html lang="en" data-analytics-enabled={data?.analyticsEnabled ? "true" : "false"}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -144,6 +151,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 ]
               })
             }}
+          />
+        )}
+        {!isAdmin && data?.webAnalyticsSiteTag && (
+          <script
+            type="module"
+            src="https://static.cloudflareinsights.com/beacon.min.js"
+            data-cf-beacon={JSON.stringify({ token: data.webAnalyticsSiteTag })}
           />
         )}
         <Meta />
