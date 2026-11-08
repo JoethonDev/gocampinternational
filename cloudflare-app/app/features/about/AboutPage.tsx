@@ -127,8 +127,15 @@ export function AboutPage({ content }: { content: AboutPageContent }) {
       )}
       <div className="container py-5">
         <Breadcrumbs items={[{ label: text("home"), to: "/" }, { label: text("about-us") }]} />
+        {visible("show-founder") && (
+          <FounderFeature
+            profile={content.profile}
+            image={content.profile.image?.trim() || SITE.images.profile}
+            eyebrow={text("title-about-us")}
+          />
+        )}
         {visible("show-content") && sections.length > 0 && (
-          <div className="row g-5">
+          <div className={"row g-5" + (visible("show-founder") ? " mt-0" : "")}>
             <div className="col-12">
               {sections.map(({ section, index }, visibleIndex) => (
                 <AboutSection
@@ -141,13 +148,7 @@ export function AboutPage({ content }: { content: AboutPageContent }) {
             </div>
           </div>
         )}
-        {visible("show-founder") && (
-          <FounderFeature
-            profile={content.profile}
-            image={content.profile.image?.trim() || SITE.images.profile}
-            eyebrow={text("title-about-us")}
-          />
-        )}
+
       </div>
     </>
   );
