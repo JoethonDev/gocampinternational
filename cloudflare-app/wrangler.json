@@ -4,9 +4,13 @@
   "main": "./workers/app.ts",
   "upload_source_maps": true,
   "compatibility_date": "2026-10-31",
-  "compatibility_flags": ["nodejs_compat"],
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
   "triggers": {
-    "crons": ["17 3 * * *"]
+    "crons": [
+      "17 3 * * *"
+    ]
   },
   "observability": {
     "enabled": true,
@@ -50,5 +54,11 @@
       "/sitemap.xml",
       "/llms.txt"
     ]
-  }
+  },
+  "routes": [
+    {
+      "pattern": "new.gocampinternational.net",
+      "custom_domain": true
+    }
+  ]
 }
