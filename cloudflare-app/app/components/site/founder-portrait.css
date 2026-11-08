@@ -29,3 +29,60 @@
 .gc-founder-portrait--dark .gc-founder-portrait__title {
   color: rgba(255, 255, 255, 0.82);
 }
+
+
+/* Editorial founder treatment shared by About Us and Contact Us. */
+.gc-founder-portrait--editorial {
+  max-width: none;
+}
+.gc-founder-portrait--editorial .gc-founder-portrait__image {
+  width: 100%;
+  aspect-ratio: 572 / 659;
+  height: auto;
+  object-fit: cover;
+  object-position: 46% center;
+  border-radius: 12px;
+  box-shadow: none !important;
+}
+.gc-founder-portrait--editorial .gc-founder-portrait__caption {
+  text-align: left;
+  padding: clamp(1rem, 1.5vw, 1.35rem) 0 0;
+}
+.gc-founder-portrait--editorial .gc-founder-portrait__name {
+  color: #13382f;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.8rem, 3vw, 3.05rem);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.12;
+  margin-bottom: 0.5rem !important;
+}
+.gc-founder-portrait--editorial .gc-founder-portrait__title {
+  color: #35302a;
+  font-size: clamp(1rem, 1.55vw, 1.55rem);
+  font-weight: 400 !important;
+  font-style: italic;
+  line-height: 1.4;
+  border-left: 4px solid #d09a32;
+  padding-left: clamp(0.75rem, 1.6vw, 1.35rem);
+}
+.gc-founder-portrait--compact.gc-founder-portrait--editorial {
+  max-width: 300px;
+}
+.gc-founder-portrait--compact.gc-founder-portrait--editorial .gc-founder-portrait__name {
+  font-size: clamp(1.45rem, 2vw, 1.9rem);
+}
+.gc-founder-portrait--compact.gc-founder-portrait--editorial .gc-founder-portrait__title {
+  font-size: 1rem;
+}
+.gc-founder-portrait--dark.gc-founder-portrait--editorial .gc-founder-portrait__name {
+  color: #fff;
+}
+.gc-founder-portrait--dark.gc-founder-portrait--editorial .gc-founder-portrait__title {
+  color: rgba(255, 255, 255, 0.88);
+}
+@media (max-width: 575.98px) {
+  .gc-founder-portrait--editorial .gc-founder-portrait__name {
+    font-size: clamp(1.75rem, 7vw, 2.4rem);
+  }
+}
