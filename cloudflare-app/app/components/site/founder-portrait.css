@@ -41,7 +41,7 @@
   padding-top: 0.875rem;
 }
 .gc-founder-portrait--editorial .gc-founder-portrait__name {
-  color: var(--brand-secondary, #173c43);
+  color: #000;
   font-family: inherit;
   font-size: 1.25rem;
   font-weight: 700;
