@@ -1,6 +1,6 @@
 import { usePublicContent } from "../../lib/public-content-react";
 import { responsiveSrcSet } from "../../lib/responsive-media";
-import { type AboutPageContent, type AboutSection } from "../../config/site";
+import { aboutSectionImage, type AboutPageContent, type AboutSection } from "../../config/site";
 import { PageBanner } from "../../components/ui/PageBanner";
 import { Breadcrumbs } from "../../components/ui/Breadcrumbs";
 import { FounderFeature } from "./FounderFeature";
@@ -18,6 +18,7 @@ function AboutSection({
   // Long editorial copy should flow around its photo rather than force
   // the photo to match the full height of the text.
   const isIntro = index === 0;
+  const image = aboutSectionImage(section);
   const paragraphs = section.body.map((paragraph, paragraphIndex) => (
     <p
       key={paragraphIndex}
@@ -41,12 +42,17 @@ function AboutSection({
 
   return (
     <div className={"card shadow-sm border-0 overflow-hidden" + (isLast ? "" : " mb-5")}>
-      {isIntro ? (
+      {!image ? (
+        <div className="card-body p-4 p-lg-5">
+          <h2 className="card-title mb-3">{section.title}</h2>
+          {paragraphs}
+        </div>
+      ) : isIntro ? (
         <div className="card-body p-4 p-lg-5">
           <div className="row g-4 align-items-start">
             <div className="col-lg-5 d-flex justify-content-center">
               <img
-                src={section.image}
+                src={image}
                 alt={text("alt-go-camp-international-students-on-an-educational-trip")}
                 className="img-fluid d-block"
                 style={{
@@ -71,8 +77,8 @@ function AboutSection({
           <div className="col-lg-5 align-self-start">
             <div className="d-flex justify-content-center align-items-start p-3 p-lg-4">
               <img
-                src={section.image}
-                srcSet={responsiveSrcSet(section.image)}
+                src={image}
+                srcSet={responsiveSrcSet(image)}
                 sizes="(max-width: 992px) 100vw, 42vw"
                 alt={section.title}
                 className="img-fluid d-block"
