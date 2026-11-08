@@ -348,8 +348,7 @@ test("production traffic counts pageviews and browser sessions", async () => {
   );
   assert.equal((await ingestTrafficEvent(visit("/admin", true), env)).status, 400);
   assert.equal(
-    (await ingestTrafficEvent(visit("/", true, "https://new.gocampinternational.net"), env))
-      .status,
+    (await ingestTrafficEvent(visit("/", true, "https://new.gocampinternational.net"), env)).status,
     204
   );
   assert.equal((await ingestTrafficEvent(visit("/", true), env)).status, 204);
