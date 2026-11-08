@@ -21,7 +21,7 @@ export const SITE = {
     faqBanner: "/images/faq_banner.webp",
     placeholder: "/images/placeholder.webp",
     profile: "/media/910dd151-26f4-54f9-bc3d-c8cabc770e31",
-    icef: "/images/icef_logo.webp",
+    icef: "/images/icef_logo.webp?v=e376f81f",
     facebookIcon: "/images/facebook_icon.webp",
     instagramIcon: "/images/instagram_icon.webp",
     linkedinIcon: "/images/linkin_icon.webp"
