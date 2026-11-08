@@ -99,11 +99,30 @@ export default function AdminAnalytics({ loaderData }: Route.ComponentProps) {
           <MetricCard
             icon="bi-bar-chart-line"
             label="Visits & pageviews"
-            value={report.trafficAvailable ? report.traffic.pageviews : "Unavailable"}
+            value={
+              report.providerTraffic.status === "ok" ||
+              report.providerTraffic.status === "partial"
+                ? report.providerTraffic.pageviews
+                : "Unavailable"
+            }
             detail={
-              report.trafficAvailable
-                ? `${report.traffic.visits} browser sessions · on-site pageviews (not Cloudflare provider totals).`
-                : "On-site traffic aggregation is not installed yet."
+              report.providerTraffic.status === "ok"
+                ? report.providerTraffic.visits + " visits · Cloudflare Web Analytics pageviews."
+                : report.providerTraffic.status === "partial"
+                  ? report.providerTraffic.visits +
+                    " visits · partial range since " +
+                    report.providerTraffic.coverageFrom
+                  : report.providerTraffic.status === "access_denied"
+                    ? "Cloudflare denied access. Check the Analytics Read token permission."
+                    : report.providerTraffic.status === "not_configured"
+                      ? "Cloudflare reporting token or site identifier is missing."
+                      : report.providerTraffic.status === "rate_limited"
+                        ? "Cloudflare Analytics rate limit reached. Retry shortly."
+                        : report.providerTraffic.status === "out_of_retention"
+                          ? "Selected period is older than Cloudflare's retention window."
+                          : report.providerTraffic.status === "disabled"
+                            ? "Cloudflare Web Analytics is production-only."
+                            : "Cloudflare Web Analytics query failed. Retry shortly."
             }
             accent="blue"
           />
@@ -161,9 +180,9 @@ export default function AdminAnalytics({ loaderData }: Route.ComponentProps) {
                 : "disabled; collection requires the canonical production hostname and the production feature flag."}
             </li>
             <li>
-              <strong>Visits and pageviews:</strong> daily D1 browser-session and pageview counts
-              since this tracking was deployed. Separate Cloudflare Web Analytics provider totals
-              and Core Web Vitals remain in the Cloudflare dashboard.
+              <strong>Visits and pageviews:</strong> read directly from the Cloudflare Web
+              Analytics GraphQL API. D1 browser counters remain separate and are not used as
+              Cloudflare totals. Core Web Vitals remain available in the Cloudflare dashboard.
             </li>
             <li>
               <strong>Campaign attribution:</strong> omitted from the limited D1 fallback; unknown

@@ -5,6 +5,7 @@ import {
 } from "../../../lib/analytics";
 import type { AnalyticsEventName } from "../../../lib/analytics";
 import { isSeoIndexingAllowed } from "../../../lib/seo-discovery.server";
+import { loadCloudflareWebAnalytics } from "./cloudflare-web-analytics.server";
 
 type DailyClickRow = {
   day: string;
@@ -41,6 +42,9 @@ type AnalyticsEnv = {
   GOCAMP_ENV: string;
   ANALYTICS_ENABLED?: string;
   WEB_ANALYTICS_SITE_TAG?: string;
+  CF_ANALYTICS_API_TOKEN?: string;
+  CF_ANALYTICS_ACCOUNT_ID?: string;
+  CF_WEB_ANALYTICS_SITE_TAG?: string;
   SEO_INDEXING_ENABLED?: string;
 };
 
@@ -106,6 +110,7 @@ export async function loadAnalyticsReport(
   const { range, from, to } = rangeFor(url, now);
   const fromEpoch = Date.parse(`${from}T00:00:00.000Z`) / 1000;
   const toEpochExclusive = Date.parse(`${to}T00:00:00.000Z`) / 1000 + 86400;
+  const providerTrafficPromise = loadCloudflareWebAnalytics(env, url, from, to, now);
 
   const [inquiryResult, schema, trafficSchema] = await Promise.all([
     db
@@ -222,6 +227,8 @@ export async function loadAnalyticsReport(
     inquiries: inquiriesByDay.get(day) || 0
   }));
 
+  const providerTraffic = await providerTrafficPromise;
+
   return {
     range,
     from,
@@ -241,6 +248,7 @@ export async function loadAnalyticsReport(
     rollupsAvailable: Boolean(schema),
     trafficAvailable: Boolean(trafficSchema),
     traffic: { visits: traffic?.visits || 0, pageviews: traffic?.pageviews || 0 },
+    providerTraffic,
     collectionEnabled: isAnalyticsCollectionEnabled(env, url),
     webAnalyticsConfigured: Boolean(configuredWebAnalyticsSiteTag(env)),
     indexingEnabled: isSeoIndexingAllowed(url, env),
