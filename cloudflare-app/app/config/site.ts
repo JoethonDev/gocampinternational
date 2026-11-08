@@ -20,7 +20,7 @@ export const SITE = {
     aboutBanner: "/images/about_banner.webp",
     faqBanner: "/images/faq_banner.webp",
     placeholder: "/images/placeholder.webp",
-    profile: "/media/910dd151-26f4-54f9-bc3d-c8cabc770e31",
+    profile: "/media/db67b319-afd4-5cb6-9f57-1d098e311223",
     icef: "/images/icef_agency_status_0543.webp?v=3690130f",
     facebookIcon: "/images/facebook_icon.webp",
     instagramIcon: "/images/instagram_icon.webp",
@@ -91,7 +91,7 @@ export const ABOUT_SECTIONS: AboutSection[] = [
 ];
 
 export type AboutPageContent = {
-  profile: { name: string; title: string; body: string };
+  profile: { name: string; title: string; body: string; image?: string };
   sections: AboutSection[];
 };
 
@@ -99,6 +99,7 @@ export const ABOUT_PAGE_DEFAULT: AboutPageContent = {
   profile: {
     name: SITE.director,
     title: SITE.directorTitle,
+    image: SITE.images.profile,
     body: "Zeinab El Sokkary is the Managing Director of GO Camp International. Her professional background spans education, travel and tourism, helping families explore suitable overseas learning experiences. Alongside international summer camps, her work includes advising students considering study abroad, helping parents assess boarding-school options, and supporting educational and cultural school travel. Families receive personal guidance when comparing programs and destinations, supported by parent presentations, orientation sessions, international partnerships and an educational-agent network that has included ICEF professional connections."
   },
   sections: ABOUT_SECTIONS

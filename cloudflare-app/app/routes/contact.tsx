@@ -22,7 +22,8 @@ export async function loader({ context }: Route.LoaderArgs) {
   return {
     profile: {
       name: profile?.name?.trim() || ABOUT_PAGE_DEFAULT.profile.name,
-      title: profile?.title?.trim() || ABOUT_PAGE_DEFAULT.profile.title
+      title: profile?.title?.trim() || ABOUT_PAGE_DEFAULT.profile.title,
+      image: profile?.image?.trim() || ABOUT_PAGE_DEFAULT.profile.image || "/media/db67b319-afd4-5cb6-9f57-1d098e311223"
     }
   };
 }
