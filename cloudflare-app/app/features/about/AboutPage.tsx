@@ -3,6 +3,7 @@ import { responsiveSrcSet } from "../../lib/responsive-media";
 import { type AboutPageContent, type AboutSection } from "../../config/site";
 import { PageBanner } from "../../components/ui/PageBanner";
 import { Breadcrumbs } from "../../components/ui/Breadcrumbs";
+import { FounderPortrait } from "../../components/site/FounderPortrait";
 
 function AboutSection({
   section,
@@ -147,31 +148,16 @@ export function AboutPage({ content }: { content: AboutPageContent }) {
             </h2>
             <section className="card shadow-sm border-0" aria-labelledby="about-director-title">
               <div className="card-body p-4 p-lg-5">
-                <div className="row g-4 align-items-center">
-                  <div className="col-md-auto text-center">
-                    <div
-                      className="rounded-circle shadow-sm mx-auto overflow-hidden"
-                      style={{ width: 180, height: 180 }}
-                    >
-                      <img
-                        src={SITE.images.profile}
-                        alt={content.profile.name}
-                        className="d-block"
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          objectFit: "cover",
-                          objectPosition: "43% 40%"
-                        }}
-                        loading="lazy"
-                      />
-                    </div>
+                <div className="row g-4 align-items-start">
+                  <div className="col-md-4 col-lg-3">
+                    <FounderPortrait
+                      src={SITE.images.profile}
+                      name={content.profile.name}
+                      title={content.profile.title}
+                      headingId="about-director-title"
+                    />
                   </div>
-                  <div className="col-md">
-                    <h3 id="about-director-title" className="h3 mb-2">
-                      {content.profile.name}
-                    </h3>
-                    <p className="fw-semibold text-secondary">{content.profile.title}</p>
+                  <div className="col-md-8 col-lg-9">
                     {content.profile.body.split(/\n\s*\n/).map((paragraph, index) => (
                       <p className="fs-5 lh-lg text-secondary" key={index}>
                         {paragraph}

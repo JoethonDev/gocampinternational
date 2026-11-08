@@ -2,7 +2,7 @@ export const SITE = {
   name: "Go Camp International",
   shortName: "GoCamp",
   director: "Zeinab El Sokkary",
-  directorTitle: "Managing Director",
+  directorTitle: "Founder, GO Camp International",
   phone: "+20 122 171 9621",
   phoneHref: "tel:+201221719621",
   whatsappHref: "https://wa.me/201221719621",

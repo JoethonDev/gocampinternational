@@ -1,0 +1,31 @@
+/* Founder portrait: preserve the actual photo proportions; never crop to a circle. */
+.gc-founder-portrait {
+  width: 100%;
+  max-width: 300px;
+}
+.gc-founder-portrait--compact {
+  max-width: 250px;
+}
+.gc-founder-portrait__image {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  border-radius: 0.25rem;
+}
+.gc-founder-portrait__caption {
+  padding-top: 0.875rem;
+}
+.gc-founder-portrait__name {
+  color: #212529;
+  overflow-wrap: anywhere;
+}
+.gc-founder-portrait__title {
+  color: #6c757d;
+  line-height: 1.5;
+}
+.gc-founder-portrait--dark .gc-founder-portrait__name {
+  color: #fff;
+}
+.gc-founder-portrait--dark .gc-founder-portrait__title {
+  color: rgba(255, 255, 255, 0.82);
+}

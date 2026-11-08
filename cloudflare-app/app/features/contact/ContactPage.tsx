@@ -3,9 +3,11 @@ import { useFetcher } from "react-router";
 import { PageBanner } from "../../components/ui/PageBanner";
 import { Breadcrumbs } from "../../components/ui/Breadcrumbs";
 import { trackBusinessEvent } from "../../lib/analytics.client";
+import { FounderPortrait } from "../../components/site/FounderPortrait";
 import "./contact.css";
 
 type ContactResult = { success?: boolean; error?: string; message?: string };
+type FounderProfile = { name: string; title: string };
 
 function ContactForm() {
   const { text } = usePublicContent("contact");
@@ -120,16 +122,21 @@ function ContactForm() {
   );
 }
 
-function ContactCard() {
+function ContactCard({ profile }: { profile: FounderProfile }) {
   const { text, site: SITE } = usePublicContent("contact");
   return (
     <div className="card border-0 shadow-sm h-100 contact-card">
       <div className="card-body p-4 p-md-5 d-flex flex-column justify-content-center align-items-center text-center">
-        <div className="mb-4 contact-avatar rounded-circle shadow-lg">
-          <img src={SITE.images.profile} alt={SITE.director} className="contact-avatar-photo" />
+        <div className="mb-4 w-100">
+          <FounderPortrait
+            src={SITE.images.profile}
+            name={profile.name}
+            title={profile.title}
+            headingId="contact-founder-name"
+            compact
+            dark
+          />
         </div>
-        <h3 className="fw-bold text-white mb-1">{SITE.director}</h3>
-        <p className="text-white-50 fs-5 mb-4 text-uppercase fw-semibold">{SITE.directorTitle}</p>
         <div className="d-flex flex-column gap-3 w-100 px-md-3">
           {SITE.whatsappHref && (
             <a
@@ -177,7 +184,7 @@ function ContactCard() {
   );
 }
 
-export function ContactPage() {
+export function ContactPage({ profile }: { profile: FounderProfile }) {
   const { text, site: SITE, visible } = usePublicContent("contact");
   return (
     <>
@@ -202,7 +209,7 @@ export function ContactPage() {
           )}
           {visible("show-contact-card") && (
             <div className="col-lg-5">
-              <ContactCard />
+              <ContactCard profile={profile} />
             </div>
           )}
         </div>
