@@ -9,7 +9,9 @@ const {
   validateAnalyticsEvent,
   webAnalyticsSiteTag
 } = await loadTypeScript("../app/lib/analytics.ts");
-const { ingestAnalyticsEvents, ingestTrafficEvent } = await loadTypeScript("../app/lib/analytics.server.ts");
+const { ingestAnalyticsEvents, ingestTrafficEvent } = await loadTypeScript(
+  "../app/lib/analytics.server.ts"
+);
 const { loadAnalyticsReport } = await loadTypeScript(
   "../app/features/admin/analytics/analytics.server.ts"
 );
@@ -327,7 +329,7 @@ test("analytics report aggregates beyond one thousand raw rollup dimensions", as
   assert.equal(report.topContentActions[0].count, 90);
 });
 
-test("on-site traffic counts public pageviews and tab sessions on canonical production only", async () => {
+test("production traffic counts pageviews and browser sessions", async () => {
   const db = new SqliteD1();
   const visit = (pagePath, newSession, origin = "https://gocampinternational.net") =>
     new Request(origin + "/api/analytics/traffic", {
