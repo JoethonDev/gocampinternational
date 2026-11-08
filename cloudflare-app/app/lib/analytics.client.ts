@@ -67,7 +67,9 @@ export function trackSitePageview() {
   if (
     typeof window === "undefined" ||
     document.documentElement.dataset.analyticsEnabled !== "true"
-  ) return;
+  ) {
+    return;
+  }
   const context = analyticsPageContext(window.location.pathname, window.location.search);
   if (!context) return;
   let newSession = false;
