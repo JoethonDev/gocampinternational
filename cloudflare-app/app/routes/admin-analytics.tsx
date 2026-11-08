@@ -160,7 +160,7 @@ export default function AdminAnalytics({ loaderData }: Route.ComponentProps) {
               <strong>Collection:</strong>{" "}
               {report.collectionEnabled
                 ? "enabled on canonical production by explicit environment flags."
-                : "disabled; collection requires canonical production, an explicit feature flag, and a published privacy notice."}
+                : "disabled; collection requires the canonical production hostname and the production feature flag."}
             </li>
             <li>
               <strong>Visits and Core Web Vitals:</strong> not queried by this dashboard; use the
