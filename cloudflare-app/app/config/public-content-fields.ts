@@ -592,7 +592,7 @@ export const PUBLIC_CONTENT_FIELDS: Record<string, Record<string, ContentField>>
     },
     "alt-icef-accredited": {
       kind: "text",
-      value: "ICEF Accredited"
+      value: "ICEF Agency Status #0543 — scan QR to verify"
     },
     "go-camp-international-all-rights-reserved": {
       kind: "text",
@@ -864,7 +864,7 @@ export const PUBLIC_CONTENT_FIELDS: Record<string, Record<string, ContentField>>
     },
     "images.icef": {
       kind: "image",
-      value: "/images/icef_logo.webp?v=e376f81f"
+      value: "/images/icef_agency_status_0543.webp?v=3690130f"
     },
     "images.facebookIcon": {
       kind: "image",
