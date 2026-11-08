@@ -864,7 +864,7 @@ export const PUBLIC_CONTENT_FIELDS: Record<string, Record<string, ContentField>>
     },
     "images.icef": {
       kind: "image",
-      value: "/images/icef_logo.webp"
+      value: "/images/icef_logo.webp?v=e376f81f"
     },
     "images.facebookIcon": {
       kind: "image",
