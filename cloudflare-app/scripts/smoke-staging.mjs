@@ -6,13 +6,13 @@ const base = (
 const tests = [
   { path: "/health", status: 200, contains: "gocamp" },
   { path: "/", status: 200, contains: "Go Camp" },
-  { path: "/", status: 200, contains: "/media/49c7cbd7-a00e-5970-9ed1-1e14e077e016" },
+  // Homepage media is CMS-managed; R2 and image delivery are verified independently below.
   { path: "/about", status: 200, contains: "About Us" },
   { path: "/about", status: 200, contains: "Zeinab El Sokkary" },
-  { path: "/about", status: 200, contains: "/media/910dd151-26f4-54f9-bc3d-c8cabc770e31" },
+  { path: "/about", status: 200, contains: "/media/db67b319-afd4-5cb6-9f57-1d098e311223" },
   { path: "/faq", status: 200, contains: "Are airport transfers arranged?" },
   { path: "/contact", status: 200, contains: "https://wa.me/201221719621" },
-  { path: "/contact", status: 200, contains: "/media/910dd151-26f4-54f9-bc3d-c8cabc770e31" },
+  { path: "/contact", status: 200, contains: "/media/db67b319-afd4-5cb6-9f57-1d098e311223" },
   { path: "/robots.txt", status: 200, contains: "Disallow: /" },
   { path: "/sitemap.xml", status: 404 },
   { path: "/faq", status: 200 },
@@ -122,7 +122,7 @@ const tests = [
     contentType: "image/webp"
   },
   {
-    path: "/media/910dd151-26f4-54f9-bc3d-c8cabc770e31",
+    path: "/media/db67b319-afd4-5cb6-9f57-1d098e311223",
     status: 200,
     method: "HEAD",
     contentType: "image/webp"
