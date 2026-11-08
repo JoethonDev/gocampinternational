@@ -144,7 +144,7 @@ export function AboutPage({ content }: { content: AboutPageContent }) {
         {visible("show-founder") && (
           <FounderFeature
             profile={content.profile}
-            image={SITE.images.profile}
+            image={content.profile.image?.trim() || SITE.images.profile}
             eyebrow={text("title-about-us")}
           />
         )}

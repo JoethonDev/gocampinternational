@@ -7,7 +7,7 @@ import { FounderPortrait } from "../../components/site/FounderPortrait";
 import "./contact.css";
 
 type ContactResult = { success?: boolean; error?: string; message?: string };
-type FounderProfile = { name: string; title: string };
+type FounderProfile = { name: string; title: string; image: string };
 
 function ContactForm() {
   const { text } = usePublicContent("contact");
@@ -129,7 +129,7 @@ function ContactCard({ profile }: { profile: FounderProfile }) {
       <div className="card-body p-4 p-md-5 d-flex flex-column justify-content-center align-items-center text-center">
         <div className="mb-4 w-100">
           <FounderPortrait
-            src={SITE.images.profile}
+            src={profile.image}
             name={profile.name}
             title={profile.title}
             headingId="contact-founder-name"

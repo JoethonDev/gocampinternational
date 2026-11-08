@@ -860,7 +860,7 @@ export const PUBLIC_CONTENT_FIELDS: Record<string, Record<string, ContentField>>
     },
     "images.profile": {
       kind: "image",
-      value: "/media/910dd151-26f4-54f9-bc3d-c8cabc770e31"
+      value: "/media/db67b319-afd4-5cb6-9f57-1d098e311223"
     },
     "images.icef": {
       kind: "image",
