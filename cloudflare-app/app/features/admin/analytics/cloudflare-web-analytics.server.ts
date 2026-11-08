@@ -52,7 +52,7 @@ function empty(status: ProviderTrafficStatus): ProviderTraffic {
 
 function classify(status: number, errors?: GraphQLPayload["errors"]): ProviderTrafficStatus {
   const messages = (errors || []).map((item) => item.message || "").join(" ");
-  if (status === 401 || status === 403 || /unauthoriz|permission|access denied/i.test(messages)) {
+  if (status === 401 || status === 403 || /unauthoriz|not authorized|permission|access denied/i.test(messages)) {
     return "access_denied";
   }
   if (status === 429 || /rate limit|budget depleted|too many quer/i.test(messages)) {
