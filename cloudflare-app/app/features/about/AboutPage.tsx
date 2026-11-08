@@ -3,7 +3,7 @@ import { responsiveSrcSet } from "../../lib/responsive-media";
 import { type AboutPageContent, type AboutSection } from "../../config/site";
 import { PageBanner } from "../../components/ui/PageBanner";
 import { Breadcrumbs } from "../../components/ui/Breadcrumbs";
-import { FounderPortrait } from "../../components/site/FounderPortrait";
+import { FounderFeature } from "./FounderFeature";
 
 function AboutSection({
   section,
@@ -142,32 +142,11 @@ export function AboutPage({ content }: { content: AboutPageContent }) {
           </div>
         )}
         {visible("show-founder") && (
-          <section className="mt-5" aria-labelledby="about-founder-title">
-            <h2 id="about-founder-title" className="h3 mb-4">
-              {text("meet-our-founder")}
-            </h2>
-            <section className="card shadow-sm border-0" aria-labelledby="about-director-title">
-              <div className="card-body p-4 p-lg-5">
-                <div className="row g-4 align-items-start">
-                  <div className="col-md-4 col-lg-3">
-                    <FounderPortrait
-                      src={SITE.images.profile}
-                      name={content.profile.name}
-                      title={content.profile.title}
-                      headingId="about-director-title"
-                    />
-                  </div>
-                  <div className="col-md-8 col-lg-9">
-                    {content.profile.body.split(/\n\s*\n/).map((paragraph, index) => (
-                      <p className="fs-5 lh-lg text-secondary" key={index}>
-                        {paragraph}
-                      </p>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </section>
-          </section>
+          <FounderFeature
+            profile={content.profile}
+            image={SITE.images.profile}
+            eyebrow={text("title-about-us")}
+          />
         )}
       </div>
     </>

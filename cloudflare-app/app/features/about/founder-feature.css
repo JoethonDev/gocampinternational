@@ -1,0 +1,99 @@
+/* Layout derived from the supplied founder reference, scoped to About Us. */
+.gc-founder-feature {
+  --gc-founder-ink: #14362e;
+  --gc-founder-gold: #c48b2b;
+  position: relative;
+  left: 50%;
+  width: min(1520px, calc(100vw - 4.5rem));
+  transform: translateX(-50%);
+  background: #fff;
+  border-radius: 16px;
+  padding: clamp(2.25rem, 4vw, 4.75rem) clamp(1.5rem, 3vw, 4.5rem);
+}
+.gc-founder-feature__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 0.94fr) minmax(0, 1.45fr);
+  align-items: start;
+  gap: clamp(2rem, 4vw, 5rem);
+}
+.gc-founder-feature__portrait,
+.gc-founder-feature__story {
+  min-width: 0;
+}
+.gc-founder-feature__story {
+  padding-top: 0.125rem;
+}
+.gc-founder-feature__eyebrow {
+  color: var(--gc-founder-gold);
+  font-size: clamp(0.9rem, 1.6vw, 1.65rem);
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  margin-bottom: clamp(0.6rem, 1.5vw, 1rem);
+}
+.gc-founder-feature__heading {
+  color: var(--gc-founder-ink);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(2.8rem, 5.3vw, 5rem);
+  font-weight: 700;
+  letter-spacing: -0.042em;
+  line-height: 1.04;
+  margin: 0;
+}
+.gc-founder-feature__rule {
+  width: clamp(4.5rem, 6vw, 6rem);
+  height: 5px;
+  background-color: var(--gc-founder-gold);
+  margin: clamp(1rem, 2vw, 2rem) 0 clamp(1.5rem, 2.5vw, 2.5rem);
+}
+.gc-founder-feature__copy {
+  color: #2c2827;
+  font-size: clamp(1.075rem, 1.6vw, 1.6rem);
+  line-height: 1.5;
+  max-width: 850px;
+}
+.gc-founder-feature__copy p {
+  margin: 0 0 clamp(1.15rem, 2vw, 1.8rem);
+}
+.gc-founder-feature__copy p:last-child {
+  margin-bottom: 0;
+}
+@media (max-width: 991.98px) {
+  .gc-founder-feature {
+    width: min(100vw - 2.5rem, 920px);
+    padding: 2.5rem 2rem;
+  }
+  .gc-founder-feature__inner {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: 2rem;
+  }
+  .gc-founder-feature__heading {
+    font-size: clamp(2.5rem, 5.4vw, 4rem);
+  }
+}
+@media (max-width: 767.98px) {
+  .gc-founder-feature {
+    width: min(100vw - 1.5rem, 680px);
+    padding: 2rem 1.35rem;
+  }
+  .gc-founder-feature__inner {
+    grid-template-columns: 1fr;
+    gap: 2.75rem;
+  }
+  .gc-founder-feature__portrait {
+    max-width: 470px;
+    width: 100%;
+    margin-inline: auto;
+  }
+  .gc-founder-feature__eyebrow {
+    font-size: 1rem;
+    letter-spacing: 0.22em;
+  }
+  .gc-founder-feature__heading {
+    font-size: clamp(2.65rem, 9vw, 4rem);
+  }
+  .gc-founder-feature__copy {
+    font-size: 1.125rem;
+    line-height: 1.6;
+  }
+}

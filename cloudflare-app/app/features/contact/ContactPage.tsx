@@ -135,6 +135,7 @@ function ContactCard({ profile }: { profile: FounderProfile }) {
             headingId="contact-founder-name"
             compact
             dark
+            editorial
           />
         </div>
         <div className="d-flex flex-column gap-3 w-100 px-md-3">

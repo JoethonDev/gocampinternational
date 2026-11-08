@@ -5,6 +5,7 @@ type FounderPortraitProps = {
   headingId?: string;
   compact?: boolean;
   dark?: boolean;
+  editorial?: boolean;
 };
 
 import "./founder-portrait.css";
@@ -16,12 +17,14 @@ export function FounderPortrait({
   title,
   headingId,
   compact = false,
-  dark = false
+  dark = false,
+  editorial = false
 }: FounderPortraitProps) {
   const classes = [
     "gc-founder-portrait mx-auto mb-0",
     compact ? "gc-founder-portrait--compact" : "",
-    dark ? "gc-founder-portrait--dark" : ""
+    dark ? "gc-founder-portrait--dark" : "",
+    editorial ? "gc-founder-portrait--editorial" : ""
   ]
     .filter(Boolean)
     .join(" ");
@@ -35,7 +38,7 @@ export function FounderPortrait({
         loading="lazy"
         decoding="async"
       />
-      <figcaption className="gc-founder-portrait__caption text-center">
+      <figcaption className="gc-founder-portrait__caption">
         <h3 id={headingId} className="gc-founder-portrait__name h5 fw-bold mb-1">
           {name}
         </h3>
