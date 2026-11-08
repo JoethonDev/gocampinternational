@@ -9,7 +9,7 @@ const {
   validateAnalyticsEvent,
   webAnalyticsSiteTag
 } = await loadTypeScript("../app/lib/analytics.ts");
-const { ingestAnalyticsEvents } = await loadTypeScript("../app/lib/analytics.server.ts");
+const { ingestAnalyticsEvents, ingestTrafficEvent } = await loadTypeScript("../app/lib/analytics.server.ts");
 const { loadAnalyticsReport } = await loadTypeScript(
   "../app/features/admin/analytics/analytics.server.ts"
 );
@@ -325,4 +325,41 @@ test("analytics report aggregates beyond one thousand raw rollup dimensions", as
   assert.equal(report.daily.at(-1).clicks, 12);
   assert.equal(report.topContentActions.length, 10);
   assert.equal(report.topContentActions[0].count, 90);
+});
+
+test("on-site traffic counts public pageviews and tab sessions on canonical production only", async () => {
+  const db = new SqliteD1();
+  const visit = (pagePath, newSession, origin = "https://gocampinternational.net") =>
+    new Request(origin + "/api/analytics/traffic", {
+      method: "POST",
+      headers: {
+        origin,
+        "content-type": "application/json",
+        "cf-connecting-ip": "203.0.113.55"
+      },
+      body: JSON.stringify({ pagePath, newSession })
+    });
+  const env = { DB: db, ...enabledEnv };
+  assert.equal(
+    (await ingestTrafficEvent(visit("/", true), { DB: db, GOCAMP_ENV: "staging" })).status,
+    204
+  );
+  assert.equal((await ingestTrafficEvent(visit("/admin", true), env)).status, 400);
+  assert.equal(
+    (await ingestTrafficEvent(visit("/", true, "https://new.gocampinternational.net"), env))
+      .status,
+    204
+  );
+  assert.equal((await ingestTrafficEvent(visit("/", true), env)).status, 204);
+  assert.equal((await ingestTrafficEvent(visit("/about", false), env)).status, 204);
+  const totals = db.sql.prepare("SELECT visits, pageviews FROM analytics_traffic_daily").get();
+  assert.equal(totals.visits, 1);
+  assert.equal(totals.pageviews, 2);
+  const report = await loadAnalyticsReport(
+    db,
+    "https://gocampinternational.net/admin/analytics?range=7d",
+    env
+  );
+  assert.equal(report.trafficAvailable, true);
+  assert.deepEqual(report.traffic, { visits: 1, pageviews: 2 });
 });

@@ -107,7 +107,7 @@ export async function loadAnalyticsReport(
   const fromEpoch = Date.parse(`${from}T00:00:00.000Z`) / 1000;
   const toEpochExclusive = Date.parse(`${to}T00:00:00.000Z`) / 1000 + 86400;
 
-  const [inquiryResult, schema] = await Promise.all([
+  const [inquiryResult, schema, trafficSchema] = await Promise.all([
     db
       .prepare(
         `SELECT date(created_at,'unixepoch') AS day,kind,COUNT(*) AS count,MAX(created_at) AS latest_at
@@ -119,6 +119,10 @@ export async function loadAnalyticsReport(
     db
       .prepare("SELECT 1 AS ready FROM sqlite_master WHERE type='table' AND name=?")
       .bind("analytics_daily_rollups")
+      .first<{ ready: number }>(),
+    db
+      .prepare("SELECT 1 AS ready FROM sqlite_master WHERE type='table' AND name=?")
+      .bind("analytics_traffic_daily")
       .first<{ ready: number }>()
   ]);
 
@@ -127,7 +131,7 @@ export async function loadAnalyticsReport(
     metrics: { results: [] as MetricClickRow[] },
     content: { results: [] as ContentActionRow[] }
   };
-  const [rollups, catalog] = await Promise.all([
+  const [rollups, catalog, traffic] = await Promise.all([
     schema
       ? Promise.all([
           db
@@ -164,7 +168,17 @@ export async function loadAnalyticsReport(
          WHERE kind IN ('destination','category') AND status='active'
          ORDER BY kind,name LIMIT 1000`
       )
-      .all<CatalogRow>()
+      .all<CatalogRow>(),
+    trafficSchema
+      ? db
+          .prepare(
+            "SELECT COALESCE(SUM(visits),0) AS visits," +
+              "COALESCE(SUM(pageviews),0) AS pageviews " +
+              "FROM analytics_traffic_daily WHERE day>=? AND day<=?"
+          )
+          .bind(from, to)
+          .first<{ visits: number; pageviews: number }>()
+      : Promise.resolve(null)
   ]);
 
   const inquiriesByKind = { contact: 0, lead: 0, newsletter: 0 };
@@ -225,6 +239,8 @@ export async function loadAnalyticsReport(
       count: row.count
     })),
     rollupsAvailable: Boolean(schema),
+    trafficAvailable: Boolean(trafficSchema),
+    traffic: { visits: traffic?.visits || 0, pageviews: traffic?.pageviews || 0 },
     collectionEnabled: isAnalyticsCollectionEnabled(env, url),
     webAnalyticsConfigured: Boolean(configuredWebAnalyticsSiteTag(env)),
     indexingEnabled: isSeoIndexingAllowed(url, env),

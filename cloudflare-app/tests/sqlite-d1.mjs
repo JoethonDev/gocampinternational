@@ -14,7 +14,8 @@ export class SqliteD1 {
       "0002_submission_limits",
       "0004_testimonials",
       "0005_media_variants",
-      "0006_analytics_rollups"
+      "0006_analytics_rollups",
+      "0007_traffic_aggregates"
     ]) {
       this.sql.exec(
         readFileSync(new URL(`../server/db/migrations/${migration}.sql`, import.meta.url), "utf8")

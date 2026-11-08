@@ -61,3 +61,42 @@ export function trackBusinessEvent(
     // Telemetry is deliberately best effort.
   }
 }
+
+/** Count public pageviews and one browser-tab session, without cookies or identifiers. */
+export function trackSitePageview() {
+  if (
+    typeof window === "undefined" ||
+    document.documentElement.dataset.analyticsEnabled !== "true"
+  ) return;
+  const context = analyticsPageContext(window.location.pathname, window.location.search);
+  if (!context) return;
+  let newSession = false;
+  try {
+    const key = "gocamp-analytics-browser-session-v1";
+    if (!window.sessionStorage.getItem(key)) {
+      newSession = true;
+      window.sessionStorage.setItem(key, "1");
+    }
+  } catch {
+    // Without browser session storage, pageviews still count, but visits do not.
+  }
+
+  const body = JSON.stringify({
+    pagePath: context.pagePath,
+    search: context.pageType === "category" ? window.location.search : "",
+    newSession
+  });
+  try {
+    const payload = new Blob([body], { type: "application/json" });
+    if (navigator.sendBeacon?.("/api/analytics/traffic", payload)) return;
+    void fetch("/api/analytics/traffic", {
+      method: "POST",
+      credentials: "same-origin",
+      headers: { "content-type": "application/json" },
+      body,
+      keepalive: true
+    }).catch(() => undefined);
+  } catch {
+    // Instrumentation never affects navigation.
+  }
+}

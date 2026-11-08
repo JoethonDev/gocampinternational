@@ -36,6 +36,7 @@ export default [
   route("contact", "routes/contact.tsx"),
   route("api/submit-contact.php", "routes/api-contact.ts"),
   route("api/analytics/events", "routes/api-analytics-events.ts"),
+  route("api/analytics/traffic", "routes/api-analytics-traffic.ts"),
   route("api/submit-lead.php", "routes/api-lead.ts"),
   route("api/subscribe-newsletter.php", "routes/api-newsletter.ts"),
   route("programs", "routes/hidden-programs.tsx"),

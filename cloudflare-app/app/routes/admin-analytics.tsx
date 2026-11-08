@@ -99,13 +99,11 @@ export default function AdminAnalytics({ loaderData }: Route.ComponentProps) {
           <MetricCard
             icon="bi-bar-chart-line"
             label="Visits & pageviews"
-            value="Unavailable"
+            value={report.trafficAvailable ? report.traffic.pageviews : "Unavailable"}
             detail={
-              report.webAnalyticsConfigured
-                ? report.collectionEnabled
-                  ? "Web Analytics is configured; provider totals are not queried here."
-                  : "A site tag is configured, but collection is disabled."
-                : "Web Analytics site tag is not configured."
+              report.trafficAvailable
+                ? `${report.traffic.visits} browser sessions · on-site pageviews (not Cloudflare provider totals).`
+                : "On-site traffic aggregation is not installed yet."
             }
             accent="blue"
           />
@@ -163,8 +161,9 @@ export default function AdminAnalytics({ loaderData }: Route.ComponentProps) {
                 : "disabled; collection requires the canonical production hostname and the production feature flag."}
             </li>
             <li>
-              <strong>Visits and Core Web Vitals:</strong> not queried by this dashboard; use the
-              Cloudflare Web Analytics provider after its beacon is configured.
+              <strong>Visits and pageviews:</strong> daily D1 browser-session and pageview counts
+              since this tracking was deployed. Separate Cloudflare Web Analytics provider totals
+              and Core Web Vitals remain in the Cloudflare dashboard.
             </li>
             <li>
               <strong>Campaign attribution:</strong> omitted from the limited D1 fallback; unknown
