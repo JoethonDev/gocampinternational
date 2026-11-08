@@ -148,7 +148,6 @@ export function AboutPage({ content }: { content: AboutPageContent }) {
             </div>
           </div>
         )}
-
       </div>
     </>
   );
