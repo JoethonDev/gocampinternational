@@ -355,7 +355,9 @@ export default function AdminAbout({ loaderData }: Route.ComponentProps) {
                   disabled={!aboutSectionImage(section)}
                   onChange={(event) => setSection(index, { reverse: event.target.checked })}
                 />
-                <span className="form-check-label">Reverse image and text (when an image is set)</span>
+                <span className="form-check-label">
+                  Reverse image and text (when an image is set)
+                </span>
               </label>
             </div>
             {section.gallery?.length ? (
