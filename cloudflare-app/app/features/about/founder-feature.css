@@ -25,7 +25,7 @@
   margin-bottom: 0.5rem;
 }
 .gc-founder-feature__heading {
-  color: var(--brand-secondary, #173c43);
+  color: #000;
   font-family: inherit;
   font-size: 1.75rem;
   font-weight: 700;
