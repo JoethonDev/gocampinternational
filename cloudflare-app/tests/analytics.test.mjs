@@ -16,8 +16,7 @@ const { loadAnalyticsReport } = await loadTypeScript(
 
 const enabledEnv = {
   GOCAMP_ENV: "production",
-  ANALYTICS_ENABLED: "true",
-  ANALYTICS_PRIVACY_NOTICE_PUBLISHED: "true"
+  ANALYTICS_ENABLED: "true"
 };
 
 function event(overrides = {}) {
@@ -66,7 +65,7 @@ test("analytics stays closed off outside explicitly enabled canonical production
   );
   assert.equal(
     isAnalyticsCollectionEnabled(
-      { ...enabledEnv, ANALYTICS_PRIVACY_NOTICE_PUBLISHED: "false" },
+      { ...enabledEnv, ANALYTICS_ENABLED: "false" },
       new URL("https://gocampinternational.net/")
     ),
     false
@@ -133,8 +132,7 @@ test("event ingestion is disabled by default and stores only bounded daily aggre
   const disabled = await ingestAnalyticsEvents(request([event()]), {
     DB: db,
     GOCAMP_ENV: "staging",
-    ANALYTICS_ENABLED: "true",
-    ANALYTICS_PRIVACY_NOTICE_PUBLISHED: "true"
+    ANALYTICS_ENABLED: "true"
   });
   assert.equal(disabled.status, 204);
   assert.equal(
