@@ -14,7 +14,7 @@ export const SITE = {
     linkedin: "https://www.linkedin.com/in/zeinab-el-sokkary-97245a34/"
   },
   images: {
-    logo: "/media/49c7cbd7-a00e-5970-9ed1-1e14e077e016",
+    logo: "/images/logo.webp",
     favicon: "/images/favi.png",
     contactBanner: "/images/contact_banner.webp",
     aboutBanner: "/images/about_banner.webp",
