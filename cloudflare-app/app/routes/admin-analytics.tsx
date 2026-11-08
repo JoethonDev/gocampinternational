@@ -100,8 +100,7 @@ export default function AdminAnalytics({ loaderData }: Route.ComponentProps) {
             icon="bi-bar-chart-line"
             label="Visits & pageviews"
             value={
-              report.providerTraffic.status === "ok" ||
-              report.providerTraffic.status === "partial"
+              report.providerTraffic.status === "ok" || report.providerTraffic.status === "partial"
                 ? report.providerTraffic.pageviews
                 : "Unavailable"
             }
@@ -180,9 +179,9 @@ export default function AdminAnalytics({ loaderData }: Route.ComponentProps) {
                 : "disabled; collection requires the canonical production hostname and the production feature flag."}
             </li>
             <li>
-              <strong>Visits and pageviews:</strong> read directly from the Cloudflare Web
-              Analytics GraphQL API. D1 browser counters remain separate and are not used as
-              Cloudflare totals. Core Web Vitals remain available in the Cloudflare dashboard.
+              <strong>Visits and pageviews:</strong> read directly from the Cloudflare Web Analytics
+              GraphQL API. D1 browser counters remain separate and are not used as Cloudflare
+              totals. Core Web Vitals remain available in the Cloudflare dashboard.
             </li>
             <li>
               <strong>Campaign attribution:</strong> omitted from the limited D1 fallback; unknown
