@@ -450,10 +450,7 @@ export default function AdminAbout({ loaderData }: Route.ComponentProps) {
           onClick={() =>
             setAbout((prev) => ({
               ...prev,
-              sections: [
-                ...prev.sections,
-                { title: "New section", image: "", body: [""] }
-              ]
+              sections: [...prev.sections, { title: "New section", image: "", body: [""] }]
             }))
           }
         >
