@@ -10,7 +10,11 @@ body.gc-admin-route {
 
 /* Small structural classes shared by the React page components. */
 .footer-icef-logo {
-  max-width: 100px;
+  display: block;
+  width: 160px;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
 }
 /* These selectors intentionally outrank Bootstrap/legacy component defaults
    that are loaded after app.css. The previous inline styles had the same effect. */
