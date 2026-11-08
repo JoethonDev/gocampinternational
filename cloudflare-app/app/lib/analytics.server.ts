@@ -157,7 +157,9 @@ export async function ingestTrafficEvent(
   if (
     (request.headers.get("content-type") || "").split(";", 1)[0].trim().toLowerCase() !==
     "application/json"
-  ) return response(415);
+  ) {
+    return response(415);
+  }
 
   let body: unknown;
   try {
@@ -174,7 +176,9 @@ export async function ingestTrafficEvent(
     typeof input.newSession !== "boolean" ||
     (input.search !== undefined &&
       (typeof input.search !== "string" || input.search.length > 256))
-  ) return response(400);
+  ) {
+    return response(400);
+  }
   if (!analyticsPageContext(input.pagePath, String(input.search || ""))) return response(400);
   if (!(await consumeRateLimit(env.DB, request, "analytics-traffic", 120, 60))) {
     return response(429);
