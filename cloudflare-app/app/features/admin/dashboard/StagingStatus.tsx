@@ -1,4 +1,3 @@
-import { Link } from "react-router";
 import { AdminPanel } from "../../../components/admin/AdminPanel";
 import type { DashboardMedia } from "./types";
 
@@ -44,14 +43,6 @@ export function StagingStatus({
           <dd>{(media.bytes / (1024 * 1024)).toFixed(1)} MB</dd>
         </div>
       </dl>
-      <Link
-        className="btn btn-sm btn-outline-secondary w-100 mt-3"
-        to="/"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <i className="bi bi-box-arrow-up-right me-1" /> Open public site
-      </Link>
     </AdminPanel>
   );
 }
