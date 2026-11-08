@@ -1,5 +1,6 @@
-import { Form, Link, useNavigation } from "react-router";
+import { Form, useNavigation } from "react-router";
 import { AdminFormActions } from "../../../components/admin/AdminFormActions";
+import { AdminPageHeader } from "../../../components/admin/AdminPageHeader";
 import { AdminFormSection } from "../../../components/admin/AdminFormSection";
 import { StatusBadge } from "../../../components/admin/StatusBadge";
 import { VisibilityOverrides } from "../../../components/VisibilityOverrides";
@@ -42,18 +43,12 @@ export function EntityEditorPage({
 
   return (
     <div className="admin-editor">
-      <div className="admin-editor-header">
-        <div>
-          <Link to={`/admin/catalog/${kind}`} className="admin-back-link">
-            <i className="bi bi-arrow-left" /> Back to {meta.label.toLowerCase()}
-          </Link>
-          <h1 className="h3 mb-1">{title}</h1>
-          <p className="text-secondary small mb-0">
-            {isNew ? "Create a new record." : `Editing ${kind} · ${slug}`}
-          </p>
-        </div>
-        {!isNew && <StatusBadge status={currentStatus} />}
-      </div>
+      <AdminPageHeader
+        title={title}
+        description={isNew ? "Create a new record." : `Editing ${kind} · ${slug}`}
+        backLink={{ to: `/admin/catalog/${kind}`, label: `Back to ${meta.label.toLowerCase()}` }}
+        aside={!isNew ? <StatusBadge status={currentStatus} /> : undefined}
+      />
       {saved && (
         <div className="alert alert-success" role="status">
           Saved successfully.

@@ -1,3 +1,5 @@
+import "./metric-card.css";
+
 export function MetricCard({
   icon,
   label,

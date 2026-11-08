@@ -1,4 +1,3 @@
-import { Link } from "react-router";
 import { AdminPageHeader } from "../../../components/admin/AdminPageHeader";
 import { CatalogHealth } from "./CatalogHealth";
 import { DashboardHero } from "./DashboardHero";
@@ -26,19 +25,7 @@ export function DashboardPage({
       <AdminPageHeader
         title="Dashboard"
         description="A working overview of catalog health, inquiries and recent content changes."
-        aside={
-          <div className="d-flex align-items-center gap-2">
-            <span className="badge bg-warning text-dark">Staging</span>
-            <Link
-              to="/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn btn-sm btn-outline-secondary"
-            >
-              <i className="bi bi-box-arrow-up-right me-1" /> Public site
-            </Link>
-          </div>
-        }
+        aside={<span className="admin-env-badge-pill">Staging environment</span>}
       />
       <DashboardHero
         username={session.username}
