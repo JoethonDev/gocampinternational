@@ -1,0 +1,38 @@
+name: Format analytics output once
+on:
+  push:
+    branches: [production]
+    paths:
+      - ".github/workflows/format-analytics-once.yml"
+permissions:
+  contents: read
+jobs:
+  format:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    defaults:
+      run:
+        working-directory: cloudflare-app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: cloudflare-app/package-lock.json
+      - run: npm ci
+      - run: npx prettier --write app/lib/analytics.server.ts tests/analytics.test.mjs
+      - name: Print formatted source for connector sync
+        run: |
+          node -e '
+            const fs = require("fs");
+            const paths = [
+              "app/lib/analytics.server.ts",
+              "tests/analytics.test.mjs"
+            ];
+            for (let i = 0; i < paths.length; i++) {
+              console.log("GOCAMP_FORMATTED_BEGIN_" + i);
+              console.log(fs.readFileSync(paths[i]).toString("base64"));
+              console.log("GOCAMP_FORMATTED_END_" + i);
+            }
+          '
