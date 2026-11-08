@@ -140,10 +140,7 @@ export async function ingestAnalyticsEvents(
 }
 
 /** Ingest production browser navigations; no IP or user IDs are stored. */
-export async function ingestTrafficEvent(
-  request: Request,
-  env: AnalyticsEnv
-): Promise<Response> {
+export async function ingestTrafficEvent(request: Request, env: AnalyticsEnv): Promise<Response> {
   if (request.method !== "POST") return response(405);
   const url = new URL(request.url);
   if (!isAnalyticsCollectionEnabled(env, url)) return response(204);
@@ -174,8 +171,7 @@ export async function ingestTrafficEvent(
     typeof input.pagePath !== "string" ||
     input.pagePath.length > 256 ||
     typeof input.newSession !== "boolean" ||
-    (input.search !== undefined &&
-      (typeof input.search !== "string" || input.search.length > 256))
+    (input.search !== undefined && (typeof input.search !== "string" || input.search.length > 256))
   ) {
     return response(400);
   }
