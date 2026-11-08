@@ -30,12 +30,17 @@ export const SITE = {
 
 export type AboutSection = {
   title: string;
-  image: string;
+  image?: string;
   reverse?: boolean;
   visible?: boolean;
   body: string[];
   gallery?: { image: string; caption: string; alt: string }[];
 };
+
+/** Blank or absent images mean a full-width, text-only About Us section. */
+export function aboutSectionImage(section: Pick<AboutSection, "image">): string {
+  return typeof section.image === "string" ? section.image.trim() : "";
+}
 
 export const ABOUT_SECTIONS: AboutSection[] = [
   {

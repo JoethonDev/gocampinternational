@@ -8,7 +8,13 @@ import { AdminPageHeader } from "../components/admin/AdminPageHeader";
 import { AdminFormSection } from "../components/admin/AdminFormSection";
 import { AdminFormActions } from "../components/admin/AdminFormActions";
 import { MediaSelector } from "../components/MediaSelector";
-import { ABOUT_PAGE_DEFAULT, SITE, type AboutPageContent, type AboutSection } from "../config/site";
+import {
+  ABOUT_PAGE_DEFAULT,
+  SITE,
+  aboutSectionImage,
+  type AboutPageContent,
+  type AboutSection
+} from "../config/site";
 import type { SiteSettings } from "../lib/domain";
 
 export function meta() {
@@ -59,8 +65,7 @@ function validateAbout(value: unknown): value is AboutPageContent {
       (s) =>
         s &&
         validText(s.title, 180) &&
-        validText(s.image, 1000) &&
-        validImage(s.image) &&
+        (s.image === undefined || (validText(s.image, 1000) && validImage(s.image))) &&
         (s.visible === undefined || typeof s.visible === "boolean") &&
         Array.isArray(s.body) &&
         s.body.length <= 12 &&
@@ -85,13 +90,15 @@ function AboutImageField({
   label,
   value,
   csrf,
-  onChange
+  onChange,
+  optional = false
 }: {
   id: string;
   label: string;
   value: string;
   csrf: string;
   onChange: (value: string) => void;
+  optional?: boolean;
 }) {
   return (
     <div className="col-12">
@@ -103,6 +110,21 @@ function AboutImageField({
         onChange={onChange}
         csrf={csrf}
       />
+      {optional && (
+        <div className="d-flex align-items-center justify-content-between gap-2 mt-2">
+          <small className="text-secondary">
+            Optional: leave blank to show the section text across the full width.
+          </small>
+          <button
+            type="button"
+            className="btn btn-sm btn-outline-secondary text-nowrap"
+            disabled={!value.trim()}
+            onClick={() => onChange("")}
+          >
+            Remove image
+          </button>
+        </div>
+      )}
     </div>
   );
 }
@@ -305,9 +327,10 @@ export default function AdminAbout({ loaderData }: Route.ComponentProps) {
             <AboutImageField
               id={`about-image-${index}`}
               label={`Section ${index + 1}`}
-              value={section.image}
+              value={section.image || ""}
               csrf={session.csrf}
               onChange={(image) => setSection(index, { image })}
+              optional
             />
             <div className="col-12">
               <label className="form-label" htmlFor={`about-body-${index}`}>
@@ -329,9 +352,10 @@ export default function AdminAbout({ loaderData }: Route.ComponentProps) {
                   className="form-check-input"
                   type="checkbox"
                   checked={Boolean(section.reverse)}
+                  disabled={!aboutSectionImage(section)}
                   onChange={(event) => setSection(index, { reverse: event.target.checked })}
                 />
-                <span className="form-check-label">Reverse image and text</span>
+                <span className="form-check-label">Reverse image and text (when an image is set)</span>
               </label>
             </div>
             {section.gallery?.length ? (
@@ -426,7 +450,7 @@ export default function AdminAbout({ loaderData }: Route.ComponentProps) {
               ...prev,
               sections: [
                 ...prev.sections,
-                { title: "New section", image: SITE.images.placeholder, body: [""] }
+                { title: "New section", image: "", body: [""] }
               ]
             }))
           }
