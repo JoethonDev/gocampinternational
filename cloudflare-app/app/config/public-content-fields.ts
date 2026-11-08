@@ -836,7 +836,7 @@ export const PUBLIC_CONTENT_FIELDS: Record<string, Record<string, ContentField>>
     },
     "images.logo": {
       kind: "image",
-      value: "/media/49c7cbd7-a00e-5970-9ed1-1e14e077e016"
+      value: "/images/logo.webp"
     },
     "images.favicon": {
       kind: "image",
