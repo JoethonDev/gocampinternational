@@ -10,7 +10,6 @@ type AnalyticsEnv = {
   DB: D1Database;
   GOCAMP_ENV: string;
   ANALYTICS_ENABLED?: string;
-  ANALYTICS_PRIVACY_NOTICE_PUBLISHED?: string;
 };
 
 const noStore = {
