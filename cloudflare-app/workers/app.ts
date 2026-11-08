@@ -3,7 +3,6 @@ import { discoveryResponse, isSeoIndexingAllowed } from "../app/lib/seo-discover
 import { createRequestHandler } from "react-router";
 import { createCloudflareContext } from "../app/lib/cloudflare-context";
 import { logEvent } from "../app/lib/logger.server";
-import { pruneExpiredRateLimits } from "../app/lib/rate-limit.server";
 
 const handle = createRequestHandler(
   () => import("virtual:react-router/server-build"),
@@ -24,7 +23,7 @@ function applyResponseHeaders(response: Response, env: Env, request: Request): R
     headers.set("Cache-Control", "no-store");
     headers.set("X-Robots-Tag", "noindex, nofollow");
   }
-  if (env.GOCAMP_ENV === "staging" || !isSeoIndexingAllowed(new URL(request.url), env)) {
+  if (String(env.GOCAMP_ENV) === "staging" || !isSeoIndexingAllowed(new URL(request.url), env)) {
     headers.set("X-Robots-Tag", "noindex, nofollow");
   }
   return new Response(response.body, {
@@ -79,13 +78,6 @@ export default {
         env,
         request
       );
-    }
-  },
-
-  async scheduled(_controller: ScheduledController, env: Env): Promise<void> {
-    const result = await pruneExpiredRateLimits(env.DB);
-    if (result.meta.changes > 0) {
-      logEvent("info", "expired rate-limit rows removed", { deletedRows: result.meta.changes });
     }
   }
 } satisfies ExportedHandler<Env>;

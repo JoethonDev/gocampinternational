@@ -4,7 +4,7 @@ import { sha256Bytes } from "./crypto.server";
  * Preserves every existing /media/:id and legacy_path reference.
  */
 export async function backfillWebp(env: Env, maxItems = 20) {
-  if (env.GOCAMP_ENV !== "staging") return { processed: 0, converted: 0, failures: [] };
+  if (String(env.GOCAMP_ENV) !== "staging") return { processed: 0, converted: 0, failures: [] };
   const items = await env.DB.prepare(
     "SELECT id,object_key,mime_type FROM media_assets WHERE mime_type != 'image/webp' ORDER BY id LIMIT ?"
   )
