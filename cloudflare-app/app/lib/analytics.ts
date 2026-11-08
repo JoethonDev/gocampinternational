@@ -38,7 +38,6 @@ const EVENT_ELEMENTS: Record<AnalyticsEventName, readonly string[]> = {
 type AnalyticsEnvironment = {
   GOCAMP_ENV: string;
   ANALYTICS_ENABLED?: string;
-  ANALYTICS_PRIVACY_NOTICE_PUBLISHED?: string;
   WEB_ANALYTICS_SITE_TAG?: string;
 };
 
@@ -47,7 +46,6 @@ export function isAnalyticsCollectionEnabled(env: AnalyticsEnvironment, url: URL
   return (
     env.GOCAMP_ENV === "production" &&
     env.ANALYTICS_ENABLED === "true" &&
-    env.ANALYTICS_PRIVACY_NOTICE_PUBLISHED === "true" &&
     url.protocol === "https:" &&
     url.hostname === "gocampinternational.net" &&
     !url.port
