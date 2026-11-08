@@ -40,7 +40,6 @@ type CatalogRow = {
 type AnalyticsEnv = {
   GOCAMP_ENV: string;
   ANALYTICS_ENABLED?: string;
-  ANALYTICS_PRIVACY_NOTICE_PUBLISHED?: string;
   WEB_ANALYTICS_SITE_TAG?: string;
   SEO_INDEXING_ENABLED?: string;
 };
