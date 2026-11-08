@@ -40,7 +40,6 @@ export function FounderFeature({
           </div>
         </div>
       </div>
-
     </section>
   );
 }
