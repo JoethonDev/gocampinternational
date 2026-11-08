@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import { AdminPageHeader } from "../../../components/admin/AdminPageHeader";
 import { CatalogHealth } from "./CatalogHealth";
 import { DashboardHero } from "./DashboardHero";
