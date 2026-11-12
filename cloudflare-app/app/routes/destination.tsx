@@ -1,15 +1,11 @@
 import { getCloudflare } from "../lib/cloudflare-context";
 import { useRouteLoaderData } from "react-router";
 import type { Route } from "./+types/destination";
-import {
-  ComingSoonDestinationPage,
-  DestinationPage
-} from "../features/destination/DestinationPage";
+import { DestinationPage } from "../features/destination/DestinationPage";
 import {
   findDestination,
   listPrograms,
-  loadDocument,
-  publicDestination
+  loadDocument
 } from "../lib/catalog.server";
 import type { MemoriesDocument, ProgramRecord, SiteSettings } from "../lib/domain";
 import {
@@ -25,10 +21,10 @@ import {
 export async function loader({ params, context }: Route.LoaderArgs) {
   const db = getCloudflare(context).env.DB;
   const slug = params.slug || "";
-  const destination = publicDestination(await findDestination(db, slug));
-  if (!destination) throw new Response("Not found", { status: 404 });
-  if (destination.status === "coming-soon") {
-    return { destination, related: [], hasProgramIds: false, memories: null };
+  const destination = await findDestination(db, slug);
+  // Only active destinations may be publicly rendered or indexed.
+  if (!destination || destination.status !== "active") {
+    throw new Response("Not Found", { status: 404 });
   }
 
   const [memories, programs] = await Promise.all([
@@ -66,9 +62,6 @@ export default function Destination({ loaderData }: Route.ComponentProps) {
   const base =
     (root as { origin?: string } | undefined)?.origin || "https://gocampinternational.net";
   const destination = loaderData.destination;
-  if (destination.status === "coming-soon") {
-    return <ComingSoonDestinationPage name={destination.name} />;
-  }
   const seo = resolveCatalogSeo(
     "destination",
     destination.name,
