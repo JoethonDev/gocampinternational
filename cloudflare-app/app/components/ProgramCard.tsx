@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import { usePublicContent } from "../lib/public-content-react";
 import { responsiveSrcSet } from "../lib/responsive-media";
 import { asNumber, asStringArray, type ProgramRecord, type SiteSettings } from "../lib/domain";
@@ -33,7 +34,14 @@ export function ProgramCard({
           </div>
         )}
         <div className="card-body p-4 d-flex flex-column">
-          <h3 className="card-title fw-bold mb-2 text-brand-dark fs-4">{program.name}</h3>
+          <h3 className="card-title fw-bold mb-2 text-brand-dark fs-4">
+            <Link
+              className="text-decoration-none text-brand-dark"
+              to={"/programs/" + encodeURIComponent(program.slug)}
+            >
+              {program.name}
+            </Link>
+          </h3>
           {hasValidAgeRange && (
             <p className="small fw-semibold text-brand-primary mb-2">
               {text("ages")}

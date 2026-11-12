@@ -2,7 +2,7 @@ import { useState } from "react";
 import { MediaSelector } from "../../../components/MediaSelector";
 import { resolveCatalogSeo, truncateSeoDescription } from "../../../lib/seo";
 
-type CatalogPageKind = "destination" | "category";
+type CatalogPageKind = "destination" | "category" | "program";
 
 function record(value: unknown): Record<string, unknown> {
   return value && typeof value === "object" && !Array.isArray(value)
@@ -38,7 +38,8 @@ export function SeoEditor({
   const [structuredDataEnabled, setStructuredDataEnabled] = useState(
     storedSeo.structured_data_enabled !== false
   );
-  const fallbackDescription = item.tagline || item.intro_text || item.intro || "";
+  const fallbackDescription =
+    item.tagline || item.intro_text || item.intro || item.description || "";
   const fallbackImage = item.banner || item.image || "/images/banner.webp";
   const imageId = imagePath.match(/^\/media\/([a-zA-Z0-9_-]{1,160})$/)?.[1] || "";
   const preview = resolveCatalogSeo(kind, item.name, fallbackDescription, fallbackImage, {
@@ -51,7 +52,9 @@ export function SeoEditor({
   const canonicalPath =
     kind === "destination"
       ? `/destinations/${encodeURIComponent(slug || "new")}`
-      : `/program/category?category=${encodeURIComponent(slug || "new")}`;
+      : kind === "program"
+        ? `/programs/${encodeURIComponent(slug || "new")}`
+        : `/program/category?category=${encodeURIComponent(slug || "new")}`;
 
   return (
     <section className="card mb-4" aria-labelledby="catalog-seo-title">
@@ -152,7 +155,7 @@ export function SeoEditor({
                 checked={!structuredDataEnabled}
                 onChange={(event) => setStructuredDataEnabled(!event.target.checked)}
               />
-              Disable this page's collection structured data
+              Disable this page's structured data
             </label>
           </div>
         </div>

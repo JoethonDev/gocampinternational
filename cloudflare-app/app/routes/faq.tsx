@@ -1,7 +1,7 @@
 import { getCloudflare } from "../lib/cloudflare-context";
 import type { Route } from "./+types/faq";
 import { FaqPage } from "../features/faq/FaqPage";
-import { loadDocument } from "../lib/catalog.server";
+import { loadPublishedDocument } from "../lib/editorial-publish.server";
 import type { FaqItem } from "../lib/domain";
 import { cleanSeoText, originFrom, safeJsonLd, seoMeta } from "../lib/seo";
 import { publicSeo } from "../lib/public-content";
@@ -10,7 +10,7 @@ import type { PublicContent } from "../lib/public-content";
 
 export async function loader({ context }: Route.LoaderArgs) {
   return {
-    items: (await loadDocument<FaqItem[]>(getCloudflare(context).env.DB, "faq")) || []
+    items: (await loadPublishedDocument<FaqItem[]>(getCloudflare(context).env, "faq")) || []
   };
 }
 

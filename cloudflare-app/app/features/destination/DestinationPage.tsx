@@ -53,7 +53,7 @@ function Hero({ destination }: { destination: DestinationRecord }) {
         src={destination.banner || SITE.images.placeholder}
         srcSet={responsiveSrcSet(destination.banner || SITE.images.placeholder)}
         sizes="100vw"
-        alt={destination.banner_alt || "Summer camp destination: " + destination.name}
+        alt={destination.banner_alt || "Program destination: " + destination.name}
         loading="eager"
         fetchPriority="high"
         decoding="async"

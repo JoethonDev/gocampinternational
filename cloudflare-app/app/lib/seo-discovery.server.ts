@@ -6,7 +6,7 @@ const SITE = "https://gocampinternational.net";
 const CANONICAL_HOST = "gocampinternational.net";
 
 type Entity = {
-  kind: "destination" | "category";
+  kind: "destination" | "category" | "program";
   slug: string;
   name: string;
   content_json: string;
@@ -19,6 +19,7 @@ type EntityContent = {
   tagline?: unknown;
   intro?: unknown;
   intro_text?: unknown;
+  description?: unknown;
   seo?: { noindex?: unknown; og_image_id?: unknown };
 };
 
@@ -47,6 +48,8 @@ function isPublicEntity(entity: Entity) {
     content !== null &&
     /^[a-z0-9][a-z0-9_-]{0,159}$/i.test(entity.slug) &&
     cleanSeoText(entity.name).length > 0 &&
+    (entity.kind !== "program" ||
+      cleanSeoText(content.description || content.tagline).length > 0) &&
     content.seo?.noindex !== true
   );
 }
@@ -61,7 +64,7 @@ function imageUrl(value: unknown, publicMediaIds: Set<string>, publicLegacyPaths
 
 async function publicEntities(env: Env): Promise<Entity[]> {
   const result = await env.DB.prepare(
-    "SELECT kind,slug,name,content_json,updated_at FROM catalog_entities WHERE status='active' AND kind IN ('destination','category') ORDER BY kind,sort_order,slug"
+    "SELECT kind,slug,name,content_json,updated_at FROM catalog_entities WHERE status='active' AND kind IN ('destination','category','program') ORDER BY kind,sort_order,slug"
   ).all<Entity>();
   return (result.results || []).filter(isPublicEntity);
 }
@@ -80,9 +83,9 @@ async function publicMedia(env: Env) {
 }
 
 function entityUrl(entry: Entity) {
-  return entry.kind === "destination"
-    ? SITE + "/destinations/" + encodeURIComponent(entry.slug)
-    : SITE + "/program/category?category=" + encodeURIComponent(entry.slug);
+  if (entry.kind === "destination") return SITE + "/destinations/" + encodeURIComponent(entry.slug);
+  if (entry.kind === "program") return SITE + "/programs/" + encodeURIComponent(entry.slug);
+  return SITE + "/program/category?category=" + encodeURIComponent(entry.slug);
 }
 
 function response(body: string, type: string, ttl = 300) {
@@ -176,18 +179,18 @@ export async function discoveryResponse(url: URL, env: Env): Promise<Response | 
 
   const lines = [
     "# Go Camp International",
-    "> International camps and educational experiences from Go Camp International.",
+    "> Short-term international camps and student experiences in sports, culture, languages, adventure and academic exploration.",
     "",
     "Official website: " + SITE,
     "Contact: " + SITE + "/contact",
     "About: " + SITE + "/about",
     "Frequently asked questions: " + SITE + "/faq",
     "",
-    "## Destinations and program categories"
+    "## Destinations, program categories and short-term programs"
   ];
   for (const item of entities) {
     const data = parseContent(item.content_json) || {};
-    const summary = cleanSeoText(data.tagline || data.intro_text || data.intro);
+    const summary = cleanSeoText(data.tagline || data.intro_text || data.intro || data.description);
     lines.push(
       "- [" +
         cleanSeoText(item.name) +

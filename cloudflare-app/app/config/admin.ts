@@ -29,6 +29,7 @@ export const ADMIN_NAV_GROUPS: AdminNavGroup[] = [
       { href: "/admin/about", label: "About Us", icon: "bi-person-badge" },
       { href: "/admin/documents/site_settings", label: "Public Content", icon: "bi-toggles" },
       { href: "/admin/documents/faq", label: "FAQs", icon: "bi-question-circle" },
+      { href: "/admin/seo-publish", label: "Publish SEO", icon: "bi-cloud-upload" },
       {
         href: "/admin/documents/testimonials",
         label: "Testimonials",
