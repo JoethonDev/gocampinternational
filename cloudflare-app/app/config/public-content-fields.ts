@@ -41,7 +41,7 @@ export const PUBLIC_CONTENT_FIELDS: Record<string, Record<string, ContentField>>
     intro: {
       kind: "text",
       value:
-        "GO Camp International helps families discover overseas educational experiences in language learning, sports, leadership and culture. Explore opportunities to learn, grow and build international connections."
+        "Go Camp International connects students and families with short-term international camps and experiences in culture, sports, languages and academic exploration. Make memories, discover interests and build friendships."
     },
     destinationsTitle: {
       kind: "text",
@@ -888,12 +888,12 @@ export const PUBLIC_CONTENT_FIELDS: Record<string, Record<string, ContentField>>
   seo: {
     "home-title": {
       kind: "text",
-      value: "Go Camp International | Unforgettable Summer Experiences"
+      value: "International Camps & Short-Term Student Experiences | Go Camp International"
     },
     "home-description": {
       kind: "text",
       value:
-        "Explore international educational experiences with GO Camp International, including language learning, sports academies, cultural travel, leadership and academic programs."
+        "Explore short-term international camps and student experiences in sports, culture, languages, adventure and academic preparation with Go Camp International."
     },
     "home-image": {
       kind: "image",
@@ -932,7 +932,7 @@ export const PUBLIC_CONTENT_FIELDS: Record<string, Record<string, ContentField>>
     "faq-description": {
       kind: "text",
       value:
-        "Find answers to common questions about our summer camps, including safety, preparation, and program details."
+        "Find answers to common questions about Go Camp International camps and short-term student experiences, including preparation, safety and programs."
     },
     "faq-image": {
       kind: "image",

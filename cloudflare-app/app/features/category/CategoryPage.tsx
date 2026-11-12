@@ -20,7 +20,7 @@ function CategoryHero({ category }: { category: CategoryRecord }) {
         src={category.banner || SITE.images.placeholder}
         srcSet={responsiveSrcSet(category.banner || SITE.images.placeholder)}
         sizes="100vw"
-        alt={"Summer camp program category: " + category.name}
+        alt={"Program category: " + category.name}
         loading="eager"
         fetchPriority="high"
         decoding="async"
