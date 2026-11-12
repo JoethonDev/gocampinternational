@@ -88,7 +88,7 @@ export type CatalogSeo = {
 };
 
 export function resolveCatalogSeo(
-  kind: "destination" | "category",
+  kind: "destination" | "category" | "program",
   name: unknown,
   fallbackDescription: unknown,
   fallbackImage: unknown,

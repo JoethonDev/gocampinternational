@@ -19,10 +19,6 @@ function applyResponseHeaders(response: Response, env: Env, request: Request): R
     "Content-Security-Policy",
     "frame-ancestors 'none'; object-src 'none'; base-uri 'self'"
   );
-  if (response.status === 404) {
-    headers.set("Cache-Control", "no-store");
-    headers.set("X-Robots-Tag", "noindex, nofollow");
-  }
   const pathname = new URL(request.url).pathname;
   if (/^\/admin(?:[/.]|$)/.test(pathname) || !["GET", "HEAD"].includes(request.method)) {
     headers.set("Cache-Control", "no-store");

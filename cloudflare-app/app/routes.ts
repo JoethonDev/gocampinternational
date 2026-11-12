@@ -28,7 +28,7 @@ export default [
   route("destination/:slug", "routes/destination-alias.ts"),
   route("program/category", "routes/category.tsx"),
   route("program/category.php", "routes/category-legacy.ts"),
-  route("programs/:slug", "routes/category-redirect.ts"),
+  route("programs/:slug", "routes/program.tsx"),
   route("faq", "routes/faq.tsx"),
   route("landing", "routes/landing.tsx"),
   route("landing.php", "routes/landing-legacy.ts"),
