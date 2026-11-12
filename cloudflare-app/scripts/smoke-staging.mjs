@@ -17,6 +17,14 @@ const tests = [
   { path: "/sitemap.xml", status: 404 },
   { path: "/faq", status: 200 },
   { path: "/contact", status: 200 },
+  { path: "/destinations/france", status: 404 },
+  { path: "/destinations/spain", status: 404 },
+  { path: "/destinations/usa", status: 404 },
+  { path: "/programs/uk-academic-architecture", status: 200, contains: "Architecture" },
+  { path: "/programs/italy-food", status: 200, contains: "Food" },
+  { path: "/programs/unknown-seo-program", status: 404 },
+  { path: "/programs/kids-camps", status: 301, location: "/program/category?category=kids-camps" },
+  { path: "/admin/seo-publish", status: 302, location: "/admin/login" },
   { path: "/destinations/italy", status: 200, contains: "Italy" },
   {
     path: "/destinations/italy",
@@ -217,7 +225,9 @@ const seoPaths = [
   ...["kids-camps", "adult-academic", "soccer-camps", "special-interests-camps", "tennis"].map(
     (slug) => "/program/category?category=" + slug
   ),
-  "/landing"
+  "/landing",
+  "/programs/uk-academic-architecture",
+  "/programs/italy-food"
 ];
 for (const path of seoPaths) {
   try {
