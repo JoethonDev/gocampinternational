@@ -11,6 +11,7 @@ export default [
   route("admin/program-quick-status", "routes/admin-program-quick-status.ts"),
   route("admin/documents/:key", "routes/admin-documents.tsx"),
   route("admin/about", "routes/admin-about.tsx"),
+  route("admin/seo-publish", "routes/admin-seo-publish.tsx"),
   route("admin/inquiries", "routes/admin-inquiries.tsx"),
   route("admin/inquiries/chunk", "routes/admin-inquiries-chunk.ts"),
   route("admin/media", "routes/admin-media.tsx"),
