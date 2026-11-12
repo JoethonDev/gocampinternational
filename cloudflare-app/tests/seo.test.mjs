@@ -111,7 +111,8 @@ test("sitemap includes only active indexed content and public, resolvable media"
   assert.match(xml, /https:\/\/gocampinternational\.net\/program\/category\?category=kids-camps/);
   assert.match(xml, new RegExp(`https://gocampinternational\\.net/media/${publicId}`));
   assert.match(xml, /<lastmod>\d{4}-\d{2}-\d{2}<\/lastmod>/);
-  assert.match(xml, /https:\/\/gocampinternational\.net\/programs\/italy-food/);
+  // Catalog programs have no dedicated page, so they must not appear in the sitemap.
+  assert.doesNotMatch(xml, /\/programs\/italy-food/);
   assert.doesNotMatch(xml, /hidden-place|33333333|inactive-program|\/destinations\/france/);
   assert.doesNotMatch(xml, /<image:loc>[^<]*33333333/);
 });

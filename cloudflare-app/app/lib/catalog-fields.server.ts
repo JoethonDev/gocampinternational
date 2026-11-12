@@ -62,7 +62,7 @@ export function readCatalogFields(
   // Price is retired from the GoCamp catalog; never persist legacy form values.
   if (kind === "program") delete data.price;
 
-  {
+  if (kind !== "program") {
     const previousSeo =
       previous.seo && typeof previous.seo === "object" && !Array.isArray(previous.seo)
         ? (previous.seo as Record<string, unknown>)

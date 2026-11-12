@@ -20,9 +20,17 @@ const tests = [
   { path: "/destinations/france", status: 404 },
   { path: "/destinations/spain", status: 404 },
   { path: "/destinations/usa", status: 404 },
-  { path: "/programs/uk-academic-architecture", status: 200, contains: "Architecture" },
-  { path: "/programs/italy-food", status: 200, contains: "Food" },
-  { path: "/programs/unknown-seo-program", status: 404 },
+  // Existing program paths are legacy redirects; do not introduce detail pages.
+  {
+    path: "/programs/uk-academic-architecture",
+    status: 301,
+    location: "/program/category?category=uk-academic-architecture"
+  },
+  {
+    path: "/programs/italy-food",
+    status: 301,
+    location: "/program/category?category=italy-food"
+  },
   { path: "/programs/kids-camps", status: 301, location: "/program/category?category=kids-camps" },
   { path: "/admin/seo-publish", status: 302, location: "/admin/login" },
   { path: "/destinations/italy", status: 200, contains: "Italy" },
@@ -225,9 +233,7 @@ const seoPaths = [
   ...["kids-camps", "adult-academic", "soccer-camps", "special-interests-camps", "tennis"].map(
     (slug) => "/program/category?category=" + slug
   ),
-  "/landing",
-  "/programs/uk-academic-architecture",
-  "/programs/italy-food"
+  "/landing"
 ];
 for (const path of seoPaths) {
   try {
