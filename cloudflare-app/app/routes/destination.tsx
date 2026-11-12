@@ -2,11 +2,7 @@ import { getCloudflare } from "../lib/cloudflare-context";
 import { useRouteLoaderData } from "react-router";
 import type { Route } from "./+types/destination";
 import { DestinationPage } from "../features/destination/DestinationPage";
-import {
-  findDestination,
-  listPrograms,
-  loadDocument
-} from "../lib/catalog.server";
+import { findDestination, listPrograms, loadDocument } from "../lib/catalog.server";
 import type { MemoriesDocument, ProgramRecord, SiteSettings } from "../lib/domain";
 import {
   cleanSeoText,
