@@ -3,8 +3,6 @@ on:
   push:
     branches:
       - codex/staging-seo-standards-20261112
-    paths:
-      - ".github/workflows/staging-seo-format-temp.yml"
 permissions:
   contents: write
 jobs:
@@ -22,9 +20,9 @@ jobs:
       - name: Format modified SEO files
         run: |
           cd cloudflare-app
-          npx prettier --write app/features/admin/catalog/SeoEditor.tsx app/lib/seo-discovery.server.ts app/routes/program.tsx
+          npm run format
           cd ..
-          git add cloudflare-app/app/features/admin/catalog/SeoEditor.tsx cloudflare-app/app/lib/seo-discovery.server.ts cloudflare-app/app/routes/program.tsx
+          git add cloudflare-app/app cloudflare-app/workers cloudflare-app/scripts cloudflare-app/tests
           if ! git diff --cached --quiet; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
