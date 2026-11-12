@@ -2,14 +2,14 @@ import { Form, redirect } from "react-router";
 import type { Route } from "./+types/admin-seo-publish";
 import { getCloudflare } from "../lib/cloudflare-context";
 import { requireAdmin, verifyAdminPost } from "../lib/admin.server";
-import {
-  editorialPublishedAt,
-  publishEditorialDocuments
-} from "../lib/editorial-publish.server";
+import { editorialPublishedAt, publishEditorialDocuments } from "../lib/editorial-publish.server";
 import { AdminShell } from "../components/admin/AdminShell";
 
 export function meta() {
-  return [{ title: "Publish SEO Content | GoCamp" }, { name: "robots", content: "noindex,nofollow" }];
+  return [
+    { title: "Publish SEO Content | GoCamp" },
+    { name: "robots", content: "noindex,nofollow" }
+  ];
 }
 
 export async function loader({ request, context }: Route.LoaderArgs) {
@@ -42,9 +42,9 @@ export default function EditorialPublish({ loaderData }: Route.ComponentProps) {
         <div className="card-body">
           <h1 className="h3">Publish editorial SEO content</h1>
           <p className="text-secondary">
-            About, Contact, FAQ and shared site copy use a durable published snapshot in
-            the staging R2 bucket. Saving drafts in the CMS does not update those public
-            pages until you publish them here.
+            About, Contact, FAQ and shared site copy use a durable published snapshot in the staging
+            R2 bucket. Saving drafts in the CMS does not update those public pages until you publish
+            them here.
           </p>
           {justPublished && (
             <div className="alert alert-success" role="status">
@@ -62,8 +62,8 @@ export default function EditorialPublish({ loaderData }: Route.ComponentProps) {
             </button>
           </Form>
           <p className="small text-secondary mt-3">
-            Program, destination and category statuses remain dynamic. Unpublished
-            catalog records return HTTP 404 immediately, independently of this snapshot.
+            Program, destination and category statuses remain dynamic. Unpublished catalog records
+            return HTTP 404 immediately, independently of this snapshot.
           </p>
         </div>
       </div>

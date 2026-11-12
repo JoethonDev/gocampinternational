@@ -44,10 +44,7 @@ async function readPublished(env: Env): Promise<PublishedEditorial | null> {
  * publish, existing D1 content remains readable for a safe migration.
  * Live catalog routes continue to query D1 separately.
  */
-export async function loadPublishedDocument<T>(
-  env: Env,
-  key: EditorialKey
-): Promise<T | null> {
+export async function loadPublishedDocument<T>(env: Env, key: EditorialKey): Promise<T | null> {
   const published = await readPublished(env);
   if (published) return (published.documents[key] ?? null) as T | null;
   return loadDocument<T>(env.DB, key);
