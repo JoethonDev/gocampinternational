@@ -126,13 +126,15 @@ export function EntityEditorPage({
         {kind === "category" && (
           <CategoryFields item={item} uploadedMedia={uploadedMedia} csrf={session.csrf} />
         )}
-        <SeoEditor
-          kind={kind}
-          slug={isNew ? "new" : slug}
-          item={item}
-          uploadedMedia={uploadedMedia}
-          csrf={session.csrf}
-        />
+        {kind !== "program" && (
+          <SeoEditor
+            kind={kind}
+            slug={isNew ? "new" : slug}
+            item={item}
+            uploadedMedia={uploadedMedia}
+            csrf={session.csrf}
+          />
+        )}
         <VisibilityOverrides
           kind={kind}
           initial={(item.visibility_overrides as Record<string, unknown> | undefined) || {}}

@@ -110,11 +110,7 @@ export function publicContentGroupsForPath(pathname: string): string[] {
     ["home", "testimonials", "social", "memories"].forEach((group) => groups.add(group));
   } else if (/^\/destinations\/[^/]+$/.test(path)) {
     ["destination", "program", "memories"].forEach((group) => groups.add(group));
-  } else if (
-    path === "/program/category" ||
-    path === "/programs" ||
-    /^\/programs\/[^/]+$/.test(path)
-  ) {
+  } else if (path === "/program/category" || path === "/programs") {
     ["category", "program", "memories"].forEach((group) => groups.add(group));
   } else if (path === "/about") {
     groups.add("about");
