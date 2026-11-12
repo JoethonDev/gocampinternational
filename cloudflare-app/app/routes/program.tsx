@@ -46,8 +46,7 @@ export async function loader({ params, context }: Route.LoaderArgs) {
       .bind(program.slug)
       .first<PublicDestination>()
   ]);
-  const category: CategoryRecord | null =
-    maybeCategory?.status === "active" ? maybeCategory : null;
+  const category: CategoryRecord | null = maybeCategory?.status === "active" ? maybeCategory : null;
   return { program, category, destination };
 }
 

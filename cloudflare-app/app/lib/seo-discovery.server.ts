@@ -48,7 +48,8 @@ function isPublicEntity(entity: Entity) {
     content !== null &&
     /^[a-z0-9][a-z0-9_-]{0,159}$/i.test(entity.slug) &&
     cleanSeoText(entity.name).length > 0 &&
-    (entity.kind !== "program" || cleanSeoText(content.description || content.tagline).length > 0) &&
+    (entity.kind !== "program" ||
+      cleanSeoText(content.description || content.tagline).length > 0) &&
     content.seo?.noindex !== true
   );
 }

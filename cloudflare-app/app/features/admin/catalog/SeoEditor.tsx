@@ -38,7 +38,8 @@ export function SeoEditor({
   const [structuredDataEnabled, setStructuredDataEnabled] = useState(
     storedSeo.structured_data_enabled !== false
   );
-  const fallbackDescription = item.tagline || item.intro_text || item.intro || item.description || "";
+  const fallbackDescription =
+    item.tagline || item.intro_text || item.intro || item.description || "";
   const fallbackImage = item.banner || item.image || "/images/banner.webp";
   const imageId = imagePath.match(/^\/media\/([a-zA-Z0-9_-]{1,160})$/)?.[1] || "";
   const preview = resolveCatalogSeo(kind, item.name, fallbackDescription, fallbackImage, {
