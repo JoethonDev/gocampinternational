@@ -12,7 +12,8 @@ import {
   useRouteLoaderData
 } from "react-router";
 import type { Route } from "./+types/root";
-import { listCategories, listDestinations, loadDocument } from "./lib/catalog.server";
+import { listCategories, listDestinations } from "./lib/catalog.server";
+import { loadPublishedDocument } from "./lib/editorial-publish.server";
 import type { CategoryRecord, DestinationRecord, SiteSettings } from "./lib/domain";
 import { SiteHeader } from "./components/site/SiteHeader";
 import { SiteFooter } from "./components/site/SiteFooter";
@@ -55,7 +56,7 @@ export async function loader({ request, context }: Route.LoaderArgs) {
   const [destinations, categories, settings] = await Promise.all([
     listDestinations(db),
     listCategories(db),
-    loadDocument<SiteSettings>(db, "site_settings")
+    loadPublishedDocument<SiteSettings>(env, "site_settings")
   ]);
   const savedSettings = settings || {};
   const { public_content: _publicContent, ...pageSettings } = savedSettings;
