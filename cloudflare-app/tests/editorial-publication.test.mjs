@@ -21,7 +21,13 @@ test("editorial D1 drafts remain invisible until explicitly published to R2", as
     MEDIA: {
       async get(key) {
         const value = files.get(key);
-        return value === undefined ? null : { async json() { return JSON.parse(value); } };
+        return value === undefined
+          ? null
+          : {
+              async json() {
+                return JSON.parse(value);
+              }
+            };
       },
       async put(key, value) {
         files.set(key, value);

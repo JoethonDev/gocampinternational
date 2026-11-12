@@ -91,8 +91,15 @@ test("sitemap includes only active indexed content and public, resolvable media"
   });
   entity(db, "category", "inactive", { name: "Inactive", status: "inactive" });
   entity(db, "destination", "france", { name: "France", status: "coming-soon" });
-  entity(db, "program", "italy-food", { name: "Food", description: "Short-term Italian cooking experience" });
-  entity(db, "program", "inactive-program", { name: "Inactive Program", description: "Inactive", status: "inactive" });
+  entity(db, "program", "italy-food", {
+    name: "Food",
+    description: "Short-term Italian cooking experience"
+  });
+  entity(db, "program", "inactive-program", {
+    name: "Inactive Program",
+    description: "Inactive",
+    status: "inactive"
+  });
 
   const env = { DB: db, GOCAMP_ENV: "production", SEO_INDEXING_ENABLED: "true" };
   const response = await discoveryResponse(
