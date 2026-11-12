@@ -61,7 +61,7 @@ export async function saveEntity(
   if (kind === "category") data.slug = slug;
 
   const seo = data.seo as Record<string, unknown> | undefined;
-  if (kind !== "program" && typeof seo?.og_image_id === "string") {
+  if (typeof seo?.og_image_id === "string") {
     const image = await db
       .prepare("SELECT 1 AS found FROM media_assets WHERE id=? AND is_public=1")
       .bind(seo.og_image_id)
